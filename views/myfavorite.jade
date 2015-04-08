@@ -1,0 +1,26 @@
+//
+   Created by Administrator on 15-1-28.
+
+doctype html
+html
+    head(lang="en")
+        meta(charset="UTF-8")
+        meta(name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no")
+        link(rel='stylesheet', href='/stylesheets/bootstrap-grid.css')
+        link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css')
+        link(rel='stylesheet', href='/stylesheets/style_new.css')
+
+    body
+        ul#room-list
+            each roomobj,i in favourite_rooms
+                li(data-id='#{roomobj.room_id}').favour_room_option.col-xxs-10.col-xxs-offset-1.col-xs-6.col-xs-offset-3
+                    .nickname.col-xxs-6
+                        - if(roomobj.nickname)
+                            span #{roomobj.nickname}
+                        - else
+                            span &nbsp;
+                    .room.col-xxs-4 #{roomobj.room_id}
+                    .fav-remove.col-xxs-2
+                        i.fa.fa-times-circle
+script(src="/javascripts/jquery.js")
+script(src="/javascripts/room-door.js")

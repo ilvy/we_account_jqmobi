@@ -1,0 +1,113 @@
+.edit-desc{
+    width: 50%;
+    margin: 0 auto;
+    height: 100px;
+}
+.edit-desc-content{
+    width: 100%;
+    height: 60%;
+    border: 1px solid #CCCCFF;
+    word-break: break-all;
+}
+#addImage{
+    width: 100%;
+}
+#upload-div{
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+}
+#upload{
+    border: none;
+    background-color: white;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+#upload .horizon{
+    width: 100%;
+    height: 30%;
+    background-color: #CCCCFF;
+    position: absolute;
+    top: 35%;
+    left: 0;
+}
+#upload .vertical{
+    width: 30%;
+    height: 100%;
+    background-color: #CCCCFF;
+    position: absolute;
+    left: 35%;
+    top: 0;
+}
+.upload-display{
+    display: inline-block;
+    width: 150px;
+    height: 150px;
+    position: relative;
+    border: 1px solid #ccccff;
+    margin-left: 10px;
+}
+.upload-display img{
+    width: 100%;
+    height: 100%;
+}
+#submit{
+    margin: 0 auto;
+    border-radius: 5px;
+    border: 1px solid #CCCCFF;
+    background: #ffffff;
+    padding: 12px 50px;
+}
+#submit:active{
+    background: purple;
+}
+#sub-btn{
+    text-align: center;position: fixed;bottom: 0;width: 100%;
+
+}
+.delete-img{
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: #222222;
+    font-size: 18px;
+    font-weight: bolder;
+}
+
+#uploading-mask{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("../images/loading.GIF");
+    background-repeat: no-repeat;
+    background-position: center;
+    display: none;
+    background-color: #ffffff;
+}
+
+@media screen and (max-width: 320px) {
+
+}
+
+@media screen and (min-width: 321px) and (max-width: 360px) {
+
+}
+
+@media screen and (min-width: 768px) and (max-width: 1366px) {/*0.71*/
+
+}
+
+@media screen and (min-width: 1367px) and (max-width: 1600px) {/*0.75*/
+
+}
+
+@media screen and (min-width: 1601px) and (max-width: 1680px){/*0.85*/
+
+}
+
+@media screen and (min-width: 1681px) { /*适配1920以及以上*/
+
+}

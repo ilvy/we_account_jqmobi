@@ -1,0 +1,40 @@
+//
+   Created by Administrator on 2015/1/13.
+
+doctype html
+html
+    head(lang="en")
+        meta(charset="UTF-8")
+        meta(name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no")
+        link(href="/stylesheets/style_new.css" rel="stylesheet")
+        link(rel='stylesheet'  href='/stylesheets/bootstrap-grid.css')
+        link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css')
+
+    body.room_door
+        //div#favour_rooms_btn
+            button(type="button" data-toggle="modal" data-target="#favour_rooms_options_popup") 我的收藏
+
+        //-if (favourite_rooms.length)
+        //div(role="dialog" aria-hidden="true" data-backdrop="static")#favour_rooms_options_popup.modal.fade
+        //    div(data-dismiss="modal")#popup-close
+        //        span ×
+        //    div.modal-dialog
+        //        div.modal-content
+        //            div.modal-body
+        //                div.favour_rooms
+        //                    each room_option,i in favourite_rooms
+        //                        div.favour_room_option #{room_option.room_id}
+
+        //form
+            div.room_input_desc 输入直播号:
+            div(contenteditable="true" name="room")#room
+            div.submit-div
+                input(type="button" value="进入直播间")#enter-room-btn
+        form.door.col-lg-offset-3.col-lg-6.col-md-8.col-md-offset-2.col-sm-8.col-sm-offset-2.col-xs-8.col-xs-offset-2.col-xxs-12
+            div.room_input.col-xxs-12.col-xs-10.col-xs-offset-1.col-md-8.col-md-offset-2
+                input(type="input" placeholder="输入昵称或直播号")#room.col-xxs-9.col-xs-9.col-md-8
+                div.submit-div
+                    a.fa.fa-arrow-right
+    script(src="/javascripts/jquery.js")
+    script(src="/javascripts/libs/bootstrap.min.js")
+    script(src="/javascripts/room-door.js")

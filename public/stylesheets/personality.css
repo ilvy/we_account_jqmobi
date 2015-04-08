@@ -1,0 +1,62 @@
+body{
+    background: #F2F2F2;
+}
+.head img{
+    width: 100%;
+}
+.personal-info{
+    /*width: 96%;*/
+    /*margin-left: 2%;*/
+    background-color: #ffffff;
+    margin-top: 20px;
+}
+.cell{
+    padding: 10px 5px;
+    border-bottom: 1px solid #e0d9da;
+}
+.cell:active{
+    background-color: #F2F2F2;
+}
+.cell:last-child{
+    border: none;
+}
+.cell > div{
+    padding-left: 0px;
+}
+.cell input{
+    border: none;
+    color: #ffffff;
+    background-color: #cdcdcd;
+}
+.async-btn{
+    text-align: center;
+}
+.btn-group{
+    margin-top: 5px;
+    display: none;
+}
+.btn-group > div:first-child{
+    display: inline-block;
+    left: 0;
+}
+.btn-group > div:last-child{
+    display: inline-block;
+    right: 0;
+    float: right;
+}
+.cancel{
+    background-color: #44b549;
+}
+.cancel:active{
+    background-color: #2f9833;
+}
+.sure{
+    background-color: #C83B3D;
+}
+.sure:active{
+    background-color: #C8050D;
+}
+
+.tip{
+    text-align: center;
+}

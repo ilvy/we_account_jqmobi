@@ -1,0 +1,76 @@
+//
+   Created by Administrator on 15-3-3.
+
+doctype html
+html
+    head(lang="en")
+        meta(charset="UTF-8")
+        meta(name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no")
+        link(rel='stylesheet', href='/stylesheets/bootstrap-grid.css')
+        link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css')
+        link(rel='stylesheet', href='/stylesheets/personality.css')
+    body
+        - if (!user)
+            .tip
+                h3 如有需要，请先注册。
+        - else
+            .personal-info.col-xxs-12
+                .cell.col-xxs-12
+                    .col-xxs-4 头像
+                    .head.col-xxs-3.col-xxs-offset-2
+                        img(src="#{user.headimgurl}")
+                .cell.col-xxs-12
+                    .col-xxs-4 昵称
+                    .nickname.col-xxs-6.col-xxs-offset-2
+                        .value(data-type="nickname" data-value="#{user.nickname}") #{user.nickname}
+                        - if (isHost)
+                            .btn-group
+                                div
+                                    input.sure(type="button" value="确定")
+                                div
+                                    input.cancel(type="button" value="取消")
+                .cell.col-xxs-12
+                    .col-xxs-4 微信账号
+                    .weix_account.col-xxs-6.col-xxs-offset-2
+                        - if (user.weix_account && isHost)
+                            .value(data-type="weix_account" data-value="#{user.weix_account}") #{user.weix_account}
+                        - else if(user.weix_account && !isHost)
+                            .value(data-type="weix_account" data-value="#{user.weix_account}(猛戳复制)") #{user.weix_account}(猛戳复制)
+                        - else if(!user.weix_account)
+                            .value(data-type="weix_account" data-value="")
+                        - if (isHost)
+                            .btn-group
+                                div
+                                    input.sure(type="button" value="确定")
+                                div
+                                    input.cancel(type="button" value="取消")
+                .cell.col-xxs-12
+                    .col-xxs-4 性别
+                    .sex.col-xxs-6.col-xxs-offset-2
+                        - if (user.sex == 1)
+                            .value(data-type="sex" data-value="男") 男
+                        - else
+                            .value(data-type="sex" data-value="女") 女
+                        - if (isHost)
+                            .btn-group
+                                div
+                                    input.sure(type="button" value="确定")
+                                div
+                                    input.cancel(type="button" value="取消")
+                .cell.col-xxs-12
+                    .col-xxs-4 城市
+                    .city.col-xxs-6.col-xxs-offset-2
+                        .value(data-type="city" data-value="#{user.city}") #{user.city}
+                        - if (isHost)
+                            .btn-group
+                                div
+                                    input.sure(type="button" value="确定")
+                                div
+                                    input.cancel(type="button" value="取消")
+                - if (isHost)
+                    .cell.col-xxs-12.async-btn
+                        input(type='button',value='从微信同步')#asyncWeiAccount
+script(src="/javascripts/jquery.js")
+script(src="/javascripts/libs/jquery.mobile.custom.js")
+- if (isHost)
+    script(src="/javascripts/personality.js")

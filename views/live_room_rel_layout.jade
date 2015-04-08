@@ -1,0 +1,130 @@
+//
+   Created by Administrator on 15-1-23.
+//
+    相对布局瀑布流
+
+
+doctype html
+html
+    head
+        - if(publisher)
+            title #{publisher.nickname}的momenT
+        - else
+            title #{host}的momenT
+        meta(name="viewport",content="width=device-width,initial-scale=1.0,user-scalable=no")
+        link(rel='stylesheet', href='/stylesheets/style_new.css')
+        link(rel='stylesheet', href='/stylesheets/bootstrap.css')
+        link(rel='stylesheet', href='/stylesheets/bootstrap-grid.css')
+        link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css')
+        style.
+            .back_to_add{
+                position:fixed;
+                right:0;
+                top:0;
+            }
+    body
+        div.page.products-page
+            #header
+                .room_num 直播号:#{room}
+            section().waterfall
+                div.column
+                div.column
+                div.column
+                div.column
+                div.column
+                div.column
+                div.column
+                div.column
+                    //each product in products
+                    //    div.box.unvisible
+                    //        div(data-desc='#{product.text}').desc #{product.text}
+                    //        div(data-imgnum='#{product.image_url.length}').img-display
+                    //            each imageName,i in product.image_url
+                    //                img(src='http://120.24.224.144/images/#{imageName}' data-num='#{i}')
+                    //        div.ontact-saler
+                    //            联系卖家
+            div(role="dialog" aria-hidden="true" data-backdrop="static")#popup.modal.fade
+                div(data-toggle="modal" data-target="#popup")#popup-close
+                    span ×
+                div.modal-dialog
+                    div.modal-content
+                        div.modal-header header
+                            button(type="button" class="close" data-dismiss="modal")
+                                span(aria-hidden="true") x
+                                span.sr-only close
+                        div.modal-body
+                            div.big-img-display
+                            //div#next next
+            //button(data-toggle="modal" data-target="#popup")#popup-btn popup-btn
+            div#tools-box
+                - if(publisher)
+                    div#upload-div-box
+                        div#upload-div
+                            div#upload
+                                i.fa.fa-plus
+                                //div.vertical
+                                //div.horizon
+                - else
+                    //div#tools-btn
+                    //    div
+                    //    div
+                    //    div
+                    //div#tools-panel
+                    //    div.changeRoom
+                    //        a(href="/we_account/room_door") 切换房间
+                    //    div.myFavorite 我的收藏
+                    a(href='/we_account/fav')
+                        div.myfavorites
+                            //div.heart-folder
+                            i.fa.fa-folder
+                            //i.fa.fa-heart
+                    a(href="/we_account/room_door")
+                        div.changeRoom
+                            i.fa.fa-exchange
+                    div.favorite
+                        - if (isFavorite)
+                            i.fa.fa-heart
+                        - else
+                            i.fa.fa-heart-o
+
+            div#upload-panel
+                div(role="alert")#warn.alert.alert-warning.fade.in 至少需要发布一张图片
+                //div#sub-btn
+                //    input(type="button" value="确定")#submit
+                input(type="text" placeholder="先来个简单介绍...").product-title
+                textarea(placeholder="详细说点什么吧，让顾客更好的了解您的产品...").product-desc
+                div#image_content
+                    //div.upload-display
+                    //    img(src="/images/test_1423213682462.jpg")
+                    //    a#delete-img
+                    //        .delete-img
+                    //            i.fa.fa-times-circle
+                    //    .adjustImg
+                    //        i.fa.fa-rotate-right
+                    //div#upload-div2
+                    //    button(data-type="pop-btn")#upload2
+                    //        div.vertical
+                    //        div.horizon
+                .lr-btn-group.col-xxs-6.col-xxs-offset-3
+                    div#cancel-btn.col-xxs-6
+                        div
+                            i#cancel.fa.fa-times-circle
+                    div#sub-btn.col-xxs-6
+                        div
+                            i#submit.fa.fa-upload
+            div#uploading-mask
+            div#disableClick-mask
+        div.page.contact-page
+            div.curr-product
+
+script(src="/javascripts/jquery.js")
+script(src="/javascripts/libs/jquery.mobile.custom.js")
+script(src="/javascripts/libs/bootstrap.min.js")
+script(src="/javascripts/preloadImg.js")
+script(src="/javascripts/waterfall_relative.js")
+script(src="/javascripts/ajaxupload.js")
+script(src="/javascripts/live_room.js")
+script.
+    function load(){
+        waterfall.asyncLoader();
+    }
