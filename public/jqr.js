@@ -3,12 +3,12 @@
  */
 
 requirejs.config({
-    baseUrl:'./',
+    baseUrl:'/',
     paths:{
-        text:'javascript/require/text',
-        jquery:'javascript/jquery',
-        router:'javascript/router',
-        routerConfig:'javascript/routerConfig'
+        text:'javascripts/libs/require/text',
+        jquery:'javascripts/jquery',
+        router:'javascripts/router',
+        routerConfig:'javascripts/routerConfig'
     },
     shim:{
         jquery:{

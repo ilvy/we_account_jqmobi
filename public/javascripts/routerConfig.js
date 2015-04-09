@@ -4,7 +4,7 @@
 
 define([],function(){
     return {
-        page1:'../modules/module1/module1',
-        page2:'../modules/module2/module2'
+        live_room:'../modules/module1/module1',
+        product:'../modules/module2/module2'
     }
 });

@@ -1,6 +1,10 @@
 /**
  * Created by man on 15-4-3.
  */
-define(['text!modules/module2/module2.html'],function(html){
-    document.getElementById("page2").innerHTML = html;
+define([],function(){
+    var url = 'product_display?product_id='+globalVar.product_id;
+    require(['text!'+url],function(html){
+        document.getElementById("product").innerHTML = html;
+    });
+
 });

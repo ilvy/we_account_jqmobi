@@ -14,9 +14,6 @@ $(document).ready(function(){
     asyncLoader = new AsyncLoader();
     waterfall.asyncLoader();
 })
-$(window).on("load",function(){
-
-});
 $(window).on("resize",function(){
 //    waterfall.init();
 });

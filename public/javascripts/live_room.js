@@ -2,6 +2,7 @@
  * Created by Administrator on 15-1-12.
  */
 var disableClick = false;
+var globalVar = {};
 $(document).ready(function(){
     addListener();
     initPopPanel();
@@ -47,7 +48,9 @@ function addListener(){
         var product_id = $(this).parents(".box").data("id"),
             type = $(".waterfall").data("type");
         type?type = "&u_type=" + type:"";
-        window.location.href = '/we_account/product_display?product_id='+product_id+type;
+//        window.location.href = '/we_account/product_display?product_id='+product_id+type;
+        globalVar.product_id = product_id;
+        window.location.href = "#product";//'/we_account/product_display?product_id='+product_id+type;
 //        var bigImgStr = "";
 //        $(this).parents(".img-display").find("img").each(function(i){
 //            if(i != currNum){
