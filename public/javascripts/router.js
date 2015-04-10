@@ -1,9 +1,10 @@
 /**
  * Created by Administrator on 2015/4/5.
  */
-define(['jquery','routerConfig'],function($,routerConfig){
-    var key = window.location.hash.substring(1) || 'page1',
+define(['routerConfig'],function(routerConfig){
+    var key = window.location.hash.substring(1) || 'live_room',
         path = routerConfig[key];
+    $.ui.loadContent("#"+key,false,false,'slide');
     var module = require([path],function(module){
 
     });

@@ -17,6 +17,6 @@ requirejs.config({
     }
 });
 
-define(['text','jquery','router'],function(text,$,router){
+define(['text','router'],function(text,router){
 
 });
