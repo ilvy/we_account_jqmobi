@@ -17,12 +17,12 @@ html
         link(rel='stylesheet', href='/stylesheets/bootstrap-grid.css')
         link(rel='stylesheet', href='/build/css/af.ui.base.min.css')
         link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css')
-        script(src="/build/ui/appframework.ui.min.js")
+        script(src="/javascripts/jquery.js")
+        script(src="/build/ui/af.ui.jquery.min.js")
         //script(src="//cdn.app-framework-software.intel.com/2.1/appframework.min.js")
-        //script(src="/javascripts/jquery.js")
         //script(src="/build/jq.appframework.min.js")
-        script(src="/javascripts/libs/jquery.mobile.custom.js")
-        script(src="/javascripts/libs/bootstrap.min.js")
+        //script(src="/javascripts/libs/jquery.mobile.custom.js")
+        //script(src="/javascripts/libs/bootstrap.min.js")
         script(src="/javascripts/preloadImg.js")
         script(src="/javascripts/waterfall_relative.js")
         script(src="/javascripts/ajaxupload.js")
@@ -41,7 +41,8 @@ html
     body
         div#main.view
             div.pages
-                div#live_room.panel
+                div(selected='true')#live_room.panel
+                    a(href="#product" data-transition="up") page2
                     div.page.products-page
                         //#header
                             .room_num 直播号:#{room}

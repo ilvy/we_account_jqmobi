@@ -38,7 +38,7 @@ function addListener(){
         console.log("stop click");
     });
     var currLen,currNum,$currImgAlbum;
-    $(document).on("vclick",".img-display img",function(){
+    $(document).on("click",".img-display img",function(){
         if(disableClick){
             return;
         }
@@ -50,7 +50,8 @@ function addListener(){
         type?type = "&u_type=" + type:"";
 //        window.location.href = '/we_account/product_display?product_id='+product_id+type;
         globalVar.product_id = product_id;
-        window.location.href = "#product";//'/we_account/product_display?product_id='+product_id+type;
+        window.location.hash = "#product";//'/we_account/product_display?product_id='+product_id+type;
+
 //        var bigImgStr = "";
 //        $(this).parents(".img-display").find("img").each(function(i){
 //            if(i != currNum){

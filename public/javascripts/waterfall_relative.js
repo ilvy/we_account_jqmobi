@@ -115,6 +115,9 @@ Waterfall.prototype.asyncLoader = function(){
     var _this = this;
     var productsStrs = [],imgstr = '',isPublisher = "";
     asyncLoader.load(function(results){
+        if(typeof results == 'string'){
+            results = JSON.parse(results);
+        }
         if(results.flag != 1){
             return;
         }
@@ -170,7 +173,7 @@ Waterfall.prototype.getMinHeight = function(){
     var _this = this;
     $columns.each(function(i){
         if(i < _this.min_col_num){
-            colHeights.push($(this).outerHeight());
+            colHeights.push($(this).height());
         }
     });
     return Math.min.apply(null,colHeights);
@@ -183,12 +186,12 @@ Waterfall.prototype.getMinHeight = function(){
 Waterfall.prototype.getMinHeightColumnIndex = function(){
     var $columns = $(".column"),
         colHeights = [];
-    var _this = this,minH = $columns.eq(0).outerHeight(),minInd = 0,tmpH;
+    var _this = this,minH = $columns.eq(0).height(),minInd = 0,tmpH;
     $columns.each(function(i){
         if(i == 0 || i >= _this.min_col_num){
             return;
         }else{
-            if(minH > (tmpH = $(this).outerHeight())){
+            if(minH > (tmpH = $(this).height())){
                 minH = tmpH;
                 minInd = i;
             }
