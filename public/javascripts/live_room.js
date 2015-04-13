@@ -127,7 +127,7 @@ function addListener(){
     var waterfallHeight,
         scrollTop;
     $("#live_room").on("scroll",function(){
-        alert("test");
+//        alert("test");
         $("#disableClick-mask").css("display","none");
 //        if(!waterfallHeight){
 //            waterfallHeight = waterfall.min(waterfall.h_weights);//绝对布局方式瀑布流
