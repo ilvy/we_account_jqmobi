@@ -50,8 +50,8 @@ function addListener(){
         type?type = "&u_type=" + type:"";
 //        window.location.href = '/we_account/product_display?product_id='+product_id+type;
         globalVar.product_id = product_id;
-        window.location.hash = "#product";//'/we_account/product_display?product_id='+product_id+type;
-
+//        window.location.hash = "#product";//'/we_account/product_display?product_id='+product_id+type;
+        $("#product-hash").click();
 //        var bigImgStr = "";
 //        $(this).parents(".img-display").find("img").each(function(i){
 //            if(i != currNum){
@@ -126,7 +126,8 @@ function addListener(){
 
     var waterfallHeight,
         scrollTop;
-    $(document).on("scroll",function(){
+    $("#live_room").on("scroll",function(){
+        alert("test");
         $("#disableClick-mask").css("display","none");
 //        if(!waterfallHeight){
 //            waterfallHeight = waterfall.min(waterfall.h_weights);//绝对布局方式瀑布流
@@ -137,13 +138,13 @@ function addListener(){
             waterfall.asyncLoader();
         }
     });
-    $("#popup").on("scroll",function(event){
-        if(event.stopPropagation){
-            event.stopPropagation();
-        }else{
-            event.cancelBubble = true;
-        }
-    })
+//    $("#popup").on("scroll",function(event){
+//        if(event.stopPropagation){
+//            event.stopPropagation();
+//        }else{
+//            event.cancelBubble = true;
+//        }
+//    })
 
     /**
      * 删除商品信息

@@ -101,7 +101,7 @@ Waterfall.prototype.setPosition = function(boxes){
 
 Waterfall.prototype.setHeader = function(){
     var headerW = this.win_w - 2 * this.margin;
-    $("#header").css({
+    $(".my-header").css({
         width:headerW,
         'margin-left':this.margin
     });

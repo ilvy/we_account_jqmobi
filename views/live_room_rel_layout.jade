@@ -12,10 +12,10 @@ html
         - else
             title #{host}的momenT
         meta(name="viewport",content="width=device-width,initial-scale=1.0,user-scalable=no")
-        link(rel='stylesheet', href='/stylesheets/style_new.css')
         link(rel='stylesheet', href='/stylesheets/bootstrap.css')
         link(rel='stylesheet', href='/stylesheets/bootstrap-grid.css')
         link(rel='stylesheet', href='/build/css/af.ui.base.min.css')
+        link(rel='stylesheet', href='/stylesheets/style_new.css')
         link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css')
         script(src="/javascripts/jquery.js")
         script(src="/build/ui/af.ui.jquery.min.js")
@@ -42,9 +42,9 @@ html
         div#main.view
             div.pages
                 div(selected='true')#live_room.panel
-                    a(href="#product" data-transition="up") page2
+                    //a(href="#product" data-transition="up") page2
                     div.page.products-page
-                        //#header
+                        .my-header
                             .room_num 直播号:#{room}
                         section().waterfall
                             div.column
@@ -116,7 +116,7 @@ html
                         //div#disableClick-mask
                     //div.page.contact-page
                         div.curr-product
-
+                    a(href="#product" data-transition="slide" style="display:none;")#product-hash
                 div#product.panel
 
 

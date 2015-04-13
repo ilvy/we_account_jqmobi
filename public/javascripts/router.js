@@ -12,8 +12,8 @@ define(['routerConfig'],function(routerConfig){
         for(var hash in routerConfig){
             var path = routerConfig[hash];
             if(window.location.hash == '#'+hash){
-//                $.ui.loadContent("#"+key,false,false,'slide');
-                $("#"+hash).trigger("click");
+//                $.ui.loadContent("#"+key);
+//                $("#"+hash).trigger("click");
                 require([path],function(module){
 
                 });
