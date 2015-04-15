@@ -5,6 +5,8 @@
 define([],function(){
     return {
         live_room:'../modules/module1/module1',
-        product:'../modules/module2/module2'
+        register:'modules/register/register',
+        publish:'modules/publish/publish',
+        product_display:'modules/product/product'
     }
 });

@@ -21,7 +21,7 @@ html
         //script(src="/build/ui/af.ui.jquery.min.js")
         //script(src="//cdn.app-framework-software.intel.com/2.1/appframework.min.js")
         //script(src="/build/jq.appframework.min.js")
-        //script(src="/javascripts/libs/jquery.mobile.custom.js")
+        script(src="/javascripts/libs/jquery.mobile.custom.js")
         //script(src="/javascripts/libs/bootstrap.min.js")
         script(src="/javascripts/preloadImg.js")
         script(src="/javascripts/waterfall_relative.js")
@@ -39,102 +39,84 @@ html
                 top:0;
             }
     body
-        div#main.view
-            div.pages
-                div(selected='true')#live_room.panel
-                    div()
-                        div(style="float:left;")
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
-                            div fdsfdsfsfds
+        div.page.register
+        div.page.products-page.live_room
+            .my-header
+                .room_num 直播号:#{room}
+            section().waterfall
+                div.column
+                div.column
+                div.column
+                div.column
+                div.column
+                div.column
+                div.column
+                div.column
 
+            div(role="dialog" aria-hidden="true" data-backdrop="static")#popup.modal.fade
+                div(data-toggle="modal" data-target="#popup")#popup-close
+                    span ×
+                div.modal-dialog
+                    div.modal-content
+                        div.modal-header header
+                            button(type="button" class="close" data-dismiss="modal")
+                                span(aria-hidden="true") x
+                                span.sr-only close
+                        div.modal-body
+                            div.big-img-display
+                            //div#next next
+            //button(data-toggle="modal" data-target="#popup")#popup-btn popup-btn
+            div#tools-box
+                - if(!publisher)
+                    div#upload-div-box
+                        div#upload-div
+                            div#upload
+                                i.fa.fa-plus
+                                //div.vertical
+                                //div.horizon
+                - else
+                    a(href='/we_account/fav')
+                        div.myfavorites
+                            //div.heart-folder
+                            i.fa.fa-folder
+                            //i.fa.fa-heart
+                    a(href="/we_account/room_door")
+                        div.changeRoom
+                            i.fa.fa-exchange
+                    div.favorite
+                        - if (isFavorite)
+                            i.fa.fa-heart
+                        - else
+                            i.fa.fa-heart-o
 
-                    a(href="#product" data-transition="slide" style="display:none;")#product-hash
-                div#product.panel
+        div.page.publish
+            div#upload-panel
+                div(role="alert")#warn.alert.alert-warning.fade.in 至少需要发布一张图片
+                //div#sub-btn
+                //    input(type="button" value="确定")#submit
+                input(type="text" placeholder="先来个简单介绍...").product-title
+                textarea(placeholder="详细说点什么吧，让顾客更好的了解您的产品...").product-desc
+                div#image_content
+                .lr-btn-group.col-xxs-6.col-xxs-offset-3
+                    div#cancel-btn.col-xxs-6
+                        div
+                            i#cancel.fa.fa-times-circle
+                    div#sub-btn.col-xxs-6
+                        div
+                            i#submit.fa.fa-upload
+            div#uploading-mask
+            div#disableClick-mask
+        div.page.product_display
+            div
+                .desc
+                #product.col-lg-offset-4.col-lg-4.col-md-8.col-md-offset-2.col-sm-8.col-sm-offset-2.col-xs-8.col-xs-offset-2.col-xxs-12
 
-
+                    .product-photo
+                        .img-box
+                            img(src="")
+                a(href="#live_room")
+                    .back-live-room.col-xxs-12
+                        .icon-box
+                            .icon
+        div.page.contact-page
+            div.curr-product

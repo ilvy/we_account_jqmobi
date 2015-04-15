@@ -464,11 +464,13 @@ function displayProduct(req,res){
     dbOperator.query('call pro_select_product_by_id(?)',[id],function(err,results){
         if(err){
             console.log("call pro_select_product_by_id err:"+err);
+            response.failed("",res,'');
             return;
         }
         var product = results[0][0];
         product.image_url = product.image_url.split(";");
-        res.render("product",{product:product});
+//        res.render("product",{product:product});
+        response.success(product,res,'');
     });
 }
 

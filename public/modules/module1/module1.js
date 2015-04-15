@@ -12,4 +12,5 @@ define([],function(){
 //            rotateImg();
 //        });
 //    });
+    modules['live_room'] = {};
 });

@@ -3,6 +3,8 @@
  */
 var disableClick = false;
 var globalVar = {};
+var modules = {};
+
 $(document).ready(function(){
     addListener();
     initPopPanel();
@@ -50,8 +52,8 @@ function addListener(){
         type?type = "&u_type=" + type:"";
 //        window.location.href = '/we_account/product_display?product_id='+product_id+type;
         globalVar.product_id = product_id;
-//        window.location.hash = "#product";//'/we_account/product_display?product_id='+product_id+type;
-        $("#product-hash").click();
+        window.location.hash = "#product_display-"+product_id;//'/we_account/product_display?product_id='+product_id+type;
+//        $("#product-hash").click();
 //        var bigImgStr = "";
 //        $(this).parents(".img-display").find("img").each(function(i){
 //            if(i != currNum){
@@ -126,7 +128,7 @@ function addListener(){
 
     var waterfallHeight,
         scrollTop;
-    $("#live_room").on("scroll",function(){
+    $(document).on("scroll",function(){
 //        alert("test");
         $("#disableClick-mask").css("display","none");
 //        if(!waterfallHeight){
@@ -134,6 +136,9 @@ function addListener(){
             waterfallHeight = waterfall.getMinHeight();//相对布局方式瀑布流
 //        }
         scrollTop = $("body").scrollTop();
+        if(window.location.hash == '' || window.location.hash == '#live_room'){
+            globalVar.lv_scroll_top = scrollTop;
+        }
         if(scrollTop + $(window).height() > 0.9 * waterfallHeight){
             waterfall.asyncLoader();
         }
@@ -176,7 +181,7 @@ function addListener(){
         })
     });
     $(function(){
-        new AjaxUpload("#upload-div-box",{
+        new AjaxUpload("#upload-div-box_bak",{
             action:"/we_account/upload",
 //                action:"http://120.24.224.144:80/we_account/upload",
             name:'file',
@@ -210,6 +215,9 @@ function addListener(){
 //                    products?products  += ";"+ res:products += res;
             }
         })
+    });
+    $("#upload-div-box").on("vclick",function(){
+        window.location.hash = "#publish";
     });
     $(function(){
         new AjaxUpload("#upload2",{
