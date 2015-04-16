@@ -26,7 +26,7 @@ html
         script(src="/javascripts/preloadImg.js")
         script(src="/javascripts/waterfall_relative.js")
         script(src="/javascripts/ajaxupload.js")
-        script(src="/javascripts/live_room.js")
+        //script(src="/javascripts/live_room.js")
         script(src="/javascripts/libs/require/require.js" data-main="/jqr.js")
         script.
             function load(){
@@ -53,21 +53,8 @@ html
                 div.column
                 div.column
 
-            div(role="dialog" aria-hidden="true" data-backdrop="static")#popup.modal.fade
-                div(data-toggle="modal" data-target="#popup")#popup-close
-                    span ×
-                div.modal-dialog
-                    div.modal-content
-                        div.modal-header header
-                            button(type="button" class="close" data-dismiss="modal")
-                                span(aria-hidden="true") x
-                                span.sr-only close
-                        div.modal-body
-                            div.big-img-display
-                            //div#next next
-            //button(data-toggle="modal" data-target="#popup")#popup-btn popup-btn
             div#tools-box
-                - if(!publisher)
+                - if(publisher)
                     div#upload-div-box
                         div#upload-div
                             div#upload
@@ -75,12 +62,12 @@ html
                                 //div.vertical
                                 //div.horizon
                 - else
-                    a(href='/we_account/fav')
+                    a(href='#myFavorite')
                         div.myfavorites
                             //div.heart-folder
                             i.fa.fa-folder
                             //i.fa.fa-heart
-                    a(href="/we_account/room_door")
+                    a(href="#room_door")
                         div.changeRoom
                             i.fa.fa-exchange
                     div.favorite
@@ -97,7 +84,7 @@ html
                 input(type="text" placeholder="先来个简单介绍...").product-title
                 textarea(placeholder="详细说点什么吧，让顾客更好的了解您的产品...").product-desc
                 div#image_content
-                .lr-btn-group.col-xxs-6.col-xxs-offset-3
+                .lr-btn-group.col-xxs-6
                     div#cancel-btn.col-xxs-6
                         div
                             i#cancel.fa.fa-times-circle
@@ -114,9 +101,18 @@ html
                     .product-photo
                         .img-box
                             img(src="")
-                a(href="#live_room")
+                a#back-live-room
                     .back-live-room.col-xxs-12
                         .icon-box
                             .icon
+        div.page.myFavorite
+            ul#room-list
+        div.page.room_door
+            form.door.col-lg-offset-3.col-lg-6.col-md-8.col-md-offset-2.col-sm-8.col-sm-offset-2.col-xs-8.col-xs-offset-2.col-xxs-12
+                div.room_input.col-xxs-12.col-xs-10.col-xs-offset-1.col-md-8.col-md-offset-2
+                    input(type="input" placeholder="输入昵称或直播号")#room.col-xxs-9.col-xs-9.col-md-8
+                    div.submit-div
+                        a.fa.fa-arrow-right
+        div.page.personality
         div.page.contact-page
             div.curr-product

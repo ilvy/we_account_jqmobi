@@ -12,7 +12,6 @@ $(document).ready(function(){
     boxes = $(".box");//sorted date source
     waterfall = new Waterfall();
     asyncLoader = new AsyncLoader();
-    waterfall.asyncLoader();
 })
 $(window).on("resize",function(){
 //    waterfall.init();
@@ -23,7 +22,6 @@ var Waterfall = function(){
     this.margin = 8;
     this.box_w = 200;
     this.h_weights = [];//weight of height,including prices,img size and so on 每列的高度
-    this.isLoadOver = true;//上一次加载事件是否已经完毕,第一次加载默认为true
     this.init();
 }
 
@@ -81,8 +79,14 @@ Waterfall.prototype.generateColumn = function(){
     }
 }
 
+/**
+ * 切换房间需要清理原内容
+ */
+Waterfall.prototype.cleanWaterfall = function(){
+    $(".column").html("");
+}
+
 Waterfall.prototype.setPosition = function(boxes){
-    this.isLoadOver = true;//开始排位说明已经加载完毕
     var colNum = this.min_col_num,
         hs = this.h_weights,
         box_h,
@@ -108,10 +112,6 @@ Waterfall.prototype.setHeader = function(){
 }
 
 Waterfall.prototype.asyncLoader = function(){
-    if(!this.isLoadOver){
-        return;
-    }
-    this.isLoadOver = false;
     var _this = this;
     var productsStrs = [],imgstr = '',isPublisher = "";
     asyncLoader.load(function(results){
@@ -252,4 +252,12 @@ function isPC(){
         if (userAgentInfo.toLowerCase().indexOf(Agents[v]) > 0) { flag = false; break; }
     }
     return flag;
+}
+
+function stopPropagation(event){
+    if(event.stopPropagation){
+        event.stopPropagation();
+    }else if(event.cancelBubble){
+        event.cancelBubble = true;
+    }
 }

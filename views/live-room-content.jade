@@ -1,0 +1,47 @@
+.my-header
+    .room_num 直播号:#{room}
+    section().waterfall
+        div.column
+        div.column
+        div.column
+        div.column
+        div.column
+        div.column
+        div.column
+        div.column
+
+    div(role="dialog" aria-hidden="true" data-backdrop="static")#popup.modal.fade
+        div(data-toggle="modal" data-target="#popup")#popup-close
+            span ×
+        div.modal-dialog
+            div.modal-content
+                div.modal-header header
+                    button(type="button" class="close" data-dismiss="modal")
+                        span(aria-hidden="true") x
+                        span.sr-only close
+                div.modal-body
+                    div.big-img-display
+                    //div#next next
+    //button(data-toggle="modal" data-target="#popup")#popup-btn popup-btn
+    div#tools-box
+        - if(publisher)
+            div#upload-div-box
+                div#upload-div
+                    div#upload
+                        i.fa.fa-plus
+                        //div.vertical
+                        //div.horizon
+        - else
+            a(href='#myFavorite')
+                div.myfavorites
+                    //div.heart-folder
+                    i.fa.fa-folder
+                    //i.fa.fa-heart
+            a(href="#room_door")
+                div.changeRoom
+                    i.fa.fa-exchange
+            div.favorite
+                - if (isFavorite)
+                    i.fa.fa-heart
+                - else
+                    i.fa.fa-heart-o

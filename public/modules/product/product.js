@@ -1,11 +1,12 @@
 /**
  * Created by man on 15-4-15.
  */
-define([],function(){
+define(['router'],function(router){
 
     function Product(){
         this.init = function(){
             this.do();
+            this.addListener();
             return this;
         }
         this.do = function(){
@@ -25,6 +26,11 @@ define([],function(){
                 }
             });
         }
+        this.addListener = function(){
+            $(document).on("click","#back-live-room",function(){
+                router.changeHash('live_room',0);
+            });
+        }
     }
-    modules['product_display'] = new Product().init();
+    globalVar.modules['product_display'] = new Product().init();
 });

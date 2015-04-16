@@ -182,8 +182,15 @@ router.get("/goto_publish",function(req,resp){
         });
 });
 
+router.get('/live_room_test',function(req,res){
+    res.redirect('/we_account/live-room#live_room-666666');
+});
+
 router.get("/fav",live_room.myFavorite);
-router.get("/live-room",gotoLiveRoom);//带上参数room_id
+router.get("/live-room",function(req,res){
+    res.render("live_room_rel_layout",{});
+});//带上参数room_id
+router.post("/live_room",gotoLiveRoom);//带上参数room_id
 
 router.post("/publish",publish_account.publishProduct);
 

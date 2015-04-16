@@ -448,7 +448,7 @@ body{
     width: 100%;
     height: 100%;
     background-color: #444444;
-    display: none;
+    display: block;
     top: 0;
 }
 
@@ -486,6 +486,11 @@ input.product-title{
     /*float: left;*/
 }
 
+#cancel-btn > div{
+    float: right;
+    margin-right: 15px;
+}
+
 #sub-btn{
     /*margin-top: 10px;*/
     /*width: 30px;*/
@@ -499,8 +504,10 @@ input.product-title{
     background-color: #58bba7;
     border-radius: 20px;
     padding-left: 0px;
-    float: right;
-    margin-top: 10px;
+    float: left;
+    /*margin: 3px auto;*/
+    margin-left: 15px;
+    margin-top: 3px;
 }
 
 #submit{

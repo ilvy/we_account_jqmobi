@@ -15,12 +15,13 @@ var dbOperator = require("../../../db/dbOperator"),
  * @param req
  * @param res
  */
-function gotoLiveRoom_new(req,res){//相对布局瀑布流，不加载商品信息
+function gotoLiveRoom_new(req,res,reqType){//相对布局瀑布流，不加载商品信息
     console.log("***********************gotoLiveRoom");
     var openId = req.session.openId,//||(req.session.openId = 'oHbq1t0enasGWD7eQoJuslZY6R-4'),
         type = req.session.type;
 //    var u_type = req.query.u_type;//u_type:用户类型，用于区别 发布者和普通用户 从商品详细页面跳回商品瀑布流展示页面的判断
-    var room_id = req.query.room_id;
+    var room_id;
+    room_id = req.query.room_id;
     req.session.room = room_id;
     var products,totalPage,
         paras1 = [null,null,0];
@@ -31,7 +32,11 @@ function gotoLiveRoom_new(req,res){//相对布局瀑布流，不加载商品信�
         var productRes,publisher = results;
         if(publisher.isPublisher){//发布者进入房间
             session.isPublisher = 1;
-            res.render("live_room_rel_layout",{publisher:publisher.isPublisher?publisher:"",room:publisher.room_id});
+            if(reqType == 'get'){
+                res.render("live_room_rel_layout",{publisher:publisher.isPublisher?publisher:"",room:publisher.room_id});
+            }else{
+                response.success({publisher:publisher.isPublisher?publisher:"",room:publisher.room_id},res,'');
+            }
         }else{
             session.isPublisher = 0;
             if(openId){
@@ -40,10 +45,18 @@ function gotoLiveRoom_new(req,res){//相对布局瀑布流，不加载商品信�
                         console.log("pro_select_favourite_rooms err:");
                         console.log(err);
                     }
-                    res.render("live_room_rel_layout",{publisher:"",room:publisher.room_id,isFavorite:favResult[0][0]['result'],host:publisher.nickname});
+                    if(reqType == 'get'){
+                        res.render("live_room_rel_layout",{publisher:"",room:publisher.room_id,isFavorite:favResult[0][0]['result'],host:publisher.nickname});
+                    }else{
+                        response.success({publisher:"",room:publisher.room_id,isFavorite:favResult[0][0]['result'],host:publisher.nickname},res,'');
+                    }
                 });
             }else{
-                res.render("live_room_rel_layout",{publisher:"",room:publisher.room_id,isFavorite:0,host:publisher.nickname});
+                if(reqType == 'get'){
+                    res.render("live_room_rel_layout",{publisher:"",room:publisher.room_id,isFavorite:0,host:publisher.nickname});
+                }else{
+                    response.success({publisher:"",room:publisher.room_id,isFavorite:0,host:publisher.nickname},res,'');
+                }
             }
         }
 //        if(type == 1 || (u_type == 1 && req.session.isPublisher)){//发布者
@@ -262,6 +275,10 @@ function loadMoreProducts_new(req,res){
         openId = session.openId,
         type = req.session.type;
     var room_id = session.room;
+    if((typeof  session.isLoadOver != 'undefined' && !session.isLoadOver)){
+        response.success(-1,res,"加载未完");
+    }
+    session.isLoadOver = false;
     var query = req.query;
     var paras = [null,null,query.page];
     var products;
@@ -281,6 +298,7 @@ function loadMoreProducts_new(req,res){
             item.image_url = item.image_url.split(";");
         });
 //        console.log("products:"+products);
+        session.isLoadOver = true;
         response.success({products:products,totalPage:rows[0][0]['totalpage'],isPublisher/*发布者有删除按钮*/:session.isPublisher},res,"加载成功");
     });
 }
@@ -480,15 +498,17 @@ function displayProduct(req,res){
  * @param res
  */
 function myFavorite(req,res){
-    var open_id = req.session.openId;//||'oHbq1t0enasGWD7eQoJuslZY6R-4';
+    var open_id = req.session.openId||'oHbq1t0enasGWD7eQoJuslZY6R-4';//;
     var paras = [open_id];
     if(open_id){
         dbOperator.query("call pro_select_favourite_rooms(?)",paras,function(err,rows){
             if(err){
                 console.log(err);
+                response.failed('',res,'');
             }else{
                 console.log(rows);
-                res.render('myfavorite',{favourite_rooms:rows[0]});
+//                res.render('myfavorite',{favourite_rooms:rows[0]});
+                response.success(rows[0],res,'');
             }
         })
     }else{//需要先关注公众号
