@@ -28,7 +28,9 @@ var globalVar = {
     scrollTop:0,
     live_room:'',
     reload:{},//标示模块是否重新加载
-    modules: {}
+    modules: {},
+    productArray : [],
+    hashFrom:''
 };
 
 define(['text','router'],function(text,router){

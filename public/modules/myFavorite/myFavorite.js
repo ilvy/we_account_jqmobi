@@ -33,7 +33,7 @@ define(['router'],function(router){
             });
         }
         this.addListener = function(){
-            $(document).on("click",".favour_room_option",function(){
+            $(document).on("vclick",".favour_room_option",function(){
                 var room = encodeURI($(this).data("id"));
                 $.ajax({
                     url:'/we_account/knock_door',
@@ -55,7 +55,7 @@ define(['router'],function(router){
             /**
              * 取消该直播间收藏
              */
-            $(document).on("click",".fav-remove",function(event){
+            $(document).on("vclick",".fav-remove",function(event){
                 if(event.stopPropagation){
                     event.stopPropagation();
                 }else if(event.cancelBubble){

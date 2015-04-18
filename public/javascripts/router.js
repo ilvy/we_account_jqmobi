@@ -2,7 +2,7 @@
  * Created by Administrator on 2015/4/5.
  */
 define(['routerConfig'],function(routerConfig){
-    var key = window.location.hash || '#live_room-666666',
+    var key = window.location.hash,
         path = routerConfig[key];
     loadModule(key);
     $(window).on('hashchange',function(){
@@ -12,17 +12,65 @@ define(['routerConfig'],function(routerConfig){
     });
 
     function changeModule(hash){
-        $('.page').each(function(){
-            var $module = $(this);
-            if($module.hasClass(hash)){
-                $module.css("display","block");
-                if(hash == 'live_room'){
-                    $('body,html').animate({scrollTop:globalVar.lv_scroll_top},'fast');
-                }
-            }else{
-                $module.css("display","none");
-            }
-        });
+        if(!globalVar.hashFrom || globalVar.hashFrom == hash){
+            $('.'+hash).removeClass("slide-init").addClass("visible");
+            globalVar.hashFrom = hash;
+            return;
+        }
+        var $fromModule = $("."+globalVar.hashFrom),
+            $toModule = $("."+hash);
+        $fromModule.addClass('slide-out');
+        $toModule.addClass("visible").addClass("slide-init").addClass("slide-position");
+        setTimeout(function(){
+            $fromModule.removeClass("visible").removeClass('slide-out').addClass("slide-init");
+            $toModule.addClass('slide-in');
+        },500);
+        setTimeout(function(){
+            $toModule.removeClass('slide-in').removeClass("slide-init").removeClass("slide-position");
+        },1000);
+//        $fromModule.css({
+//            "position":"absolute",
+//            width:"100%"
+//        }).animate({
+//            right:'100%'
+//        },300,function(){
+//            $(this).css({
+//                "display":"none",
+//                position:'static',
+//                right:0
+//            });
+//        });
+
+        globalVar.hashFrom = hash;
+        if(typeof document.body.scrollTop != 'undefined'){
+            document.body.scrollTop = globalVar.lv_scroll_top;
+        }
+        if(typeof document.documentElement.scrollTop != 'undefined'){
+            document.documentElement.scrollTop = globalVar.lv_scroll_top;
+        }
+//        $('.page').each(function(){
+//            var $module = $(this);
+//            if($module.hasClass(hash)){
+//                $module.removeClass("slide-out").css("display","block").addClass('slide-in');//.css("display","block");
+//                setTimeout(function(){
+//                    $module.removeClass('slide-in').removeClass('slide');
+//                },550);
+////                if(hash == 'live_room'){
+////                    $('body,html').animate({scrollTop:globalVar.lv_scroll_top},'fast');
+////                }
+//                if(typeof document.body.scrollTop != 'undefined'){
+//                    document.body.scrollTop = globalVar.lv_scroll_top;
+//                }
+//                if(typeof document.documentElement.scrollTop != 'undefined'){
+//                    document.documentElement.scrollTop = globalVar.lv_scroll_top;
+//                }
+//            }else{
+//                $module.removeClass("slide-in").addClass('slide-out');//.css("display","none");
+//                setTimeout(function(){
+//                    $module.removeClass('slide-out').addClass('slide').css("display","none");
+//                },300);
+//            }
+//        });
     }
 
     /**
@@ -60,10 +108,11 @@ define(['routerConfig'],function(routerConfig){
         var hash = hashParts[0];
         switch (hash){
             case '#live_room':
-                globalVar.room_id = hashParts[1];
+                globalVar.room_id = hashParts[1] || globalVar.room_id;
                 break;
             case '#product_display':
                 globalVar.product_id = hashParts[1];
+                globalVar.room_id = hashParts[2];
                 break;
             default :
                 break;
@@ -76,6 +125,9 @@ define(['routerConfig'],function(routerConfig){
             var objHash = hash.split('-')[0];
             if(objHash){
                 globalVar.reload[objHash] = reload || 0;
+                if(objHash == 'live_room' && reload){
+                    globalVar.lv_scroll_top = 0;
+                }
                 window.location.hash = '#'+hash;
             }
         }

@@ -27,8 +27,8 @@ define(['router'],function(router){
             });
         }
         this.addListener = function(){
-            $(document).on("click","#back-live-room",function(){
-                router.changeHash('live_room',0);
+            $(document).on("vclick","#back-live-room",function(){
+                router.changeHash('live_room-'+globalVar.room_id,0);
             });
         }
     }

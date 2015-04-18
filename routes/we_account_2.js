@@ -164,15 +164,17 @@ router.get("/goto_publish",function(req,resp){
                         return;
                     }
                     if(results[0]&&results[0]["count(1)"]){
-                        resp.redirect("/we_account/live-room?room_id="+results[0]["room_id"]);
+                        resp.redirect("/we_account/live-room#live_room-"+results[0]["room_id"]);
                     }else{
                         resp.redirect("/register.html");
                     }
                 });
             }else if(type == 2){//普通用户登录
-                live_room.renderRoom_door(req,resp);//返回room_door
+                resp.redirect("/we_account/live-room#room_door");
+//                live_room.renderRoom_door(req,resp);//返回room_door
             }else if(type == 3){//进入收藏页面
-                live_room.myFavorite(req,resp);
+                resp.redirect("/we_account/live-room#myFavorite");
+//                live_room.myFavorite(req,resp);
             }else if(type == 4){//进入个人信息页面
                 publish_account.getPersonalInfo(req,resp,1);
             }

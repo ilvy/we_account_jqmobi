@@ -498,7 +498,7 @@ function displayProduct(req,res){
  * @param res
  */
 function myFavorite(req,res){
-    var open_id = req.session.openId||'oHbq1t0enasGWD7eQoJuslZY6R-4';//;
+    var open_id = req.session.openId;//||'oHbq1t0enasGWD7eQoJuslZY6R-4';//;
     var paras = [open_id];
     if(open_id){
         dbOperator.query("call pro_select_favourite_rooms(?)",paras,function(err,rows){
@@ -524,7 +524,7 @@ querystring = require('querystring');
  * @param res
  */
 function compressPic(req,resp){
-    var path = '/mnt/projects/weAccount_git/we_account/public/images/'+req.body.filePath;
+    var path = '/mnt/projects/we_account_jqmobi/public/images/'+req.body.filePath;
     var post_data = querystring.stringify({
         filePath:path
     });
@@ -554,7 +554,7 @@ function compressPic(req,resp){
  * @param resp
  */
 function rotateImg(req,resp){
-    var path = '/mnt/projects/weAccount_git/we_account/public'+req.body.filePath;
+    var path = '/mnt/projects/we_account_jqmobi/public'+req.body.filePath;
 //    var path = 'F:/weAccount_test/weAccountServerTest/public'+req.body.filePath;
     var post_data = querystring.stringify({
         filePath:path

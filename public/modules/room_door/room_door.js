@@ -12,7 +12,7 @@ define(['router'],function(router){
             $("#room").val("");//清空
         }
         this.addListener = function(){
-            $(document).on("click",".submit-div",function(){
+            $(document).on("vclick",".submit-div",function(){
                 var room = encodeURI($("#room").val().trim());
                 if(room.length > 20){
                     alert("输入不合法");

@@ -7,31 +7,13 @@
 doctype html
 html
     head
-        - if(publisher)
-            title #{publisher.nickname}的momenT
-        - else
-            title #{host}的momenT
+        title 的momenT
         meta(name="viewport",content="width=device-width,initial-scale=1.0,user-scalable=no")
+        link(rel='stylesheet', href='/stylesheets/style_new.css')
         link(rel='stylesheet', href='/stylesheets/bootstrap.css')
         link(rel='stylesheet', href='/stylesheets/bootstrap-grid.css')
         //link(rel='stylesheet', href='/build/css/af.ui.base.min.css')
-        link(rel='stylesheet', href='/stylesheets/style_new.css')
         link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css')
-        script(src="/javascripts/jquery.js")
-        //script(src="/build/ui/af.ui.jquery.min.js")
-        //script(src="//cdn.app-framework-software.intel.com/2.1/appframework.min.js")
-        //script(src="/build/jq.appframework.min.js")
-        script(src="/javascripts/libs/jquery.mobile.custom.js")
-        //script(src="/javascripts/libs/bootstrap.min.js")
-        script(src="/javascripts/preloadImg.js")
-        script(src="/javascripts/waterfall_relative.js")
-        script(src="/javascripts/ajaxupload.js")
-        //script(src="/javascripts/live_room.js")
-        script(src="/javascripts/libs/require/require.js" data-main="/jqr.js")
-        script.
-            function load(){
-                waterfall.asyncLoader();
-            }
         style.
             .back_to_add{
                 position:fixed;
@@ -40,9 +22,9 @@ html
             }
     body
         div.page.register
-        div.page.products-page.live_room
-            .my-header
-                .room_num 直播号:#{room}
+        div.page.products-page.live_room.slide-init
+            #header
+                .room_num 直播号:
             section().waterfall
                 div.column
                 div.column
@@ -54,27 +36,20 @@ html
                 div.column
 
             div#tools-box
-                - if(publisher)
-                    div#upload-div-box
-                        div#upload-div
-                            div#upload
-                                i.fa.fa-plus
-                                //div.vertical
-                                //div.horizon
-                - else
-                    a(href='#myFavorite')
-                        div.myfavorites
-                            //div.heart-folder
-                            i.fa.fa-folder
-                            //i.fa.fa-heart
-                    a(href="#room_door")
-                        div.changeRoom
-                            i.fa.fa-exchange
-                    div.favorite
-                        - if (isFavorite)
-                            i.fa.fa-heart
-                        - else
-                            i.fa.fa-heart-o
+                div#upload-div-box
+                    div#upload-div
+                        div#upload
+                            i.fa.fa-plus
+                            //div.vertical
+                            //div.horizon
+                a#toMyFav
+                    div.myfavorites
+                        i.fa.fa-folder
+                a#toRoomDoor
+                    div.changeRoom
+                        i.fa.fa-exchange
+                div.favorite
+
 
         div.page.publish
             div#upload-panel
@@ -84,18 +59,17 @@ html
                 input(type="text" placeholder="先来个简单介绍...").product-title
                 textarea(placeholder="详细说点什么吧，让顾客更好的了解您的产品...").product-desc
                 div#image_content
-                .lr-btn-group.col-xxs-6
+                .lr-btn-group.col-xxs-6.col-xxs-offset-3
                     div#cancel-btn.col-xxs-6
                         div
                             i#cancel.fa.fa-times-circle
                     div#sub-btn.col-xxs-6
                         div
                             i#submit.fa.fa-upload
-            div#uploading-mask
             div#disableClick-mask
-        div.page.product_display
+        div.page.product_display.slide-init
             div
-                .desc
+                .desc.col-lg-offset-4.col-lg-4.col-md-8.col-md-offset-2.col-sm-8.col-sm-offset-2.col-xs-8.col-xs-offset-2.col-xxs-12
                 #product.col-lg-offset-4.col-lg-4.col-md-8.col-md-offset-2.col-sm-8.col-sm-offset-2.col-xs-8.col-xs-offset-2.col-xxs-12
 
                     .product-photo
@@ -105,6 +79,7 @@ html
                     .back-live-room.col-xxs-12
                         .icon-box
                             .icon
+            div.stick-width
         div.page.myFavorite
             ul#room-list
         div.page.room_door
@@ -116,3 +91,17 @@ html
         div.page.personality
         div.page.contact-page
             div.curr-product
+
+        div#uploading-mask
+
+script(src="/javascripts/jquery.js")
+//script(src="/build/ui/af.ui.jquery.min.js")
+//script(src="//cdn.app-framework-software.intel.com/2.1/appframework.min.js")
+//script(src="/build/jq.appframework.min.js")
+script(src="/javascripts/libs/jquery.mobile.custom.js")
+//script(src="/javascripts/libs/bootstrap.min.js")
+script(src="/javascripts/preloadImg.js")
+script(src="/javascripts/waterfall_relative.js")
+script(src="/javascripts/ajaxupload.js")
+//script(src="/javascripts/live_room.js")
+script(src="/javascripts/libs/require/require.js" data-main="/jqr.js")

@@ -6,7 +6,7 @@
 var boxes = [],
     waterfall,
     asyncLoader,
-    totalPage,currentPage = 0;
+    totalPage = -1,currentPage = 0;
 
 $(document).ready(function(){
     boxes = $(".box");//sorted date source
@@ -29,6 +29,7 @@ Waterfall.prototype.init = function(){
     var win_w = this.win_w = $(window).width(),
         win_H = this.win_H =  $(window).height();
     if(isPC()){
+        alert('pc');
         win_w -= 20;
         this.win_w = win_w;
     }
@@ -105,10 +106,11 @@ Waterfall.prototype.setPosition = function(boxes){
 
 Waterfall.prototype.setHeader = function(){
     var headerW = this.win_w - 2 * this.margin;
-    $(".my-header").css({
+    $("#header").css({
         width:headerW,
         'margin-left':this.margin
     });
+    $(".stick-width").css("height",3);
 }
 
 Waterfall.prototype.asyncLoader = function(){
@@ -129,7 +131,7 @@ Waterfall.prototype.asyncLoader = function(){
             isPublisher = results.data.isPublisher;
         }
         var deleteProductBtn = "";
-        if(!isPublisher){
+        if(isPublisher){
             deleteProductBtn = '<div class="delete-product"><i class="fa fa-times-circle"></div>';//<input type="button" value="删除"/>
         }else{
             deleteProductBtn = '<a href="/we_account/personalInfo"><div class="contact">联系卖家</div></a>';
@@ -214,7 +216,7 @@ AsyncLoader.prototype.setTheLastPos = function(){
 }
 
 AsyncLoader.prototype.load = function(callback){
-    if(currentPage + 1 >= totalPage){
+    if(currentPage + 1 >= totalPage && totalPage != -1){
         return;
     }
     var url = '/we_account/load_more?page='+currentPage++;

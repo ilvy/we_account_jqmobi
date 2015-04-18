@@ -2,7 +2,7 @@
  * Created by man on 15-4-15.
  */
 define(['router'],function(router){
-    var products = '',desc = '',productArray = [];
+    var products = '',desc = '',productArray = globalVar.productArray;
 
     function Publish(){
 
@@ -18,7 +18,7 @@ define(['router'],function(router){
             $("#cancel").on("click",function(){
 //        removeUploadPanel();
 //                window.location.hash = '#live_room';
-                router.changeHash('live_room',0);//不重新加载
+                router.changeHash('live_room-'+globalVar.room_id,0);//不重新加载
             });
             $(document).on("vclick",".adjustImg",function(){
                 var $this = $(this),
@@ -71,6 +71,7 @@ define(['router'],function(router){
                         if(data && data.flag == 1){
                             showNewUploadImg(data.data.id,productArray,title);
                             cleanPosition();
+                            router.changeHash("live_room-"+globalVar.room_id,0);
                         }else{
                             alert("上传失败，请重试！！");
                         }
@@ -111,6 +112,7 @@ define(['router'],function(router){
 
 
     function cleanPosition(){
+        $(".product-title").val("");
         $(".product-desc").val("");
         productArray = [];
         products = "";
