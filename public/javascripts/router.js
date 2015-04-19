@@ -24,10 +24,10 @@ define(['routerConfig'],function(routerConfig){
         setTimeout(function(){
             $fromModule.removeClass("visible").removeClass('slide-out').addClass("slide-init");
             $toModule.addClass('slide-in');
-        },500);
+        },800);
         setTimeout(function(){
             $toModule.removeClass('slide-in').removeClass("slide-init").removeClass("slide-position");
-        },1000);
+        },1300);
 //        $fromModule.css({
 //            "position":"absolute",
 //            width:"100%"
