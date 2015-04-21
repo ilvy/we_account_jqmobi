@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <link href="css/mystyle.css" rel="stylesheet"/>
+</head>
+<body>
+    <div id="order-list">
+        <div class="table">
+            <div class="t-row ">
+                <div class="t-col t-col-3">品名</div>
+                <div class="t-col t-col-2">数量</div>
+                <!--<div class="t-col t-col-2">客户</div>-->
+                <div class="t-col t-col-3 extra">备注</div>
+                <div class="t-col t-col-1">状态</div>
+                <div class="t-col t-col-1 extra">操作</div>
+            </div>
+            <div class="t-row ">
+                <div class="t-col t-col-3">iphone6</div>
+                <div class="t-col t-col-2">2</div>
+                <!--<div class="t-col t-col-2">3人</div>-->
+                <div class="t-col t-col-3 extra" style="overflow-y: hidden;">备注备注备注备注</div>
+                <div class="t-col t-col-1">√</div>
+                <div class="t-col t-col-1 extra">删除</div>
+            </div>
+            <div class="t-row ">
+                <div class="t-col t-col-3">奶粉</div>
+                <div class="t-col t-col-2">1</div>
+                <!--<div class="t-col t-col-2">孙大个</div>-->
+                <div class="t-col t-col-3 extra">孙远征</div>
+                <div class="t-col t-col-1">√</div>
+                <div class="t-col t-col-1 extra">删除</div>
+            </div>
+        </div>
+    </div>
+    <div id="pay-list">
+
+    </div>
+    <div id="bill-list">
+
+    </div>
+</body>
+<script src="js/jquery-1.10.2.min.js"></script>
+<script>
+    $(".t-row").on("click",function(event){
+        event.stopPropagation();
+        $(this).css({
+            marginLeft:- getMarginLeft($(this))
+        }).addClass('operateObj');
+    });
+    $(document).on("click",function(){
+        $(".operateObj").css("margin-left",0).removeClass('operateObj');
+    });
+    function getMarginLeft($row){
+        var ml = 0;
+        $row.find('.extra').each(function(){
+            ml += $(this).width();
+        });
+        return ml;
+    }
+</script>
+</html>
