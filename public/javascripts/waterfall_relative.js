@@ -29,7 +29,6 @@ Waterfall.prototype.init = function(){
     var win_w = this.win_w = $(window).width(),
         win_H = this.win_H =  $(window).height();
     if(isPC()){
-        alert('pc');
         win_w -= 20;
         this.win_w = win_w;
     }

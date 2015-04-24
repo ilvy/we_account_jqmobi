@@ -19,6 +19,12 @@ define(['router'],function(router){
                         var product = result.data;
                         $(".product_display .desc").html(product.text);
                         $(".product_display img").attr("src",'http://120.24.224.144/images/'+product.image_url[0]);
+                        var isPublisher = window.sessionStorage.getItem('moment_publisher');
+                        if(isPublisher == 1){
+                            $("#take_order").remove();
+                        }else{
+                            $("#take_order").css("display","block");
+                        }
                     }
                 },
                 error:function(err){
@@ -29,6 +35,34 @@ define(['router'],function(router){
         this.addListener = function(){
             $(document).on("vclick","#back-live-room",function(){
                 router.changeHash('live_room-'+globalVar.room_id,0);
+            });
+            $(document).on('vclick',"#take_order",function(){
+                var $this = $(this);
+                if(!$this.hasClass("ready")){
+                    $this.addClass('ready').text("提交订单");
+                    $("#order_info").slideToggle();
+                }else{
+                    var quantity = Number($(".order_quantity .qtt_num").text()),
+                        remark = $(".order_remark textarea").val();
+                    if(quantity == 0){
+                        alert('请选择购买数量！');
+                        return;
+                    }
+                    $.ajax({
+                        url:''
+                    });
+                }
+            });
+            $(document).on("vclick",".sub-order .fa-minus,.add-order .fa-plus",function(){
+                var $this = $(this);
+                var quantity = Number($(".order_quantity .qtt_num").text());
+                if($this.hasClass('fa-minus')){
+                    if(quantity > 0){
+                        $(".order_quantity .qtt_num").text(--quantity);
+                    }
+                }else if($this.hasClass('fa-plus')){
+                    $(".order_quantity .qtt_num").text(++quantity);
+                }
             });
         }
     }

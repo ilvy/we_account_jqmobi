@@ -43,7 +43,7 @@ a {
 }
 
 #product{
-    margin-bottom:35px;
+    margin-bottom:10px;
     padding-left: 0px;
     padding-right: 0px;
 }
@@ -116,6 +116,56 @@ a {
     top: -7px;
     left: -11px;
 }
+
+#take_order{
+    background-color: rgba(200,30,40,1);
+    color: #ffffff;
+    text-align: center;
+    padding: 6px 0;
+    margin-bottom: 16px;
+    display: none;
+}
+
+#take_order:active{
+    color: #47d3f5;
+}
+
+#order_info{
+    display: none;
+}
+
+.order_quantity{
+    text-align: center;
+}
+
+.sub-order{
+    border: 1px solid #A6A6A6;
+    padding: 2px 5px;
+    background-color: #cdcdcd;
+}
+
+.qtt_num{
+    border: 1px solid #A6A6A6;
+    padding: 2px 11px;
+}
+
+.add-order{
+    border: 1px solid #A6A6A6;
+    padding: 2px 5px;
+    background-color: #cdcdcd;
+}
+
+.order_remark{
+    margin-top: 6px;
+}
+
+.order_remark span{
+    float: left;
+}
+.order_remark textarea{
+    width: 80%;
+}
+
 /*************end product********************/
 
 .page{

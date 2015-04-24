@@ -145,4 +145,13 @@ exports.query = query;
 //    }
 //});
 
+//var paras = ['oHbq1t0enasGWD7eQoJuslZY6R-4','666666','没啥事',135,3,'2014-04-24 18:04:36'];
+//query('call pro_take_order(?,?,?,?,?,?)',paras,function(err,rows){
+//    if(err){
+//        console.log(err);
+//    }else{
+//        console.log(rows);
+//    }
+//});
+
 //console.log(new Buffer([01])[0]);

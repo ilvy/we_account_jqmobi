@@ -1,0 +1,285 @@
+body{
+    margin: 0;
+    box-sizing: border-box;
+}
+*{
+    box-sizing: border-box;
+}
+
+#order-list,#pay-list{
+    display: none;
+}
+
+.card{
+    width: 100%;
+    float: left;
+    border: 1px solid #cdcdcd;
+    background-color: rgba(217, 249, 240, 0.4);
+    overflow-x: hidden;
+}
+
+.card-title{
+    text-align: center;
+    padding: 6px 0 6px 0;
+}
+
+.all-status{
+    float: right;
+    margin-right: 10px;
+}
+
+.all-status > span{
+    font-size: 0.8rem;
+}
+
+.card-title .fa-caret-right{
+    margin-left: 15px;
+    color: rgb(25, 126, 122);
+}
+.card-title .fa-square-o{
+    color: rgba(200, 30, 40, 1);
+}
+
+.card-title > div{
+    display: inline-block;
+}
+
+#pay-list .table,#order-list .table{
+    /*border: 1px solid #cdcdcd;*/
+    float: left;
+    width: 100%;
+    display: none;
+}
+.t-row{
+    width: 100%;
+    float: left;
+    /*-webkit-transition: all 1s;-moz-transition: all 1s;-ms-transition: all 1s;-o-transition: all 1s;transition: all 1s;*/
+}
+
+.t-row{
+    border-bottom: 1px solid #cdcdcd;
+}
+.t-row:first-child{
+    border-top: 1px solid #cdcdcd;
+}
+.t-row:last-child{
+    border-bottom: 1px solid #cdcdcd;
+}
+.t-row-over-1{
+    width: 111%;
+}
+.t-row-over-2{
+    width: 125%;
+}
+.t-row-over-3{
+    width: 142.8%;
+}
+.t-col{
+    display: inline-block;
+    border-right: 1px solid #cdcdcd;
+    text-align: center;
+    float: left;
+    padding-top: 4px;
+    padding-bottom: 0;
+    overflow: hidden;
+    height: 25px;
+    /*padding-left: 2px;*/
+    /*padding-right: 2px;*/
+}
+
+.input-div{
+    padding: 1px 0 1px 0;
+}
+
+.t-col input[type='text']{
+    width: 100%;
+    height: 90%;
+    border: none;
+    background-color: rgba(0,0,0,0);
+}
+.t-row .t-col:last-child{
+    border-right: transparent;
+}
+.t-col-1{
+    width: 10%;
+    float: left;
+}
+.t-col-2{
+    width: 20%;
+    float: left;
+}
+.t-col-3{
+    width: 30%;
+    float: left;
+}
+.t-col-4{
+    width: 40%;
+    float: left;
+}
+.t-col-5{
+    width: 50%;
+    float: left;
+}
+.t-col-6{
+    width: 60%;
+    float: left;
+}
+.t-col-9{
+    width: 90%;
+    float: left;
+}
+.t-col-10{
+    width: 100%;
+    float: left;
+}
+@media all and (max-width: 560px) {
+    .t-col-xs-1{
+        width: 10%;
+        float: left;
+    }
+    .t-col-xs-2{
+        width: 20%;
+        float: left;
+    }
+    .t-col-xs-3{
+        width: 30%;
+        float: left;
+    }
+    .t-col-xs-4{
+        width: 40%;
+        float: left;
+    }
+    .t-col-xs-5{
+        width: 50%;
+        float: left;
+    }
+    .t-col-xs-6{
+        width: 60%;
+        float: left;
+    }
+    .t-col-xs-7{
+        width: 70%;
+        float: left;
+    }
+    .t-col-xs-8{
+        width: 80%;
+        float: left;
+    }
+    .t-col-xs-9{
+        width: 90%;
+        float: left;
+    }
+    .t-col-xs-10{
+        width: 100%;
+        float: left;
+    }
+}
+
+@media all and (max-width: 360px) {
+    .t-col-xxs-1{
+        width: 10%;
+        float: left;
+    }
+    .t-col-xxs-2{
+        width: 20%;
+        float: left;
+    }
+    .t-col-xxs-3{
+        width: 30%;
+        float: left;
+    }
+    .t-col-xxs-4{
+        width: 40%;
+        float: left;
+    }
+    .t-col-xxs-5{
+        width: 50%;
+        float: left;
+    }
+    .t-col-xxs-6{
+        width: 60%;
+        float: left;
+    }
+    .t-col-xxs-7{
+        width: 70%;
+        float: left;
+    }
+    .t-col-xxs-8{
+        width: 80%;
+        float: left;
+    }
+    .t-col-xxs-9{
+        width: 90%;
+        float: left;
+    }
+    .t-col-xxs-10{
+        width: 100%;
+        float: left;
+    }
+}
+
+.quantity{
+    position: relative;
+}
+.quantity .sub{
+    position: absolute;
+    left: 7px;
+    bottom: 1px;
+    font-size: 1.5rem;
+    display: none;
+}
+.quantity .add{
+    position: absolute;
+    right: 7px;
+    bottom: 1px;
+    font-size: 1.5rem;
+    display: none;
+}
+
+.extra-row{
+    float: left;
+    width: 100%;
+    padding: 6px;
+}
+
+.extra-row > div{
+    display: inline-block;
+}
+
+.t-col input.mailpay{
+    width: 26px;
+    height: 100%;
+}
+
+.getpay{
+    float: right;
+}
+
+#bill-list .position > div{
+    display: inline-block;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.date,.search-input{
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #cdcdcd;
+}
+
+#search{
+    background: none;
+    border: none;
+    /* background-color: transparent; */
+    color: #5A5858;
+    text-shadow: 0px 4px 33px;
+    /* border-bottom: 1px #cdcdcd solid; */
+    border-left: 1px solid #cdcdcd;
+    margin-left: -1px;
+}
+
+.bill-sum{
+    text-align: center;
+    margin-top: 20px;
+    /*display: inline-block;*/
+}

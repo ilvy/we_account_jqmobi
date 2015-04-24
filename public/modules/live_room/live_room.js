@@ -304,8 +304,10 @@ define(['router'],function(router){
                     if(result.flag == 1){
                         var data = result.data;
                         if(data.publisher){
+                            window.sessionStorage.setItem('moment_publisher',1);
                             $("title").text(data.publisher.nickname + '的momenT');
                         }else{
+                            window.sessionStorage.setItem('moment_publisher',0);
                             $("title").text(data.host + '的momenT');
                             var favHeart = '';
                             if(data.isFavorite){
