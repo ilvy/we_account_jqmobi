@@ -337,6 +337,7 @@ a {
     width: 100%;
     position: fixed;
     bottom: 0;
+    left: 0;
     background-color: rgba(200,30,40,0);
     padding-top: 6px;
     min-height: 34px;
@@ -531,6 +532,7 @@ input.product-title{
 .lr-btn-group{
     position: fixed !important;
     bottom: 0;
+    left: 0;
     text-align: center;
     width: 100%;
 }
@@ -906,6 +908,14 @@ li.favour_room_option > div{
     left: 100%;
 }
 
+.transition-init{
+    -webkit-transition: left 0.5s;
+    -moz-transition:  left 0.5s;
+    -ms-transition:  left 0.5s;
+    -o-transition:  left 0.5s;
+    transition:  left 0.5s;
+}
+
 .slide-in{
     -webkit-transition: left 0.5s;
     -moz-transition:  left 0.5s;
@@ -917,11 +927,11 @@ li.favour_room_option > div{
 }
 
 .slide-out{
-    -webkit-transition: left 0.5s;
-    -moz-transition:  left 0.5s;
-    -ms-transition:  left 0.5s;
-    -o-transition:  left 0.5s;
-    transition:  left 0.5s;
+    -webkit-transition: left 0.8s;
+    -moz-transition:  left 0.8s;
+    -ms-transition:  left 0.8s;
+    -o-transition:  left 0.8s;
+    transition:  left 0.8s;
     position: absolute;
     left: -100%;
 }

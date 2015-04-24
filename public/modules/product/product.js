@@ -35,6 +35,7 @@ define(['router'],function(router){
         this.addListener = function(){
             $(document).on("vclick","#back-live-room",function(){
                 router.changeHash('live_room-'+globalVar.room_id,0);
+                $(".img-box img").attr('src',"http://120.24.224.144/images/default.jpg");
             });
             $(document).on('vclick',"#take_order",function(){
                 var $this = $(this);
