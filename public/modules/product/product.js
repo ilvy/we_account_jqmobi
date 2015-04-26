@@ -49,8 +49,24 @@ define(['router'],function(router){
                         alert('请选择购买数量！');
                         return;
                     }
+                    var data = {
+                        room_id:globalVar.room_id,
+                        remark:remark,
+                        product_id:globalVar.product_id,
+                        quantity:quantity
+                    };
                     $.ajax({
-                        url:''
+                        url:'/we_account/take_order',
+                        type:'post',
+                        data:data,
+                        success:function(results){
+                            if(results.flag == 1){
+                                alert('订单确定，请联系卖家！')
+                            }
+                        },
+                        error:function(err){
+                            console.log(err);
+                        }
                     });
                 }
             });

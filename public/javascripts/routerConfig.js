@@ -10,6 +10,7 @@ define([],function(){
         product_display:'modules/product/product',
         myFavorite:'modules/myFavorite/myFavorite',//收藏夹
         room_door:'modules/room_door/room_door',
-        personality:'modules/personality/personality'
+        personality:'modules/personality/personality',
+        billSystem:'modules/bill/bill'
     }
 });

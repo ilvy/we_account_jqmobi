@@ -10,6 +10,7 @@ html
         title 的momenT
         meta(name="viewport",content="width=device-width,initial-scale=1.0,user-scalable=no")
         link(rel='stylesheet', href='/stylesheets/style_new.css')
+        link(rel='stylesheet', href='/css/mystyle.css')
         link(rel='stylesheet', href='/stylesheets/bootstrap.css')
         link(rel='stylesheet', href='/stylesheets/bootstrap-grid.css')
         //link(rel='stylesheet', href='/build/css/af.ui.base.min.css')
@@ -101,9 +102,27 @@ html
                     div.submit-div
                         a.fa.fa-arrow-right
         div.page.personality
+        div.page.billSystem
+            #order-list
+            #pay-list
+            #bill-list
+                .position.t-col-10
+                    .t-col-2
+                        input(type="text" placeholder="开始日期" value="").date#date1
+                    .t-col-2
+                        input(type="text" placeholder="开始日期" value="").date#date2
+                    .t-col-3
+                        input(type="text" placeholder="根据买家搜索" value="").search-input#nickname
+                    .t-col-2
+                        input(type="button" value="GO").search-input#nickname
+            div(style='position: fixed;bottom: 100px;')#switchList
+                input(type='button' value='账单列表')#to_order
+                input(type='button' value='付款列表')#to_pay
+                input(type='button' value='总账单列表')#to_bill
         div.page.contact-page
             div.curr-product
-
+        div(style='position:fixed;top:10px;right:10px;')
+            a(href='#billSystem')账单系统
         div#uploading-mask
 
 script(src="/javascripts/jquery.js")

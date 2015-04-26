@@ -24,7 +24,8 @@ var publish_account = require("./we_account/business/publish_account"),
     gotoLiveRoom = live_room.renderLiveRoom_new,
     knockDoor = live_room.knockDoor,
 //    knocktoLiveRoom = live_room.knocktoLiveRoom ,
-    loadMoreProducts = live_room.loadMoreProducts_new;
+    loadMoreProducts = live_room.loadMoreProducts_new,
+    billSystem = require("./we_account/business/billSystem");
 
 var TOKEN = 'jxfgx_20140526';
 router.get("/",function(req,res){
@@ -272,7 +273,13 @@ router.post("/asyncAccountInfoFromWeix",function(req,res){
 /***
  * 订单系统
  */
-router.post('/take_order');
+router.post('/take_order',billSystem.takeOrder);
+
+router.get("/get_bill_list",billSystem.filter_bill,billSystem.getBillList);
+
+router.get("/get_final_bill",billSystem.filter_bill,billSystem.getFinalBill);
+
+router.get("/updateCustomerInfo",billSystem.updateCustomerInfo);
 
 router.get("/xml",function(req,res){
     xmlParser.parseXml("<xml><ToUserName><![CDATA[gh_d28b25ec1197]]></ToUserName>" +

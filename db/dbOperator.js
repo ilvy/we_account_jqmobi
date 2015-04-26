@@ -154,4 +154,20 @@ exports.query = query;
 //    }
 //});
 
+//query('call pro_get_order_info(?,?)',['oHbq1ty6M1x1NgUVM8wQukbhmTZU',1],function(err,rows) {
+//    if (err) {
+//        console.log(err);
+//    } else {
+//        console.log(rows);
+//    }
+//});
+
+//query('call pro_set_customer_nickname(?,?,?)',['oHbq1t0enasGWD7eQoJuslZY6R-4','666666','SHU'],function(err,rows){
+//    if(err){
+//        console.log(err);
+//    }else{
+//        console.log(rows);
+//    }
+//});
+
 //console.log(new Buffer([01])[0]);
