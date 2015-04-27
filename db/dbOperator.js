@@ -170,4 +170,12 @@ exports.query = query;
 //    }
 //});
 
+//query('SELECT * from t_order o WHERE o.id IN ('+'55,56'+')',[],function(err,rows){
+//    if(err){
+//        console.log(err);
+//    }else{
+//        console.log(rows);
+//    }
+//});
+
 //console.log(new Buffer([01])[0]);

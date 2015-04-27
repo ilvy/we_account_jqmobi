@@ -281,6 +281,8 @@ router.get("/get_final_bill",billSystem.filter_bill,billSystem.getFinalBill);
 
 router.get("/updateCustomerInfo",billSystem.updateCustomerInfo);
 
+router.post("/updateOrderStatus",billSystem.updateOrderStatus);
+
 router.get("/xml",function(req,res){
     xmlParser.parseXml("<xml><ToUserName><![CDATA[gh_d28b25ec1197]]></ToUserName>" +
         "<FromUserName><![CDATA[oHbq1t0enasGWD7eQoJuslZY6R-4]]></FromUserName>" +

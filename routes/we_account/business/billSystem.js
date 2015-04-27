@@ -55,7 +55,7 @@ function getNicknameFromWeix(openid,roomid){
 }
 
 /**
- * 更新昵称，进价或者售价信息
+ * 更新1、昵称，2、进价或者3、售价 4、数量 信息
  * @param req
  * @param res
  */
@@ -64,13 +64,15 @@ function updateCustomerInfo(req,res){
         objid = req.query.objId,
         nickname = req.query.nickname,
         value = req.query.value,
-        type = req.query.type;
+        type = req.query.type;//
     var args = [objid,value||0,nickname||'',type];
     dbOperator.query('call pro_set_customer_info(?,?,?,?)',args,function(err,rows){
         if(err){
             console.log(err);
+            response.failed('',res,'');
         }else{
             console.log(rows);
+            response.success('',res,'');
         }
     });
 }
@@ -112,6 +114,30 @@ function getBillList(req,res){
     });
 }
 
+/**
+ * 修改订单状态
+ * @param req
+ * @param res
+ */
+function updateOrderStatus(req,res){
+    var openId = req.session.openId||'oHbq1t0enasGWD7eQoJuslZY6R-4';
+    var status = req.query.status,
+        order_id = req.query.oid,
+        buy_time = util.formatDate(null,true);
+    if(!openId){
+        response.failed(0,res,'');
+        return;
+    }
+    var sql = 'UPDATE t_order o SET o.status = '+status+',o.buy_time=\''+buy_time+'\' WHERE o.id IN ('+order_id+')';
+    dbOperator.query(sql,[],function(err,results){
+        if(err){
+            console.log(err);
+            response.failed(-1,res,'');
+        }else{
+            response.success('',res,'');
+        }
+    });
+}
 
 
 function filter_bill(req,res,next){
@@ -153,3 +179,4 @@ exports.getBillList = getBillList;
 exports.filter_bill = filter_bill;
 exports.getFinalBill = getFinalBill;
 exports.updateCustomerInfo = updateCustomerInfo;
+exports.updateOrderStatus = updateOrderStatus;
