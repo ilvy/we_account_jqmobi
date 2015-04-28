@@ -128,7 +128,12 @@ function updateOrderStatus(req,res){
         response.failed(0,res,'');
         return;
     }
-    var sql = 'UPDATE t_order o SET o.status = '+status+',o.buy_time=\''+buy_time+'\' WHERE o.id IN ('+order_id+')';
+    if(status == 2){
+        var sql = 'UPDATE t_order o SET o.status = '+status+',o.buy_time=\''+buy_time+'\' WHERE o.id IN ('+order_id+')';
+    }else if(status == 3){
+        sql = 'UPDATE t_order o SET o.status = '+status+',o.pay_time=\''+buy_time+'\' WHERE o.id IN ('+order_id+')';
+    }
+
     dbOperator.query(sql,[],function(err,results){
         if(err){
             console.log(err);
@@ -161,7 +166,7 @@ function getFinalBill(req,res){
         date1 = query.date1,
         date2 = query.date2,
         nickname = query.nickname || '';
-    var paras = [openId,nickname,date1,date2]
+    var paras = [openId,nickname,date1,date2];
     dbOperator.query('call pro_get_final_bill(?,?,?,?)',paras,function(err,rows){
         if(err){
             console.log(err);

@@ -49,7 +49,23 @@ define(['router','touchEvent'],function(router){
             });
         },
         flushBillList:function(){
+            var _this = this;
+            var date1 = $("#date1").val(),
+                date2 = $("#date2").val(),
+                nickname = $("#nickname-position").val();
+            $.ajax({
+                url:'/we_account/get_final_bill?date1='+date1+'&date2='+date2+'&nickname='+nickname,
+                type:'get',
+                success:function(results){
+                    if(results.flag == 1){
+                        var data = results.data;
+                        _this.dealPayList(data);
+                    }
+                },
+                error:function(err){
 
+                }
+            });
         },
         dealOrderList:function(data){
             if(!(data && data.length > 0)){
@@ -86,7 +102,7 @@ define(['router','touchEvent'],function(router){
                     '<div class="product"><span class="name">'+procductName+'</span> × <span class="total-quantity">'+quantity+'</span> <i class="fa fa-caret-right"></i></div>' +
                     '<div class="all-status"><i class="fa fa-square-o"></i></div></div>';
                 cardStr += tableStr +'</div>';
-                $("#order-list").append(cardStr);
+                $("#order-list").html(cardStr);
             }
         },
         dealPayList:function(data){
@@ -130,7 +146,7 @@ define(['router','touchEvent'],function(router){
                 var lastRow = '<div class="extra-row"><div class="t-col-5 remark-col">备注：<span>'+record.remark+'</span></div>' +
                     '<div class="t-col-5 getpay"><input type="button" value="向买家收款"/></div></div>';
                 cardStr += tableStr +lastRow+'</div>';
-                $("#pay-list").append(cardStr);
+                $("#pay-list").html(cardStr);
             }
         },
         addListener:function(){
