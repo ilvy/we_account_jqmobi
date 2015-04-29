@@ -29,9 +29,20 @@ var menusObj = {
             ]
         },
         {
-            type:"view",
             name:"个人信息",
-            url:"http://120.24.224.144/we_account/publish?type=4"
+            sub_button:[
+                {
+                    type:"view",
+                    name:"个人信息",
+                    url:"http://120.24.224.144/we_account/publish?type=4"
+                },
+                {
+                    type:"view",
+                    name:"账单系统",
+                    url:"http://120.24.224.144/we_account/publish?type=5"
+                },
+            ]
+
         }
     ]
 };

@@ -178,6 +178,8 @@ router.get("/goto_publish",function(req,resp){
 //                live_room.myFavorite(req,resp);
             }else if(type == 4){//进入个人信息页面
                 publish_account.getPersonalInfo(req,resp,1);
+            }else if(type == 5){//进入账单系统
+                resp.redirect("/we_account/live-room#billSystem");
             }
         })
     }).on("error",function(e){
@@ -282,6 +284,8 @@ router.get("/get_final_bill",billSystem.filter_bill,billSystem.getFinalBill);
 router.get("/updateCustomerInfo",billSystem.updateCustomerInfo);
 
 router.post("/updateOrderStatus",billSystem.updateOrderStatus);
+
+router.post("/updateMailPay",billSystem.updateMailPay);
 
 router.get("/xml",function(req,res){
     xmlParser.parseXml("<xml><ToUserName><![CDATA[gh_d28b25ec1197]]></ToUserName>" +

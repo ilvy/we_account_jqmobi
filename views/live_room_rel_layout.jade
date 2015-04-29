@@ -107,22 +107,23 @@ html
             #pay-list
             #bill-list
                 .position.t-col-10
-                    .t-col-2
-                        input(type="text" placeholder="开始日期" value="").date#date1
-                    .t-col-2
-                        input(type="text" placeholder="开始日期" value="").date#date2
-                    .t-col-3
+                    .t-col-2.t-col-xs-3
+                        input(type="text" placeholder="开始日期" value="" disable=true onclick='laydate({max:laydate.now()})').date#date1
+                    .t-col-2.t-col-xs-3
+                        input(type="text" placeholder="开始日期" value="" onclick='laydate({max:laydate.now()})').date#date2
+                    .t-col-3.t-col-xs-3
                         input(type="text" placeholder="根据买家搜索" value="").search-input#nickname-position
-                    .t-col-2
-                        input(type="button" value="GO").search-input#nickname
+                    .t-col-1.t-col-xs-1
+                        input(type="button" value="GO").search-input#search-go
+                .bill-list-content
             div(style='position: fixed;bottom: 100px;')#switchList
-                input(type='button' value='账单列表')#to_order
+                input(type='button' value='账单列表')#to_order.current-list
                 input(type='button' value='付款列表')#to_pay
                 input(type='button' value='总账单列表')#to_bill
         div.page.contact-page
             div.curr-product
-        div(style='position:fixed;top:10px;right:10px;')
-            a(href='#billSystem') 账单系统
+        //div(style='position:fixed;top:10px;right:10px;')
+        //    a(href='#billSystem') 账单系统
         div#uploading-mask
 
 script(src="/javascripts/jquery.js")

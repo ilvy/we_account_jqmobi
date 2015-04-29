@@ -72,7 +72,12 @@ function updateCustomerInfo(req,res){
             response.failed('',res,'');
         }else{
             console.log(rows);
-            response.success('',res,'');
+            if(rows.affectedRows != 0){
+                response.success('',res,'');
+            }else{
+                response.failed(-2,res,'');//未修改成功
+            }
+
         }
     });
 }
@@ -131,9 +136,35 @@ function updateOrderStatus(req,res){
     if(status == 2){
         var sql = 'UPDATE t_order o SET o.status = '+status+',o.buy_time=\''+buy_time+'\' WHERE o.id IN ('+order_id+')';
     }else if(status == 3){
-        sql = 'UPDATE t_order o SET o.status = '+status+',o.pay_time=\''+buy_time+'\' WHERE o.id IN ('+order_id+')';
+        sql = 'UPDATE t_order o SET o.status = '+status+',o.pay_time=\''+buy_time+'\' WHERE o.id IN ('+order_id+');';
+    }else if(status == 0){
+        sql = 'UPDATE t_order o SET o.status = '+status+',o.modify_time=\''+buy_time+'\' WHERE o.id IN ('+order_id+')';
     }
 
+    dbOperator.query(sql,[],function(err,results){
+        if(err){
+            console.log(err);
+            response.failed(-1,res,'');
+        }else{
+            response.success('',res,'');
+        }
+    });
+}
+
+/**
+ * 编辑邮费
+ * @param req
+ * @param res
+ */
+function updateMailPay(req,res){
+    var openId = req.session.openId||'oHbq1t0enasGWD7eQoJuslZY6R-4';
+    var isMailFree = req.query.mail_free,
+        order_id = req.query.oid,
+        mailPay = req.query.mail_pay;
+    var sql = 'UPDATE t_order o SET o.mail_free = '+isMailFree+' ,o.mail_pay = '+ mailPay + ' where o.id in ('+order_id+');';
+    if(!mailPay){
+        sql = 'UPDATE t_order o SET o.mail_free = '+isMailFree+' where o.id in ('+order_id+');';
+    }
     dbOperator.query(sql,[],function(err,results){
         if(err){
             console.log(err);
@@ -161,7 +192,7 @@ function filter_bill(req,res,next){
  * @param res
  */
 function getFinalBill(req,res){
-    var openId = req.session.openId;
+    var openId = req.session.openId||'oHbq1t0enasGWD7eQoJuslZY6R-4';
     var query = req.query,
         date1 = query.date1,
         date2 = query.date2,
@@ -185,3 +216,4 @@ exports.filter_bill = filter_bill;
 exports.getFinalBill = getFinalBill;
 exports.updateCustomerInfo = updateCustomerInfo;
 exports.updateOrderStatus = updateOrderStatus;
+exports.updateMailPay = updateMailPay;

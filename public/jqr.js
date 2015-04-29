@@ -10,7 +10,9 @@ requirejs.config({
         router:'javascripts/router',
         routerConfig:'javascripts/routerConfig',
         'room-door':'javascripts/room-door',
-        touchEvent:'touchUtil'
+        touchEvent:'touchUtil',
+        laydate:'Jplugin/laydate/laydate',
+        util:'util/util'
     },
     shim:{
         jquery:{
@@ -21,6 +23,9 @@ requirejs.config({
         },
         touchEvent:{
             exports:'touchEvent'
+        },
+        laydate:{
+            exports:'laydate'
         }
     }
 });

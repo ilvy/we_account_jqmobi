@@ -20,7 +20,7 @@ body{
 
 .card-title{
     text-align: center;
-    padding: 6px 0 6px 0;
+    padding: 8px 0 8px 0;
 }
 
 .all-status{
@@ -218,21 +218,47 @@ body{
     }
 }
 
+.billSystem{
+    margin-top: 40px;
+}
+
+#switchList{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+    height: 40px;
+}
+
+#switchList > input{
+    border: none;
+    background: none;
+    padding: 6px;
+    width: 33.3%;
+    background-color: rgb(134, 171, 228);
+    color: #ffffff;
+    border-bottom: 3px solid rgb(80, 127, 199);
+}
+
+.current-list{
+    border-bottom-color: #ffffff !important;
+}
+
 .quantity{
     position: relative;
 }
 .quantity .sub{
     position: absolute;
     left: 7px;
-    bottom: 1px;
-    font-size: 1.5rem;
+    bottom: -13px;
+    font-size: 3.5rem;
     display: none;
 }
 .quantity .add{
     position: absolute;
     right: 7px;
-    bottom: 1px;
-    font-size: 1.5rem;
+    bottom: -13px;
+    font-size: 3.5rem;
     display: none;
 }
 
@@ -257,7 +283,7 @@ body{
 
 #bill-list .position > div{
     display: inline-block;
-    margin-top: 20px;
+    margin-top: 6px;
     margin-bottom: 10px;
 }
 

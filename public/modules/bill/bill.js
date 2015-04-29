@@ -2,7 +2,7 @@
  * Created by Administrator on 2015/4/25.
  */
 
-define(['router','touchEvent'],function(router){
+define(['router','util','touchEvent','laydate'],function(router,util){
     var Bill = function(){
         this.init();
     };
@@ -10,6 +10,7 @@ define(['router','touchEvent'],function(router){
         init:function(){
             this.do();
             this.addListener();
+            this.initDates();
         },
         do:function(){
             this.flushOrderList();
@@ -53,13 +54,17 @@ define(['router','touchEvent'],function(router){
             var date1 = $("#date1").val(),
                 date2 = $("#date2").val(),
                 nickname = $("#nickname-position").val();
+            this.getBillList(date1,date2,nickname);
+        },
+        getBillList:function(date1,date2,nickname){
+            var _this = this;
             $.ajax({
                 url:'/we_account/get_final_bill?date1='+date1+'&date2='+date2+'&nickname='+nickname,
                 type:'get',
                 success:function(results){
                     if(results.flag == 1){
                         var data = results.data;
-                        _this.dealPayList(data);
+                        _this.dealFinalBillList(data);
                     }
                 },
                 error:function(err){
@@ -68,6 +73,7 @@ define(['router','touchEvent'],function(router){
             });
         },
         dealOrderList:function(data){
+            $("#order-list").html("");
             if(!(data && data.length > 0)){
                 return;
             }
@@ -102,10 +108,11 @@ define(['router','touchEvent'],function(router){
                     '<div class="product"><span class="name">'+procductName+'</span> × <span class="total-quantity">'+quantity+'</span> <i class="fa fa-caret-right"></i></div>' +
                     '<div class="all-status"><i class="fa fa-square-o"></i></div></div>';
                 cardStr += tableStr +'</div>';
-                $("#order-list").html(cardStr);
+                $("#order-list").append(cardStr);
             }
         },
         dealPayList:function(data){
+            $("#pay-list").html("");
             if(!(data && data.length > 0)){
                 return;
             }
@@ -136,18 +143,71 @@ define(['router','touchEvent'],function(router){
                         '<div class="t-col t-col-2 input-div"><input class="unit_price" data-type="3" type="text" data-value="'+(record.unit_price||"")+'" placeholder="" value="'+(record.unit_price||"")+'"/></div>' +
                         '<div class="t-col t-col-1 extra">删除</div></div>';
                 }
+                if(!record.mail_free){
+                    totalMoney += record.mail_pay;
+                }
                 var mailStr = '<div class="t-row t-row-over-1 mail-row"><div class="t-col t-col-9">' +
-                    '<span>编辑邮费：</span><input type="text" class="mailpay" placeholder="0"><span class="unit">元</span>' +
-                    '<i class="fa fa-square-o mailFree"></i><span>包邮</span></div></div>';
+                    '<i class="fa '+(record.mail_free?'fa-check-square':'fa-square-o')+' mailFree"></i><span>包邮</span> <span>邮费：</span>' +
+                    '<input type="text" class="mailpay" placeholder="0" value="'+(record.mail_pay?record.mail_pay:"")+'">' +
+                    '<span class="unit">元</span></div></div>';
                 tableStr += mailStr+'</div>';
                 var cardStr = '<div class="card"><div class="card-title">' +
                     '<div class="product"><span class="name">'+nickname+'</span> 总计: <span class="total-quantity">'+totalMoney+'</span> <i class="fa fa-caret-right"></i></div>' +
                     '<div class="all-status"><span>已付：</span><i class="fa fa-square-o"></i></div></div>';
-                var lastRow = '<div class="extra-row"><div class="t-col-5 remark-col">备注：<span>'+record.remark+'</span></div>' +
+                var lastRow = '<div class="extra-row"><div class="t-col-5 remark-col">备注：<span>'+(record.remark || "无")+'</span></div>' +
                     '<div class="t-col-5 getpay"><input type="button" value="向买家收款"/></div></div>';
                 cardStr += tableStr +lastRow+'</div>';
-                $("#pay-list").html(cardStr);
+                $("#pay-list").append(cardStr);
             }
+        },
+        dealFinalBillList:function(data){
+            $(".bill-list-content").html("");
+            if(!(data && data.length > 0)){
+                return;
+            }
+            var tableStr = '<div class="table"><div class="t-row t-row-over-1 t-row-header">' +
+                '<div class="t-col t-col-3">品名</div><div class="t-col t-col-2">数量</div>' +
+                '<div class="t-col t-col-2">进价</div>' +
+                '<div class="t-col t-col-2">售价</div><div class="t-col t-col-1 extra">操作</div></div>';
+            var totalMoney = 0,totalCost = 0;
+            var customerObj = {};
+            for(var i = 0; i < data.length; i++){
+                var record = data[i];
+                if(!customerObj[record.cid]){//计算邮费，每个用户只取一条订单即可
+                    customerObj[record.cid+'_'+record.pay_time] = record;
+                }
+                totalMoney += record.quantity * (record.unit_price ? record.unit_price:0);
+                totalCost += record.quantity * (record.unit_cost ? record.unit_cost:0);
+                tableStr += '<div class="t-row t-row-over-1"><div class="t-col t-col-3 product_name">'+record.product_name+'</div>' +
+                    '<div class="t-col t-col-2"><div class="num">'+record.quantity+'</div></div>' +
+                    '<div class="t-col t-col-2">'+(record.unit_cost||"")+'</div>' +
+                    '<div class="t-col t-col-2">'+(record.unit_price||"")+'</div>' +
+                    '<div class="t-col t-col-1 extra">删除</div></div>';
+            }
+            var mailCost = this.calcMailCost(customerObj);
+            totalCost += mailCost;
+            var mailStr = '<div class="t-row t-row-over-1"><div class="t-col t-col-9"><span>邮费成本：</span>'+mailCost+'<span class="unit">元</span></div></div>';
+            tableStr += mailStr+'</div>';
+            var cardStr = '<div class="card">';
+            cardStr += tableStr +'</div>';
+            cardStr += '<div class="bill-sum t-col-10"><div id="sum_cost" class="t-col-5">总成本：<span>'+totalCost+'</span>元</div>' +
+                '<div id="sum_earn" class="t-col-5">总盈利：<span>'+(totalMoney - totalCost)+'</span>元</div></div>';
+            $(".bill-list-content").append(cardStr);
+        },
+        /**
+         * 邮费计算
+         * @param customerOrders
+         * @returns {number}
+         */
+        calcMailCost:function(customerOrders){
+            var mailCost = 0;
+            for(var cid in customerOrders){
+                var record = customerOrders[cid];
+                if(record.mail_free){
+                    mailCost += record.mail_pay;
+                }
+            }
+            return mailCost;
         },
         addListener:function(){
             var _this = this;
@@ -164,6 +224,7 @@ define(['router','touchEvent'],function(router){
             });
             $('#to_order,#to_pay,#to_bill').touch("click",function(event){
                 var $this = event.$this;
+                $this.addClass('current-list').siblings('.current-list').removeClass('current-list');
                 if($this.attr("id") == 'to_order'){
                     $("#bill-list").css("display",'none');
                     $("#pay-list").css("display",'none');
@@ -178,6 +239,7 @@ define(['router','touchEvent'],function(router){
                     $("#bill-list").css("display",'block');
                     $("#order-list").css("display",'none');
                     $("#pay-list").css("display",'none');
+                    _this.flushBillList();
                 }
             });
 //    $(".t-row:not(.t-row-header)").touch("swipeleft",function(event){
@@ -229,8 +291,7 @@ define(['router','touchEvent'],function(router){
                     type:'get',
                     success:function(results){
                         if(results.flag == 1){
-                            $quantity.data("value",value);
-                            $quantity.parents('.card').find(".total-quantity").text(value);
+                            $quantity.data("value",value).parents(".quantity-modify").removeClass('.quantity-modify');
                         }
                     },
                     error:function(err){
@@ -257,6 +318,18 @@ define(['router','touchEvent'],function(router){
             });
             $(".all-status").touch("click",function(event){
                 var $this = event.$this;
+                var $card = $this.parents(".card");
+                var isPriceOk = false;
+                var $rows = $card.find(".t-row");
+                for(var i = 0; i < $rows.length; i++){
+                    var $row = $rows.eq(i);
+                    var unitCost = $row.find(".unit_cost").val(),
+                        unitPrice = $row.find(".unit_price").val();
+                    if(!unitCost && unitCost != 0 && !unitPrice && unitPrice != 0){
+                        alert("请编辑进价和售价!");
+                        return;
+                    }
+                }
                 var oids = '';
                 $this.parents('.card').find('.t-row:not(.t-row-header)').each(function(){
                     var $row = $(this);
@@ -284,13 +357,16 @@ define(['router','touchEvent'],function(router){
                 var $quantity = $this.siblings(".num");
                 var q = Number($quantity.text());
                 if($this.hasClass('sub')){
-                    $quantity.text(--q);
                     if(q == 1){
                         if(confirm("确认删除订单？")){
                             $quantity.text(--q);
                             //删除订单
+                            var orderIds = $this.parents(".t-row").data("oid");
+                            _this.updateOrderStatus($this.parents(".t-row"),orderIds,0);
+                            return;
                         }
                     }
+                    $quantity.text(--q);
                 }else{
                     $quantity.text(++q);
                 }
@@ -319,15 +395,46 @@ define(['router','touchEvent'],function(router){
                 var $card = $(this).parents('.card');
                 if($this.parents("#pay-list").length > 0){
                     _this.calcBillPay($card);
+                    var $mailFree;
+                    if(($mailFree = $this.siblings('.mailFree')).length > 0){
+                        var mail_pay = $mailFree.siblings(".mailpay").val();
+                        var orders = '';
+                        $this.parents('.mail-row').siblings(".t-row:not(.t-row-header)").each(function(){
+                            var $row = $(this);
+                            orders += $row.data("oid") + ',';
+                        });
+                        orders = orders.substring(0,orders.length - 1);
+                        if(mail_pay == 0 || mail_pay == $(".mailpay").data("value")){
+                            return;
+                        }
+                        if($mailFree.hasClass("fa-check-square")){
+                            if(confirm('邮费'+mail_pay+'元，包邮')){
+                                _this.updateMailPay(1,mail_pay,orders);
+                            }
+                        }else if($mailFree.hasClass("fa-square-o")){
+                            if(confirm('邮费'+mail_pay+'元，不包邮')){
+                                _this.updateMailPay(0,mail_pay,orders);
+                            }
+                        }
+
+                    }
                 }
             });
 
             $(".mailFree").touch("click",function(event){
                 var $this = event.$this;
+                var orders = '';
+                $this.parents('.mail-row').siblings(".t-row:not(.t-row-header)").each(function(){
+                    var $row = $(this);
+                    orders += $row.data("oid") + ',';
+                });
+                orders = orders.substring(0,orders.length - 1);
                 if($this.hasClass("fa-square-o")){
                     $this.removeClass("fa-square-o").addClass("fa-check-square");
+                    _this.updateMailPay(1,'',orders);
                 }else{
                     $this.addClass("fa-square-o").removeClass("fa-check-square");
+                    _this.updateMailPay(0,'',orders);
                 }
             });
 
@@ -400,8 +507,30 @@ define(['router','touchEvent'],function(router){
                 }
             });
 
-        },
+            $("#search-go").touch('click',function(){
+                var date1 = $("#date1").val(),
+                    date2 = $("#date2").val(),
+                    nickname = $("#nickname-position").val();
+                _this.getBillList(date1,date2,nickname);
+            });
+//            $('#date1,#date2').touch('click',function(event){
+//                var $this = event.$this;
+//                if($this.attr("id") == 'date1'){
+//                    laydate();
+//                }else{
+//                    laydate({
+//                        max:laydate.now()
+//                    })
+//                }
+//            });
 
+        },
+        initDates:function(){
+            var date1 = util.formatDate(null,false,7);
+            var date2 = util.formatDate(null,false);
+            $("#date1").val(date1);
+            $("#date2").val(date2);
+        },
         getMarginLeft:function($row){
             var ml = 0;
             $row.find('.extra').each(function(){
@@ -409,6 +538,30 @@ define(['router','touchEvent'],function(router){
             });
             return ml;
         },
+
+        /**
+         * 编辑邮费
+         * @param isMailFree
+         * @param mailPay
+         * @param orderIds
+         */
+        updateMailPay:function(isMailFree,mailPay,orderIds){
+            $.ajax({
+                url:'/we_account/updateMailPay?mail_free='+isMailFree+'&mail_pay='+mailPay+'&oid='+orderIds,
+                type:'post',
+                success:function(results){
+                    if(results.flag == 1){
+
+                    }else{
+
+                    }
+                },
+                error:function(err){
+                    console.log(err);
+                }
+            })
+        },
+
         /**
          * 计算账单费用
          */
@@ -422,7 +575,7 @@ define(['router','touchEvent'],function(router){
                 num = isNaN(num)?0:num;
                 unitPrice = isNaN(unitPrice)?0:unitPrice;
                 total += num * unitPrice;
-                if(($mailpay = $row.find(".mailpay")).length > 0){
+                if(($mailpay = $row.find(".mailpay")).length > 0 && $mailpay.siblings('.fa-square-o').length == 0){
                     total += Number($mailpay.val());
                 }
             });
@@ -436,7 +589,7 @@ define(['router','touchEvent'],function(router){
          */
         updateOrderStatus:function($obj,orderIds,status){
             $.ajax({
-                url:'/we_account/updateOrderStatus?oid='+orderIds+'&status='+(status || 2),
+                url:'/we_account/updateOrderStatus?oid='+orderIds+'&status='+(typeof status != 'undefined'?status : 2),
                 type:'post',
                 success:function(results){
                     if(results.flag == 1){

@@ -31,6 +31,11 @@ define(['router'],function(router){
                     console.log(err);
                 }
             });
+            this.cleanEarlierInputs();
+        }
+        this.cleanEarlierInputs = function(){
+            $(".order_quantity .qtt_num").text(1);
+            $(".order_remark textarea").val("");
         }
         this.addListener = function(){
             $(document).on("vclick","#back-live-room",function(){
