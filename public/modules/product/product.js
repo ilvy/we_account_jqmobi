@@ -32,6 +32,7 @@ define(['router'],function(router){
                 }
             });
             this.cleanEarlierInputs();
+            $("title").html("你要么，这里告诉我");
         }
         this.cleanEarlierInputs = function(){
             $(".order_quantity .qtt_num").text(1);

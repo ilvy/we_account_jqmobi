@@ -161,6 +161,13 @@ exports.query = query;
 //        console.log(rows);
 //    }
 //});
+//query('call pro_select_product_by_id(?)',['474'],function(err,rows) {
+//    if (err) {
+//        console.log(err);
+//    } else {
+//        console.log(rows);
+//    }
+//});
 
 //query('call pro_set_customer_nickname(?,?,?)',['oHbq1t0enasGWD7eQoJuslZY6R-4','666666','SHU'],function(err,rows){
 //    if(err){
@@ -179,3 +186,7 @@ exports.query = query;
 //});
 
 //console.log(new Buffer([01])[0]);
+
+query('select sleep(50);',[],function(err,rows){
+    console.log(rows);
+});

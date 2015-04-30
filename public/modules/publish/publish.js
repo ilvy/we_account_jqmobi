@@ -114,7 +114,7 @@ define(['router'],function(router){
     function cleanPosition(){
         $(".product-title").val("");
         $(".product-desc").val("");
-        productArray = [];
+        productArray = globalVar.productArray = [];
         products = "";
         $("#image_content .upload-display").remove();
     }

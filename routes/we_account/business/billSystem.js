@@ -23,6 +23,7 @@ function takeOrder(req,res){
         create_time = util.formatDate(null,true);
     if(!openId){//未关注公众号，跳到公众号关注界面
         response.failed(0,res,'');
+        return;
     }
     var paras = [openId,roomId,remark,productId,quantity,create_time];
     dbOperator.query('call pro_take_order(?,?,?,?,?,?)',paras,function(err,rows){

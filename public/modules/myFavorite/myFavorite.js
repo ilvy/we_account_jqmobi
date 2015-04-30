@@ -31,6 +31,7 @@ define(['router'],function(router){
                     console.log(err);
                 }
             });
+            $("title").html('我的收藏');
         }
         this.addListener = function(){
             $(document).on("vclick",".favour_room_option",function(){
