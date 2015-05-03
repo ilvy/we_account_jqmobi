@@ -60,6 +60,13 @@ html
                 input(type="text" placeholder="先来个简单介绍...").product-title
                 textarea(placeholder="详细说点什么吧，让顾客更好的了解您的产品...").product-desc
                 div#image_content
+                    .upload-display
+                        img(src='http://120.24.224.144/images/test_1430359628167.jpg')
+                        a#delete-img
+                            div.delete-img
+                                i.fa.fa-times-circle
+                        .adjustImg
+                            i.fa.fa-rotate-right
                 .lr-btn-group.col-xxs-6.col-xxs-offset-3
                     div#cancel-btn.col-xxs-6
                         div
@@ -125,6 +132,8 @@ html
         //div(style='position:fixed;top:10px;right:10px;')
         //    a(href='#billSystem') 账单系统
         div#uploading-mask
+        div#loading
+        div(data-orderstatus='#{orderStatus}')#forTakeOrder
 
 script(src="/javascripts/jquery.js")
 //script(src="/build/ui/af.ui.jquery.min.js")

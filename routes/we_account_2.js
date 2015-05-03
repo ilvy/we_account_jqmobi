@@ -25,7 +25,8 @@ var publish_account = require("./we_account/business/publish_account"),
     knockDoor = live_room.knockDoor,
 //    knocktoLiveRoom = live_room.knocktoLiveRoom ,
     loadMoreProducts = live_room.loadMoreProducts_new,
-    billSystem = require("./we_account/business/billSystem");
+    billSystem = require("./we_account/business/billSystem"),
+    we_auth = require('./we_account/we_auth');
 
 var TOKEN = 'jxfgx_20140526';
 router.get("/",function(req,res){
@@ -63,14 +64,14 @@ router.post("/",function(req,res){
         xmlData += data;
     });
     req.on("end",function(){
-        console.log("req end:"+xmlData);
+//        console.log("req end:"+xmlData);
         xmlParser.parseXml(xmlData,function(result){
-            console.log("*****************************");
-            for(var key in result){
-                console.log(key+": "+result[key]);
-            }
+//            console.log("*****************************");
+//            for(var key in result){
+//                console.log(key+": "+result[key]);
+//            }
             console.log("----------------"+result["ToUserName"]);
-            console.log("in argument result:"+resultObj);
+//            console.log("in argument result:"+resultObj);
             var replyXml = '<xml>' +
                 '<ToUserName><![CDATA['+result["FromUserName"]+']]></ToUserName>' +
                 '<FromUserName><![CDATA['+result["ToUserName"]+']]></FromUserName>' +
@@ -193,6 +194,26 @@ router.get('/live_room_test',function(req,res){
 
 router.get("/fav",live_room.myFavorite);
 router.get("/live-room",function(req,res){
+    var openId = req.session.openId;
+    var query = req.query,
+        roomId = query.room_id;
+    if(typeof roomId != 'undefined' && !openId){
+        var remark = query.remark,
+            productId = query.product_id,
+            quantity = query.quantity;
+        if(!openId){
+            we_auth.getWeAuth('http://120.24.224.144/we_account/getAuth?room_id='+roomId+'&remark='+remark+'' +
+                '&product_id='+productId+'&quantity='+quantity,res);
+            return;
+        }
+    }
+    var orderStatus = req.session.orderStatus;
+    if(orderStatus){
+        delete req.session.orderStatus;
+        res.render("live_room_rel_layout",{orderStatus:orderStatus});
+        return;
+    }
+//    res.redirect('/live_room');
     res.render("live_room_rel_layout",{});
 });//带上参数room_id
 router.post("/live_room",gotoLiveRoom);//带上参数room_id
@@ -272,10 +293,49 @@ router.post("/asyncAccountInfoFromWeix",function(req,res){
     publish_account.asyncAccountInfoFromWeix(req.session.openId,res);
 });
 
+router.post('/getAuthForTakeOrder',function(req,res){
+
+});
+
+/**
+ * 用户非从公众号进入
+ */
+router.get('/getAuth',function(req,res){
+    we_auth.redirectToUrl(req,res,function(err,results,requ,resp,nocode){
+        if(err){
+            console.log('getAuth failed:',err);
+        }else if(nocode){
+            resp.redirect('/follow_account.html');
+            return;
+        }else if(results){
+            req.session.openId = results.openid;
+            console.log("get openId:"+results.openid);
+            var roomId = req.query.room_id,
+                product_id = req.query.product_id;
+            billSystem.takeOrder(req,res,function(err,rows,response){
+                if(err){
+//                    response.render('live_room_rel_layout',{orderStatus:0});
+                    req.session.orderStatus = -1;
+                    response.redirect('/we_account/live-room#product_display-'+product_id+'-'+roomId);
+                }else if(rows){
+                    if(rows[0] && rows[0][0] && rows[0][0].isExistCustomer){
+                        billSystem.getNicknameFromWeix(openId,roomId);
+                    }
+                    req.session.orderStatus = 1;
+                    response.redirect('/we_account/live-room#product_display-'+product_id+'-'+roomId);
+//                    response.render('live_room_rel_layout',{orderStatus:1});
+                }
+            });//提交订单并自定义处理
+        }
+    });
+});
+
 /***
  * 订单系统
  */
-router.post('/take_order',billSystem.takeOrder);
+router.post('/take_order',function(req,res){
+    billSystem.takeOrder(req,res);
+});
 
 router.get("/get_bill_list",billSystem.filter_bill,billSystem.getBillList);
 

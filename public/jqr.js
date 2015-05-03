@@ -39,7 +39,13 @@ var globalVar = {
     reload:{},//标示模块是否重新加载
     modules: {},
     productArray : [],
-    hashFrom:''
+    hashFrom:'',
+    showLoading:function(){
+        $("#loading").css('display','block');
+    },
+    hideLoading:function(){
+        $("#loading").css('display','none');
+    }
 };
 
 define(['text','router'],function(text,router){

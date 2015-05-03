@@ -17,10 +17,12 @@ define(['router','util','touchEvent','laydate'],function(router,util){
         },
         flushOrderList:function(){
             var _this = this;
+            this.showLoading();
             $.ajax({
                 url:'/we_account/get_bill_list?billType=1',
                 type:'get',
                 success:function(results){
+                    _this.hideLoading();
                     if(results.flag == 1){
                         var data = results.data;
                         _this.dealOrderList(data);
@@ -35,10 +37,12 @@ define(['router','util','touchEvent','laydate'],function(router,util){
         },
         flushPayList:function(){
             var _this = this;
+            this.showLoading();
             $.ajax({
                 url:'/we_account/get_bill_list?billType=2',
                 type:'get',
                 success:function(results){
+                    _this.hideLoading();
                     if(results.flag == 1){
                         var data = results.data;
                         _this.dealPayList(data);
@@ -58,10 +62,12 @@ define(['router','util','touchEvent','laydate'],function(router,util){
         },
         getBillList:function(date1,date2,nickname){
             var _this = this;
+            this.showLoading();
             $.ajax({
                 url:'/we_account/get_final_bill?date1='+date1+'&date2='+date2+'&nickname='+nickname,
                 type:'get',
                 success:function(results){
+                    _this.hideLoading();
                     if(results.flag == 1){
                         var data = results.data;
                         _this.dealFinalBillList(data);
@@ -106,7 +112,7 @@ define(['router','util','touchEvent','laydate'],function(router,util){
                 tableStr += '</div>';
                 var cardStr = '<div class="card"><div class="card-title">' +
                     '<div class="product"><span class="name">'+procductName+'</span> × <span class="total-quantity">'+quantity+'</span> <i class="fa fa-caret-right"></i></div>' +
-                    '<div class="all-status"><i class="fa fa-square-o"></i></div></div>';
+                    '<div class="all-status ignore"><i class="fa fa-square-o"></i></div></div>';
                 cardStr += tableStr +'</div>';
                 $("#order-list").append(cardStr);
             }
@@ -299,22 +305,25 @@ define(['router','util','touchEvent','laydate'],function(router,util){
                     }
                 });
             });
-            $(".card .product").touch("click",function(event){
-                event.$this.parent().siblings('.table').toggle(500);
+            $(".card .product").touch("click",function(e){
+                var event = e;
                 var $this = event.$this,
                     $caret;
-                if(($caret = $this.find(".fa-caret-right")).length > 0){
-                    $caret.removeClass("fa-caret-right").addClass("fa-caret-down");
-                    $this.parents(".card").siblings(".card").each(function(){
-                        var $c = $(this),$table;
-                        if(($table = $c.find(".table")).css("display") != 'none'){
-                            $table.toggle(500);
-                            $c.find(".product .fa-caret-down").addClass("fa-caret-right").removeClass("fa-caret-down");
-                        }
-                    });
-                }else if(($caret = $this.find(".fa-caret-down")).length > 0){
-                    $caret.addClass("fa-caret-right").removeClass("fa-caret-down");
-                }
+                setTimeout(function(){
+                    $this.parent().siblings('.table').toggle(500);
+                    if(($caret = $this.find(".fa-caret-right")).length > 0){
+                        $caret.removeClass("fa-caret-right").addClass("fa-caret-down");
+                        $this.parents(".card").siblings(".card").each(function(){
+                            var $c = $(this),$table;
+                            if(($table = $c.find(".table")).css("display") != 'none'){
+                                $table.toggle(500);
+                                $c.find(".product .fa-caret-down").addClass("fa-caret-right").removeClass("fa-caret-down");
+                            }
+                        });
+                    }else if(($caret = $this.find(".fa-caret-down")).length > 0){
+                        $caret.addClass("fa-caret-right").removeClass("fa-caret-down");
+                    }
+                },100);
             });
             $(".all-status").touch("click",function(event){
                 var $this = event.$this;
@@ -323,9 +332,12 @@ define(['router','util','touchEvent','laydate'],function(router,util){
                 var $rows = $card.find(".t-row");
                 for(var i = 0; i < $rows.length; i++){
                     var $row = $rows.eq(i);
+                    if($row.hasClass('t-row-header')||$row.hasClass('mail-row')){
+                        continue;
+                    }
                     var unitCost = $row.find(".unit_cost").val(),
                         unitPrice = $row.find(".unit_price").val();
-                    if(!unitCost && unitCost != 0 && !unitPrice && unitPrice != 0){
+                    if(!$this.hasClass('ignore') && (!unitCost && unitCost !== 0 || (!unitPrice && unitPrice !== 0))){
                         alert("请编辑进价和售价!");
                         return;
                     }
@@ -354,20 +366,24 @@ define(['router','util','touchEvent','laydate'],function(router,util){
             });
             $(".quantity .sub,.quantity .add").touch("click",function(event){
                 var $this = event.$this;
-                var $quantity = $this.siblings(".num");
-                var q = Number($quantity.text());
+                var $quantity = $this.siblings(".num"),
+                    $tq = $this.parents('.card').find('.total-quantity');
+                var q = Number($quantity.text()),
+                    total = Number($tq.text());
                 if($this.hasClass('sub')){
                     if(q == 1){
                         if(confirm("确认删除订单？")){
-                            $quantity.text(--q);
+//                            $quantity.text(--q);
                             //删除订单
                             var orderIds = $this.parents(".t-row").data("oid");
                             _this.updateOrderStatus($this.parents(".t-row"),orderIds,0);
                             return;
                         }
                     }
+                    $tq.text(total-1);
                     $quantity.text(--q);
                 }else{
+                    $tq.text(total+1);
                     $quantity.text(++q);
                 }
                 if($this.parents("#pay-list").length > 0){
@@ -593,6 +609,12 @@ define(['router','util','touchEvent','laydate'],function(router,util){
                 type:'post',
                 success:function(results){
                     if(results.flag == 1){
+                        if($obj.hasClass('t-row')){
+                            var $tq = $obj.parents('.card').find('.total-quantity');
+                            var total = Number($tq.text());
+                            var subQuantity = Number($obj.find('.num').text());
+                            $tq.text(total - subQuantity);
+                        }
                         $obj.remove();
                     }else{
                         alert('操作失败，请重试');
@@ -602,6 +624,12 @@ define(['router','util','touchEvent','laydate'],function(router,util){
                     console.log(err);
                 }
             })
+        },
+        showLoading:function(){
+            $("#loading").css('display','block');
+        },
+        hideLoading:function(){
+            $("#loading").css('display','none');
         }
     };
     globalVar.modules['bill'] = new Bill();

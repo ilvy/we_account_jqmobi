@@ -10,6 +10,7 @@ define(['router'],function(router){
             return this;
         }
         this.do = function(){
+            var _this = this;
             var url = 'product_display?product_id='+globalVar.product_id;
             $.ajax({
                 url:url,
@@ -31,14 +32,16 @@ define(['router'],function(router){
                     console.log(err);
                 }
             });
-            this.cleanEarlierInputs();
-            $("title").html("你要么，这里告诉我");
+            $("title").html("要么，在这里告诉我");
         }
         this.cleanEarlierInputs = function(){
             $(".order_quantity .qtt_num").text(1);
             $(".order_remark textarea").val("");
+            $("#take_order").removeClass('ready').text("下单");
+            $("#order_info").css('display','none');
         }
         this.addListener = function(){
+            var _this = this;
             $(document).on("vclick","#back-live-room",function(){
                 router.changeHash('live_room-'+globalVar.room_id,0);
                 $(".img-box img").attr('src',"http://120.24.224.144/images/default.jpg");
@@ -55,6 +58,8 @@ define(['router'],function(router){
                         alert('请选择购买数量！');
                         return;
                     }
+                    globalVar.showLoading();
+                    var isWeChat = _this.checkUserAgent();
                     var data = {
                         room_id:globalVar.room_id,
                         remark:remark,
@@ -66,8 +71,14 @@ define(['router'],function(router){
                         type:'post',
                         data:data,
                         success:function(results){
+                            globalVar.hideLoading();
                             if(results.flag == 1){
+                                _this.cleanEarlierInputs();
                                 alert('订单确定，请联系卖家！')
+                                router.changeHash('live_room-'+globalVar.room_id,0);
+                            }else if(results.flag == 0 && results.data == 0){//订单失败且openId为null,微信客户端打开
+                                window.location.href = '/we_account/live-room?room_id='+data.room_id+'&remark='+data.remark+'' +
+                                    '&product_id='+data.product_id+'&quantity='+data.quantity+window.location.hash;
                             }
                         },
                         error:function(err){
@@ -87,6 +98,16 @@ define(['router'],function(router){
                     $(".order_quantity .qtt_num").text(++quantity);
                 }
             });
+
+        };
+
+        this.checkUserAgent = function(){
+            var userAgent = navigator.userAgent,
+                isOnline = navigator.onLine;
+            if(userAgent.toLowerCase().indexOf('qqbrowser') > -1){
+                return true;
+            }
+            return false;
         }
     }
     globalVar.modules['product_display'] = new Product().init();

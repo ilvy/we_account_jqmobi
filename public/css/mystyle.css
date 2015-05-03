@@ -40,6 +40,10 @@ body{
     color: rgba(200, 30, 40, 1);
 }
 
+.fa-check-square,.fa-square-o{
+    font-size: 1.8rem !important;
+}
+
 .card-title > div{
     display: inline-block;
 }

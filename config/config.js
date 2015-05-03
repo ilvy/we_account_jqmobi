@@ -64,6 +64,7 @@ var dbPoolConfig = {
     password : 'root@123',
     database:'moment',
     connectionLimit:10
+//    ,queueLimit:5
 };
 
 var serverConfig =  {

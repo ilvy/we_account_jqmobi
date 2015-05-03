@@ -10,6 +10,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var access_token = require("./routes/we_account/access_token");//定时刷新access_token
 var we_account = require('./routes/we_account_2');
+var test = require('./routes/we_account/test/test');
 
 var app = express();
 
@@ -36,6 +37,7 @@ app.use(session({
 app.use('/', routes);
 app.use('/users', users);
 app.use("/we_account",we_account);
+app.use('/test',test);
 
 
 // catch 404 and forward to error handler

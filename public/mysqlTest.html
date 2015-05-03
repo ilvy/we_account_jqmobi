@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <input type="button" value="mysql test" onclick="mysqlTest()"/>
+</body>
+<script src="javascripts/jquery.js"></script>
+<script>
+    alert(navigator.userAgent + "~~" + navigator.onLine + '##' + navigator.platform);
+    function mysqlTest(){
+        $.ajax({
+            url:'/test/mysql',
+            type:'post',
+            success:function(results){
+                console.log(results);
+            },
+            error:function(err){
+                console.log(err);
+            }
+        })
+    }
+
+</script>
+</html>

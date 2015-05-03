@@ -6,34 +6,56 @@ var dbOperator = require("../../../db/dbOperator"),
     response = require("../response/response"),
     accountInfo = require("../accountInfo"),
     tokenManager = require("../access_token"),
-    util = require("../util/util");
+    util = require("../util/util"),
+    we_auth = require('../we_auth');
 
 /**
  * 买家下订单
  * @param req
  * @param res
  */
-function takeOrder(req,res){
+function takeOrder(req,res,callback){
     var openId = req.session.openId,
-        body = req.body;
+        body = req.body,
+        query = req.query;
     var roomId = body.room_id,
         remark = body.remark,
         productId = body.product_id,
         quantity = body.quantity,
+        isWeChat = body.isWeChat,
         create_time = util.formatDate(null,true);
+    if(callback){
+        roomId = query.room_id;
+        remark = query.remark;
+        productId = query.product_id;
+        quantity = query.quantity;
+    }
     if(!openId){//未关注公众号，跳到公众号关注界面
         response.failed(0,res,'');
         return;
     }
+//    else if(!openId && isWeChat){//若是微信客户端打开，获取openid
+//        we_auth.getWeAuth('/we_account/getAuthAndTakeOrder?room_id='+roomId+'&remark='+remark+'' +
+//            '&product_id='+productId+'&quantity='+quantity+'&create_time='+create_time);
+//        return;
+//    }
     var paras = [openId,roomId,remark,productId,quantity,create_time];
     dbOperator.query('call pro_take_order(?,?,?,?,?,?)',paras,function(err,rows){
         if(err){
             console.log(err);
+            if(callback){
+                callback(err,null,res);
+                return;
+            }
             response.failed(-2,res,'');
         }else{
+            if(callback){
+                callback(null,rows,res);
+                return;
+            }
             console.log(rows);
             response.success('',res,'');
-            if(rows[0][0] && rows[0][0].isExistCustomer){
+            if(rows[0] && rows[0][0] && rows[0][0].isExistCustomer){
                 getNicknameFromWeix(openId,roomId);
             }
         }
@@ -218,3 +240,4 @@ exports.getFinalBill = getFinalBill;
 exports.updateCustomerInfo = updateCustomerInfo;
 exports.updateOrderStatus = updateOrderStatus;
 exports.updateMailPay = updateMailPay;
+exports.getNicknameFromWeix = getNicknameFromWeix;

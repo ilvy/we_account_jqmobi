@@ -4,6 +4,7 @@
 define(['routerConfig'],function(routerConfig){
     var key = window.location.hash,
         path = routerConfig[key];
+    dealOrderFromWeb();
     loadModule(key);
     $(window).on('hashchange',function(){
         for(var hash in routerConfig){
@@ -118,6 +119,15 @@ define(['routerConfig'],function(routerConfig){
                 break;
         }
         return hash;
+    }
+
+    function dealOrderFromWeb(){//处理直接
+        var orderStatus = $("#forTakeOrder").data("orderstatus");
+        if(orderStatus && orderStatus == 1){
+            alert("下单成功");
+        }else if(orderStatus && orderStatus == -1){
+            alert("下单失败，请重试");
+        }
     }
 
     return {

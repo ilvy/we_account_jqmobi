@@ -7,20 +7,28 @@ var mysql = require("mysql"),
 
 var pool = mysql.createPool(dbPoolConfig);
 
+//var query = function(sql,posts,callback){
+//    sql = mysql.format(sql,posts);
+//    console.log("sql:\n"+sql);
+//    pool.getConnection(function(err,connection){
+//        if(err){
+//            console.log(err);
+//            return;
+//        }
+//        connection.query(sql,posts,function(err,rows){
+//            callback(err,rows);
+//            connection.release();
+//        });
+//    })
+//}
+
 var query = function(sql,posts,callback){
     sql = mysql.format(sql,posts);
     console.log("sql:\n"+sql);
-    pool.getConnection(function(err,connection){
-        if(err){
-            console.log(err);
-            return;
-        }
-        connection.query(sql,posts,function(err,rows){
-            callback(err,rows);
-            connection.release();
-        });
-    })
-}
+    pool.query(sql,function(err,rows,fields){
+        callback(err,rows);
+    });
+};
 
 exports.query = query;
 
@@ -186,7 +194,15 @@ exports.query = query;
 //});
 
 //console.log(new Buffer([01])[0]);
+//for(var i = 0; i < 12;i++){
+//    (function(){
+//        var k = i;
+//        query('select sleep(?);',[5],function(err,rows){
+//            console.log("count:"+k);
+//            console.log(rows);
+//        });
+//    })();
+//
+//}
 
-query('select sleep(50);',[],function(err,rows){
-    console.log(rows);
-});
+
