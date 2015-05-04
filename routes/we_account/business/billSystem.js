@@ -232,6 +232,27 @@ function getFinalBill(req,res){
     });
 }
 
+/**
+ * 模糊匹配查询
+ * @param req
+ * @param res
+ */
+function vagueMatchNames(req,res){
+    var openId = req.session.openId || 'oHbq1t0enasGWD7eQoJuslZY6R-4',
+        vagueName = req.query.nickname;
+    dbOperator.query('call pro_vague_match_customer(?,?)',['%'+vagueName+'%',openId],function(err,rows){
+        if(err){
+            response.failed(-1,res,'');
+        }else{
+            if(rows[0] && rows[0].length > 0){
+                response.success(rows[0],res,'');
+            }else{
+                response.success(1,res,'');//查询成功，无匹配项
+            }
+        }
+    });
+}
+
 exports.takeOrder = takeOrder;
 exports.filter_takeOrder = filter_takeOrder;
 exports.getBillList = getBillList;
@@ -241,3 +262,4 @@ exports.updateCustomerInfo = updateCustomerInfo;
 exports.updateOrderStatus = updateOrderStatus;
 exports.updateMailPay = updateMailPay;
 exports.getNicknameFromWeix = getNicknameFromWeix;
+exports.vagueMatchNames = vagueMatchNames;

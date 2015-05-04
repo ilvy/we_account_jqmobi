@@ -337,7 +337,7 @@ a {
     width: 100%;
     position: fixed;
     bottom: 0;
-    left: 0;
+    /*left: 0;*/
     background-color: rgba(200,30,40,0);
     padding-top: 6px;
     min-height: 34px;
@@ -946,6 +946,14 @@ li.favour_room_option > div{
     transition:  left 0.8s;
     position: absolute;
     left: -100%;
+}
+
+.tools-box-slide-out{
+    left: -100%;
+}
+
+.tools-box-slide-in{
+    left: 0%;
 }
 
 .slide-position{

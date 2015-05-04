@@ -281,6 +281,7 @@ define(['router','util','touchEvent','laydate'],function(router,util){
 
             $(document).touch("click",function(event){
                 $(".operateObj").css("margin-left",0).removeClass('operateObj');
+                $("#vagueBox").css("display","none");
                 var $target =$(event.target);
                 if(!($target.hasClass("sub")||$target.hasClass("add")||$target.hasClass("num") || $target.hasClass(".quantity"))){
                     $('.add,.sub').css("display",'none');
@@ -539,7 +540,34 @@ define(['router','util','touchEvent','laydate'],function(router,util){
 //                    })
 //                }
 //            });
+            $(document).on("input","#nickname-position",function(){
+                var $this = $(this);
+                var offset = $this.offset(),
+                    left = offset.left,
+                    top = offset.top,
+                    inputHeight = $this.height(),
+                    inputWidth = $this.width();
+                var nickname = $this.val();
+                if(nickname == '' || nickname.length == 0){
 
+                }
+                $("#vagueBox").css({
+                    left:left,
+                    top:top + inputHeight,
+                    width:inputWidth
+                });
+                _this.vagueMatchNames(nickname);
+            });
+
+            $('#vagueBox > li').touch('click',function(event){
+                var $this = event.$this;
+                var nickname = $this.text(),
+                    date1 = $("#date1").val(),
+                    date2 = $("#date2").val();
+                $("#nickname-position").val(nickname);
+                $this.parents("#vagueBox").css("display","none");
+                _this.getBillList(date1,date2,nickname);
+            },true);
         },
         initDates:function(){
             var date1 = util.formatDate(null,false,7);
@@ -624,6 +652,30 @@ define(['router','util','touchEvent','laydate'],function(router,util){
                     console.log(err);
                 }
             })
+        },
+        vagueMatchNames:function(nickname){
+            $.ajax({
+                url:'/we_account/vagueMatchNames?nickname='+nickname,
+                type:'post',
+                success:function(results){
+                    if(results.flag == 1){
+                        var data = results.data;
+                        if(data == 1){
+                            $("#vagueBox").css("display","none");
+                            return;
+                        }else{
+                            var listr = '';
+                            for(var i = 0; i < data.length;i++){
+                                listr += '<li>'+data[i].name+'</li>';
+                            }
+                            $("#vagueBox").html(listr).css("display","block");
+                        }
+                    }
+                },
+                error:function(err){
+                    console.log(err);
+                }
+            });
         },
         showLoading:function(){
             $("#loading").css('display','block');

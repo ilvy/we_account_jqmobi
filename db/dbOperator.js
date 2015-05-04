@@ -193,6 +193,14 @@ exports.query = query;
 //    }
 //});
 
+//query('call pro_vague_match_customer(?,?)',['%nik%','oHbq1t0enasGWD7eQoJuslZY6R-4'],function(err,rows){
+//    if(err){
+//        console.log(err);
+//    }else{
+//        console.log(rows);
+//    }
+//});
+
 //console.log(new Buffer([01])[0]);
 //for(var i = 0; i < 12;i++){
 //    (function(){

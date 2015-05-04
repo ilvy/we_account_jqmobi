@@ -20,11 +20,11 @@ define(['routerConfig'],function(routerConfig){
         }
         var $fromModule = $("."+globalVar.hashFrom),
             $toModule = $("."+hash);
-        $fromModule.addClass('slide-out');
+        $fromModule.addClass('slide-out').find('#tools-box').addClass('tools-box-slide-out').removeClass('tools-box-slide-in');
         $toModule.addClass("visible").addClass("slide-init").addClass("slide-position");
         setTimeout(function(){
             $fromModule.removeClass("visible").removeClass('slide-out').addClass("slide-init");
-            $toModule.addClass('slide-in');
+            $toModule.addClass('slide-in').find('#tools-box').removeClass('tools-box-slide-out').addClass('tools-box-slide-in');
         },800);
         setTimeout(function(){
             $toModule.removeClass('slide-in').removeClass("slide-init").removeClass("slide-position");
