@@ -309,14 +309,14 @@
             $("#pay-list").css("display",'none');
         }
     });
-//    $(".t-row:not(.t-row-header)").touch("swipeleft",function(event){
-////        event.stopPropagation();
-//        alert("删除当前列");
-//        var $this = event.$this;
-////        $this.css({
-////            marginLeft:- getMarginLeft(event.$this)
-////        }).addClass('operateObj');
-//    });
+    $(".t-row:not(.t-row-header)").touch("swipeleft",function(event){
+//        event.stopPropagation();
+        alert("删除当前列");
+        var $this = event.$this;
+//        $this.css({
+//            marginLeft:- getMarginLeft(event.$this)
+//        }).addClass('operateObj');
+    },true);
 
     $(".buy-status").touch('click',function(event){
         var $this = event.$this,

@@ -248,14 +248,29 @@ define(['router','util','touchEvent','laydate'],function(router,util){
                     _this.flushBillList();
                 }
             });
-//    $(".t-row:not(.t-row-header)").touch("swipeleft",function(event){
-////        event.stopPropagation();
-//        alert("删除当前列");
-//        var $this = event.$this;
-////        $this.css({
-////            marginLeft:- getMarginLeft(event.$this)
-////        }).addClass('operateObj');
-//    });
+            $(".t-row:not(.t-row-header)").touch("swipeleft",function(event){
+        //        event.stopPropagation();
+//                alert("删除当前列");
+                var $this = event.$this;
+                if($this.hasClass('mail-row')){
+                    return;
+                }
+//                $this.css({
+//                    marginLeft:- _this.getMarginLeft(event.$this)
+//                }).addClass('operateObj');
+                $this.animate({
+                    marginLeft:- _this.getMarginLeft(event.$this)
+                },500).addClass('operateObj');
+            });
+
+            $(".extra").touch("click",function(event){
+                var $this = event.$this;
+                if(confirm("删除当前订单？")){
+                    var $currRow = $this.parents(".t-row");
+                    var orderIds = $currRow.data("oid");
+                    _this.updateOrderStatus($currRow,orderIds,0);
+                }
+            });
 
             $(".buy-status").touch('click',function(event){
                 var $this = event.$this,
@@ -380,6 +395,7 @@ define(['router','util','touchEvent','laydate'],function(router,util){
                             _this.updateOrderStatus($this.parents(".t-row"),orderIds,0);
                             return;
                         }
+                        return;
                     }
                     $tq.text(total-1);
                     $quantity.text(--q);
@@ -547,7 +563,7 @@ define(['router','util','touchEvent','laydate'],function(router,util){
                     top = offset.top,
                     inputHeight = $this.height(),
                     inputWidth = $this.width();
-                var nickname = $this.val();
+                 var nickname = $this.val();
                 if(nickname == '' || nickname.length == 0){
 
                 }
@@ -638,10 +654,18 @@ define(['router','util','touchEvent','laydate'],function(router,util){
                 success:function(results){
                     if(results.flag == 1){
                         if($obj.hasClass('t-row')){
-                            var $tq = $obj.parents('.card').find('.total-quantity');
-                            var total = Number($tq.text());
-                            var subQuantity = Number($obj.find('.num').text());
-                            $tq.text(total - subQuantity);
+                            if($obj.parents("#pay-list").length > 0){
+                                var $tq = $obj.parents('.card').find('.total-quantity');
+                                var total = Number($tq.text());
+                                var subQuantity = Number($obj.find('.num').text()),
+                                    unitPrice = Number($obj.find('.unit_price').val());
+                                $tq.text(total - subQuantity * unitPrice);
+                            }else if($obj.parents("#order-list").length > 0){
+                                var $tq = $obj.parents('.card').find('.total-quantity');
+                                var total = Number($tq.text());
+                                var subQuantity = Number($obj.find('.num').text());
+                                $tq.text(total - subQuantity);
+                            }
                         }
                         $obj.remove();
                     }else{

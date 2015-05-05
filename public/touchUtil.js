@@ -64,9 +64,13 @@ $.fn.touch = function(type,selector,cb,cancelBubble){
     }
     selector = $(this).selector;
     //移动设备触摸事件
-    $(this).each(function(){
-        $(this).off(touchEvent.touchstart);
+//    $(this).each(function(){
+//        $(this).off(touchEvent.touchstart);
         $(document).on(touchEvent.touchstart,selector,function(event){
+            if(cancelBubble){
+                event.stopPropagation();
+                event.originalEvent.stopPropagation();
+            }
             if(event.originalEvent && event.originalEvent.targetTouches){
                 event = event.originalEvent.targetTouches[0];
             }
@@ -81,7 +85,7 @@ $.fn.touch = function(type,selector,cb,cancelBubble){
 //                cb(event);
 //            },500);
         });
-    });
+//    });
 
     switch (type){
         case touchEvent.longtouch:
@@ -124,7 +128,7 @@ $.fn.touch = function(type,selector,cb,cancelBubble){
         case touchEvent.swipeleft:
 //            $(this).each(function(){
                 $(document).on(touchEvent.touchmove,selector,function(event){
-                    clearTimeout($(this).longTouchtimeout);
+//                    clearTimeout($(this).longTouchtimeout);
                     if(cancelBubble){
                         event.stopPropagation();
                         event.originalEvent.stopPropagation();
@@ -147,7 +151,7 @@ $.fn.touch = function(type,selector,cb,cancelBubble){
                     cb(event);
                 });
                 $(document).on(touchEvent.touchend,selector,function(event){
-                    clearTimeout($(this).longTouchtimeout);
+//                    clearTimeout($(this).longTouchtimeout);
                     if(cancelBubble){
                         event.stopPropagation();
                         event.originalEvent.stopPropagation();
@@ -161,7 +165,7 @@ $.fn.touch = function(type,selector,cb,cancelBubble){
                     if(startX - endX < 30){
                         return;
                     }
-//                    cb(event);
+                    cb(event);
                 });
 //            });
             break;
