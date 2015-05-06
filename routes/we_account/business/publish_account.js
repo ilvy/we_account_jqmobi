@@ -6,7 +6,9 @@ var dbOperator = require("../../../db/dbOperator"),
     response = require("../response/response"),
     accountInfo = require("../accountInfo"),
     tokenManager = require("../access_token"),
-    dataviewConfig = require("../../../config/config").dataviewConfig;
+    dataviewConfig = require("../../../config/config").dataviewConfig,
+    access_token = require('../access_token'),
+    wxsign = require('../sign');
 
 function applyAccount(data,res){
 
@@ -157,6 +159,17 @@ function publishProduct(req,res){
     });
 }
 
+/**
+ * 微信jssdk初始化配置获取
+ * @param req
+ * @param res
+ */
+function wxJssdkInit(req,res){
+    var ticket = access_token.jsapi_ticket;
+    var url = req.body.url;
+    var ret = wxsign(ticket,url);
+    response.success(ret,res,1);
+}
 
 exports.applyAccount = applyAccount;
 exports.publishProduct = publishProduct;
@@ -165,3 +178,4 @@ exports.register = register;
 exports.getPersonalInfo = getPersonalInfo;
 exports.updatePersonality = updatePersonality;
 exports.asyncAccountInfoFromWeix = asyncAccountInfoFromWeix;
+exports.wxJssdkInit = wxJssdkInit;

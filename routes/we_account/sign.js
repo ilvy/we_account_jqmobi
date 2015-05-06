@@ -1,3 +1,6 @@
+
+var crypto = require('crypto');
+
 var createNonceStr = function () {
   return Math.random().toString(36).substr(2, 15);
 };
@@ -38,9 +41,10 @@ var sign = function (jsapi_ticket, url) {
     url: url
   };
   var string = raw(ret);
-      jsSHA = require('jssha');
-      shaObj = new jsSHA(string, 'TEXT');
-  ret.signature = shaObj.getHash('SHA-1', 'HEX');
+//      jsSHA = require('jssha');
+//      shaObj = new jsSHA(string, 'TEXT');
+//  ret.signature = shaObj.getHash('SHA-1', 'HEX');
+  ret.signature = crypto.createHash("sha1").update(string).digest('hex');
 
   return ret;
 };

@@ -25,6 +25,29 @@ function getAccess_token(callback){
         });
 }
 
+function getJsapi_ticket(access_token){
+    var options = {
+        host:""
+    }
+    var url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token="+access_token+"&type=jsapi";
+    https.get(url,function(res){
+        var chunks = "";
+        res.on("data",function(data){
+            chunks += data;
+        });
+        res.on('end',function(){
+//            console.log(chunks.toString());
+            var results = JSON.parse(chunks);
+            if(results.errcode == 0){
+                exports.jsapi_ticket = results.ticket;
+            }
+            console.log(results);
+        })
+    }).on("error",function(e){
+            console.log("get error:"+ e.message);
+        });
+}
+
 exports.getAccess_token = getAccess_token;
 exports.access_token = access_token;
 /**
@@ -34,11 +57,13 @@ setInterval(function(){
     getAccess_token(function(data){
         data = JSON.parse(data);
         console.log(data);
+        getJsapi_ticket(data.access_token);
         exports.access_token = data.access_token;
     });
 },1000*3600*1.5);
 getAccess_token(function(data){
     data = JSON.parse(data);
     console.log(data);
+    getJsapi_ticket(data.access_token);
     exports.access_token = data.access_token;
 });

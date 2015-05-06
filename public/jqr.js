@@ -50,10 +50,24 @@ var globalVar = {
 };
 
 define(['text','router','wxAPI'],function(text,router,wxAPI){
-    wx.config({
-        appId:"wxaef4aefd905a4662",
-        timestamp:new Date().getTime(),
-        nonceStr:''
+    wxjssdkInit(function(err,results){
+        var config;
+        if(results.flag == 1){
+            var data = results.data;
+            config = {
+                app:"wxaef4aefd905a4662",
+                jsapi_ticket: data.jsapi_ticket,
+                nonceStr: data.nonceStr,
+                timestamp: data.timestamp,
+                signature:data.signature,
+                url: data.url,
+                jsApiList: ['onMenuShareAppMessage']
+            };
+            wx.config(config);
+            wx.ready(function(){
+                console.log("wxjssdkinit success");
+            })
+        }
     })
 });
 
@@ -67,6 +81,8 @@ function wxjssdkInit(callback){
         data:data,
         success:function(results){
             if(results.flag == 1){
+                callback(null,results);
+            }else{
 
             }
         },
