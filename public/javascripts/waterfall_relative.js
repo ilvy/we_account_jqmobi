@@ -8,14 +8,7 @@ var boxes = [],
     asyncLoader,
     totalPage = -1,currentPage = 0;
 
-$(document).ready(function(){
-    boxes = $(".box");//sorted date source
-    waterfall = new Waterfall();
-    asyncLoader = new AsyncLoader();
-})
-$(window).on("resize",function(){
-//    waterfall.init();
-});
+
 
 var Waterfall = function(){
     this.displayWay = '';//1.image size,2.self defined
@@ -262,3 +255,12 @@ function stopPropagation(event){
         event.cancelBubble = true;
     }
 }
+
+$(document).ready(function(){
+    boxes = $(".box");//sorted date source
+    waterfall = new Waterfall();
+    asyncLoader = new AsyncLoader();
+})
+$(window).on("resize",function(){
+//    waterfall.init();
+});

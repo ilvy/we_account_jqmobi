@@ -171,8 +171,7 @@ $.fn.touch = function(type,selector,cb,cancelBubble){
             break;
         case touchEvent.swiperight:
 //            $(this).each(function(){
-                $(document).on(touchEvent.touchend,$(this),function(event){
-                    clearTimeout($(this).longTouchtimeout);
+                $(document).on(touchEvent.touchend,selector,function(event){
                     if(cancelBubble){
                         event.stopPropagation();
                         event.originalEvent.stopPropagation();

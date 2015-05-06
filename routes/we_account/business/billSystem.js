@@ -200,7 +200,7 @@ function updateMailPay(req,res){
 
 
 function filter_bill(req,res,next){
-    var openId = req.session.openId;
+    var openId = req.session.openId || 'oHbq1t0enasGWD7eQoJuslZY6R-4';
     var status = req.query.billType;
     if(!openId){
         response.failed(0,res,'');//

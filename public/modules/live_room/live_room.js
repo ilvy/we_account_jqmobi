@@ -1,7 +1,7 @@
 /**
  * Created by man on 15-4-3.
  */
-define(['router'],function(router){
+define(['router','jqmobiTouch','preloadImg','waterfall','ajaxupload'],function(router){
     var disableClick = false;
     function LiveRoom(){
         this.hasSetToolBox = 0;//标记是否已经初始化toolbox

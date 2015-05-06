@@ -191,7 +191,7 @@ router.get("/goto_publish",function(req,resp){
 router.get('/live_room_test',function(req,res){
     res.redirect('/we_account/live-room#live_room-666666');
 });
-router.get('/wxjssdkinit',publish_account.wxJssdkInit(req,res));
+router.post('/wxjssdkinit',publish_account.wxJssdkInit);
 router.get("/fav",live_room.myFavorite);
 router.get("/live-room",function(req,res){
     var openId = req.session.openId;

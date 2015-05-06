@@ -1,4 +1,7 @@
-
+/**
+ * 微信jssdk初始化签名生成
+ * @type {exports}
+ */
 var crypto = require('crypto');
 
 var createNonceStr = function () {
@@ -45,7 +48,7 @@ var sign = function (jsapi_ticket, url) {
 //      shaObj = new jsSHA(string, 'TEXT');
 //  ret.signature = shaObj.getHash('SHA-1', 'HEX');
   ret.signature = crypto.createHash("sha1").update(string).digest('hex');
-
+    console.log("wx jssdk config:",ret);
   return ret;
 };
 

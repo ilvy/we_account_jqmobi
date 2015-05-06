@@ -1,7 +1,7 @@
 /**
  * Created by man on 15-4-16.
  */
-define(['router'],function(router){
+define(['router','jqmobiTouch'],function(router){
     function RoomDoor(){
         this.init = function(){
             this.do();

@@ -2,7 +2,7 @@
  * Created by Administrator on 2015/4/25.
  */
 
-define(['router','util','touchEvent','laydate'],function(router,util){
+define(['router','util','wxAPI','touchEvent','laydate'],function(router,util,wx){
     var Bill = function(){
         this.init();
     };
@@ -184,7 +184,7 @@ define(['router','util','touchEvent','laydate'],function(router,util){
                 }
                 totalMoney += record.quantity * (record.unit_price ? record.unit_price:0);
                 totalCost += record.quantity * (record.unit_cost ? record.unit_cost:0);
-                tableStr += '<div class="t-row t-row-over-1"><div class="t-col t-col-3 product_name">'+record.product_name+'</div>' +
+                tableStr += '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'><div class="t-col t-col-3 product_name">'+record.product_name+'</div>' +
                     '<div class="t-col t-col-2"><div class="num">'+record.quantity+'</div></div>' +
                     '<div class="t-col t-col-2">'+(record.unit_cost||"")+'</div>' +
                     '<div class="t-col t-col-2">'+(record.unit_price||"")+'</div>' +
@@ -261,6 +261,10 @@ define(['router','util','touchEvent','laydate'],function(router,util){
                 $this.animate({
                     marginLeft:- _this.getMarginLeft(event.$this)
                 },500).addClass('operateObj');
+            });
+
+            $(".t-row:not(.t-row-header)").touch("swiperight",function(event){
+                $(".operateObj").css("margin-left",0).removeClass('operateObj');
             });
 
             $(".extra").touch("click",function(event){
@@ -584,6 +588,25 @@ define(['router','util','touchEvent','laydate'],function(router,util){
                 $this.parents("#vagueBox").css("display","none");
                 _this.getBillList(date1,date2,nickname);
             },true);
+
+            $(".getpay input").touch('click',function(event){
+                var $this = event.$this;
+                var title = '亲，东西已经买好',
+                    desc = '代购总费用:'+$this.parents(".card").find(".total-quantity").text()+'详情请点开',
+                    link = 'http://www.baidu.com';
+                wx.onMenuShareAppMessage({
+                    title:title,
+                    desc:desc,
+                    link:link,
+                    success:function(){
+                        alert("用户账单发送成功");
+                    },
+                    cancel:function(){
+                        alert("用户账单发送已取消");
+                    }
+                })
+                alert("账单已选好，试试点击右上角按钮发送给相关好友哦");
+            });
         },
         initDates:function(){
             var date1 = util.formatDate(null,false,7);

@@ -1,7 +1,7 @@
 /**
  * Created by man on 15-4-15.
  */
-define(['router'],function(router){
+define(['router','jqmobiTouch'],function(router){
 
     function Product(){
         this.init = function(){
