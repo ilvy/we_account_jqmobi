@@ -330,6 +330,27 @@ router.get('/getAuth',function(req,res){
     });
 });
 
+router.get('/payment',function(req,res){
+    var openId = req.session.openid;
+
+    if(!openId){
+        we_auth.getWeAuth('http://120.24.224.144/we_account/payme',res);
+    }
+
+});
+
+router.get('/payme',function(req,res){
+    we_auth.redirectToUrl(req,res,function(err,results,requ,resp){
+        if(err){
+            console.log('getAuth failed（pay）:',err);
+        }else if(results){
+            req.session.openId = results.openid;
+            console.log("get openId:"+results.openid);
+
+        }
+    });
+});
+
 /***
  * 订单系统
  */

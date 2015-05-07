@@ -330,3 +330,26 @@ body{
     padding: 3px;
     border: 1px solid #cecece;
 }
+
+/********getpay start********/
+
+#getpay{
+    margin-bottom: 4rem;
+    float: left;
+}
+
+#gotoLiveroom{
+    width: 100%;
+    border: 1px solid #73C4DB;
+    background: none;
+    padding: 0.8rem;
+    border-radius: 5px;
+    color: #9E9E9E;
+    font-size: 1rem;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background-color: #fff;
+}
+
+/********getpay end**********/

@@ -15,9 +15,11 @@ define(['router','jqmobiTouch'],function(router){
 
         }
         this.addListener = function(){
+            var _this = this;
             $("#cancel").on("click",function(){
 //        removeUploadPanel();
 //                window.location.hash = '#live_room';
+                cleanPosition();
                 router.changeHash('live_room-'+globalVar.room_id,0);//不重新加载
             });
             $(document).on("vclick",".adjustImg",function(){

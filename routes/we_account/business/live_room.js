@@ -276,9 +276,10 @@ function loadMoreProducts_new(req,res){
         type = req.session.type;
     var room_id = session.room;
     if((typeof  session.isLoadOver != 'undefined' && !session.isLoadOver)){
+        session.isLoadOver = false;
         response.success(-1,res,"加载未完");
+        return;
     }
-    session.isLoadOver = false;
     var query = req.query;
     var paras = [null,null,query.page];
     var products;
