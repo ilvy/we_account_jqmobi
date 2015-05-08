@@ -11,6 +11,7 @@ define([],function(){
         myFavorite:'modules/myFavorite/myFavorite',//收藏夹
         room_door:'modules/room_door/room_door',
         personality:'modules/personality/personality',
-        billSystem:'modules/bill/bill'
+        billSystem:'modules/bill/bill',
+        getpay:'modules/Payment/Payment'
     }
 });

@@ -58,6 +58,7 @@ var globalVar = {
     modules: {},
     productArray : [],
     hashFrom:'',
+    nickname:'',//当前账单用户昵称
     showLoading:function(){
         $("#loading").css('display','block');
     },

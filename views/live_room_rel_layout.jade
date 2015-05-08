@@ -128,6 +128,15 @@ html
                 input(type='button' value='账单列表')#to_order.current-list
                 input(type='button' value='付款列表')#to_pay
                 input(type='button' value='总账单列表')#to_bill
+        div.page.getpay#getpay
+            .table
+                .t-row.t-row-header
+                    .t-col.t-col-2 品名
+                    .t-col.t-col-2 数量
+                    .t-col.t-col-2 备注
+                    .t-col.t-col-2 价格
+                    .t-col.t-col-2 总计
+            input(type='button' value='回到账单')#backtobill
         div.page.contact-page
             div.curr-product
         //div(style='position:fixed;top:10px;right:10px;')

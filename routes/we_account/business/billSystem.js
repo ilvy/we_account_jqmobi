@@ -233,6 +233,50 @@ function getFinalBill(req,res){
 }
 
 /**
+ * 跟买家收款时生成收款列表
+ * @param req
+ * @param res
+ */
+function getPayment(req,res,isRequestBySeller){//需要验证openid
+    var openId = req.session.openid;
+    var room_id = req.query.room_id,
+        nickname = req.query.nickname;//1:卖家查看账单，其他（包括undefined）：买家查看账单
+    var paras = [nickname];
+    if(!room_id || !nickname){
+        if(!isRequestBySeller){
+            res.render('error')
+        }else{
+            response.failed(0,res,'')
+        }
+        return;
+    }
+    dbOperator.query('call pro_getpayment(?)',paras,function(err,rows){
+        if(err){
+            console.log(err);
+            if(!isRequestBySeller){
+                res.render('error')
+            }else{
+                response.failed(-1,res,'')
+            }
+        }else{
+            console.log(rows);
+            var data = rows[0] || [];
+            for(var i = 0; i < data.length; i++){
+                var quantity = data[i].quantity?Number(data[i].quantity):0,
+                    price = data[i].price?Number(data[i].price):0;
+                data[i].single_total = quantity * price;
+            }
+            console.log()
+            if(!isRequestBySeller){
+                res.render('payment',{dataList:data,roomId:room_id})
+            }else{
+                response.success({dataList:data,roomId:room_id},res,'')
+            }
+        }
+    });
+}
+
+/**
  * 模糊匹配查询
  * @param req
  * @param res
@@ -263,3 +307,4 @@ exports.updateOrderStatus = updateOrderStatus;
 exports.updateMailPay = updateMailPay;
 exports.getNicknameFromWeix = getNicknameFromWeix;
 exports.vagueMatchNames = vagueMatchNames;
+exports.getPayment = getPayment;

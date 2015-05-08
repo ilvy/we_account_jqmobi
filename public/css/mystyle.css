@@ -336,9 +336,10 @@ body{
 #getpay{
     margin-bottom: 4rem;
     float: left;
+    width: 100%;
 }
 
-#gotoLiveroom{
+#gotoLiveroom,#backtobill{
     width: 100%;
     border: 1px solid #73C4DB;
     background: none;
@@ -350,6 +351,8 @@ body{
     bottom: 0;
     left: 0;
     background-color: #fff;
+    text-align: center;
+    text-decoration: none;
 }
 
 /********getpay end**********/

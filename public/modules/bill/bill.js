@@ -7,6 +7,7 @@ define(['router','util','wxAPI','touchEvent','laydate'],function(router,util,wx)
         this.init();
     };
     Bill.prototype = {
+        room_id:'',
         init:function(){
             this.do();
             this.addListener();
@@ -123,6 +124,7 @@ define(['router','util','wxAPI','touchEvent','laydate'],function(router,util,wx)
                 return;
             }
             var totalMoney = 0,cards = {};
+            this.room_id = data[0].room_id;
             for(var i = 0; i < data.length; i++){
                 var record = data[i];
                 if(!cards[record.nickname+"_"+record.cid]){
@@ -161,7 +163,7 @@ define(['router','util','wxAPI','touchEvent','laydate'],function(router,util,wx)
                     '<div class="product"><span class="name">'+nickname+'</span> 总计: <span class="total-quantity">'+totalMoney+'</span> <i class="fa fa-caret-right"></i></div>' +
                     '<div class="all-status"><span>已付：</span><i class="fa fa-square-o"></i></div></div>';
                 var lastRow = '<div class="extra-row"><div class="t-col-5 remark-col">备注：<span>'+(record.remark || "无")+'</span></div>' +
-                    '<div class="t-col-5 getpay"><input type="button" value="向买家收款"/></div></div>';
+                    '<div class="t-col-5 getpay-btn"><input type="button" value="向买家收款"/></div></div>';
                 cardStr += tableStr +lastRow+'</div>';
                 $("#pay-list").append(cardStr);
             }
@@ -589,11 +591,14 @@ define(['router','util','wxAPI','touchEvent','laydate'],function(router,util,wx)
                 _this.getBillList(date1,date2,nickname);
             },true);
 
-            $(".getpay input").touch('click',function(event){
+            $(".getpay-btn input").touch('click',function(event){
                 var $this = event.$this;
                 var title = '亲，东西已经买好',
-                    desc = '代购总费用:'+$this.parents(".card").find(".total-quantity").text()+'详情请点开',
-                    link = 'http://www.baidu.com';
+                    desc = '代购总费用:'+$this.parents(".card").find(".total-quantity").text()+',详情请点开',
+                    nickname = $this.parents('.card').find('.name').text(),
+                    link = 'http://120.24.224.144/we_account/payit?room_id='+_this.room_id+'&nickname='+nickname;
+                globalVar.room_id = _this.room_id;
+                globalVar.nickname = nickname;
                 wx.onMenuShareAppMessage({
                     title:title,
                     desc:desc,
@@ -604,8 +609,9 @@ define(['router','util','wxAPI','touchEvent','laydate'],function(router,util,wx)
                     cancel:function(){
                         alert("用户账单发送已取消");
                     }
-                })
-                alert("账单已选好，试试点击右上角按钮发送给相关好友哦");
+                });
+                router.changeHash('getpay',1);
+//                alert("账单已选好，试试点击右上角按钮发送给相关好友哦");
             });
         },
         initDates:function(){
@@ -731,5 +737,5 @@ define(['router','util','wxAPI','touchEvent','laydate'],function(router,util,wx)
             $("#loading").css('display','none');
         }
     };
-    globalVar.modules['bill'] = new Bill();
+    globalVar.modules['billSystem'] = new Bill();
 });
