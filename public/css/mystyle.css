@@ -83,10 +83,10 @@ body{
     border-right: 1px solid #cdcdcd;
     text-align: center;
     float: left;
-    padding-top: 4px;
+    padding-top: 6px;
     padding-bottom: 0;
     overflow: hidden;
-    height: 25px;
+    height: 32px;
     /*padding-left: 2px;*/
     /*padding-right: 2px;*/
 }
@@ -331,3 +331,29 @@ body{
     padding: 3px;
     border: 1px solid #cecece;
 }
+
+/********getpay start********/
+
+#getpay{
+    margin-bottom: 4rem;
+    float: left;
+    width: 100%;
+}
+
+#gotoLiveroom,#backtobill{
+    width: 100%;
+    border: 1px solid #73C4DB;
+    background: none;
+    padding: 0.8rem;
+    border-radius: 5px;
+    color: #9E9E9E;
+    font-size: 1rem;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background-color: #fff;
+    text-align: center;
+    text-decoration: none;
+}
+
+/********getpay end**********/
