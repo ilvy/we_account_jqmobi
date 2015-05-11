@@ -59,7 +59,7 @@ define(['router','jqmobiTouch','preloadImg','waterfall','ajaxupload'],function(r
         },
         setToolBox : function(data){
             if(data.publisher){
-                alert(data.publisher)
+//                alert(data.publisher)
     //                $("#tools-box").html('<div id="upload-div-box"><div id="upload-div"><div id="upload"><i class="fa fa-plus"></i></div></div></div>');
                 $("#upload-div-box").removeClass('remove').siblings().addClass('remove');
             }else{

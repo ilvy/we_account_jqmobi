@@ -335,7 +335,7 @@ body{
 /********getpay start********/
 
 #getpay{
-    margin-bottom: 4rem;
+    margin-bottom: 5rem;
     float: left;
     width: 100%;
 }
@@ -347,9 +347,9 @@ body{
     padding: 0.8rem;
     border-radius: 5px;
     color: #9E9E9E;
-    font-size: 1rem;
+    font-size: 1.5rem;
     position: fixed;
-    bottom: 0;
+    bottom: 3px;
     left: 0;
     background-color: #fff;
     text-align: center;

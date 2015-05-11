@@ -1,7 +1,7 @@
 /**
  * Created by man on 15-4-15.
  */
-define(['router','jqmobiTouch'],function(router){
+define(['router','wxAPI','jqmobiTouch'],function(router,wx){
 
     function Product(){
         this.init = function(){
@@ -12,14 +12,27 @@ define(['router','jqmobiTouch'],function(router){
         this.do = function(){
             var _this = this;
             var url = 'product_display?product_id='+globalVar.product_id;
+            globalVar.showLoading();
             $.ajax({
                 url:url,
                 type:'get',
                 success:function(result){
                     if(result.flag == 1){
+                        globalVar.hideLoading();
                         var product = result.data;
                         $(".product_display .desc").html(product.text);
                         $(".product_display img").attr("src",'http://120.24.224.144/images/'+product.image_url[0]);
+                        wx.onMenuShareAppMessage({
+                            title:product.title+',要不要',
+                            desc:product.text,
+                            imgUrl:'http://120.24.224.144/images/'+product.image_url[0],
+                            success:function(){
+                                alert('分享成功');
+                            },
+                            success:function(){
+                                alert('分享失败，请重试！');
+                            }
+                        });
                         var isPublisher = window.sessionStorage.getItem('moment_publisher');
                         if(isPublisher == 1){
                             $("#take_order").remove();

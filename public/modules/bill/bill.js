@@ -683,6 +683,10 @@ define(['router','util','wxAPI','touchEvent','laydate'],function(router,util,wx)
                 success:function(results){
                     if(results.flag == 1){
                         if($obj.hasClass('t-row')){
+                            if($obj.siblings('.t-row:not(.t-row-header,.mail-row)').length == 0){
+                                $obj.parents('.card').remove();
+                                return;
+                            }
                             if($obj.parents("#pay-list").length > 0){
                                 var $tq = $obj.parents('.card').find('.total-quantity');
                                 var total = Number($tq.text());
