@@ -27,6 +27,7 @@ define(['router'],function(router){
                                 '<div class="t-col t-col-2">'+record.price+'</div>' +
                                 '<div class="t-col t-col-2">'+record.single_total+'</div></div>';
                         }
+                        $(".total-price").html('<span>总计：</span>'+'<span>'+results.data.total+'元</span>');
                         $("#getpay .table").append(rowStr);
                     }else if(results.flag == 0){
                         if(results.data == -1){

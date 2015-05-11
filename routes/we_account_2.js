@@ -308,7 +308,7 @@ router.get('/getAuth',function(req,res){
             resp.redirect('/follow_account.html');
             return;
         }else if(results){
-            req.session.openId = results.openid;
+            var openId = req.session.openId = results.openid;
             console.log("get openId:"+results.openid);
             var roomId = req.query.room_id,
                 product_id = req.query.product_id;

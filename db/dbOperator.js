@@ -213,4 +213,14 @@ exports.query = query;
 //
 //}
 
+//query('SELECT * from t_customer c where c.c_nickname is NULL OR c.c_nickname = \'null\' ' +
+//    'and c_openid is not NULL and seller_room_id is not NULL',[],function(err,rows){
+//    if(err){
+//        console.log('getNullAccountInfo failed:',err);
+////        cb('getNullAccountInfo failed',null)
+//    }else{
+//        console.log(rows);
+////        cb(null,rows[0]);
+//    }
+//});
 

@@ -54,15 +54,15 @@ function takeOrder(req,res,callback){
                 return;
             }
             console.log(rows);
-            response.success('',res,'');
             if(rows[0] && rows[0][0] && rows[0][0].isExistCustomer){
                 getNicknameFromWeix(openId,roomId);
             }
+            response.success('',res,'');
         }
     });
 }
 
-function getNicknameFromWeix(openid,roomid){
+function getNicknameFromWeix(openid,roomid,callback){
     accountInfo.getAccountInfo(tokenManager.access_token,openid,function(accountInfo){
         console.log(accountInfo);
         accountInfo = JSON.parse(accountInfo);
@@ -261,16 +261,18 @@ function getPayment(req,res,isRequestBySeller){//需要验证openid
         }else{
             console.log(rows);
             var data = rows[0] || [];
+            var total = 0;
             for(var i = 0; i < data.length; i++){
                 var quantity = data[i].quantity?Number(data[i].quantity):0,
                     price = data[i].price?Number(data[i].price):0;
                 data[i].single_total = quantity * price;
+                total += data[i].single_total;
             }
-            console.log()
+
             if(!isRequestBySeller){
-                res.render('payment',{dataList:data,roomId:room_id})
+                res.render('payment',{dataList:data,roomId:room_id,total:total})
             }else{
-                response.success({dataList:data,roomId:room_id},res,'')
+                response.success({dataList:data,roomId:room_id,total:total},res,'')
             }
         }
     });
