@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head runat="server">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>jquery插件开发入门学习</title>
+    <link rel="stylesheet" href="jquery.light-popup.css"/>
+    <link rel="stylesheet" href="style.css"/>
+    <link rel="stylesheet" href="bootstrap.css"/>
+    <script src="./jquery.js"></script>
+    <script src="./jquery.light-popup.js"></script>
+    
+    <style>
+
+    </style>
+</head>
+    <body >
+        <input type="button" value="弹出" id="pop" onclick="popup(event)"/>
+        <div id="light-popup" class="light-popup">
+            <div>
+                <span>币种：</span>
+                <select>
+                    <option value="1" selected>港币</option>
+                    <option value="2">人民币</option>
+                    <option value="3">美元</option>
+                </select>
+                <span>汇率<span class="rate-desc">(兑人民币)</span>：</span>
+                <input id="recharge-rate" value="0.82"/>
+            </div>
+            <div>
+                <span>金额：</span><input type="text" id="money-input"/>
+            </div>
+            <div class="btn-group">
+                <input type="button" value="取消" id="input-cancel"/>
+                <input type="button" value="确定" id="input-sure"/>
+            </div>
+        </div>
+        <table class="table table-bordered table-hover" style="width: 500px;">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>词汇等级</th>
+                    <th>总题数</th>
+                    <th>正确率</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>入学测试</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="success">
+                    <td>入学测试</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>入学测试</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="success">
+                    <td>...</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+
+        </table>
+        
+        <script>
+            
+            //var options = {width:"80%",height:"80%"};
+            var options = {width:window.innerWidth - 100,height:innerHeight - 100};
+            function popup(event) {
+                if (event.stopPropagation) {
+                    event.stopPropagation();
+                } else if (event.cancelBubble) {
+                    event.cancelBubble = true;
+                }
+                $("#light-popup").pop(options);
+            }
+        </script>
+    </body>
+</html>

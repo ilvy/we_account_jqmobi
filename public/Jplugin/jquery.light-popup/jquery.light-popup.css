@@ -1,0 +1,83 @@
+﻿.light-popup {
+    border: 1px solid #d3d3d3;
+    box-shadow: 1px 1px 3px #d3d3d3;
+    z-index: -1000;
+    position: fixed;
+    display: none;
+    opacity: 0.1;
+    background-color: white;
+    overflow-y: auto;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    -webkit-transition: all 1s ease;-moz-transition: all 1s ease;-ms-transition: all 1s ease;-o-transition: all 1s ease;transition: all 1s ease;
+}
+.popup-header {
+    width: 100%;
+    height: 8%;
+    background-color: #00bfff;
+    padding-top: 10px;
+}
+.popup:after {
+
+}
+.popup-content {
+    background-color: white;
+}
+.sclose {
+    float: right;
+    margin-right: 5px;
+}
+.mask {
+    width: 100%;height:100%;
+    position: fixed;
+    background-color: #000000;
+    top: 0;
+    left: 0;
+    opacity: 0.8;
+    z-index: 999;
+}
+.btn {
+    -webkit-border-radius: .25em;
+    border-radius: .25em;
+    border: 1px solid #949494;
+    bottom: 0px;
+    color: #000;
+    cursor: pointer;
+    padding: 7px 25px 7px 25px;
+    text-align: center;
+    vertical-align: middle;
+    display: inline;
+}
+#light-popup div {
+    border-top: 1px solid #6EDEF4;
+    border-bottom: 1px solid #CEE3EF;
+    margin: 0 auto;
+    /*padding: 12px 0px 12px 0px;*/
+    padding: 12px 30px;
+    /*text-align: center;*/
+    font-size: 1em;
+    font-family: 'microsoft yahei';
+}
+
+
+.light-popup-show{
+    width: 90%;
+    height: 160px;
+    top: 34%;
+    left: 5%;
+    opacity: 1;
+    z-index: 1000;
+    /*display: block;*/
+}
+@media screen and (min-height: 769px) {
+    .light-popup-show{
+        width: 60%;
+        left: 20%;
+        /*display: block;*/
+    }
+}
+.visible{
+    display: block;
+}

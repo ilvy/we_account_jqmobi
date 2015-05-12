@@ -17,6 +17,7 @@ requirejs.config({
         preloadImg:"javascripts/preloadImg",
         waterfall:"javascripts/waterfall_relative",
         ajaxupload:"javascripts/ajaxupload",
+        jpopup:'Jplugin/jquery.light-popup/jquery.light-popup',
         wxAPI:'http://res.wx.qq.com/open/js/jweixin-1.0.0'
     },
     shim:{

@@ -2,7 +2,7 @@
  * Created by Administrator on 2015/4/25.
  */
 
-define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router,util,wx){
+define(['router','util','wxAPI','Jpopup','touchEvent','laydate'],function(router,util,wx,Jpopup){
     var Bill = function(){
         this.init();
     };
@@ -106,7 +106,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     tableStr += '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'><div class="t-col t-col-4 nickname" data-type="1" data-value="'+record.nickname+'" contenteditable="true">'+record.nickname+'</div>' +
                         '<div class="t-col t-col-2 quantity" data-value="'+record.quantity+'"><div class="sub"><i class="fa fa-caret-left"></i></div>' +
                         '<div class="num" contenteditable="true">'+record.quantity+'</div><div class="add"><i class="fa fa-caret-right"></i></div></div>' +
-                        '<div class="t-col t-col-2 input-div unit_cost" data-type="2">'+(record.unit_cost||"")+'</div>' +
+                        '<div class="t-col t-col-2 input-div"><input class="unit_cost" data-type="2" type="text" data-value="'+(record.unit_cost||"")+'" placeholder="" value="'+(record.unit_cost||"")+'"/></div>' +
                         '<div class="t-col t-col-1 buy-status"><i class="fa fa-square-o"></i></div>' +
                         '<div class="t-col t-col-1 extra">删除</div></div>';
                 }
@@ -147,8 +147,8 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     tableStr += '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'><div class="t-col t-col-3 product_name" data-type="1" data-value="'+record.product_name+'" contenteditable="true">'+record.product_name+'</div>' +
                         '<div class="t-col t-col-2 quantity" data-value="'+record.quantity+'"><div class="sub"><i class="fa fa-caret-left"></i></div>' +
                         '<div class="num" contenteditable="true">'+record.quantity+'</div><div class="add"><i class="fa fa-caret-right"></i></div></div>' +
-                        '<div class="t-col t-col-2 input-div unit_cost" data-type="2">'+(record.unit_cost||"")+'</div>' +
-                        '<div class="t-col t-col-2 input-div unit_price" data-type="3">'+(record.unit_price||"")+'</div>' +
+                        '<div class="t-col t-col-2 input-div"><input class="unit_cost" data-type="2" type="text" data-value="'+(record.unit_cost||"")+'" placeholder="" value="'+(record.unit_cost||"")+'"/></div>' +
+                        '<div class="t-col t-col-2 input-div"><input class="unit_price" data-type="3" type="text" data-value="'+(record.unit_price||"")+'" placeholder="" value="'+(record.unit_price||"")+'"/></div>' +
                         '<div class="t-col t-col-1 extra">删除</div></div>';
                 }
                 if(!record.mail_free){
@@ -477,7 +477,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 }
             });
 
-            $(document).on("blur",'div.nickname[contenteditable="true"]',function(){
+            $(document).on("blur",'div.nickname[contenteditable="true"],.input-div input',function(){
                 var $this = $(this);
                 var value = '',
                     type = $this.data("type"),
@@ -497,10 +497,46 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                         type:'get',
                         success:function(results){
                             if(results.flag == 1){
-//                                $this.parents('.t-row').data("value",value);
+                                $this.parents('.t-row').data("value",value);
                                 $(".t-row[data-cid = "+objId+"] .nickname").text(value).data("value",value);
-                            }else{
-                                alert('昵称修改失败，请重试！');
+                            }
+                        },
+                        error:function(err){
+
+                        }
+                    });
+                }else if(type == 2){//进价
+                    var objId = $this.parents('.t-row').data('oid');
+                    value = $this.val();
+                    if(value == originValue){
+                        return;
+                    }
+                    var url = '/we_account/updateCustomerInfo?value='+value+'&objId='+objId+'&type='+type;
+                    $.ajax({
+                        url:url,
+                        type:'get',
+                        success:function(results){
+                            if(results.flag == 1){
+                                $this.data("value",value);
+                            }
+                        },
+                        error:function(err){
+
+                        }
+                    });
+                }else if(type == 3){//售价
+                    var objId = $this.parents('.t-row').data('oid');
+                    value = $this.val();
+                    if(value == originValue){
+                        return;
+                    }
+                    var url = '/we_account/updateCustomerInfo?value='+value+'&objId='+objId+'&type='+type;
+                    $.ajax({
+                        url:url,
+                        type:'get',
+                        success:function(results){
+                            if(results.flag == 1){
+                                $this.parents('.t-row').data("value",value);
                             }
                         },
                         error:function(err){
@@ -577,93 +613,6 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 router.changeHash('getpay',1);
 //                alert("账单已选好，试试点击右上角按钮发送给相关好友哦");
             });
-            $('.input-div').touch('click',function(event){
-                var $this = event.$this;
-                var $card = $(this).parents('.card');
-                $this.addClass('current').parents('.t-row').siblings('.t-row').find('.current').removeClass('current');
-                $this.siblings('.current').removeClass('current');
-                var type = $this.data('type'),
-                    objId = $this.parents('.t-row').data('oid');
-                $('.light-popup').data('type',type).data('objid',objId);
-                $("#light-popup").pop({callback:function(){
-                    $('.current').removeClass('current');
-                }});
-            },true);
-
-            $('#input-sure').touch('click',function(event){
-                var $this = event.$this;
-                var $inputDiv = $('.current');
-                var value = '',
-                    type = $inputDiv.data("type"),
-                    originValue = $inputDiv.data("value");
-                if(type == 2){//进价
-                    var objId = $inputDiv.parents('.t-row').data('oid');
-                    value = $('#money-input').val();
-                    if(value == originValue || (!value && value !== 0)){
-                        $("#light-popup").pop({hidden:'true',callback:function(){
-                            $('.current').removeClass('current');
-                        }});
-                        _this.cleanPopPanel();
-                        return;
-                    }
-                    var url = '/we_account/updateCustomerInfo?value='+value+'&objId='+objId+'&type='+type;
-                    $.ajax({
-                        url:url,
-                        type:'get',
-                        success:function(results){
-                            if(results.flag == 1){
-                                $inputDiv.data("value",value).text(value).removeClass('current');
-                                $("#light-popup").pop({hidden:'true',callback:function(){
-                                    $('.current').removeClass('current');
-                                }});
-                                _this.cleanPopPanel();
-                            }else{
-                                alert('进价保存失败，请重试');
-                            }
-                        },
-                        error:function(err){
-
-                        }
-                    });
-                }else if(type == 3){//售价
-                    var objId = $inputDiv.parents('.t-row').data('oid');
-                    value = $('#money-input').val();
-                    if(value == originValue || (!value && value !== 0)){
-                        $("#light-popup").pop({hidden:'true',callback:function(){
-                            $('.current').removeClass('current');
-                        }});
-                        _this.cleanPopPanel();
-                        return;
-                    }
-                    var url = '/we_account/updateCustomerInfo?value='+value+'&objId='+objId+'&type='+type;
-                    $.ajax({
-                        url:url,
-                        type:'get',
-                        success:function(results){
-                            if(results.flag == 1){
-                                $inputDiv.data("value",value).text(value).removeClass('current');
-                                $("#light-popup").pop({hidden:'true',callback:function(){
-                                    $('.current').removeClass('current');
-                                }});
-                                _this.cleanPopPanel();
-                            }else{
-                                alert('售价保存失败，请重试');
-                            }
-                        },
-                        error:function(err){
-
-                        }
-                    });
-                }
-            });
-            $('#input-cancel').on('click',function(){
-                $("#light-popup").pop({hidden:'true',callback:function(){
-                    $('.current').removeClass('current');
-                }});
-            });
-        },
-        cleanPopPanel:function(){
-            $('#money-input').val('');
         },
         initDates:function(){
             var date1 = util.formatDate(null,false,7);

@@ -361,3 +361,44 @@ body{
 }
 
 /********getpay end**********/
+
+/***********弹出框插件 start*************/
+.btn-group > input{
+    background-color: white;
+    border: 1px solid #8E8E8E;
+    padding: 4px 13px;
+}
+
+#light-popup div:first-child{
+    border-top: none;
+}
+
+.rate-desc{
+    font-size: 0.5rem;
+}
+
+#recharge-rate{
+    width: 60px;
+}
+
+#money-input{
+    width: 100px;
+}
+
+#light-popup div:last-child{
+    border-bottom: none;
+    text-align: center;
+}
+
+.btn-group > input{
+    margin-left: 20px;
+}
+
+.btn-group > input:active{
+    border-color: #f5f5f5;
+}
+
+.current {
+    background-color: rgb(247, 139, 139);
+}
+/***********弹出框插件 end*************/

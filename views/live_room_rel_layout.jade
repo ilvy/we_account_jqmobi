@@ -10,6 +10,7 @@ html
         title 的momenT
         meta(name="viewport",content="width=device-width,initial-scale=1.0,user-scalable=no")
         link(rel='stylesheet', href='/stylesheets/style_new.css')
+        link(rel='stylesheet', href='/Jplugin/jquery.light-popup/jquery.light-popup.css')
         link(rel='stylesheet', href='/css/mystyle.css')
         link(rel='stylesheet', href='/stylesheets/bootstrap.css')
         link(rel='stylesheet', href='/stylesheets/bootstrap-grid.css')
@@ -147,6 +148,24 @@ html
         div#uploading-mask
         div#loading
         div(data-orderstatus='#{orderStatus}')#forTakeOrder
+        #light-popup.light-popup
+            div
+                span 币种：
+                select
+                    option(value='1' selected) 港币
+                    option(value='2') 人民币
+                    option(value='3') 美元
+                span 汇率
+                    span.rate-desc (兑人民币)
+                    span ：
+                input(type='text' value='0.82')#recharge-rate
+            div
+                span 金额：
+                input(type='text')#money-input
+            .btn-group
+                input(type='button' value='取消')#input-cancel
+                input(type='button' value='确定')#input-sure
+
 
 script(src="/javascripts/jquery.js")
 //script(src="/javascripts/libs/jquery.mobile.custom.js")
