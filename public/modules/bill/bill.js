@@ -106,7 +106,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     tableStr += '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'><div class="t-col t-col-4 nickname" data-type="1" data-value="'+record.nickname+'" contenteditable="true">'+record.nickname+'</div>' +
                         '<div class="t-col t-col-2 quantity" data-value="'+record.quantity+'"><div class="sub"><i class="fa fa-caret-left"></i></div>' +
                         '<div class="num" contenteditable="true">'+record.quantity+'</div><div class="add"><i class="fa fa-caret-right"></i></div></div>' +
-                        '<div class="t-col t-col-2 input-div unit_cost" data-type="2">'+(record.unit_cost||"")+'</div>' +
+                        '<div class="t-col t-col-2 input-div unit_cost" data-type="2">'+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+'</div>' +
                         '<div class="t-col t-col-1 buy-status"><i class="fa fa-square-o"></i></div>' +
                         '<div class="t-col t-col-1 extra">删除</div></div>';
                 }
@@ -147,8 +147,8 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     tableStr += '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'><div class="t-col t-col-3 product_name" data-type="1" data-value="'+record.product_name+'" contenteditable="true">'+record.product_name+'</div>' +
                         '<div class="t-col t-col-2 quantity" data-value="'+record.quantity+'"><div class="sub"><i class="fa fa-caret-left"></i></div>' +
                         '<div class="num" contenteditable="true">'+record.quantity+'</div><div class="add"><i class="fa fa-caret-right"></i></div></div>' +
-                        '<div class="t-col t-col-2 input-div unit_cost" data-type="2">'+(record.unit_cost||"")+'</div>' +
-                        '<div class="t-col t-col-2 input-div unit_price" data-type="3">'+(record.unit_price||"")+'</div>' +
+                        '<div class="t-col t-col-2 input-div unit_cost" data-type="2">'+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+'</div>' +
+                        '<div class="t-col t-col-2 input-div unit_price" data-type="3">'+((!record.unit_price && record.unit_price != 0)?"":record.unit_price)+'</div>' +
                         '<div class="t-col t-col-1 extra">删除</div></div>';
                 }
                 if(!record.mail_free){
@@ -188,8 +188,8 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 totalCost += record.quantity * (record.unit_cost ? record.unit_cost:0);
                 tableStr += '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'><div class="t-col t-col-3 product_name">'+record.product_name+'</div>' +
                     '<div class="t-col t-col-2"><div class="num">'+record.quantity+'</div></div>' +
-                    '<div class="t-col t-col-2">'+(record.unit_cost||"")+'</div>' +
-                    '<div class="t-col t-col-2">'+(record.unit_price||"")+'</div>' +
+                    '<div class="t-col t-col-2">'+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+'</div>' +
+                    '<div class="t-col t-col-2">'+((!record.unit_price && record.unit_price != 0)?"":record.unit_price)+'</div>' +
                     '<div class="t-col t-col-1 extra">删除</div></div>';
             }
             var mailCost = this.calcMailCost(customerObj);
@@ -252,7 +252,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             });
             $(".t-row:not(.t-row-header)").touch("swipeleft",function(event){
         //        event.stopPropagation();
-//                alert("删除当前列");
+                alert("删除当前列");
                 var $this = event.$this;
                 if($this.hasClass('mail-row')){
                     return;
