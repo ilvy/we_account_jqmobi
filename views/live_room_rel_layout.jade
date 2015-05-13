@@ -46,9 +46,11 @@ html
                             //div.horizon
                 a#toMyFav
                     div.myfavorites
+                        input(type='button')
                         i.fa.fa-folder
                 a#toRoomDoor
                     div.changeRoom
+                        input(type='button')
                         i.fa.fa-exchange
                 div.favorite
 
@@ -153,8 +155,8 @@ html
                 span 币种：
                 select
                     option(value='1' selected) 港币
-                    option(value='2') 人民币
-                    option(value='3') 美元
+                    //option(value='2') 人民币
+                    //option(value='3') 美元
                 span 汇率
                     span.rate-desc (兑人民币)
                     span ：
@@ -162,6 +164,8 @@ html
             div
                 span 金额：
                 input(type='text')#money-input
+                //span 折扣：
+                //input(type='text' value=10)#discount
             .btn-group
                 input(type='button' value='取消')#input-cancel
                 input(type='button' value='确定')#input-sure

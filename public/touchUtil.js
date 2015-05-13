@@ -78,7 +78,7 @@ $.fn.touch = function(type,selector,cb,cancelBubble){
             startX = event.clientX;
             touchStartTime = new Date().getTime();
             var _$this = $(this);
-            _$this.attr("touchstart",1);
+            _$this.parents('.t-row').attr("touchstart",1);
             event.$this = _$this;
             //长按0.5s后进入longTouch事件
 //            _$this.longTouchtimeout = setTimeout(function(){
@@ -138,12 +138,14 @@ $.fn.touch = function(type,selector,cb,cancelBubble){
                     }
                     var $this = $(this);
                     if($this.attr("touchstart") != 1){
+//                        alert('move');
                         return;
                     }
                     endX = event.clientX;
                     event.$this = $(this);
 //                    alert("swipeLeft "+$this.attr("touchstart"))
-                    if(startX - endX < 30){
+                    if(startX - endX < 60){
+//                        alert('short')
                         return;
                     }
 //                    alert(startX +" "+endX);
@@ -161,8 +163,9 @@ $.fn.touch = function(type,selector,cb,cancelBubble){
                     }
                     endX = event.clientX;
                     var $this = event.$this = $(this);
-                    $this.attr("touchstart",0);
-                    if(startX - endX < 30){
+                    $this.parents('.t-row').attr("touchstart",0);
+                    if(startX - endX < 60){
+//                        alert('short 2')
                         return;
                     }
                     cb(event);
@@ -171,6 +174,31 @@ $.fn.touch = function(type,selector,cb,cancelBubble){
             break;
         case touchEvent.swiperight:
 //            $(this).each(function(){
+            $(document).on(touchEvent.touchmove,selector,function(event){
+//                    clearTimeout($(this).longTouchtimeout);
+                if(cancelBubble){
+                    event.stopPropagation();
+                    event.originalEvent.stopPropagation();
+                }
+                if(event.originalEvent && event.originalEvent.targetTouches){
+                    event = event.originalEvent.targetTouches[0];
+                }
+                var $this = $(this);
+                if($this.attr("touchstart") != 1){
+//                        alert('move');
+                    return;
+                }
+                endX = event.clientX;
+                event.$this = $(this);
+//                    alert("swipeLeft "+$this.attr("touchstart"))
+                if(endX - startX < 30){
+//                        alert('short')
+                    return;
+                }
+//                    alert(startX +" "+endX);
+                $this.attr("touchstart",0);
+                cb(event);
+            });
                 $(document).on(touchEvent.touchend,selector,function(event){
                     if(cancelBubble){
                         event.stopPropagation();

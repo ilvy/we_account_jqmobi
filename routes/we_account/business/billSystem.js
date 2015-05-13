@@ -87,9 +87,13 @@ function updateCustomerInfo(req,res){
         objid = req.query.objId,
         nickname = req.query.nickname,
         value = req.query.value,
-        type = req.query.type;//
+        type = req.query.type,
+        exchange_rate = req.query.exchange_rate;//
     var args = [objid,value||0,nickname||'',type];
-    dbOperator.query('call pro_set_customer_info(?,?,?,?)',args,function(err,rows){
+//    if(type == 2){
+        args.push(exchange_rate || '');
+//    }
+    dbOperator.query('call pro_set_customer_info(?,?,?,?,?)',args,function(err,rows){
         if(err){
             console.log(err);
             response.failed('',res,'');

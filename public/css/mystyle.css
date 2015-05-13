@@ -360,6 +360,14 @@ body{
     text-align: center;
 }
 
+.input-div-cost{
+    padding: 6px;
+}
+
+.unit_price{
+    text-align: center;
+}
+
 /********getpay end**********/
 
 /***********弹出框插件 start*************/
@@ -377,7 +385,7 @@ body{
     font-size: 0.5rem;
 }
 
-#recharge-rate{
+#recharge-rate,#discount{
     width: 60px;
 }
 

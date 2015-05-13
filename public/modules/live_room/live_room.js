@@ -1,7 +1,7 @@
 /**
  * Created by man on 15-4-3.
  */
-define(['router','jqmobiTouch','preloadImg','waterfall','ajaxupload'],function(router){
+define(['router','jqmobiTouch','preloadImg','waterfall','ajaxupload','touchEvent'],function(router){
     var disableClick = false;
     function LiveRoom(){
         this.hasSetToolBox = 0;//标记是否已经初始化toolbox
@@ -186,13 +186,20 @@ define(['router','jqmobiTouch','preloadImg','waterfall','ajaxupload'],function(r
                 })
             });
 
-            $(document).on("click",'#toMyFav',function(){
+            $(document).on("click",'#toMyFav input',function(){
 //                alert('to my fav')
                 router.changeHash('myFavorite',1);
             });
-            $(document).on("click",'#toRoomDoor',function(){
+            $(document).on("click",'#toRoomDoor input',function(){
                 router.changeHash('room_door',1);
             });
+//            $('#toMyFav').touch("click",function(){
+////                alert('to my fav')
+//                router.changeHash('myFavorite',1);
+//            },1);
+//            $('#toRoomDoor').touch("click",function(){
+//                router.changeHash('room_door',1);
+//            },1);
 
             var waterfallHeight,
                 scrollTop;
