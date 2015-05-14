@@ -106,7 +106,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     tableStr += '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'><div class="t-col t-col-4 nickname" data-type="1" data-value="'+record.nickname+'" contenteditable="true">'+record.nickname+'</div>' +
                         '<div class="t-col t-col-2 quantity" data-value="'+record.quantity+'"><div class="sub"><i class="fa fa-caret-left"></i></div>' +
                         '<div class="num" contenteditable="true">'+record.quantity+'</div><div class="add"><i class="fa fa-caret-right"></i></div></div>' +
-                        '<div class="t-col t-col-2 input-div input-div-cost unit_cost" data-type="2" data-exrate="'+record.exchange_rate+'">'+((!record.unit_cost && record.unit_cost != 0)?"":this.exchangeMoney(record.unit_cost,record.exchange_rate))+'</div>' +
+                        '<div class="t-col t-col-2 input-div input-div-cost unit_cost" data-type="2" data-value='+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+' data-exrate="'+record.exchange_rate+'">'+((!record.unit_cost && record.unit_cost != 0)?"":this.exchangeMoney(record.unit_cost,record.exchange_rate))+'</div>' +
                         '<div class="t-col t-col-1 buy-status"><i class="fa fa-square-o"></i></div>' +
                         '<div class="t-col t-col-1 extra">删除</div></div>';
                 }
@@ -147,7 +147,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     tableStr += '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'><div class="t-col t-col-3 product_name" data-type="1" data-value="'+record.product_name+'" contenteditable="true">'+record.product_name+'</div>' +
                         '<div class="t-col t-col-2 quantity" data-value="'+record.quantity+'"><div class="sub"><i class="fa fa-caret-left"></i></div>' +
                         '<div class="num" contenteditable="true">'+record.quantity+'</div><div class="add"><i class="fa fa-caret-right"></i></div></div>' +
-                        '<div class="t-col t-col-2 input-div input-div-cost unit_cost" data-type="2" data-exrate="'+record.exchange_rate+'">'+((!record.unit_cost && record.unit_cost != 0)?"":this.exchangeMoney(record.unit_cost,record.exchange_rate))+'</div>' +
+                        '<div class="t-col t-col-2 input-div input-div-cost unit_cost" data-value='+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+' data-type="2" data-exrate="'+record.exchange_rate+'">'+((!record.unit_cost && record.unit_cost != 0)?"":this.exchangeMoney(record.unit_cost,record.exchange_rate))+'</div>' +
                         '<div class="t-col t-col-2 input-div unit_price" data-type="3"><input class="unit_price" data-type="3" type="text" data-value="'+((!record.unit_price && record.unit_price != 0)?"":record.unit_price)+'" placeholder="" value="'+((!record.unit_price && record.unit_price != 0)?"":record.unit_price)+'"/></div>' +
                         '<div class="t-col t-col-1 extra">删除</div></div>';
                 }
@@ -603,7 +603,9 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 $this.siblings('.current').removeClass('current');
                 var type = $this.data('type'),
                     exchange_rate = $this.data('exrate'),
-                    objId = $this.parents('.t-row').data('oid');
+                    objId = $this.parents('.t-row').data('oid'),
+                    originValue = $this.data('value');
+                $('#money-input').val(originValue);
                 $("#light-popup").pop({callback:function(){
                     $('.current').removeClass('current');
                 }}).find('#recharge-rate').val(exchange_rate);
