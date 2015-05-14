@@ -615,7 +615,8 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 var value = '',
                     type = $inputDiv.data("type"),
                     originValue = $inputDiv.data("value"),
-                    exchange_rate = $('#recharge-rate').val();
+                    exchange_rate = $('#recharge-rate').val(),
+                    exchange_type = $('#exchange-type').val();
                 if(type == 2){//进价
                     var objId = $inputDiv.parents('.t-row').data('oid');
                     value = $('#money-input').val();
@@ -626,7 +627,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                         }});
                         return;
                     }
-                    var url = '/we_account/updateCustomerInfo?value='+value+'&objId='+objId+'&type='+type+'&exchange_rate='+exchange_rate;
+                    var url = '/we_account/updateCustomerInfo?value='+value+'&objId='+objId+'&type='+type+'&exchange_rate='+exchange_rate+'&exchange_type='+exchange_type;
                     $.ajax({
                         url:url,
                         type:'get',
@@ -808,6 +809,14 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
         },
         exchangeMoney:function(money,exchange_rate){
             return Math.ceil(money * exchange_rate);
+        },
+        generateNumSelect:function(optionNum){
+            var selectStr = '<select>';
+            for(var i = 0; i <= optionNum; i++){
+                selectStr += '<option value="'+i+'">'+i+'</option>';
+            }
+            selectStr += '</option>';
+            return selectStr;
         },
         showLoading:function(){
             $("#loading").css('display','block');

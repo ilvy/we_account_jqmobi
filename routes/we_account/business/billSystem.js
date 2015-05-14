@@ -78,32 +78,31 @@ function getNicknameFromWeix(openid,roomid,callback){
 }
 
 /**
- * 更新1、昵称，2、进价或者3、售价 4、数量 信息
+ * 更新1、昵称，2、进价或者3、售价 4、type 5、汇率 6、币种
  * @param req
  * @param res
  */
 function updateCustomerInfo(req,res){
-    var openid = req.session.openId,
+    var openid = req.session.openId || 'oHbq1t0enasGWD7eQoJuslZY6R-4',
         objid = req.query.objId,
         nickname = req.query.nickname,
         value = req.query.value,
         type = req.query.type,
-        exchange_rate = req.query.exchange_rate;//
-    var args = [objid,value||0,nickname||'',type];
-//    if(type == 2){
-        args.push(exchange_rate || '');
-//    }
-    dbOperator.query('call pro_set_customer_info(?,?,?,?,?)',args,function(err,rows){
+        exchange_rate = req.query.exchange_rate,
+        exchange_type = req.query.exchange_type;//
+    var args = [objid,value||0,nickname||'',type,exchange_rate || '',openid,exchange_type || ''];
+
+    dbOperator.query('call pro_set_customer_info(?,?,?,?,?,?,?)',args,function(err,rows){
         if(err){
             console.log(err);
             response.failed('',res,'');
         }else{
             console.log(rows);
-            if(rows.affectedRows != 0){
+//            if(rows.affectedRows != 0){
                 response.success('',res,'');
-            }else{
-                response.failed(-2,res,'');//未修改成功
-            }
+//            }else{
+//                response.failed(-2,res,'');//未修改成功
+//            }
 
         }
     });
