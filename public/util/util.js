@@ -43,6 +43,13 @@ define([],function(){
             var mm = date.getMinutes();
             var ss = date.getSeconds();
             return (hh >= 10?"":"0")+hh+":"+(mm >= 10?"":"0")+mm+":"+(ss >= 10?"":"0")+ss;
+        },
+        stopPropagation:function(event){
+            if(event.stopPropagation){
+                event.stopPropagation(event);
+            }else if(event.cancelBubble){
+                event.cancelBubble = true;
+            }
         }
     }
 });
