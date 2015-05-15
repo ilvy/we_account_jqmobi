@@ -410,3 +410,16 @@ body{
     background-color: rgb(247, 139, 139);
 }
 /***********弹出框插件 end*************/
+
+/*************select 样式 start**************/
+
+.quantity select{
+    border: none !important;
+    background: transparent !important;
+}
+.quantity option{
+    width: 80px;
+    text-align: center;
+}
+
+/*************select 样式 end**************/

@@ -16,5 +16,24 @@
             3
         </div>
     </div>
+    <input type="text" id="inputTest"/>
+    <select id="selectTest">
+        <option value="1">
+            1
+        </option>
+        <option value="2">
+            2
+        </option>
+        <option value="3">
+            3
+        </option>
+    </select>
+
 </body>
+<script>
+    $('#inputTest').on('click',function(){
+        $('#selectTest').click();
+    });
+//    $("#selectTest").on('click')
+</script>
 </html>
