@@ -151,8 +151,8 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     var record = cates[j];
                     totalMoney += record.quantity * (record.unit_price ? record.unit_price:0);
                     tableStr += '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'><div class="t-col t-col-3 product_name" data-type="1" data-value="'+record.product_name+'" contenteditable="true">'+record.product_name+'</div>' +
-                        '<div class="t-col t-col-2 quantity" data-value="'+record.quantity+'"><div class="sub"><i class="fa fa-caret-left"></i></div>' +
-                        '<div class="num" contenteditable="true">'+record.quantity+'</div><div class="add"><i class="fa fa-caret-right"></i></div></div>' +
+                        '<div class="t-col t-col-2 quantity" data-value="'+record.quantity+'">' +
+                        this.generateNumSelect(100,record.quantity)+'</div>' +
                         '<div class="t-col t-col-2 input-div input-div-cost unit_cost" data-value="'+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+'" data-type="2" data-exrate="'+record.exchange_rate+'">'+((!record.unit_cost && record.unit_cost != 0)?"":this.exchangeMoney(record.unit_cost,record.exchange_rate))+'</div>' +
                         '<div class="t-col t-col-2 input-div unit_price" data-type="3"><input class="unit_price" data-type="3" type="text" data-value="'+((!record.unit_price && record.unit_price != 0)?"":record.unit_price)+'" placeholder="" value="'+((!record.unit_price && record.unit_price != 0)?"":record.unit_price)+'"/></div>' +
                         '<div class="t-col t-col-1 extra">删除</div></div>';
@@ -309,29 +309,29 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             $(document).touch("click",function(event){
                 $(".operateObj").css("margin-left",0).removeClass('operateObj');
                 $("#vagueBox").css("display","none");
-                var $target =$(event.target);
-                if(!($target.hasClass("sub")||$target.hasClass("add")||$target.hasClass("num") || $target.hasClass(".quantity"))){
-                    $('.add,.sub').css("display",'none');
-                }
-                var $quantity = $('.quantity-modify').find('.quantity');
-                var originValue = $quantity.data("value"),
-                    value = $quantity.find('.num').text();
-                if(originValue == value || !$quantity || $quantity.length == 0){
-                    return;
-                }
-                var oid = $quantity.parents('.t-row').data("oid");
-                $.ajax({
-                    url:'/we_account/updateCustomerInfo?value='+value+'&type=4&objId='+oid,
-                    type:'get',
-                    success:function(results){
-                        if(results.flag == 1){
-                            $quantity.data("value",value).parents(".quantity-modify").removeClass('.quantity-modify');
-                        }
-                    },
-                    error:function(err){
-                        console.log(err);
-                    }
-                });
+//                var $target =$(event.target);
+//                if(!($target.hasClass("sub")||$target.hasClass("add")||$target.hasClass("num") || $target.hasClass(".quantity"))){
+//                    $('.add,.sub').css("display",'none');
+//                }
+//                var $quantity = $('.quantity-modify').find('.quantity');
+//                var originValue = $quantity.data("value"),
+//                    value = $quantity.find('.num').text();
+//                if(originValue == value || !$quantity || $quantity.length == 0){
+//                    return;
+//                }
+//                var oid = $quantity.parents('.t-row').data("oid");
+//                $.ajax({
+//                    url:'/we_account/updateCustomerInfo?value='+value+'&type=4&objId='+oid,
+//                    type:'get',
+//                    success:function(results){
+//                        if(results.flag == 1){
+//                            $quantity.data("value",value).parents(".quantity-modify").removeClass('.quantity-modify');
+//                        }
+//                    },
+//                    error:function(err){
+//                        console.log(err);
+//                    }
+//                });
             });
             $(".card .product").touch("click",function(e){
                 var event = e;
@@ -363,8 +363,8 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     if($row.hasClass('t-row-header')||$row.hasClass('mail-row')){
                         continue;
                     }
-                    var unitCost = $row.find(".unit_cost").val(),
-                        unitPrice = $row.find(".unit_price").val();
+                    var unitCost = $row.find(".unit_cost").text(),
+                        unitPrice = $row.find("input.unit_price").val();
                     if(!$this.hasClass('ignore') && (!unitCost && unitCost !== 0 || (!unitPrice && unitPrice !== 0))){
                         alert("请编辑进价和售价!");
                         return;
@@ -641,7 +641,8 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                         type:'get',
                         success:function(results){
                             if(results.flag == 1){
-                                $inputDiv.data("value",value).data('exrate',exchange_rate).text(Math.ceil(value * exchange_rate)).removeClass('current');
+                                $inputDiv.data("value",value).attr('data-exrate',exchange_rate).text(Math.ceil(value * exchange_rate)).removeClass('current');
+                                _this.updateDisplayExchangeRate(exchange_rate);
                                 $("#light-popup").pop({hidden:'true',callback:function(){
                                     $('.current').removeClass('current');
                                     _this.cleanPopPanel();
@@ -692,34 +693,37 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 }});
             });
             $(document).on('change','.quantity select',function(){
-                var quantity = $(this).val();
                 var $this = $(this);
-                var $quantity = $this.siblings(".num"),
-                    $tq = $this.parents('.card').find('.total-quantity');
-                var q = Number($quantity.text()),
+                var $tq = $this.parents('.card').find('.total-quantity');
+                var q = $(this).val(),
                     total = Number($tq.text());
-                if($this.hasClass('sub')){
-                    if(q == 1){
-                        if(confirm("确认删除订单？")){
+                if(q == 0){
+                    if(confirm("确认删除订单？")){
 //                            $quantity.text(--q);
-                            //删除订单
-                            var orderIds = $this.parents(".t-row").data("oid");
-                            _this.updateOrderStatus($this.parents(".t-row"),orderIds,0);
-                            return;
-                        }
+                        //删除订单
+                        var orderIds = $this.parents(".t-row").data("oid");
+                        _this.updateTotalNum($this);
+                        _this.updateOrderStatus($this.parents(".t-row"),orderIds,0);
                         return;
                     }
-                    $tq.text(total-1);
-                    $quantity.text(--q);
-                }else{
-                    $tq.text(total+1);
-                    $quantity.text(++q);
+                    return;
                 }
-                if($this.parents("#pay-list").length > 0){
-                    _this.calcBillPay($this.parents(".card"));
-                }
+                _this.updateOrderQuantity($this);
+                _this.updateTotalNum($this);
             });
 
+        },
+        /**
+         * 更新每条记录用于显示的汇率
+         * @param newRate
+         */
+        updateDisplayExchangeRate:function(newRate){
+            $('.input-div-cost').each(function(){
+                var $this = $(this);
+                if($this.text() == ''){
+                    $this.attr('data-exrate',newRate);
+                }
+            });
         },
         cleanPopPanel:function(){
             $('#money-input').val('');
@@ -737,7 +741,40 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             });
             return ml;
         },
-
+        updateTotalNum:function($select){
+            var total = 0;
+            var $tq = $select.parents('.card').find('.total-quantity');
+            if($select.parents("#pay-list").length > 0){
+                this.calcBillPay($select.parents(".card"));
+            }else if($select.parents("#order-list").length > 0){
+                $select.parents('.card').find('.quantity select').each(function(){
+                    var $select = $(this);
+                    total += Number($select.val());
+                });
+                $tq.text(total);
+            }
+        },
+        /**
+         * 更改订单商品数量
+         * @param $select
+         */
+        updateOrderQuantity:function($select){
+            var value = Number($select.val());
+            var oid = $select.parents('.t-row').data("oid");
+            $.ajax({
+                url:'/we_account/updateCustomerInfo?value='+value+'&type=4&objId='+oid,
+                type:'get',
+                success:function(results){
+                    if(results.flag == 1){
+                        console.log('updateOrderQuantity success');
+                        $select.data("value",value);
+                    }
+                },
+                error:function(err){
+                    console.log(err);
+                }
+            });
+        },
         /**
          * 编辑邮费
          * @param isMailFree
@@ -769,7 +806,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 $mailpay;
             $card.find(" .table .t-row:not(.t-row-header)").each(function(){
                 var $row = $(this);
-                var num = Number($row.find('.quantity .num').text()),
+                var num = Number($row.find('.quantity select').val()),
                     unitPrice = Number($row.find('input.unit_price').val());
                 num = isNaN(num)?0:num;
                 unitPrice = isNaN(unitPrice)?0:unitPrice;

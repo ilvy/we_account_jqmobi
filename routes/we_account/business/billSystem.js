@@ -86,7 +86,7 @@ function updateCustomerInfo(req,res){
     var openid = req.session.openId || 'oHbq1t0enasGWD7eQoJuslZY6R-4',
         objid = req.query.objId,
         nickname = req.query.nickname,
-        value = req.query.value,
+        value = req.query.value?Number(req.query.value):0,
         type = req.query.type,
         exchange_rate = req.query.exchange_rate,
         exchange_type = req.query.exchange_type;//
@@ -97,9 +97,12 @@ function updateCustomerInfo(req,res){
             console.log(err);
             response.failed('',res,'');
         }else{
-            console.log(rows);
+            console.log('updateCustomerInfo type:'+type +',id:'+objid+' success');
 //            if(rows.affectedRows != 0){
                 response.success('',res,'');
+//            if(value == ''){
+//
+//            }
 //            }else{
 //                response.failed(-2,res,'');//未修改成功
 //            }
@@ -139,7 +142,7 @@ function getBillList(req,res){
             console.log(err);
             response.failed(-2,res,'');
         }else{
-            console.log(rows);
+//            console.log(rows);
             response.success(rows[0],res,'');
         }
     });
