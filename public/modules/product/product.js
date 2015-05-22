@@ -7,6 +7,7 @@ define(['router','wxAPI','jqmobiTouch'],function(router,wx){
         this.init = function(){
             this.do();
             this.addListener();
+            this.generateNumSelect(100,0);
             return this;
         }
         this.do = function(){
@@ -48,8 +49,9 @@ define(['router','wxAPI','jqmobiTouch'],function(router,wx){
             $("title").html("要么，在这里告诉我");
         }
         this.cleanEarlierInputs = function(){
-            $(".order_quantity .qtt_num").text(1);
-            $(".order_remark textarea").val("");
+            $(".order_quantity .qtt_num option[selected=true]").attr('selected',false);
+            $(".order_quantity .qtt_num option").eq(0).attr('selected',true);
+//            $(".order_remark textarea").val("");
             $("#take_order").removeClass('ready').text("下单");
             $("#order_info").css('display','none');
         }
@@ -57,6 +59,7 @@ define(['router','wxAPI','jqmobiTouch'],function(router,wx){
             var _this = this;
             $(document).on("vclick","#back-live-room",function(){
                 router.changeHash('live_room-'+globalVar.room_id,0);
+                _this.cleanEarlierInputs();
                 $(".img-box img").attr('src',"http://120.24.224.144/images/default.jpg");
             });
             $(document).on('vclick',"#take_order",function(){
@@ -65,8 +68,8 @@ define(['router','wxAPI','jqmobiTouch'],function(router,wx){
                     $this.addClass('ready').text("提交订单");
                     $("#order_info").slideToggle();
                 }else{
-                    var quantity = Number($(".order_quantity .qtt_num").text()),
-                        remark = $(".order_remark textarea").val();
+                    var quantity = Number($(".order_quantity .qtt_num").val()),
+                        remark = '';//$(".order_remark textarea").val();
                     if(quantity == 0){
                         alert('请选择购买数量！');
                         return;
@@ -121,6 +124,22 @@ define(['router','wxAPI','jqmobiTouch'],function(router,wx){
                 return true;
             }
             return false;
+        };
+
+        this.generateNumSelect = function(optionNum,currentNum){
+//            optionNum = Math.max(optionNum,currentNum>1000?1000:currentNum);
+            var selectStr = '';
+            currentNum = currentNum?currentNum:0;
+            var selectClass = '';
+            for(var i = 0; i <= optionNum; i++){
+                if(i == currentNum){
+                    selectClass = 'selected='+true;
+                }else{
+                    selectClass = '';
+                }
+                selectStr += '<option value="'+i+'" '+selectClass+'>'+i+'</option>';
+            }
+            $(".order_quantity .qtt_num").html(selectStr);
         }
     }
     globalVar.modules['product_display'] = new Product().init();

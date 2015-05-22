@@ -25,7 +25,17 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'),{
+//    etag:true,
+//    maxAge:'no-cache',
+//    expires:new Date().getTime() + 30000,//无效
+//    setHeaders:function(res,path){
+//        res.set('x-timestamp',new Date().getTime());
+//        res.set('x-hehe','set header test');
+//        res.set('Expires','Tuesday,19 May 2015 03:50:30 GMT');//无效
+////        res.set('Last-Modified','Tue, 19 May 2015 04:27:35 GMT');
+//    }
+}));
 app.use(session({
     secret: 'keyboard cat',
     resave: false,

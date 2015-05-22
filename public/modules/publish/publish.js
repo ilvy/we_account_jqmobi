@@ -26,7 +26,8 @@ define(['router','jqmobiTouch'],function(router){
                 var $this = $(this),
                     $uploadBox = $this.parents(".upload-display"),
                     $img;
-                var imgSrc = ($img = $this.siblings("img")).attr("src").split("?")[0];
+//                var imgSrc = ($img = $this.siblings("img")).attr("src").split("?")[0];
+                var imgSrc = ($img = $this.parents('.upload-display')).css("background-image").split("url(")[1].split(")")[0];
                 var data = {
                     filePath:imgSrc,
                     type:1
@@ -39,7 +40,8 @@ define(['router','jqmobiTouch'],function(router){
                         if(result.flag == 1){
 //                    $img.remove();
                             setTimeout(function(){
-                                $img.attr("src",imgSrc + '?v='+ new Date().getTime());
+//                                $img.attr("src",imgSrc + '?v='+ new Date().getTime());
+                                $img.css("background-image",imgSrc + '?v='+ new Date().getTime());
 //                        $uploadBox.prepend('<img src="'+imgSrc+'?v='+ rotateI++ +'"/>');
                             },200);
 

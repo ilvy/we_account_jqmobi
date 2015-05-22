@@ -63,7 +63,7 @@ html
                 input(type="text" placeholder="先来个简单介绍...").product-title
                 textarea(placeholder="详细说点什么吧，让顾客更好的了解您的产品...").product-desc
                 div#image_content
-                    //.upload-display
+                    .upload-display
                         img(src='http://120.24.224.144/images/test_1430359628167.jpg')
                         a#delete-img
                             div.delete-img
@@ -82,21 +82,20 @@ html
             div
                 .desc.col-lg-offset-4.col-lg-4.col-md-8.col-md-offset-2.col-sm-8.col-sm-offset-2.col-xs-8.col-xs-offset-2.col-xxs-12
                 #product.col-lg-offset-4.col-lg-4.col-md-8.col-md-offset-2.col-sm-8.col-sm-offset-2.col-xs-8.col-xs-offset-2.col-xxs-12
-
                     .product-photo
                         .img-box
                             img(src="http://120.24.224.144/images/default.jpg")
                 #order_info.col-xxs-12
                     .order_quantity.col-xxs-12
                         span 订单数量：
-                        span.sub-order
-                            i.fa.fa-minus
-                        span.qtt_num 1
-                        span.add-order
-                            i.fa.fa-plus
-                    .order_remark.col-xxs-12
-                        span 备注：
-                        textarea(placeholder='对卖家说点啥要求')
+                        //span.sub-order
+                        //    i.fa.fa-minus
+                        select.qtt_num
+                        //span.add-order
+                        //    i.fa.fa-plus
+                    //.order_remark.col-xxs-12
+                    //    span 备注：
+                    //    textarea(placeholder='对卖家说点啥要求')
                 #take_order.col-xxs-12 下单
                 a#back-live-room
                     .back-live-room.col-xxs-12
