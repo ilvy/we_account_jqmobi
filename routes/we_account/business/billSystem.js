@@ -191,7 +191,7 @@ function updateMailPay(req,res){
         order_id = req.query.oid,
         mailPay = req.query.mail_pay;
     var sql = 'UPDATE t_order o SET o.mail_free = '+isMailFree+' ,o.mail_pay = '+ mailPay + ' where o.id in ('+order_id+');';
-    if(!mailPay){
+    if(!mailPay && mailPay !== 0){
         sql = 'UPDATE t_order o SET o.mail_free = '+isMailFree+' where o.id in ('+order_id+');';
     }
     dbOperator.query(sql,[],function(err,results){
@@ -247,7 +247,7 @@ function getPayment(req,res,isRequestBySeller){//需要验证openid
     var openId = req.session.openid;
     var room_id = req.query.room_id,
         nickname = req.query.nickname;//1:卖家查看账单，其他（包括undefined）：买家查看账单
-    var paras = [nickname];
+    var paras = [nickname,room_id];
     if(!room_id || !nickname){
         if(!isRequestBySeller){
             res.render('error')
@@ -256,7 +256,7 @@ function getPayment(req,res,isRequestBySeller){//需要验证openid
         }
         return;
     }
-    dbOperator.query('call pro_getpayment(?)',paras,function(err,rows){
+    dbOperator.query('call pro_getpayment(?,?)',paras,function(err,rows){
         if(err){
             console.log(err);
             if(!isRequestBySeller){
@@ -274,11 +274,14 @@ function getPayment(req,res,isRequestBySeller){//需要验证openid
                 data[i].single_total = quantity * price;
                 total += data[i].single_total;
             }
+            if(!data[0].mail_free){
+                total += data[0].mail_pay;
+            }
 
             if(!isRequestBySeller){
-                res.render('payment',{dataList:data,roomId:room_id,total:total})
+                res.render('payment',{dataList:data,roomId:room_id,total:total,isMailFree:data[0].mail_free,mailPay:data[0].mail_pay,nickname:nickname})
             }else{
-                response.success({dataList:data,roomId:room_id,total:total},res,'')
+                response.success({dataList:data,roomId:room_id,total:total,isMailFree:data[0].mail_free,mailPay:data[0].mail_pay,nickname:nickname},res,'')
             }
         }
     });

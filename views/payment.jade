@@ -12,6 +12,9 @@ html
         link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css')
     body
         #getpay
+            .getpay-title
+                span.collection_object #{nickname}
+                span 的账单
             .table
                 .t-row.t-row-header
                     .t-col.t-col-2 品名
@@ -26,4 +29,13 @@ html
                         .t-col.t-col-2 #{record.remark}
                         .t-col.t-col-2 #{record.price}
                         .t-col.t-col-2 #{record.single_total}
+            .mail-detail
+                span 邮费:
+                - if (isMailFree)
+                    span 包邮
+                - else
+                    span #{mailPay} 元
+            .total-price
+                span 总计：
+                span #{total} 元
         a#gotoLiveroom( href='/we_account/live-room#live_room-#{roomId}') 看看TA还有啥

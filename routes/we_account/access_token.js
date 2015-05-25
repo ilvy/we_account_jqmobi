@@ -57,13 +57,13 @@ setInterval(function(){
     getAccess_token(function(data){
         data = JSON.parse(data);
         console.log(data);
-        getJsapi_ticket(data.access_token);
+//        getJsapi_ticket(data.access_token);
         exports.access_token = data.access_token;
     });
 },1000*3600*1.5);
 getAccess_token(function(data){
     data = JSON.parse(data);
     console.log(data);
-    getJsapi_ticket(data.access_token);
+//    getJsapi_ticket(data.access_token);
     exports.access_token = data.access_token;
 });

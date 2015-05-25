@@ -60,10 +60,11 @@ html
                 div(role="alert")#warn.alert.alert-warning.fade.in 至少需要发布一张图片
                 //div#sub-btn
                 //    input(type="button" value="确定")#submit
-                input(type="text" placeholder="先来个简单介绍...").product-title
-                textarea(placeholder="详细说点什么吧，让顾客更好的了解您的产品...").product-desc
+                .text-group
+                    input(type="text" placeholder="先来个简单介绍...").product-title
+                    textarea(placeholder="详细说点什么吧，让顾客更好的了解您的产品...").product-desc
                 div#image_content
-                    .upload-display
+                    //.upload-display
                         img(src='http://120.24.224.144/images/test_1430359628167.jpg')
                         a#delete-img
                             div.delete-img
@@ -76,7 +77,7 @@ html
                             i#cancel.fa.fa-times-circle
                     div#sub-btn.col-xxs-6
                         div
-                            i#submit.fa.fa-upload
+                            i#submit.fa.fa-arrow-up
             div#disableClick-mask
         div.page.product_display.slide-init
             div
@@ -131,6 +132,9 @@ html
                 input(type='button' value='付款列表')#to_pay
                 input(type='button' value='总账单列表')#to_bill
         div.page.getpay#getpay
+            .getpay-title
+                span.collection_object
+                span 的账单
             .table
                 .t-row.t-row-header
                     .t-col.t-col-2 品名
@@ -138,6 +142,12 @@ html
                     .t-col.t-col-2 备注
                     .t-col.t-col-2 价格
                     .t-col.t-col-2 总计
+            .mail-detail
+                - if (isMailFree)
+                    span 包邮
+                - else
+                    span 邮费:
+                    span #{mailPay}
             .total-price
                 span 总计：
                 span #{total}

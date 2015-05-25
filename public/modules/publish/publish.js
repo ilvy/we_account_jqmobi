@@ -22,14 +22,15 @@ define(['router','jqmobiTouch'],function(router){
                 cleanPosition();
                 router.changeHash('live_room-'+globalVar.room_id,0);//不重新加载
             });
-            $(document).on("vclick",".adjustImg",function(){
+            $(document).on("vclick",".adjustImg .fa-rotate-right",function(){
                 var $this = $(this),
                     $uploadBox = $this.parents(".upload-display"),
                     $img;
 //                var imgSrc = ($img = $this.siblings("img")).attr("src").split("?")[0];
-                var imgSrc = ($img = $this.parents('.upload-display')).css("background-image").split("url(")[1].split(")")[0];
+                var imgSrc = ($img = $this.parents('.upload-display')).css("background-image").split("url(")[1].split(")")[0].split('?')[0];
+//                alert('adjustImg',imgSrc);
                 var data = {
-                    filePath:imgSrc,
+                    filePath:'/images/'+imgSrc.split('/images/')[1],//去掉协议以及ip信息
                     type:1
                 }
                 $.ajax({
@@ -37,11 +38,12 @@ define(['router','jqmobiTouch'],function(router){
                     type:"post",
                     data:data,
                     success:function(result){
+//                        alert(result.flag)
                         if(result.flag == 1){
 //                    $img.remove();
                             setTimeout(function(){
 //                                $img.attr("src",imgSrc + '?v='+ new Date().getTime());
-                                $img.css("background-image",imgSrc + '?v='+ new Date().getTime());
+                                $img.css("background-image",'url('+imgSrc + '?v='+ new Date().getTime()+')');
 //                        $uploadBox.prepend('<img src="'+imgSrc+'?v='+ rotateI++ +'"/>');
                             },200);
 

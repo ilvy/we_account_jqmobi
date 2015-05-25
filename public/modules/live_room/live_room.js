@@ -269,8 +269,8 @@ define(['router','util','jqmobiTouch','preloadImg','waterfall','ajaxupload','tou
                         onComplete:function(file,res){
                             compress(res,function(err,result){
                                 if(result.flag == 1){
-                                    $("#image_content").append('<div class="upload-display" style="background:url(http://120.24.224.144/images/'+res+') center;background-size:100%;">' +
-                                        +'<div class="adjustImg"><i class="fa fa-rotate-right"></i></div></div>');//×
+                                    $("#image_content").append('<div class="upload-display" style="background:url(http://120.24.224.144/images/'+res+') center no-repeat;background-size:100%;">' +
+                                        '<div class="adjustImg"><i class="fa fa-rotate-right"></i></div></div>');//×
                                 }else{
                                     alert("上传失败");
                                     router.changeHash('live_room-'+globalVar.room_id,0);

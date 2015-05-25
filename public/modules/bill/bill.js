@@ -205,6 +205,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             var cardStr = '<div class="card">';
             cardStr += tableStr +'</div>';
             cardStr += '<div class="bill-sum t-col-10"><div id="sum_cost" class="t-col-5">总成本：<span>'+totalCost+'</span>元</div>' +
+                '<div id="sum_price" class="t-col-5">总收入：<span>'+(totalMoney)+'</span>元</div>'+
                 '<div id="sum_earn" class="t-col-5">总盈利：<span>'+(totalMoney - totalCost)+'</span>元</div></div>';
             $(".bill-list-content").append(cardStr);
         },

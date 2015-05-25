@@ -1,6 +1,10 @@
+html{
+    font-size: 10px;
+}
 body{
     margin: 0;
     box-sizing: border-box;
+    font-size: 14px;
 }
 *{
     box-sizing: border-box;
@@ -315,6 +319,10 @@ body{
     /*display: inline-block;*/
 }
 
+#sum_earn{
+    margin-top: 16px;
+}
+
 #vagueBox{
     position: absolute;
     display: none;
@@ -366,6 +374,25 @@ body{
 
 .unit_price{
     text-align: center;
+}
+
+.mail-detail{
+    text-align: center;
+}
+
+#getpay .mailpay_getpay{
+    height: 22px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    width: 50px;
+}
+
+.getpay-title{
+    text-align: center;
+    padding: 6px;
+    border-bottom: 3px solid rgb(255, 121, 137);
+    font-size: 2.3rem;
+    font-weight: bolder;
 }
 
 /********getpay end**********/
