@@ -3,14 +3,17 @@
  */
 var grant_type = "jxfgx_20140526",
     https = require("https"),
-    access_token = "";//自定义
+    access_token = "",
+    appConfig = require('../../config/config').appConfig,
+    appId = appConfig.appId,
+    appSecret = appConfig.appSecret;//自定义
 
 function getAccess_token(callback){
     var options = {
         host:""
     }
     var url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential" +
-        "&appid=wxaef4aefd905a4662&secret=ca038c00a3764885a2d18b53d47f8282";
+        "&appid="+appId+"&secret="+appSecret;
     https.get(url,function(res){
         var chunks = "";
         res.on("data",function(data){

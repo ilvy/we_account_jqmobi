@@ -22,6 +22,7 @@ function check(req){
     var sign = crypto.createHash("sha1").update(shaStr).digest('hex');
 
     if(sign == signature){
+        console.log('!!!!!!!!!!!!!!!!!!!!check success');
         return true;
     }else{
         console.log("check failed：生成signature:"+sign+",微信signature:"+signature)

@@ -2,18 +2,41 @@
  * Created by Administrator on 14-12-19.
  */
 
-var token_access = require("./access_token").access_token;
+var token = require("./access_token"),
+    menuConfig = require('../../config/config').menusObj;
+var https = require('https');
 
-function setMenu(){
+/**
+ * 设置菜单
+ */
+function setMenu(method){
+    var token_access = token.access_token;
     var option = {
-        host:" api.weixin.qq.com",
+        host:"api.weixin.qq.com",
         method:"post",
-        path:"/cgi-bin/menu/create?"
+        path:"/cgi-bin/menu/"+method+"?access_token="+token_access
     };
-    getAccess_token(function(data){
-        data = JSON.parse(data);
-        console.log(data);
-
+    var paraBody = JSON.stringify(menuConfig);
+    var req = https.request(option,function(res){
+        var result = "";
+        res.on("data",function(chunk){
+            result += chunk;
+        }).on("end",function(){
+                console.log(result);
+            }).on("error",function(err){
+                console.log('create menu',err);
+            });
     });
+    req.on('error',function(err){
+        console.log('request error:',err);
+    });
+    if(method == 'create'){
+        req.write(paraBody);
+    }
+    req.end();
 
 }
+
+setTimeout(function(){
+    setMenu('create');
+},5 * 1000);

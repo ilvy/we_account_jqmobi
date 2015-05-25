@@ -40,7 +40,7 @@ var menusObj = {
                     type:"view",
                     name:"账单系统",
                     url:"http://120.24.224.144/we_account/publish?type=5"
-                },
+                }
             ]
 
         }
@@ -76,9 +76,17 @@ var appConfig = {
     appId:"wxaef4aefd905a4662",
     appSecret:"ca038c00a3764885a2d18b53d47f8282"
 };
+var appConfigForm = { //正式公众号配置
+    appId:'wx2f81c72f4e91b732',
+    appSecret:'a5b090f83fc6ef595084fe3f8a789ce3'
+};
+
 
 exports.menusObj = menusObj;
 exports.dbPoolConfig = dbPoolConfig;
 exports.serverConfig = serverConfig;
-exports.appConfig = appConfig;
+exports.appConfig = appConfigForm;
 exports.dataviewConfig = dataviewConfig;
+if(process.argv[2] == 'test'){
+    exports.appConfig = appConfig;
+}
