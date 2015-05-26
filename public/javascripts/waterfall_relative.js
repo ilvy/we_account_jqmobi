@@ -124,18 +124,22 @@ Waterfall.prototype.asyncLoader = function(){
         }
         var deleteProductBtn = "";
         if(isPublisher){
-            deleteProductBtn = '<div class="delete-product"><i class="fa fa-times-circle"></div>';//<input type="button" value="删除"/>
+            deleteProductBtn = '<div class="delete-product"><i class="fa fa-times"></div>';//<input type="button" value="删除"/><i class="fa fa-times-circle">
         }else{
-            deleteProductBtn = '<a href="/we_account/personalInfo"><div class="contact">联系卖家</div></a>';
+            deleteProductBtn = '<a href="/we_account/personalInfo"><div class="contact"><i class="fa fa-comment"></i></div></a>';
         }
         loadDatas.forEach(function(item){
 //        $(this).clone().css(_this.lastPosition).appendTo(".waterfall");
-            var imgstr = '',descStr;
+            var imgstr = '',descStr,bottomStr = '';
             imgstr = '<img class="lazy" src="http://120.24.224.144/images/'+item.image_url[0]+'" data-num="0">' + imgstr;
-            descStr = '<div class="desc" style="'+("border-bottom:1px solid #e6e6e6;")+'" data-desc="'+item.title+'">'+(item.title?item.title:"") +'</div>';
+            descStr = '';
+            if(item.title){
+                descStr = '<div class="desc" style="'+("border-bottom:1px solid #e6e6e6;")+'" data-desc="'+item.title+'">'+(item.title?item.title:"") +'</div>';
+            }
+            bottomStr = '<div><div class="publish-time">'+item.create_time+'</div>'+deleteProductBtn+'</div>';//;
             productsStrs.push('<div id="'+item.id+'" class="box" data-id="'+item.id+'">' +
                 '<div class="img-display" data-imgnum="'+item.image_url.length+'">'+ imgstr+
-                '</div>'+descStr+deleteProductBtn+'</div>');
+                '</div>'+descStr+bottomStr+'</div>');
         });
         _this.setPosition(productsStrs);
         var loadImgCount = 0;

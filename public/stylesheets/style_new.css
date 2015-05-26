@@ -178,7 +178,8 @@ a {
 #header{
     width: 100%;
     text-align: center;
-    background-color: rgba(200,30,40,1);
+    /*background-color: rgba(200,30,40,1);*/
+    background-color: rgba(233, 234, 234, 1);
     color: white;
     /*padding: 8px 6px;*/
     font-size: 1.5rem;
@@ -229,7 +230,7 @@ a {
 }
 .live_room .desc{
     /*border-bottom: 1px solid #e6e6e6;*/
-    padding: 3px 0px 3px 0px;
+    padding: 3px 0px 3px 3px;
     text-align: left;
 }
 
@@ -246,14 +247,24 @@ a {
     padding-right: 3px;
 }
 
+.publish-time{
+    float: left;
+    font-size: 1rem;
+    color: rgb(182, 182, 182);
+}
+
 .contact{
-    text-align: center;
-    font-family: "microsoft yahei";
+    text-align: right;
     padding: 6px;
+    color: rgb(35, 139, 56);
+}
+
+.contact .fa-comment{
+    font-size: 1.5rem;
 }
 
 .delete-product i{
-    font-size: 23px;
+    font-size: 1.6rem;
 }
 
 .delete-product input{
@@ -921,16 +932,13 @@ li.favour_room_option > div{
 
 }
 
-.nickname,.room,.fav-remove{
+.room,.fav-remove{
     background-color: whitesmoke;
     border-left: 3px solid rgba(230,230,230,1);
     padding-top: 10px;
     padding-bottom: 10px;
 }
 
-.nickname{
-    border-left: none;
-}
 
 .fav-remove{
     color: rgba(200,30,40,1);
@@ -997,6 +1005,81 @@ li.favour_room_option > div{
     display: block;
 }
 
+/**************personality start*******************/
+
+#header{
+    float: left;
+}
+
+#header .head img{
+    width: 100%;
+}
+
+.no-padding{
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.detail-personal-info{
+    color: rgb(73, 69, 69);
+    margin-left: 3%;
+    height: 100%;
+}
+
+.room_num{
+    background-color: rgba(200,30,40,1);
+    color: white;
+    margin-bottom: 6px;
+    padding: 1px;
+}
+
+#header .col-xxs-8{/**挤出一个间距**/
+    width: 63.666667%;
+}
+#header .col-xs-10{/**挤出一个间距**/
+    width: 80%;
+}
+
+#header .col-xxs-1,#header .col-xxs-2,#header .col-xxs-3,#header .col-xxs-4,#header .col-xxs-5,#header .col-xxs-6,
+#header .col-xxs-7,#header .col-xxs-8,#header .col-xxs-9,#header .col-xxs-10,#header .col-xxs-11,#header .col-xxs-12{
+    padding-right: 0;
+    padding-left: 0;
+}
+#header .col-xs-1,#header .col-xs-2,#header .col-xs-3,#header .col-xs-4,#header .col-xs-5,#header .col-xs-6,
+#header .col-xs-7,#header .col-xs-8,#header .col-xs-9,#header .col-xs-10,#header .col-xs-11,#header .col-xs-12{
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.cell{
+    text-align: left;
+    font-size: 1rem;
+}
+
+.search-group{
+    margin-top: 3px;
+}
+
+#vagueProduct{
+    position: absolute;
+    display: none;
+    background: white;
+    list-style: none;
+    text-align: left;
+    margin-top: 2px;
+    /*border: 1px solid #cdcdcd;*/
+    padding-left: 0px;
+    z-index: 100;
+}
+
+#vagueProduct > li{
+    font-size: 1.6rem;
+    padding: 3px;
+    border: 1px solid #cecece;
+}
+
+/**************personality end*******************/
+
 /***************end 页面切换效果******************/
 
 
@@ -1009,7 +1092,11 @@ li.favour_room_option > div{
 }
 
 @media screen and (min-width: 768px){/*0.71*/
-
+    .search-product,.search-btn{
+        height: 2.5rem;
+        font-size: 1.6rem;
+        border-radius: 0px;
+    }
 }
 
 @media screen and (min-width: 1367px) {/*0.75*/

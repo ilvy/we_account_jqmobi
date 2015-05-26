@@ -580,6 +580,24 @@ function rotateImg(req,resp){
     req.end();
 }
 
+/**
+ * 模糊匹配商品名
+ * @param req
+ * @param res
+ * 需要验证openId
+ */
+function vagueSearchProduct(req,res){
+    var roomId = req.query.room_id,
+        productName = req.query.product_name;
+    dbOperator.query('call pro_vague_match_product(?,?)',['%'+productName+'%',roomId],function(err,rows){
+        if(err){
+            response.failed(-1,res,'');
+        }else{
+            response.success(rows[0],res,0);
+        }
+    });
+}
+
 //exports.renderLiveRoom = gotoLiveRoom;
 exports.renderLiveRoom_new = gotoLiveRoom_new;
 exports.knockDoor = knockDoor;
@@ -596,3 +614,4 @@ exports.myFavorite = myFavorite;
 exports.checkRoom = checkRoom;
 exports.compressPic = compressPic;
 exports.rotateImg = rotateImg;
+exports.vagueSearchProduct = vagueSearchProduct;

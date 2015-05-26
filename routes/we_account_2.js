@@ -360,6 +360,8 @@ router.post("/updateMailPay",billSystem.updateMailPay);
 
 router.post("/vagueMatchNames",billSystem.vagueMatchNames);
 
+router.get("/vagueSearchProduct",live_room.vagueSearchProduct);
+
 router.get("/xml",function(req,res){
     xmlParser.parseXml("<xml><ToUserName><![CDATA[gh_d28b25ec1197]]></ToUserName>" +
         "<FromUserName><![CDATA[oHbq1t0enasGWD7eQoJuslZY6R-4]]></FromUserName>" +

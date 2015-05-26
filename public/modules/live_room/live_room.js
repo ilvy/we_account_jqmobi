@@ -12,6 +12,7 @@ define(['router','util','jqmobiTouch','preloadImg','waterfall','ajaxupload','tou
         init:function(){
             this.do();
             var that = this;
+            this.setVagueBox();
             $(document).ready(function(){
                 that.addListener();
             });
@@ -45,7 +46,7 @@ define(['router','util','jqmobiTouch','preloadImg','waterfall','ajaxupload','tou
                             }
                         }
                         that.setToolBox(data);
-                        $('.room_num').html(' 直播号:'+data.room);
+                        $('.room_num').html(' 代代号:'+data.room);
                         currentPage = 0;
                         totalPage = -1;
                         waterfall.cleanWaterfall();
@@ -56,6 +57,19 @@ define(['router','util','jqmobiTouch','preloadImg','waterfall','ajaxupload','tou
                     console.log(err);
                 }
             })
+        },
+        setVagueBox:function(){
+            var $searchInput = $('.search-product'),
+                offset = $searchInput.offset(),
+                left = offset.left,
+                top = offset.top,
+                height = $searchInput.outerHeight(),
+                width = $searchInput.width();
+            $("#vagueProduct").css({
+                left:left,
+                top:top + height,
+                width:width
+            });
         },
         setToolBox : function(data){
             if(data.publisher){
@@ -110,6 +124,7 @@ define(['router','util','jqmobiTouch','preloadImg','waterfall','ajaxupload','tou
             });
         },
         addListener:function(){
+            var _this = this;
             $("#tools-btn").on("click",function(event){
                 if(event.stopPropagation){
                     event.stopPropagation();
@@ -225,7 +240,7 @@ define(['router','util','jqmobiTouch','preloadImg','waterfall','ajaxupload','tou
             /**
              * 删除商品信息
              */
-            $(document).on("vclick",".delete-product .fa-times-circle",function(event){
+            $(document).on("vclick",".delete-product .fa-times",function(event){
                 if(!confirm("确定删除该商品?")){
                     return;
                 }
@@ -294,7 +309,38 @@ define(['router','util','jqmobiTouch','preloadImg','waterfall','ajaxupload','tou
                     var btn_id = $this.attr("id");
                     $("#"+btn_id+"_file_type").click();
                 });
+                $(document).on('input','.search-group .search-product',function(event){
+                    var $this = $(this);
+                    var roomId = globalVar.room_id,
+                        value = $this.val();
+                    var url = '/we_account/vagueSearchProduct?room_id='+roomId+'&product_name='+value;
+                    $.ajax({
+                        url:url,
+                        type:'get',
+                        success:function(results){
+                            if(results.flag == 1){
+                                _this.renderVagueProductBox(results.data);
+                            }
+                        },
+                        error:function(err){
+                            console.log('search err');
+                        }
+                    });
+                });
+                $('#vagueProduct li').touch('click',function(event){
+                    var product_name = $(this).text(),
+                        pId = $(this).data('id');
+
+                },true);
             }
+        },
+        renderVagueProductBox:function(datas){
+            var liStr = '';
+            for(var i = 0; i < datas.length; i++){
+                var record = datas[i];
+                liStr += '<li data-id="'+record.id+'">'+record.product_name+'</li>';
+            }
+            $('#vagueProduct').html(liStr).css('display','block');
         }
     }
 

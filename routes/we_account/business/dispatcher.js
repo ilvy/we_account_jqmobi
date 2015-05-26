@@ -9,7 +9,6 @@ var applyAccount = require("./publish_account").applyAccount,
     checkUser = require("./publish_account").checkUser,
     async = require("async"),
     live_room = require("./live_room");
-var niceNums = ['121212','438438','436436'];
 
 function dispatch(data,res){
     switch (data.MsgType){
@@ -35,7 +34,10 @@ function dispatch(data,res){
             break;
         case 'event':
             console.log("msgtype:event");
-            if(data.Event == 'CLICK'){
+            if(data.Event == 'subscribe'){
+                data.replyContent = '欢迎关注代代！\n http://www.baidu.com/';
+                response(data,res);
+            }else if(data.Event == 'CLICK'){
                 console.log("event:click");
                 if(data.EventKey == 'input_room_num'){
                     console.log("EventKey:input_room_num");
