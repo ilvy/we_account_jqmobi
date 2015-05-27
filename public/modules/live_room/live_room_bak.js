@@ -1,7 +1,7 @@
 /**
  * Created by man on 15-4-3.
  */
-define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent'],function(router,util){
+define(['router','util','jqmobiTouch','preloadImg','waterfall','ajaxupload','touchEvent'],function(router,util){
     var disableClick = false;
     function LiveRoom(){
         this.hasSetToolBox = 0;//标记是否已经初始化toolbox
@@ -68,7 +68,7 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent'],func
             $("#vagueProduct").css({
                 left:left,
                 top:top + height,
-                width:width + $('.search-btn').width()
+                width:width
             });
         },
         setToolBox : function(data){
@@ -125,16 +125,41 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent'],func
         },
         addListener:function(){
             var _this = this;
-            $(document).touch('click',function(event){
-                $('#vagueProduct').css('display','none');
+            $("#tools-btn").on("click",function(event){
+                if(event.stopPropagation){
+                    event.stopPropagation();
+                }else{
+                    event.cancelBubble = true;
+                }
+                if($("#tools-panel").css("display") == 'none'){
+                    $("#tools-panel").css("display","block");
+                }else{
+                    $("#tools-panel").css("display","none");
+                }
+            });
+            $("#tools-panel").on("click",function(event){
+                if(event.stopPropagation){
+                    event.stopPropagation();
+                }else{
+                    event.cancelBubble = true;
+                }
+                $("#tools-panel").css("display","none");
+            });
+
+            $(document).on("vclick","#disableClick-mask",function(event){
+                stopPropagation(event);
+                $("#disableClick-mask").css("display","none");
+                console.log("stop click");
             });
             var currLen,currNum,$currImgAlbum;
-            $(".img-display img").touch("click",function(event){
-                var $this = event.$this;
-                currNum = $this.data("num");
-                $currImgAlbum = $this.parents(".img-display").find("img");
-                currLen = $this.parents(".img-display").data("imgnum");
-                var product_id = $this.parents(".box").data("id"),
+            $(document).on("click",".img-display img",function(){
+                if(disableClick){
+                    return;
+                }
+                currNum = $(this).data("num");
+                $currImgAlbum = $(this).parents(".img-display").find("img");
+                currLen = $(this).parents(".img-display").data("imgnum");
+                var product_id = $(this).parents(".box").data("id"),
                     type = $(".waterfall").data("type");
                 type?type = "&u_type=" + type:"";
 //        window.location.href = '/we_account/product_display?product_id='+product_id+type;
@@ -143,10 +168,9 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent'],func
 //                window.location.hash = "#product_display-"+product_id;//'/we_account/product_display?product_id='+product_id+type;
             });
             //收藏直播间
-            $(".favorite").touch("click",function(event){
-                var $this = event.$this;
+            $(document).on("vclick",".favorite",function(){
                 var url = '/we_account/favourite';
-                if($this.find('i').hasClass("fa-heart")){
+                if($(this).find('i').hasClass("fa-heart")){
                     if(!confirm("是否取消关注")){
                         return;
                     }
@@ -216,12 +240,12 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent'],func
             /**
              * 删除商品信息
              */
-            $(".delete-product .fa-times").touch("click",function(event){
+            $(document).on("vclick",".delete-product .fa-times",function(event){
                 if(!confirm("确定删除该商品?")){
                     return;
                 }
-                var $this = event.$this;
-                var product_id = $this.parents(".box").data("id");
+                var product_id = $(this).parents(".box").data("id");
+                var $this = $(this);
                 var data = {
                     id:product_id
                 }
@@ -274,12 +298,17 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent'],func
                         }
                     })
                 });
-                $("#upload-div-box").touch("click",function(event){
+                $(document).on("vclick","#upload-div-box",function(event){
+                    if(event.stopPropagation){
+                        event.stopPropagation();
+                    }else if(event.cancelBubble){
+                        event.cancelBubble = true;
+                    }
 //        alert("upload:"+$(this).attr("id"));
-                    var $this = event.$this;
+                    var $this = $(this);
                     var btn_id = $this.attr("id");
                     $("#"+btn_id+"_file_type").click();
-                },true);
+                });
                 $(document).on('input','.search-group .search-product',function(event){
                     var $this = $(this);
                     var roomId = globalVar.room_id,
@@ -298,15 +327,18 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent'],func
                         }
                     });
                 });
-                $('#vagueProduct li').touch('click',function(event){
+                $(document).on('vclick','#vagueProduct li',function(event){
 //                    alert(event.originalEvent.type)
-                    var $this = event.$this;
-                    var product_name = $this.text(),
-                        pId = $this.data('id');
+                    if(event.originalEvent && event.originalEvent.stopPropagation){
+                        alert(event.originalEvent.stopPropagation)
+                        event.originalEvent.stopPropagation();
+                    }
+                    var product_name = $(this).text(),
+                        pId = $(this).data('id');
                     console.log(''+pId);
-                    $('.search-product').val(product_name);
-                    $this.parent().css('display','none');
-                },true);
+                    $(this).val(product_name);
+                    $(this).parent().css('display','none');
+                });
             }
         },
         renderVagueProductBox:function(datas){

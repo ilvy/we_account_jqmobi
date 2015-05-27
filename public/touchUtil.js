@@ -25,6 +25,8 @@ var touchEvent = {
     }
 }
 
+var clickEnable = true;
+
 /**
  * 判断是否pc设备
  * @returns {boolean}
@@ -49,21 +51,22 @@ touchEvent.init();
 var longTouchtimeout;
 var touchStartTime,touchEndTime;
 var startX,endX;
-$.fn.touch = function(type,selector,cb,cancelBubble){
+(function($){
+    $.fn.touch = function(type,selector,cb,cancelBubble){
 //    if(isPC()){
 //        $(this).each(function(){
 //            $(this).on(type,cb);
 //        });
 //        return;
 //    }
-    if(arguments.length == 2){
-        cb = selector;
-    }else if(arguments.length == 3){
-        cancelBubble = cb;
-        cb = selector;
-    }
-    selector = $(this).selector;
-    //移动设备触摸事件
+        if(arguments.length == 2){
+            cb = selector;
+        }else if(arguments.length == 3){
+            cancelBubble = cb;
+            cb = selector;
+        }
+        selector = $(this).selector;
+        //移动设备触摸事件
 //    $(this).each(function(){
 //        $(this).off(touchEvent.touchstart);
         $(document).on(touchEvent.touchstart,selector,function(event){
@@ -87,8 +90,8 @@ $.fn.touch = function(type,selector,cb,cancelBubble){
         });
 //    });
 
-    switch (type){
-        case touchEvent.longtouch:
+        switch (type){
+            case touchEvent.longtouch:
 //            $(this).each(function(){
                 $(document).on(touchEvent.touchend,selector,function(event){
                     touchEndTime = new Date().getTime();
@@ -98,8 +101,8 @@ $.fn.touch = function(type,selector,cb,cancelBubble){
                     }
                 })
 //            });
-            break;
-        case touchEvent.click:
+                break;
+            case touchEvent.click:
 //            $(this).each(function(){
                 $(document).on(touchEvent.touchend,selector,function(event){
                     touchEndTime = new Date().getTime();
@@ -124,8 +127,8 @@ $.fn.touch = function(type,selector,cb,cancelBubble){
                     }
                 });
 //            });
-            break;
-        case touchEvent.swipeleft:
+                break;
+            case touchEvent.swipeleft:
 //            $(this).each(function(){
                 $(document).on(touchEvent.touchmove,selector,function(event){
 //                    clearTimeout($(this).longTouchtimeout);
@@ -171,34 +174,34 @@ $.fn.touch = function(type,selector,cb,cancelBubble){
                     cb(event);
                 });
 //            });
-            break;
-        case touchEvent.swiperight:
+                break;
+            case touchEvent.swiperight:
 //            $(this).each(function(){
-            $(document).on(touchEvent.touchmove,selector,function(event){
+                $(document).on(touchEvent.touchmove,selector,function(event){
 //                    clearTimeout($(this).longTouchtimeout);
-                if(cancelBubble){
-                    event.stopPropagation();
-                    event.originalEvent.stopPropagation();
-                }
-                if(event.originalEvent && event.originalEvent.targetTouches){
-                    event = event.originalEvent.targetTouches[0];
-                }
-                var $this = $(this);
-                if($this.attr("touchstart") != 1){
+                    if(cancelBubble){
+                        event.stopPropagation();
+                        event.originalEvent.stopPropagation();
+                    }
+                    if(event.originalEvent && event.originalEvent.targetTouches){
+                        event = event.originalEvent.targetTouches[0];
+                    }
+                    var $this = $(this);
+                    if($this.attr("touchstart") != 1){
 //                        alert('move');
-                    return;
-                }
-                endX = event.clientX;
-                event.$this = $(this);
+                        return;
+                    }
+                    endX = event.clientX;
+                    event.$this = $(this);
 //                    alert("swipeLeft "+$this.attr("touchstart"))
-                if(endX - startX < 30){
+                    if(endX - startX < 30){
 //                        alert('short')
-                    return;
-                }
+                        return;
+                    }
 //                    alert(startX +" "+endX);
-                $this.attr("touchstart",0);
-                cb(event);
-            });
+                    $this.attr("touchstart",0);
+                    cb(event);
+                });
                 $(document).on(touchEvent.touchend,selector,function(event){
                     if(cancelBubble){
                         event.stopPropagation();
@@ -215,8 +218,15 @@ $.fn.touch = function(type,selector,cb,cancelBubble){
                     cb(event);
                 });
 //            });
-            break;
+                break;
+        }
+
     }
 
-}
+
+    function setClickStatus(status){
+        clickEnable = status;
+    }
+
+})($);
 

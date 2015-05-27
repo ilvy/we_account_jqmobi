@@ -598,6 +598,22 @@ function vagueSearchProduct(req,res){
     });
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ */
+function searchProductByName(req,res){
+    var productName = req.query.product_name;
+    dbOperator.query('call pro_search_product_by_name(?)',['%'+productName+'%'],function(err,rows){
+        if(err){
+            response.failed(-1,res,0);
+        }else{
+            response.success(rows[0],res,0);
+        }
+    });
+}
+
 //exports.renderLiveRoom = gotoLiveRoom;
 exports.renderLiveRoom_new = gotoLiveRoom_new;
 exports.knockDoor = knockDoor;
@@ -615,3 +631,4 @@ exports.checkRoom = checkRoom;
 exports.compressPic = compressPic;
 exports.rotateImg = rotateImg;
 exports.vagueSearchProduct = vagueSearchProduct;
+exports.searchProductByName = searchProductByName;

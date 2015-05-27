@@ -107,42 +107,52 @@ Waterfall.prototype.setHeader = function(){
 
 Waterfall.prototype.asyncLoader = function(){
     var _this = this;
-    var productsStrs = [],imgstr = '',isPublisher = "";
     asyncLoader.load(function(results){
-        if(typeof results == 'string'){
-            results = JSON.parse(results);
-        }
-        if(results.flag != 1){
-            return;
-        }
-        var loadDatas;
-        var urlArray = [],lazyImgs;//需要异步加载的图片数组
-        if(results.data){
-            loadDatas = results.data.products;
-            totalPage = results.data.totalPage;
-            isPublisher = results.data.isPublisher;
-        }
-        var deleteProductBtn = "";
-        if(isPublisher){
-            deleteProductBtn = '<div class="delete-product"><i class="fa fa-times"></div>';//<input type="button" value="删除"/><i class="fa fa-times-circle">
-        }else{
-            deleteProductBtn = '<a href="/we_account/personalInfo"><div class="contact"><i class="fa fa-comment"></i></div></a>';
-        }
-        loadDatas.forEach(function(item){
+        _this.renderWaterfall(results);
+    });
+}
+
+/**
+ * 渲染瀑布流
+ * @param results
+ */
+Waterfall.prototype.renderWaterfall = function(results){
+    var _this = this;
+    var productsStrs = [],imgstr = '',isPublisher = "";
+    if(typeof results == 'string'){
+        results = JSON.parse(results);
+    }
+    if(results.flag != 1){
+        return;
+    }
+    var loadDatas;
+    var urlArray = [],lazyImgs;//需要异步加载的图片数组
+    if(results.data){
+        loadDatas = results.data.products;
+        totalPage = results.data.totalPage;
+        isPublisher = results.data.isPublisher;
+    }
+    var deleteProductBtn = "";
+    if(isPublisher){
+        deleteProductBtn = '<div class="delete-product"><i class="fa fa-times"></div>';//<input type="button" value="删除"/><i class="fa fa-times-circle">
+    }else{
+        deleteProductBtn = '<a href="/we_account/personalInfo"><div class="contact"><i class="fa fa-comment"></i></div></a>';
+    }
+    loadDatas.forEach(function(item){
 //        $(this).clone().css(_this.lastPosition).appendTo(".waterfall");
-            var imgstr = '',descStr,bottomStr = '';
-            imgstr = '<img class="lazy" src="http://120.24.224.144/images/'+item.image_url[0]+'" data-num="0">' + imgstr;
-            descStr = '';
-            if(item.title){
-                descStr = '<div class="desc" style="'+("border-bottom:1px solid #e6e6e6;")+'" data-desc="'+item.title+'">'+(item.title?item.title:"") +'</div>';
-            }
-            bottomStr = '<div><div class="publish-time">'+item.create_time+'</div>'+deleteProductBtn+'</div>';//;
-            productsStrs.push('<div id="'+item.id+'" class="box" data-id="'+item.id+'">' +
-                '<div class="img-display" data-imgnum="'+item.image_url.length+'">'+ imgstr+
-                '</div>'+descStr+bottomStr+'</div>');
-        });
-        _this.setPosition(productsStrs);
-        var loadImgCount = 0;
+        var imgstr = '',descStr,bottomStr = '';
+        imgstr = '<img class="lazy" src="http://120.24.224.144/images/'+item.image_url[0]+'" data-num="0">' + imgstr;
+        descStr = '';
+        if(item.title){
+            descStr = '<div class="desc" style="'+("border-bottom:1px solid #e6e6e6;")+'" data-desc="'+item.title+'">'+(item.title?item.title:"") +'</div>';
+        }
+        bottomStr = '<div><div class="publish-time">'+item.create_time+'</div>'+deleteProductBtn+'</div>';//;
+        productsStrs.push('<div id="'+item.id+'" class="box" data-id="'+item.id+'">' +
+            '<div class="img-display" data-imgnum="'+item.image_url.length+'">'+ imgstr+
+            '</div>'+descStr+bottomStr+'</div>');
+    });
+    _this.setPosition(productsStrs);
+    var loadImgCount = 0;
 //        lazyImgs = document.getElementsByClassName("lazy");
 //        preloadImgs(lazyImgs,function ready(width,height){
 //
@@ -157,8 +167,6 @@ Waterfall.prototype.asyncLoader = function(){
 //                $(".lazy").removeClass("lazy");
 //            }
 //        });
-    });
-
 }
 
 /**
