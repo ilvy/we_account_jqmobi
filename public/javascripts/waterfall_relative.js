@@ -116,9 +116,10 @@ Waterfall.prototype.asyncLoader = function(){
  * 渲染瀑布流
  * @param results
  */
+var isPublisher = "";
 Waterfall.prototype.renderWaterfall = function(results){
     var _this = this;
-    var productsStrs = [],imgstr = '',isPublisher = "";
+    var productsStrs = [],imgstr = '';
     if(typeof results == 'string'){
         results = JSON.parse(results);
     }
@@ -129,8 +130,13 @@ Waterfall.prototype.renderWaterfall = function(results){
     var urlArray = [],lazyImgs;//需要异步加载的图片数组
     if(results.data){
         loadDatas = results.data.products;
-        totalPage = results.data.totalPage;
-        isPublisher = results.data.isPublisher;
+        if(results.data.totalPage){
+            totalPage = results.data.totalPage;
+        }
+        if(results.data.totalPage){
+            isPublisher = results.data.isPublisher;
+        }
+
     }
     var deleteProductBtn = "";
     if(isPublisher){

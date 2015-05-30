@@ -11,6 +11,7 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent'],func
     LiveRoom.prototype = {
         init:function(){
             this.do();
+            this.getHostInfo();
             var that = this;
             this.setVagueBox();
             $(document).ready(function(){
@@ -97,6 +98,26 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent'],func
             }
             this.hasSetToolBox = 1;
             this.initToolsPosition();
+        },
+        getHostInfo:function(){
+            var roomId = globalVar.room_id;
+            var url = '/we_account/personalInfo?room_id='+roomId;
+            $.ajax({
+                url:url,
+                type:'get',
+                success:function(results){
+                    if(results.flag == 1){
+                        var userInfo = results.data.user;
+                        console.log(userInfo);
+                        userInfo.city = userInfo.country+' '+userInfo.city;
+                        $('.city').text(userInfo.city);
+                        $('.nickname').text(userInfo.nickname);
+                        $('.weix_account').text(userInfo.weix_account);
+                        $('.head img').attr('src',userInfo.headimgurl);
+                        $('.sex').text(userInfo.sex == 1?'男':'女');
+                    }
+                }
+            });
         },
         initToolsPosition : function(){
             var $fav = $(".favorite"),
@@ -298,14 +319,40 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent'],func
                         }
                     });
                 });
-                $('#vagueProduct li').touch('click',function(event){
+                $('#vagueProduct li,.search-btn').touch('click',function(event){
 //                    alert(event.originalEvent.type)
                     var $this = event.$this;
-                    var product_name = $this.text(),
-                        pId = $this.data('id');
-                    console.log(''+pId);
-                    $('.search-product').val(product_name);
-                    $this.parent().css('display','none');
+                    var roomId = globalVar.room_id;
+                    if(!$this.hasClass('search-btn')){
+                        var product_name = $this.text(),
+                            pId = $this.data('id');
+                        console.log(''+pId);
+                        $('.search-product').val(product_name);
+                        $this.parent().css('display','none');
+                    }else{
+                        product_name = $('.search-input').val();
+                    }
+                    if(!product_name){
+                        currentPage = 0;
+                        totalPage = -1;
+                        waterfall.cleanWaterfall();
+                        waterfall.asyncLoader();
+                        return;
+                    }
+
+                    var url = '/we_account/searchProductByName?product_name='+product_name+'&room_id='+roomId;
+                    $.ajax({
+                        url:url,
+                        type:'get',
+                        success:function(results){
+                            waterfall.cleanWaterfall();
+                            currentPage = 0;
+                            waterfall.renderWaterfall(results);
+                        },
+                        error:function(err){
+                            console.log(err);
+                        }
+                    })
                 },true);
             }
         },

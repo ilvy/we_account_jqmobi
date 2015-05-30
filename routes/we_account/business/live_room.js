@@ -604,12 +604,17 @@ function vagueSearchProduct(req,res){
  * @param res
  */
 function searchProductByName(req,res){
-    var productName = req.query.product_name;
-    dbOperator.query('call pro_search_product_by_name(?)',['%'+productName+'%'],function(err,rows){
+    var productName = req.query.product_name,
+        roomId = req.query.room_id;
+    dbOperator.query('call pro_search_product_by_name(?,?)',['%'+productName+'%',roomId],function(err,rows){
         if(err){
             response.failed(-1,res,0);
         }else{
-            response.success(rows[0],res,0);
+            var products = rows[0];
+            products.forEach(function(item,i){
+                item.image_url = item.image_url.split(";");
+            });
+            response.success({products:rows[0]},res,0);
         }
     });
 }

@@ -118,9 +118,9 @@ function getPersonalInfo(req,res,isHost){
         args = [open_id,null],
         room_id = session.room;
     if(!isHost){
-        args = [null,room_id||"888888"];
+        args = [open_id,room_id||"888888"];
     }
-    dbOperator.query("call pro_weix_account_info_get(?,?)",args,function(err,row){
+    dbOperator.query("call pro_weix_account_info_get_new(?,?)",args,function(err,row){
         if(err){
             console.log("pro_weix_account_info_get:"+err);
         }else{
@@ -130,6 +130,10 @@ function getPersonalInfo(req,res,isHost){
                 user.sex = user.sex[0];
             }
             console.log(user);
+            if(!isHost){
+                response.success({user:user?user:null},res,'');
+                return;
+            }
             res.render("personality",{user:user?user:null,isHost:isHost});
         }
     });
