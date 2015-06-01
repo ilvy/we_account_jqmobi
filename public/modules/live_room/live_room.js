@@ -1,7 +1,7 @@
 /**
  * Created by man on 15-4-3.
  */
-define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent'],function(router,util){
+define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpopup'],function(router,util){
     var disableClick = false;
     function LiveRoom(){
         this.hasSetToolBox = 0;//标记是否已经初始化toolbox
@@ -11,7 +11,6 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent'],func
     LiveRoom.prototype = {
         init:function(){
             this.do();
-            this.getHostInfo();
             var that = this;
             this.setVagueBox();
             $(document).ready(function(){
@@ -21,6 +20,7 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent'],func
         },
         do:function(){
             this.flushPage();
+            this.getHostInfo();
         },
         flushPage:function(){
             var room_id = globalVar.room_id;
@@ -150,11 +150,11 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent'],func
                 $('#vagueProduct').css('display','none');
             });
             var currLen,currNum,$currImgAlbum;
-            $(".img-display img").touch("click",function(event){
+            $(".img-display img,.wanttobuy").touch("click",function(event){
                 var $this = event.$this;
-                currNum = $this.data("num");
-                $currImgAlbum = $this.parents(".img-display").find("img");
-                currLen = $this.parents(".img-display").data("imgnum");
+//                currNum = $this.data("num");
+//                $currImgAlbum = $this.parents(".img-display").find("img");
+//                currLen = $this.parents(".img-display").data("imgnum");
                 var product_id = $this.parents(".box").data("id"),
                     type = $(".waterfall").data("type");
                 type?type = "&u_type=" + type:"";
@@ -333,10 +333,13 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent'],func
                         product_name = $('.search-input').val();
                     }
                     if(!product_name){
+                        globalVar.showLoading();
                         currentPage = 0;
                         totalPage = -1;
                         waterfall.cleanWaterfall();
-                        waterfall.asyncLoader();
+                        waterfall.asyncLoader(function(){
+                            globalVar.hideLoading();
+                        });
                         return;
                     }
 
@@ -354,6 +357,15 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent'],func
                         }
                     })
                 },true);
+                $('.edit-personality').touch('click',function(event){
+                    $('#host-info').pop();
+                    $('#host-info input[type=text]').each(function(){
+                        var type = $(this).data('type');
+                        $(this).val($('#header .'+type).text());
+                    });
+                },true);
+                $('.light-popup').touch('click',function(){},true);//弹出框防止穿透
+
             }
         },
         renderVagueProductBox:function(datas){

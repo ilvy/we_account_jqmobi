@@ -102,13 +102,19 @@ Waterfall.prototype.setHeader = function(){
         width:headerW,
         'margin-left':this.margin
     });
+    $(".search-group").css({
+        width:headerW
+    });
     $(".stick-width").css("height",3);
 }
 
-Waterfall.prototype.asyncLoader = function(){
+Waterfall.prototype.asyncLoader = function(callback){
     var _this = this;
     asyncLoader.load(function(results){
         _this.renderWaterfall(results);
+        if(callback){
+            callback();
+        }
     });
 }
 
@@ -142,7 +148,7 @@ Waterfall.prototype.renderWaterfall = function(results){
     if(isPublisher){
         deleteProductBtn = '<div class="delete-product"><i class="fa fa-times"></div>';//<input type="button" value="删除"/><i class="fa fa-times-circle">
     }else{
-        deleteProductBtn = '<a href="/we_account/personalInfo"><div class="contact"><i class="fa fa-comment"></i></div></a>';
+        deleteProductBtn = '<a href="/we_account/personalInfo"><div class="wanttobuy">我要买</div></a>';
     }
     loadDatas.forEach(function(item){
 //        $(this).clone().css(_this.lastPosition).appendTo(".waterfall");

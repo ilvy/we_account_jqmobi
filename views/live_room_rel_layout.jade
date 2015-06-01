@@ -26,13 +26,14 @@ html
         div.page.register
         div.page.products-page.live_room.slide-init
             #header
-                .head.col-xxs-4.col-xs-2
+                .head.col-xxs-3.col-xs-2
                     img(src="")
-                .detail-personal-info.col-xxs-8.col-xs-10
+                .detail-personal-info.col-xxs-9.col-xs-10
                     .room_num 代代号:
                     .cell.col-xxs-12
                         .col-xxs-4 昵称
-                        .nickname.col-xxs-8
+                        .nickname.col-xxs-6
+                        input(type='button' value='编辑').edit-personality.col-xxs-2
                     .cell.col-xxs-12
                         .col-xxs-4 微信账号
                         .weix_account.col-xxs-8
@@ -42,9 +43,9 @@ html
                     .cell.col-xxs-12
                         .col-xxs-4 城市
                         .city.col-xxs-8
-                    .cell.col-xxs-12.search-group
-                        input(type='text' placeholder='商品名称').search-product.col-xxs-8.col-xs-10
-                        input(type='button' value='搜索商品').search-btn.col-xxs-4.col-xs-2
+                .cell.col-xxs-12.search-group
+                    input(type='text' placeholder='商品名称').search-product.col-xxs-8.col-xs-10
+                    input(type='button' value='搜索商品').search-btn.col-xxs-4.col-xs-2
             ul#vagueProduct
                 li hhhhhh
             section().waterfall
@@ -198,7 +199,26 @@ html
             .btn-group
                 input(type='button' value='取消')#input-cancel
                 input(type='button' value='确定')#input-sure
-
+        #host-info.light-popup
+            div.col-xxs-12
+                span.col-xxs-3.col-xxs-offset-2 昵称
+                div.col-xxs-7
+                    input.nickname(type='text',date-type='nickname',value='')
+            div.col-xxs-12
+                span.col-xxs-3.col-xxs-offset-2 微信账号
+                .col-xxs-7
+                    input(type='text',date-type='weix_account',value='').weix_account
+            div.col-xxs-12
+                span.col-xxs-3.col-xxs-offset-2 性别
+                .col-xxs-7
+                    input(type='text',date-type='sex',value='').sex
+            div.col-xxs-12
+                span.col-xxs-3.col-xxs-offset-2 城市
+                .col-xxs-7
+                    input(type='text',date-type='city',value='').city
+            .btn-group.col-xxs-12
+                input(type='button',value="取消").input-cancel
+                input(type='button',value="确定").input-sure
 
 script(src="/javascripts/jquery.js")
 script(src="/touchUtil.js")

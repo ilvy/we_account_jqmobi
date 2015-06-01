@@ -253,14 +253,12 @@ a {
     color: rgb(182, 182, 182);
 }
 
-.contact{
+.wanttobuy{
     text-align: right;
     padding: 6px;
     color: rgb(35, 139, 56);
-}
-
-.contact .fa-comment{
     font-size: 1.5rem;
+    cursor: pointer;
 }
 
 .delete-product i{
@@ -1057,6 +1055,19 @@ li.favour_room_option > div{
 .search-product,.search-btn{
     height: 2rem;
     font-size: 1.5rem;
+    border-radius: 0px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.search-btn{
+    color: rgb(121, 118, 118);
+    border: 1px solid white;
+}
+
+.edit-personality{
+    border: 1px solid white;
+    border-right: none;
 }
 
 .search-product{
@@ -1085,19 +1096,34 @@ li.favour_room_option > div{
 
 /***************end 页面切换效果******************/
 
+/************个人信息修改 start**************/
+#host-info .btn-group{
+    text-align: center;
+    margin-top: 10px;
+}
+
+#host-info > div:first-child{
+    margin-top: 10px;
+}
+
+#host-info > div:not(.btn-group){
+    margin-top: 6px;
+}
+
+/************个人信息修改 end**************/
+
 
 #header .col-xxs-8{/**挤出一个间距**/
     width: 63.666667%;
+}
+#header .col-xxs-9{
+    width: 72%;
 }
 @media screen and (min-width: 361px) {
 
 }
 
 @media screen and (min-width: 561px) {
-
-}
-
-@media screen and (min-width: 768px){/*0.71*/
     .search-product,.search-btn{
         height: 2.5rem;
         font-size: 1.6rem;
@@ -1106,6 +1132,10 @@ li.favour_room_option > div{
     #header .col-xs-10{/**挤出一个间距**/
         width: 80%;
     }
+}
+
+@media screen and (min-width: 768px){/*0.71*/
+
 }
 
 @media screen and (min-width: 1367px) {/*0.75*/
