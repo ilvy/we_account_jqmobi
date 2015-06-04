@@ -33,19 +33,25 @@ html
                     .cell.col-xxs-12
                         .col-xxs-4 昵称
                         .nickname.col-xxs-6
-                        input(type='button' value='编辑').edit-personality.col-xxs-2
+                        input(type='button' value='编辑').edit-personality.col-xxs-2.remove
                     .cell.col-xxs-12
                         .col-xxs-4 微信账号
                         .weix_account.col-xxs-8
                     .cell.col-xxs-12
                         .col-xxs-4 性别
                         .sex.col-xxs-8
+                            select
+                                option(value=0) 女
+                                option(value=1) 男
                     .cell.col-xxs-12
                         .col-xxs-4 城市
-                        .city.col-xxs-8
+                        .c-city.col-xxs-8
                 .cell.col-xxs-12.search-group
                     input(type='text' placeholder='商品名称').search-product.col-xxs-8.col-xs-10
                     input(type='button' value='搜索商品').search-btn.col-xxs-4.col-xs-2
+            .cell.split-part
+                .line
+                .text 货架内容已更新
             ul#vagueProduct
                 li hhhhhh
             section().waterfall
@@ -203,19 +209,23 @@ html
             div.col-xxs-12
                 span.col-xxs-3.col-xxs-offset-2 昵称
                 div.col-xxs-7
-                    input.nickname(type='text',date-type='nickname',value='')
+                    input#nickname(type='text',data-type='nickname',value='')
             div.col-xxs-12
                 span.col-xxs-3.col-xxs-offset-2 微信账号
                 .col-xxs-7
-                    input(type='text',date-type='weix_account',value='').weix_account
+                    input(type='text',data-type='weix_account',value='')#weix_account
             div.col-xxs-12
                 span.col-xxs-3.col-xxs-offset-2 性别
                 .col-xxs-7
-                    input(type='text',date-type='sex',value='').sex
+                    select#sex
             div.col-xxs-12
                 span.col-xxs-3.col-xxs-offset-2 城市
                 .col-xxs-7
-                    input(type='text',date-type='city',value='').city
+                    input(type='text',data-type='city',value='')#city
+            div.col-xxs-12
+                span.col-xxs-3.col-xxs-offset-2 国家
+                .col-xxs-7
+                    input(type='text',data-type='country',value='')#country
             .btn-group.col-xxs-12
                 input(type='button',value="取消").input-cancel
                 input(type='button',value="确定").input-sure

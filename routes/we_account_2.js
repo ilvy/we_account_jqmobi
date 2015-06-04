@@ -289,6 +289,8 @@ router.get("/personalInfo",function(req,res){
 
 router.post("/update_personality",publish_account.updatePersonality);
 
+router.post("/update_personality_all",publish_account.updatePersonality_all);
+
 router.post("/asyncAccountInfoFromWeix",function(req,res){
     publish_account.asyncAccountInfoFromWeix(req.session.openId,res);
 });

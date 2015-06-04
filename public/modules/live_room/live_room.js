@@ -77,6 +77,7 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
 //                alert(data.publisher)
     //                $("#tools-box").html('<div id="upload-div-box"><div id="upload-div"><div id="upload"><i class="fa fa-plus"></i></div></div></div>');
                 $("#upload-div-box").removeClass('remove').siblings().addClass('remove');
+                $('.edit-personality').removeClass('remove');
             }else{
 //                alert('hehe')
                 var favHeart = '';
@@ -109,12 +110,11 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
                     if(results.flag == 1){
                         var userInfo = results.data.user;
                         console.log(userInfo);
-                        userInfo.city = userInfo.country+' '+userInfo.city;
-                        $('.city').text(userInfo.city);
+                        $('.c-city').html('<span class="country">'+userInfo.country+'</span><span class="city">'+userInfo.city+'</span>');
                         $('.nickname').text(userInfo.nickname);
                         $('.weix_account').text(userInfo.weix_account);
                         $('.head img').attr('src',userInfo.headimgurl);
-                        $('.sex').text(userInfo.sex == 1?'男':'女');
+                        $('.sex select option[value='+userInfo.sex+']').attr('selected',true).siblings('option[selected]').attr('selected',false);
                     }
                 }
             });
@@ -363,9 +363,40 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
                         var type = $(this).data('type');
                         $(this).val($('#header .'+type).text());
                     });
+                    if($('.sex select').val() == 0){
+                        $('select#sex').html('<option value="0">女</option><option value="1">男</option>');
+                    }else{
+                        $('select#sex').html('<option value="0">女</option><option value="1" selected>男</option>');
+                    }
+
                 },true);
                 $('.light-popup').touch('click',function(){},true);//弹出框防止穿透
-
+                $('.input-cancel').touch('click',function(){
+                    $('#host-info').pop({hidden:true,callback:function(){
+                        $('#host-info input[type=text]').each(function(){
+                            $(this).val('');
+                        });
+                    }});
+                },true);
+                $('.input-sure').touch('click',function(event){
+                    var data = {};
+                    $('#host-info input[type=text]').each(function(){
+                        var type = $(this).data('type');
+                        data[type] = $(this).val();
+                    });
+                    data.sex = $('select#sex').val();
+                    var url = '/we_account/update_personality_all';
+                    $.ajax({
+                        url:url,
+                        type:'post',
+                        data:data,
+                        success:function(results){
+                            if(results.flag == 1){
+                                console.log('update_personality_all success');
+                            }
+                        }
+                    })
+                });
             }
         },
         renderVagueProductBox:function(datas){

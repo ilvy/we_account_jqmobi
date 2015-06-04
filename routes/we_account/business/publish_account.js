@@ -105,6 +105,32 @@ function updatePersonality(req,res){
         }
     });
 }
+/**
+ * 更新微信账号信息
+ * @param req
+ * @param res
+ */
+function updatePersonality_all(req,res){
+    var body = req.body;
+    var open_id = req.session.openId,
+        nickname = body.nickname,
+        weixAccount = body.weix_account,
+        sex = body.sex,
+        city = body.city,
+        country = body.country;
+    var sql = dataviewConfig.personality;
+//    console.log(sql+" "+key+" "+value);
+    dbOperator.query('call pro_update_weix_account_info(?,?,?,?,?,?)',
+        [open_id,weixAccount,nickname,sex,city,country],function(err,rows){
+        if(err){
+            console.log("personality err:"+err);
+            response.failed("0",res,"");
+        }else{
+            console.log(rows);
+            response.success("1",res,"");
+        }
+    });
+}
 
 /**
  * 获取用户个人信息
@@ -181,5 +207,6 @@ exports.checkUser = checkUser;
 exports.register = register;
 exports.getPersonalInfo = getPersonalInfo;
 exports.updatePersonality = updatePersonality;
+exports.updatePersonality_all = updatePersonality_all;
 exports.asyncAccountInfoFromWeix = asyncAccountInfoFromWeix;
 exports.wxJssdkInit = wxJssdkInit;

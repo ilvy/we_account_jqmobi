@@ -184,6 +184,7 @@ a {
     /*padding: 8px 6px;*/
     font-size: 1.5rem;
     margin-top: 8px;
+    margin-bottom: 10px;
 }
 
 .waterfall{
@@ -1092,6 +1093,33 @@ li.favour_room_option > div{
     border: 1px solid #cecece;
 }
 
+.split-part{
+    width: 92%;
+    height: 1.6rem;
+    position: relative;
+    margin-top: 6.5rem;
+    margin-bottom: 0.5rem;
+    clear: both;
+    padding-top: 4px;
+    left: 4%;
+}
+
+.split-part > .text{
+    background-color: rgba(233, 234, 234, 1);
+    z-index: 1000000;
+    position: absolute;
+    padding: 0 8px;
+    left: 38%;
+    color: rgb(180, 181, 182);
+}
+
+.split-part > .line{
+    border-top: 1px solid #948e87;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+}
+
 /**************personality end*******************/
 
 /***************end 页面切换效果******************/
@@ -1108,6 +1136,14 @@ li.favour_room_option > div{
 
 #host-info > div:not(.btn-group){
     margin-top: 6px;
+}
+
+#host-info > div > span{
+    padding: 0;
+}
+
+#host-info > div  input[type='text']{
+    width: 80%;
 }
 
 /************个人信息修改 end**************/

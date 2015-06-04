@@ -148,7 +148,7 @@ Waterfall.prototype.renderWaterfall = function(results){
     if(isPublisher){
         deleteProductBtn = '<div class="delete-product"><i class="fa fa-times"></div>';//<input type="button" value="删除"/><i class="fa fa-times-circle">
     }else{
-        deleteProductBtn = '<a href="/we_account/personalInfo"><div class="wanttobuy">我要买</div></a>';
+        deleteProductBtn = '<div class="wanttobuy">我要买</div>';
     }
     loadDatas.forEach(function(item){
 //        $(this).clone().css(_this.lastPosition).appendTo(".waterfall");
