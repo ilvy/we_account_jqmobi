@@ -13,6 +13,9 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
             this.do();
             var that = this;
             this.setVagueBox();
+            $('.split-part .text').css({
+                left:($('.split-part').outerWidth() - $('.split-part .text').outerWidth()) / 2 - $('.split-part').offset().left
+            });
             $(document).ready(function(){
                 that.addListener();
             });
@@ -68,7 +71,7 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
                 width = $searchInput.width();
             $("#vagueProduct").css({
                 left:left,
-                top:top + height,
+                top:top + height + 10,
                 width:width + $('.search-btn').width()
             });
         },
@@ -101,6 +104,7 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
             this.initToolsPosition();
         },
         getHostInfo:function(){
+            var _this = this;
             var roomId = globalVar.room_id;
             var url = '/we_account/personalInfo?room_id='+roomId;
             $.ajax({
@@ -110,14 +114,17 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
                     if(results.flag == 1){
                         var userInfo = results.data.user;
                         console.log(userInfo);
-                        $('.c-city').html('<span class="country">'+userInfo.country+'</span><span class="city">'+userInfo.city+'</span>');
-                        $('.nickname').text(userInfo.nickname);
-                        $('.weix_account').text(userInfo.weix_account);
-                        $('.head img').attr('src',userInfo.headimgurl);
-                        $('.sex select option[value='+userInfo.sex+']').attr('selected',true).siblings('option[selected]').attr('selected',false);
+                        _this.setHostInfo(userInfo);
                     }
                 }
             });
+        },
+        setHostInfo:function(userInfo){
+            $('.c-city').html('<span class="country">'+userInfo.country+'</span><span class="city">'+userInfo.city+'</span>');
+            $('.nickname').text(userInfo.nickname);
+            $('.weix_account').text(userInfo.weix_account);
+            userInfo.headimgurl ? $('.head img').attr('src',userInfo.headimgurl) : '';
+            $('.sex').text(userInfo.sex ? '男':'女');
         },
         initToolsPosition : function(){
             var $fav = $(".favorite"),
@@ -392,6 +399,7 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
                         data:data,
                         success:function(results){
                             if(results.flag == 1){
+                                _this.setHostInfo(data);
                                 console.log('update_personality_all success');
                             }
                         }

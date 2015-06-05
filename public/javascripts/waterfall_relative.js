@@ -158,7 +158,7 @@ Waterfall.prototype.renderWaterfall = function(results){
         if(item.title){
             descStr = '<div class="desc" style="'+("border-bottom:1px solid #e6e6e6;")+'" data-desc="'+item.title+'">'+(item.title?item.title:"") +'</div>';
         }
-        bottomStr = '<div><div class="publish-time">'+item.create_time+'</div>'+deleteProductBtn+'</div>';//;
+        bottomStr = '<div class="product-footer"><div class="publish-time">'+item.create_time+'</div>'+deleteProductBtn+'</div>';//;
         productsStrs.push('<div id="'+item.id+'" class="box" data-id="'+item.id+'">' +
             '<div class="img-display" data-imgnum="'+item.image_url.length+'">'+ imgstr+
             '</div>'+descStr+bottomStr+'</div>');
