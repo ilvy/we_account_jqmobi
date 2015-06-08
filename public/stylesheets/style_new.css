@@ -226,7 +226,7 @@ a {
 .box div{
     word-break:break-all;
     /*text-align:center;*/
-    font-size: 0.6rem;
+    font-size: 1.2rem;
     font-family: "microsoft yahei";
 }
 .live_room .desc{
@@ -253,19 +253,21 @@ a {
     padding: 4px 0px;
 }
 
-.publish-time{
+.box .publish-time{
     float: left;
     font-size: 1rem;
     color: rgb(182, 182, 182);
+    width: 60%;
 }
 
-.wanttobuy{
+.box .wanttobuy{
     text-align: right;
     padding: 0 6px;
     color: rgb(35, 139, 56);
     font-size: 1.5rem;
     cursor: pointer;
     float: left;
+    width: 39%;
 }
 
 .delete-product i{
@@ -1060,7 +1062,7 @@ li.favour_room_option > div{
 }
 
 .search-product,.search-btn{
-    height: 2rem;
+    height: 2.3rem;
     font-size: 1.5rem;
     border-radius: 0px;
     padding-left: 15px;

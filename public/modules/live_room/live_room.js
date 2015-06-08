@@ -337,7 +337,7 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
                         $('.search-product').val(product_name);
                         $this.parent().css('display','none');
                     }else{
-                        product_name = $('.search-input').val();
+                        product_name = $('.search-product').val();
                     }
                     if(!product_name){
                         globalVar.showLoading();
