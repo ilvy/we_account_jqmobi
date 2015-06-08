@@ -57,7 +57,7 @@ define(['router','jqmobiTouch'],function(router){
             $(document).on("vclick","#submit",function(){
                 var desc = $(".product-desc").val();//TODO 检验字符串合法性
                 var title = $(".product-title").val();
-                if(productArray.length == 0){
+                if(productArray.length == 0 || !title){
                     $("#warn").fadeInAndOut();
                     return;
                 }
