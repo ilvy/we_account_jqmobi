@@ -226,7 +226,7 @@ a {
 .box div{
     word-break:break-all;
     /*text-align:center;*/
-    font-size: 1.2rem;
+    font-size: 0.6rem;
     font-family: "microsoft yahei";
 }
 .live_room .desc{
@@ -253,21 +253,19 @@ a {
     padding: 4px 0px;
 }
 
-.box .publish-time{
+.publish-time{
     float: left;
     font-size: 1rem;
     color: rgb(182, 182, 182);
-    width: 60%;
 }
 
-.box .wanttobuy{
+.wanttobuy{
     text-align: right;
     padding: 0 6px;
     color: rgb(35, 139, 56);
     font-size: 1.5rem;
     cursor: pointer;
     float: left;
-    width: 39%;
 }
 
 .delete-product i{
@@ -590,7 +588,6 @@ input.product-title{
     left: 0;
     text-align: center;
     width: 100%;
-    margin-bottom: 1rem;
 }
 
 .lr-btn-group > div{
@@ -600,10 +597,6 @@ input.product-title{
 #cancel-btn > div{
     float: right;
     margin-right: 15px;
-    width: 36px;
-    height: 36px;
-    background-color: rgba(168, 65, 71, 1);
-    border-radius: 20px;
 }
 
 #sub-btn{
@@ -621,6 +614,8 @@ input.product-title{
     padding-left: 0px;
     float: left;
     /*margin: 3px auto;*/
+    margin-left: 15px;
+    margin-top: 9px;
 }
 
 #submit{
@@ -647,12 +642,11 @@ input.product-title{
 
 #cancel{
     margin: 0 auto;
+    /*padding: 4px 8px;*/
     border: none;
-    color: white;
+    /*background: #757978;*/
+    color: rgba(168, 65, 71, 1);
     font-weight: lighter;
-    font-size: 3rem;
-    height: 45px;
-    vertical-align: middle;
 }
 
 #upload2{
@@ -1066,7 +1060,7 @@ li.favour_room_option > div{
 }
 
 .search-product,.search-btn{
-    height: 2.3rem;
+    height: 2rem;
     font-size: 1.5rem;
     border-radius: 0px;
     padding-left: 15px;

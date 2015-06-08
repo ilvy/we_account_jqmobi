@@ -1,7 +1,7 @@
 /**
  * Created by man on 15-4-3.
  */
-define(['router','util','jqmobiTouch','preloadImg','waterfall','ajaxupload','touchEvent'],function(router,util){
+define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpopup'],function(router,util){
     var disableClick = false;
     function LiveRoom(){
         this.hasSetToolBox = 0;//标记是否已经初始化toolbox
@@ -13,6 +13,9 @@ define(['router','util','jqmobiTouch','preloadImg','waterfall','ajaxupload','tou
             this.do();
             var that = this;
             this.setVagueBox();
+            $('.split-part .text').css({
+                left:($('.split-part').outerWidth() - $('.split-part .text').outerWidth()) / 2 - $('.split-part').offset().left
+            });
             $(document).ready(function(){
                 that.addListener();
             });
@@ -20,6 +23,7 @@ define(['router','util','jqmobiTouch','preloadImg','waterfall','ajaxupload','tou
         },
         do:function(){
             this.flushPage();
+            this.getHostInfo();
         },
         flushPage:function(){
             var room_id = globalVar.room_id;
@@ -67,8 +71,8 @@ define(['router','util','jqmobiTouch','preloadImg','waterfall','ajaxupload','tou
                 width = $searchInput.width();
             $("#vagueProduct").css({
                 left:left,
-                top:top + height,
-                width:width
+                top:top + height + 10,
+                width:width + $('.search-btn').width()
             });
         },
         setToolBox : function(data){
@@ -76,6 +80,7 @@ define(['router','util','jqmobiTouch','preloadImg','waterfall','ajaxupload','tou
 //                alert(data.publisher)
     //                $("#tools-box").html('<div id="upload-div-box"><div id="upload-div"><div id="upload"><i class="fa fa-plus"></i></div></div></div>');
                 $("#upload-div-box").removeClass('remove').siblings().addClass('remove');
+                $('.edit-personality').removeClass('remove');
             }else{
 //                alert('hehe')
                 var favHeart = '';
@@ -97,6 +102,29 @@ define(['router','util','jqmobiTouch','preloadImg','waterfall','ajaxupload','tou
             }
             this.hasSetToolBox = 1;
             this.initToolsPosition();
+        },
+        getHostInfo:function(){
+            var _this = this;
+            var roomId = globalVar.room_id;
+            var url = '/we_account/personalInfo?room_id='+roomId;
+            $.ajax({
+                url:url,
+                type:'get',
+                success:function(results){
+                    if(results.flag == 1){
+                        var userInfo = results.data.user;
+                        console.log(userInfo);
+                        _this.setHostInfo(userInfo);
+                    }
+                }
+            });
+        },
+        setHostInfo:function(userInfo){
+            $('.c-city').html('<span class="country">'+userInfo.country+'</span><span class="city">'+userInfo.city+'</span>');
+            $('.nickname').text(userInfo.nickname);
+            $('.weix_account').text(userInfo.weix_account);
+            userInfo.headimgurl ? $('.head img').attr('src',userInfo.headimgurl) : '';
+            $('.sex').text(userInfo.sex ? '男':'女');
         },
         initToolsPosition : function(){
             var $fav = $(".favorite"),
@@ -125,41 +153,16 @@ define(['router','util','jqmobiTouch','preloadImg','waterfall','ajaxupload','tou
         },
         addListener:function(){
             var _this = this;
-            $("#tools-btn").on("click",function(event){
-                if(event.stopPropagation){
-                    event.stopPropagation();
-                }else{
-                    event.cancelBubble = true;
-                }
-                if($("#tools-panel").css("display") == 'none'){
-                    $("#tools-panel").css("display","block");
-                }else{
-                    $("#tools-panel").css("display","none");
-                }
-            });
-            $("#tools-panel").on("click",function(event){
-                if(event.stopPropagation){
-                    event.stopPropagation();
-                }else{
-                    event.cancelBubble = true;
-                }
-                $("#tools-panel").css("display","none");
-            });
-
-            $(document).on("vclick","#disableClick-mask",function(event){
-                stopPropagation(event);
-                $("#disableClick-mask").css("display","none");
-                console.log("stop click");
+            $(document).touch('click',function(event){
+                $('#vagueProduct').css('display','none');
             });
             var currLen,currNum,$currImgAlbum;
-            $(document).on("click",".img-display img",function(){
-                if(disableClick){
-                    return;
-                }
-                currNum = $(this).data("num");
-                $currImgAlbum = $(this).parents(".img-display").find("img");
-                currLen = $(this).parents(".img-display").data("imgnum");
-                var product_id = $(this).parents(".box").data("id"),
+            $(".img-display img,.wanttobuy").touch("click",function(event){
+                var $this = event.$this;
+//                currNum = $this.data("num");
+//                $currImgAlbum = $this.parents(".img-display").find("img");
+//                currLen = $this.parents(".img-display").data("imgnum");
+                var product_id = $this.parents(".box").data("id"),
                     type = $(".waterfall").data("type");
                 type?type = "&u_type=" + type:"";
 //        window.location.href = '/we_account/product_display?product_id='+product_id+type;
@@ -168,9 +171,10 @@ define(['router','util','jqmobiTouch','preloadImg','waterfall','ajaxupload','tou
 //                window.location.hash = "#product_display-"+product_id;//'/we_account/product_display?product_id='+product_id+type;
             });
             //收藏直播间
-            $(document).on("vclick",".favorite",function(){
+            $(".favorite").touch("click",function(event){
+                var $this = event.$this;
                 var url = '/we_account/favourite';
-                if($(this).find('i').hasClass("fa-heart")){
+                if($this.find('i').hasClass("fa-heart")){
                     if(!confirm("是否取消关注")){
                         return;
                     }
@@ -240,12 +244,12 @@ define(['router','util','jqmobiTouch','preloadImg','waterfall','ajaxupload','tou
             /**
              * 删除商品信息
              */
-            $(document).on("vclick",".delete-product .fa-times",function(event){
+            $(".delete-product .fa-times").touch("click",function(event){
                 if(!confirm("确定删除该商品?")){
                     return;
                 }
-                var product_id = $(this).parents(".box").data("id");
-                var $this = $(this);
+                var $this = event.$this;
+                var product_id = $this.parents(".box").data("id");
                 var data = {
                     id:product_id
                 }
@@ -298,17 +302,12 @@ define(['router','util','jqmobiTouch','preloadImg','waterfall','ajaxupload','tou
                         }
                     })
                 });
-                $(document).on("vclick","#upload-div-box",function(event){
-                    if(event.stopPropagation){
-                        event.stopPropagation();
-                    }else if(event.cancelBubble){
-                        event.cancelBubble = true;
-                    }
+                $("#upload-div-box").touch("click",function(event){
 //        alert("upload:"+$(this).attr("id"));
-                    var $this = $(this);
+                    var $this = event.$this;
                     var btn_id = $this.attr("id");
                     $("#"+btn_id+"_file_type").click();
-                });
+                },true);
                 $(document).on('input','.search-group .search-product',function(event){
                     var $this = $(this);
                     var roomId = globalVar.room_id,
@@ -327,17 +326,89 @@ define(['router','util','jqmobiTouch','preloadImg','waterfall','ajaxupload','tou
                         }
                     });
                 });
-                $(document).on('vclick','#vagueProduct li',function(event){
+                $('#vagueProduct li,.search-btn').touch('click',function(event){
 //                    alert(event.originalEvent.type)
-                    if(event.originalEvent && event.originalEvent.stopPropagation){
-                        alert(event.originalEvent.stopPropagation)
-                        event.originalEvent.stopPropagation();
+                    var $this = event.$this;
+                    var roomId = globalVar.room_id;
+                    if(!$this.hasClass('search-btn')){
+                        var product_name = $this.text(),
+                            pId = $this.data('id');
+                        console.log(''+pId);
+                        $('.search-product').val(product_name);
+                        $this.parent().css('display','none');
+                    }else{
+                        product_name = $('.search-input').val();
                     }
-                    var product_name = $(this).text(),
-                        pId = $(this).data('id');
-                    console.log(''+pId);
-                    $(this).val(product_name);
-                    $(this).parent().css('display','none');
+                    if(!product_name){
+                        globalVar.showLoading();
+                        currentPage = 0;
+                        totalPage = -1;
+                        waterfall.cleanWaterfall();
+                        waterfall.asyncLoader(function(){
+                            globalVar.hideLoading();
+                        });
+                        return;
+                    }
+
+                    var url = '/we_account/searchProductByName?product_name='+product_name+'&room_id='+roomId;
+                    $.ajax({
+                        url:url,
+                        type:'get',
+                        success:function(results){
+                            waterfall.cleanWaterfall();
+                            currentPage = 0;
+                            waterfall.renderWaterfall(results);
+                        },
+                        error:function(err){
+                            console.log(err);
+                        }
+                    })
+                },true);
+                $('.edit-personality').touch('click',function(event){
+                    $('#host-info').pop();
+                    $('#host-info input[type=text]').each(function(){
+                        var type = $(this).data('type');
+                        $(this).val($('#header .'+type).text());
+                    });
+                    if($('.sex select').val() == 0){
+                        $('select#sex').html('<option value="0">女</option><option value="1">男</option>');
+                    }else{
+                        $('select#sex').html('<option value="0">女</option><option value="1" selected>男</option>');
+                    }
+
+                },true);
+                $('.light-popup').touch('click',function(){},true);//弹出框防止穿透
+                $('.input-cancel').touch('click',function(){
+                    $('#host-info').pop({hidden:true,callback:function(){
+                        $('#host-info input[type=text]').each(function(){
+                            $(this).val('');
+                        });
+                    }});
+                },true);
+                $('.input-sure').touch('click',function(event){
+                    var data = {};
+                    $('#host-info input[type=text]').each(function(){
+                        var type = $(this).data('type');
+                        data[type] = $(this).val();
+                    });
+                    data.sex = $('select#sex').val();
+                    var url = '/we_account/update_personality_all';
+                    $.ajax({
+                        url:url,
+                        type:'post',
+                        data:data,
+                        success:function(results){
+                            if(results.flag == 1){
+                                _this.setHostInfo(data);
+                                $('#host-info').pop({hidden:true,callback:function(){
+                                    $('#host-info input[type=text]').each(function(){
+                                        $(this).val('');
+                                    });
+                                }});
+                                console.log('update_personality_all success');
+                            }
+                        }
+                    })
                 });
             }
         },
