@@ -120,9 +120,9 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
             });
         },
         setHostInfo:function(userInfo){
-            $('.c-city').html('<span class="country">'+userInfo.country+'</span><span class="city">'+userInfo.city+'</span>');
-            $('.nickname').text(userInfo.nickname);
-            $('.weix_account').text(userInfo.weix_account);
+            $('.c-city').html('<span class="country">'+(userInfo.country||'')+'</span><span class="city">'+(userInfo.city||'')+'</span>');
+            $('.nickname').text(userInfo.nickname||'');
+            $('.weix_account').text(userInfo.weix_account||'');
             userInfo.headimgurl ? $('.head img').attr('src',userInfo.headimgurl) : '';
             $('.sex').text(userInfo.sex ? '男':'女');
         },

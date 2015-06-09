@@ -28,12 +28,6 @@
             })
             return false;
         }
-        if(!nickname || nickname.trim().length == 0){
-            $("#nickname").css({
-                borderBottomColor:"red"
-            })
-            return false;
-        }
         if(!emailReg.test(username)){
             $("#email-tip").css("display","block");
             setTimeout(function(){

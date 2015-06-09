@@ -76,7 +76,7 @@ define(['text','router','wxAPI'],function(text,router,wx){
 //            alert(data.url);
             config = {
 //                debug:true,
-                appId:"wxaef4aefd905a4662",
+                appId:"wx2f81c72f4e91b732",
                 jsapi_ticket: data.jsapi_ticket,
                 nonceStr: data.nonceStr,
                 timestamp: data.timestamp,
