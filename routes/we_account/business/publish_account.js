@@ -142,7 +142,7 @@ function getPersonalInfo(req,res,isHost){
     var session = req.session;
     var open_id = session.openId,
         args = [open_id,null],
-        room_id = req.query.room;
+        room_id = req.query.room_id;
     if(!isHost){
         args = [open_id,room_id||"888888"];
     }
