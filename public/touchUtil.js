@@ -50,7 +50,7 @@ touchEvent.init();
  */
 var longTouchtimeout;
 var touchStartTime,touchEndTime;
-var startX,endX;
+var startX,endX,startY,endY;
 (function($){
     $.fn.touch = function(type,selector,cb,cancelBubble){
 //    if(isPC()){
@@ -79,6 +79,7 @@ var startX,endX;
             }
 //            alert('start');
             startX = event.clientX;
+            startY = event.clientY;
             touchStartTime = new Date().getTime();
             var _$this = $(this);
             _$this.parents('.t-row').attr("touchstart",1);
@@ -120,7 +121,8 @@ var startX,endX;
                         event = event.originalEvent.changedTouches[0];
                     }
                     endX = event.clientX;
-                    if((touchEndTime - touchStartTime) < 500 && Math.abs(startX - endX) < 10){
+                    endY = event.clientY;
+                    if((touchEndTime - touchStartTime) < 500 && Math.abs(startX - endX) < 10 && Math.abs(startY - endY) < 30){
 //                        alert('end')
                         event.$this = _$this;
                         cb(event);

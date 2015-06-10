@@ -139,7 +139,7 @@ Waterfall.prototype.renderWaterfall = function(results){
         if(results.data.totalPage){
             totalPage = results.data.totalPage;
         }
-        if(results.data.totalPage){
+        if(results.data.isPublisher){
             isPublisher = results.data.isPublisher;
         }
 
