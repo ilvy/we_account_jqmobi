@@ -6,7 +6,7 @@ var menusObj = {
         {
             type:"view",
             name:"我要发布",
-            url:"http://120.24.224.144/we_account/publish?type=1"
+            url:"http://www.daidai2u.com/we_account/publish?type=1"
         },
         {
             name:"进入直播间",
@@ -19,12 +19,12 @@ var menusObj = {
                 {
                     type:"view",
                     name:"我的收藏",
-                    url:"http://120.24.224.144/we_account/publish?type=3"
+                    url:"http://www.daidai2u.com/we_account/publish?type=3"
                 },
                 {
                     type:"view",
                     name:"直播间",
-                    url:"http://120.24.224.144/we_account/publish?type=2"
+                    url:"http://www.daidai2u.com/we_account/publish?type=2"
                 }
             ]
         },
@@ -34,12 +34,12 @@ var menusObj = {
                 {
                     type:"view",
                     name:"个人信息",
-                    url:"http://120.24.224.144/we_account/publish?type=4"
+                    url:"http://www.daidai2u.com/we_account/publish?type=4"
                 },
                 {
                     type:"view",
                     name:"账单系统",
-                    url:"http://120.24.224.144/we_account/publish?type=5"
+                    url:"http://www.daidai2u.com/we_account/publish?type=5"
                 }
             ]
 

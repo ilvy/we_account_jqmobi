@@ -586,7 +586,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 var title = '亲，东西已经买好',
                     desc = '代购总费用:'+$this.parents(".card").find(".total-quantity").text()+',详情请点开',
                     nickname = $this.parents('.card').find('.name').text(),
-                    link = 'http://120.24.224.144/we_account/payit?room_id='+_this.room_id+'&nickname='+nickname;
+                    link = '/we_account/payit?room_id='+_this.room_id+'&nickname='+nickname;
                 globalVar.room_id = _this.room_id;
                 globalVar.nickname = nickname;
                 wx.onMenuShareAppMessage({

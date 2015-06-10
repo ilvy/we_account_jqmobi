@@ -4,7 +4,7 @@
     <title></title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no" />
-
+    <link rel="stylesheet" href="stylesheets/style_new.css">
 </head>
 <body>
     <form id="form" action="/we_account/register" method="post" onsubmit="return register();">
@@ -24,12 +24,6 @@
         var emailReg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
         if(!username || username.trim().length == 0){
             $("#username").css({
-                borderBottomColor:"red"
-            })
-            return false;
-        }
-        if(!nickname || nickname.trim().length == 0){
-            $("#nickname").css({
                 borderBottomColor:"red"
             })
             return false;

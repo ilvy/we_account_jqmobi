@@ -127,11 +127,11 @@ router.get("/publish",function(req,res){
     var type = req.query.type;
     req.session.isPublisher = type==1 ? 1:0;
     //判断用户是否存在账号，若无，返回注册界面，若已有账号，直接登录即可
-    var redirect_uri;// = urlencode("http://120.24.224.144/we_account/goto_publish");
-    redirect_uri = urlencode("http://120.24.224.144/we_account/goto_publish?type="+type);
+    var redirect_uri;// = urlencode("http://www.daidai2u.com/we_account/goto_publish");
+    redirect_uri = urlencode("http://www.daidai2u.com/we_account/goto_publish?type="+type);
 //    if(type == 1){//发布者进入
 //    }else if(type == 2){//普通浏览者进入
-//        redirect_uri = urlencode("http://120.24.224.144/we_account/goto_publish?type="+type);
+//        redirect_uri = urlencode("http://www.daidai2u.com/we_account/goto_publish?type="+type);
 //    }
 
     res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?" +
@@ -202,7 +202,7 @@ router.get("/live-room",function(req,res){
             productId = query.product_id,
             quantity = query.quantity;
         if(!openId){
-            we_auth.getWeAuth('http://120.24.224.144/we_account/getAuth?room_id='+roomId+'&remark='+remark+'' +
+            we_auth.getWeAuth('http://www.daidai2u.com/we_account/getAuth?room_id='+roomId+'&remark='+remark+'' +
                 '&product_id='+productId+'&quantity='+quantity,res);
             return;
         }
