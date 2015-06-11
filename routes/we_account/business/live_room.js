@@ -525,15 +525,16 @@ querystring = require('querystring');
  * @param res
  */
 function compressPic(req,resp){
-    var path = '/mnt/projects/we_account_jqmobi/public/images/'+req.body.filePath;
+    var dir = '/mnt/projects/we_account_jqmobi/public/images/';
     var post_data = querystring.stringify({
-        filePath:path
+        fileDir:dir,
+        fileName:req.body.filePath
     });
     var req = http.request({
         host:"localhost",
         port:"8080",
         method:"post",
-        path:"/MsecondaryServer/compressPic?filePath="+path
+        path:"/MsecondaryServer/compressPic?fileDir="+dir+"&fileName="+req.body.filePath
     },function(res){
         var result = "";
         res.on("data",function(chunk){
@@ -555,16 +556,16 @@ function compressPic(req,resp){
  * @param resp
  */
 function rotateImg(req,resp){
-    var path = '/mnt/projects/we_account_jqmobi/public'+req.body.filePath;
+    var dir = '/mnt/projects/we_account_jqmobi/public/images/';
 //    var path = 'F:/weAccount_test/weAccountServerTest/public'+req.body.filePath;
     var post_data = querystring.stringify({
-        filePath:path
+//        fileDir:dir,
     });
     var req = http.request({
         host:"localhost",
         port:"8080",
         method:"post",
-        path:"/MsecondaryServer/img_rotate?filePath="+path+"&rotate_type="+req.body.type
+        path:"/MsecondaryServer/img_rotate?fileDir="+dir+"&fileName="+req.body.filePath+"&rotate_type="+req.body.type
     },function(res){
         var result = "";
         res.on("data",function(chunk){
