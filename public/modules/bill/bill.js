@@ -120,7 +120,8 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 var cardStr = '<div class="card"><div class="card-title">' +
                     '<div class="product"><span class="name">'+procductName+'</span> × <span class="total-quantity">'+quantity+'</span> <i class="fa fa-caret-right"></i></div>' +
                     '<div class="all-status ignore"><i class="fa fa-square-o"></i></div></div>';
-                cardStr += tableStr +'</div>';
+                var lastRow = '<div class="extra-row"><div class="t-col-5 product-detail" data-pid="'+key.split('_')[1]+'">【商品详情】</span></div></div>';
+                cardStr += tableStr + lastRow +'</div>';
                 $("#order-list").append(cardStr);
             }
         },
@@ -257,6 +258,11 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     _this.flushBillList();
                 }
             });
+            $('.product-detail').touch('click',function(event){
+                var $this = event.$this;
+                var product_id = $this.data('pid');
+                router.changeHash("product_display-"+product_id,1);
+            },true);
             $(".t-row:not(.t-row-header)").touch("swipeleft",function(event){
         //        event.stopPropagation();
 //                alert("删除当前列");

@@ -281,6 +281,10 @@ body{
     display: inline-block;
 }
 
+.product-detail{
+    color: #5780d1;
+}
+
 .t-col input.mailpay{
     width: 26px;
     height: 100%;
