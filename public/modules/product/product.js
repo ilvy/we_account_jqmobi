@@ -62,8 +62,9 @@ define(['router','wxAPI','jqmobiTouch'],function(router,wx){
             var _this = this;
             $(document).on("vclick","#back-live-room",function(){
                 if(globalVar.room_id){
-                    router.changeHash('live_room-'+globalVar.room_id,0);
+                    router.changeHash('live_room-'+globalVar.room_id,1);
                 }else{
+                    $('title').text("代代");
                     router.changeHash("billSystem",0);
                 }
                 _this.cleanEarlierInputs();

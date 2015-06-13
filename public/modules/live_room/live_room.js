@@ -38,10 +38,10 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
                         var data = result.data;
                         if(data.publisher){
                             window.sessionStorage.setItem('moment_publisher',1);
-                            $("title").text(data.publisher.nickname + '的代代');
+//                            $("title").text(data.publisher.nickname + '的代代');
                         }else{
                             window.sessionStorage.setItem('moment_publisher',0);
-                            $("title").text(data.host + '的代代');
+//                            $("title").text(data.host + '的代代');
                             var favHeart = '';
                             if(data.isFavorite){
                                 favHeart = '<div class="favorite"><i class="fa fa-heart"></i></div>';

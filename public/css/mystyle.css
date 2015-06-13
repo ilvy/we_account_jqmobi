@@ -277,6 +277,10 @@ body{
     padding: 6px;
 }
 
+.order-list .extra-row{
+    padding-top: 0;
+}
+
 .extra-row > div{
     display: inline-block;
 }

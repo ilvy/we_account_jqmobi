@@ -261,6 +261,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             $('.product-detail').touch('click',function(event){
                 var $this = event.$this;
                 var product_id = $this.data('pid');
+                $('#take_order').remove();
                 router.changeHash("product_display-"+product_id,1);
             },true);
             $(".t-row:not(.t-row-header)").touch("swipeleft",function(event){
