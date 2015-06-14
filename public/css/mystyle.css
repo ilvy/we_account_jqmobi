@@ -277,8 +277,16 @@ body{
     padding: 6px;
 }
 
+.order-list .extra-row{
+    padding-top: 0;
+}
+
 .extra-row > div{
     display: inline-block;
+}
+
+.product-detail{
+    color: #5780d1;
 }
 
 .t-col input.mailpay{

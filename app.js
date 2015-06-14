@@ -8,7 +8,9 @@ var session = require('express-session');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
-var access_token = require("./routes/we_account/access_token");//定时刷新access_token
+if(process.argv[2] != 'test'){
+    var access_token = require("./routes/we_account/access_token");//定时刷新access_token
+}
 var we_account = require('./routes/we_account_2');
 var test = require('./routes/we_account/test/test');
 

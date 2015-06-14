@@ -120,7 +120,8 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 var cardStr = '<div class="card"><div class="card-title">' +
                     '<div class="product"><span class="name">'+procductName+'</span> × <span class="total-quantity">'+quantity+'</span> <i class="fa fa-caret-right"></i></div>' +
                     '<div class="all-status ignore"><i class="fa fa-square-o"></i></div></div>';
-                cardStr += tableStr +'</div>';
+                var lastRow = '<div class="extra-row"><div class="t-col-5 product-detail" data-pid="'+key.split('_')[1]+'">【商品详情】</span></div></div>';
+                cardStr += tableStr + lastRow +'</div>';
                 $("#order-list").append(cardStr);
             }
         },
@@ -257,6 +258,12 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     _this.flushBillList();
                 }
             });
+            $('.product-detail').touch('click',function(event){
+                var $this = event.$this;
+                var product_id = $this.data('pid');
+                $('#take_order').remove();
+                router.changeHash("product_display-"+product_id,1);
+            },true);
             $(".t-row:not(.t-row-header)").touch("swipeleft",function(event){
         //        event.stopPropagation();
 //                alert("删除当前列");
@@ -586,7 +593,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 var title = '亲，东西已经买好',
                     desc = '代购总费用:'+$this.parents(".card").find(".total-quantity").text()+',详情请点开',
                     nickname = $this.parents('.card').find('.name').text(),
-                    link = '/we_account/payit?room_id='+_this.room_id+'&nickname='+nickname;
+                    link = 'http://www.daidai2u.com/we_account/payit?room_id='+_this.room_id+'&nickname='+nickname;
                 globalVar.room_id = _this.room_id;
                 globalVar.nickname = nickname;
                 wx.onMenuShareAppMessage({

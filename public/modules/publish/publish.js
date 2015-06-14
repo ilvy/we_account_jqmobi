@@ -1,7 +1,7 @@
 /**
  * Created by man on 15-4-15.
  */
-define(['router','jqmobiTouch'],function(router){
+define(['router','util','jqmobiTouch'],function(router,util){
     var products = '',desc = '',productArray = globalVar.productArray;
 
     function Publish(){
@@ -30,7 +30,7 @@ define(['router','jqmobiTouch'],function(router){
                 var imgSrc = ($img = $this.parents('.upload-display')).css("background-image").split("url(")[1].split(")")[0].split('?')[0];
 //                alert('adjustImg',imgSrc);
                 var data = {
-                    filePath:'/images/'+imgSrc.split('/images/')[1],//去掉协议以及ip信息
+                    filePath:imgSrc.split('/images/')[1],//去掉协议以及ip信息
                     type:1
                 }
                 $.ajax({
@@ -128,10 +128,9 @@ define(['router','jqmobiTouch'],function(router){
      *
      * @param product_id
      * @param productArray
-     * @param desc
-     * @param smallH
+     * @param title
      */
-    function showNewUploadImg(product_id,productArray,desc){
+    function showNewUploadImg(product_id,productArray,title){
         var minColIndex = waterfall.getMinHeightColumnIndex();
 //    alert(minColIndex);
         var imgstr = '';
@@ -142,9 +141,17 @@ define(['router','jqmobiTouch'],function(router){
                 imgstr += '<img class="lazy" src="http://120.24.224.144/images/'+item+'" data-num="'+i+'"  style="height:'+waterfall.smallH+'px;width:'+waterfall.smallH+'px;">';
             }
         });
-        $(".column").eq(minColIndex).prepend('<div class="box" data-id="'+product_id+'">' +
-            '<div class="img-display" data-imgnum="'+productArray.length+'">' +imgstr+
-            '</div><div class="desc" style="border-bottom:1px solid #e6e6e6;" data-desc="'+desc+'">'+desc+'</div><div class="delete-product"><i class="fa fa-times-circle"></div></div>');
+        if(title){
+            var descStr = '<div class="desc" style="'+("border-bottom:1px solid #e6e6e6;")+'" data-desc="'+title+'">'+(title?title:"") +'</div>';
+        }
+        var deleteProductBtn = '<div class="delete-product"><i class="fa fa-times"></div>';
+        var bottomStr = '<div class="product-footer"><div class="publish-time">'+(util.formatTime(new Date()))+'</div>'+deleteProductBtn+'</div>';//;
+//        $(".column").eq(minColIndex).prepend('<div class="box" data-id="'+product_id+'">' +
+//            '<div class="img-display" data-imgnum="'+productArray.length+'">' +imgstr+
+//            '</div><div class="desc" style="border-bottom:1px solid #e6e6e6;" data-desc="'+desc+'">'+desc+'</div><div class="delete-product"><i class="fa fa-times-circle"></div></div>');
+        $(".column").eq(minColIndex).prepend('<div id="'+product_id+'" class="box" data-id="'+product_id+'">' +
+            '<div class="img-display"">'+ imgstr+
+            '</div>'+descStr+bottomStr+'</div>');
     }
 
     /**

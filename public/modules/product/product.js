@@ -13,6 +13,9 @@ define(['router','wxAPI','jqmobiTouch'],function(router,wx){
         this.do = function(){
             var _this = this;
             var url = 'product_display?product_id='+globalVar.product_id;
+            if(!globalVar.room_id){
+
+            }
             globalVar.showLoading();
             $.ajax({
                 url:url,
@@ -58,7 +61,12 @@ define(['router','wxAPI','jqmobiTouch'],function(router,wx){
         this.addListener = function(){
             var _this = this;
             $(document).on("vclick","#back-live-room",function(){
-                router.changeHash('live_room-'+globalVar.room_id,0);
+                if(globalVar.room_id){
+                    router.changeHash('live_room-'+globalVar.room_id,1);
+                }else{
+                    $('title').text("代代");
+                    router.changeHash("billSystem",0);
+                }
                 _this.cleanEarlierInputs();
                 $(".img-box img").attr('src',"http://120.24.224.144/images/default.jpg");
             });
