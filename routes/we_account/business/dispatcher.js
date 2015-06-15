@@ -15,27 +15,28 @@ function dispatch(data,res){
         case 'text':
             console.log("msgtype:text");
             var text = data.Content.trim();
-            var room = text;
-            if(text == ''||text.length > 6){
-                data.replyContent = '房间号输入不合法';
-            }else{
-                live_room.checkRoom(room,function(err,room_id){
-                    if(err){
-                        console.log("");
-                        data.replyContent = '该房间不存在';
-                    }else{
-                        data.replyContent = 'http://www.moment.cn.com/we_account/live-room?room_id='+room_id;
-                    }
+            data.replyContent = "小主您好，我是小代";
+//            var room = text;
+//            if(text == ''||text.length > 6){
+//                data.replyContent = '房间号输入不合法';
+//            }else{
+//                live_room.checkRoom(room,function(err,room_id){
+//                    if(err){
+//                        console.log("");
+//                        data.replyContent = '该房间不存在';
+//                    }else{
+//                        data.replyContent = 'http://www.moment.cn.com/we_account/live-room?room_id='+room_id;  hh
+//                    }
                     response(data,res);
-                });
-
-            }
+//                });
+//
+//            }
 
             break;
         case 'event':
             console.log("msgtype:event");
             if(data.Event == 'subscribe'){
-                data.replyContent = '欢迎关注代代！\n http://www.baidu.com/';
+                data.replyContent = '欢迎关注代代！\n ';
                 response(data,res);
             }else if(data.Event == 'CLICK'){
                 console.log("event:click");

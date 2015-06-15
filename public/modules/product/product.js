@@ -29,11 +29,14 @@ define(['router','wxAPI','jqmobiTouch'],function(router,wx){
                         wx.onMenuShareAppMessage({
                             title:product.title+',要不要',
                             desc:product.text,
-                            imgUrl:'http://120.24.224.144/images/'+product.image_url[0],
+                            imgUrl:'http://120.24.224.144/images/thumb/'+product.image_url[0],
                             success:function(){
                                 alert('分享成功');
                             },
-                            success:function(){
+                            cancel:function(){
+                                alert("取消分享");
+                            },
+                            error:function(){
                                 alert('分享失败，请重试！');
                             }
                         });
@@ -62,7 +65,7 @@ define(['router','wxAPI','jqmobiTouch'],function(router,wx){
             var _this = this;
             $(document).on("vclick","#back-live-room",function(){
                 if(globalVar.room_id){
-                    router.changeHash('live_room-'+globalVar.room_id,1);
+                    router.changeHash('live_room-'+globalVar.room_id,0);
                 }else{
                     $('title').text("代代");
                     router.changeHash("billSystem",0);

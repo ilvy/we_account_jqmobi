@@ -192,7 +192,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     customerObj[record.cid+'_'+record.pay_time] = record;
                 }
                 totalMoney += record.quantity * (record.unit_price ? record.unit_price:0);
-                totalCost += record.quantity * (record.unit_cost ? record.unit_cost:0);
+                totalCost += record.quantity * (record.unit_cost ? record.unit_cost:0) * record.exchange_rate;
                 tableStr += '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'><div class="t-col t-col-3 product_name">'+record.product_name+'</div>' +
                     '<div class="t-col t-col-2"><div class="num">'+record.quantity+'</div></div>' +
                     '<div class="t-col t-col-2">'+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+'</div>' +
@@ -205,9 +205,9 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             tableStr += mailStr+'</div>';
             var cardStr = '<div class="card">';
             cardStr += tableStr +'</div>';
-            cardStr += '<div class="bill-sum t-col-10"><div id="sum_cost" class="t-col-5">总成本：<span>'+totalCost+'</span>元</div>' +
-                '<div id="sum_price" class="t-col-5">总收入：<span>'+(totalMoney)+'</span>元</div>'+
-                '<div id="sum_earn" class="t-col-5">总盈利：<span>'+(totalMoney - totalCost)+'</span>元</div></div>';
+            cardStr += '<div class="bill-sum t-col-10"><div id="sum_cost" class="t-col-5">总成本：<span>'+totalCost.toFixed(1)+'</span>元</div>' +
+                '<div id="sum_price" class="t-col-5">总收入：<span>'+(totalMoney.toFixed(1))+'</span>元</div>'+
+                '<div id="sum_earn" class="t-col-5">总盈利：<span>'+(totalMoney - totalCost).toFixed(1)+'</span>元</div></div>';
             $(".bill-list-content").append(cardStr);
         },
         /**

@@ -7,7 +7,7 @@
             if (!popup) {//若没有初始化，则先初始化
                 popup = new Popup(jquerythis,options);
             } else {//弹出框已初始化完成，只需要显示即可
-                if(options.hidden == 'true'){
+                if(options.hidden == 'true' || options.hidden === true){
                     popup.hide(options.callback);//代码隐藏弹出框时，传入回调函数
                     return;
                 }

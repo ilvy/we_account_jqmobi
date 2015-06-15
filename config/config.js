@@ -29,19 +29,19 @@ var menusObj = {
             ]
         },
         {
-            name:"个人信息",
-            sub_button:[
-                {
-                    type:"view",
-                    name:"个人信息",
-                    url:"http://www.daidai2u.com/we_account/publish?type=4"
-                },
-                {
+//            name:"代代账单",
+//            sub_button:[
+//                {
+//                    type:"view",
+//                    name:"个人信息",
+//                    url:"http://www.daidai2u.com/we_account/publish?type=4"
+//                },
+//                {
                     type:"view",
                     name:"账单系统",
                     url:"http://www.daidai2u.com/we_account/publish?type=5"
-                }
-            ]
+//                }
+//            ]
 
         }
     ]

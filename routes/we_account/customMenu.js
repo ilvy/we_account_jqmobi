@@ -2,15 +2,18 @@
  * Created by Administrator on 14-12-19.
  */
 
-var token = require("./access_token"),
-    menuConfig = require('../../config/config').menusObj;
+//var token = require("./access_token"),
+var    config = require('../../config/config'),
+    menuConfig = config.menusObj;
 var https = require('https');
+
+var accessTokenArg = process.argv[process.argv.length - 1];
 
 /**
  * 设置菜单
  */
 function setMenu(method){
-    var token_access = token.access_token;
+    var token_access = accessTokenArg;//token.access_token;
     var option = {
         host:"api.weixin.qq.com",
         method:"post",
@@ -37,6 +40,6 @@ function setMenu(method){
 
 }
 
-setTimeout(function(){
+//setTimeout(function(){
     setMenu('create');
-},5 * 1000);
+//},5 * 1000);

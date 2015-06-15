@@ -14,7 +14,7 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
             var that = this;
             this.setVagueBox();
             $('.split-part .text').css({
-                left:($('.split-part').outerWidth() - $('.split-part .text').outerWidth()) / 2 - $('.split-part').offset().left
+                left:($('.split-part').outerWidth() - $('.split-part .text').outerWidth() - $('.split-part').position().left) / 2
             });
             $(document).ready(function(){
                 that.addListener();
@@ -366,6 +366,7 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
                 },true);
                 $('.edit-personality').touch('click',function(event){
                     $('#host-info').pop();
+//                    alert('host info')
                     $('#host-info input[type=text]').each(function(){
                         var type = $(this).data('type');
                         $(this).val($('#header .'+type).text());
@@ -400,6 +401,11 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
                         success:function(results){
                             if(results.flag == 1){
                                 _this.setHostInfo(data);
+                                $('#host-info').pop({hidden:true,callback:function(){
+                                    $('#host-info input[type=text]').each(function(){
+                                        $(this).val('');
+                                    });
+                                }});
                                 console.log('update_personality_all success');
                             }
                         }
