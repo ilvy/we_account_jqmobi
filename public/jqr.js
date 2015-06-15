@@ -82,13 +82,13 @@ define(['text','router','wxAPI'],function(text,router,wx){
                 timestamp: data.timestamp,
                 signature:data.signature,
                 url: data.url,
-                jsApiList: ['onMenuShareAppMessage']
+                jsApiList: ['onMenuShareAppMessage','scanQRCode']
             };
             wx.config(config);
             wx.ready(function(){
 //                alert("wxjssdkinit success");
                 wx.checkJsApi({
-                    jsApiList: ['onMenuShareAppMessage'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+                    jsApiList: ['onMenuShareAppMessage','scanQRCode','startRecord','stopRecord','onVoiceRecordEnd','translateVoice'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
                     success: function(res) {
                         // 以键值对的形式返回，可用的api值true，不可用为false
                         // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}

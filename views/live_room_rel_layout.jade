@@ -148,9 +148,9 @@ html
                 .bill-list-content
             ul#vagueBox
             div(style='position: fixed;bottom: 100px;')#switchList
-                input(type='button' value='账单列表')#to_order.current-list
-                input(type='button' value='付款列表')#to_pay
-                input(type='button' value='总账单列表')#to_bill
+                input(type='button' value='预购清单')#to_order.current-list
+                input(type='button' value='收款列表')#to_pay
+                input(type='button' value='总账单')#to_bill
         div.page.getpay#getpay
             .getpay-title
                 span.collection_object
@@ -198,6 +198,9 @@ html
             .btn-group
                 input(type='button' value='取消')#input-cancel
                 input(type='button' value='确定')#input-sure
+            //.test-audio
+                input(type='button' value='录音')#record-start
+                input(type='button' value='停止')#record-end
         #host-info.light-popup
             div.col-xxs-12
                 span.col-xxs-3.col-xxs-offset-2 昵称

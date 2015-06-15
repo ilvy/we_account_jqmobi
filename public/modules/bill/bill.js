@@ -195,7 +195,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 totalCost += record.quantity * (record.unit_cost ? record.unit_cost:0) * record.exchange_rate;
                 tableStr += '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'><div class="t-col t-col-3 product_name">'+record.product_name+'</div>' +
                     '<div class="t-col t-col-2"><div class="num">'+record.quantity+'</div></div>' +
-                    '<div class="t-col t-col-2">'+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+'</div>' +
+                    '<div class="t-col t-col-2">'+((((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)*record.exchange_rate).toFixed(1))+'</div>' +
                     '<div class="t-col t-col-2">'+((!record.unit_price && record.unit_price != 0)?"":record.unit_price)+'</div>' +
                     '<div class="t-col t-col-1 extra">删除</div></div>';
             }
@@ -611,6 +611,14 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
 //                alert("账单已选好，试试点击右上角按钮发送给相关好友哦");
             });
             $('.input-div-cost').touch('click',function(event){
+//                wx.scanQRCode({
+//                    needResult:1,
+//                    scanType: ["barCode"],
+//                    success:function(res){
+//                        var result = res.resultStr;
+//                        alert(result);
+//                    }
+//                })
                 var $this = event.$this;
                 var $card = $(this).parents('.card');
                 $this.addClass('current').parents('.t-row').siblings('.t-row').find('.current').removeClass('current');
@@ -719,6 +727,40 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 _this.updateOrderQuantity($this);
                 _this.updateTotalNum($this);
             });
+            $("#record-start").touch('click',function(){
+                alert('start record')
+                wx.startRecord();
+                wx.onVoiceRecordEnd({
+                    // 录音时间超过一分钟没有停止的时候会执行 complete 回调
+                    complete: function (res) {
+                        var localId = res.localId;
+                        alert(localId);
+                        wx.translateVoice({
+                            localId: localId, // 需要识别的音频的本地Id，由录音相关接口获得
+                            isShowProgressTips: 1, // 默认为1，显示进度提示
+                            success: function (res) {
+                                alert(res.translateResult); // 语音识别的结果
+                            }
+                        });
+                    }
+                });
+            },true)
+            $("#record-end").touch('click',function(){
+                alert('end record')
+                wx.stopRecord({
+                    success: function (res) {
+                        var localId = res.localId;
+                        alert(localId)
+                        wx.translateVoice({
+                            localId: localId, // 需要识别的音频的本地Id，由录音相关接口获得
+                            isShowProgressTips: 1, // 默认为1，显示进度提示
+                            success: function (res) {
+                                alert(res.translateResult); // 语音识别的结果
+                            }
+                        });
+                    }
+                });
+            },true)
 
         },
         /**
