@@ -56,7 +56,7 @@ define(['router','wxAPI','jqmobiTouch'],function(router,wx){
         }
         this.cleanEarlierInputs = function(){
             $(".order_quantity .qtt_num option[selected=true]").attr('selected',false);
-            $(".order_quantity .qtt_num option").eq(0).attr('selected',true);
+            $(".order_quantity .qtt_num option").eq(1).attr('selected',true);
 //            $(".order_remark textarea").val("");
             $("#take_order").removeClass('ready').text("下单");
             $("#order_info").css('display','none');
@@ -140,7 +140,7 @@ define(['router','wxAPI','jqmobiTouch'],function(router,wx){
         this.generateNumSelect = function(optionNum,currentNum){
 //            optionNum = Math.max(optionNum,currentNum>1000?1000:currentNum);
             var selectStr = '';
-            currentNum = currentNum?currentNum:0;
+            currentNum = currentNum?currentNum:1;
             var selectClass = '';
             for(var i = 0; i <= optionNum; i++){
                 if(i == currentNum){

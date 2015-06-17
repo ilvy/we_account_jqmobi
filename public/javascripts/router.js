@@ -125,22 +125,23 @@ define(['routerConfig'],function(routerConfig){
         var orderStatus = $("#forTakeOrder").data("orderstatus");
         if(orderStatus && orderStatus == 1){
             alert("下单成功");
+            changeHash('live_room-'+globalVar.room_id,1);
         }else if(orderStatus && orderStatus == -1){
             alert("下单失败，请重试");
         }
     }
-
-    return {
-        changeHash:function(hash,reload){
-            var objHash = hash.split('-')[0];
-            if(objHash){
-                globalVar.reload[objHash] = reload || 0;
-                if(objHash == 'live_room' && reload){
-                    globalVar.lv_scroll_top = 0;
-                }
-                window.location.hash = '#'+hash;
+    function changeHash(hash,reload){
+        var objHash = hash.split('-')[0];
+        if(objHash){
+            globalVar.reload[objHash] = reload || 0;
+            if(objHash == 'live_room' && reload){
+                globalVar.lv_scroll_top = 0;
             }
+            window.location.hash = '#'+hash;
         }
+    }
+    return {
+        changeHash:changeHash
     }
 
 });

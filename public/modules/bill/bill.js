@@ -758,6 +758,9 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                                 alert(res.translateResult); // 语音识别的结果
                             }
                         });
+                    },
+                    error:function(err){
+                        alert(err)
                     }
                 });
             },true)
