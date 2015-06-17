@@ -746,7 +746,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 });
             },true)
             $("#record-end").touch('click',function(){
-                alert('end record')
+                alert(wx.stopRecord)
                 wx.stopRecord({
                     success: function (res) {
                         var localId = res.localId;

@@ -286,6 +286,7 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
                             }
                         },
                         onComplete:function(file,res){
+                            $('#image_content').html("");
                             compress(res,function(err,result){
                                 if(result.flag == 1){
                                     $("#image_content").append('<div class="upload-display" style="background:url(http://120.24.224.144/images/'+res+') center no-repeat;background-size:100%;">' +

@@ -37,7 +37,7 @@ define(['router'],function(router){
                                 '<input type="text" class="mailpay_getpay" placeholder="0" data-value="'+(record.mail_pay?record.mail_pay:"")+'" value="'+(record.mail_pay?record.mail_pay:"")+'">' +
                                 '<span class="unit">元</span></div>';
                         }
-                        $('.collection_object').html(results.nickname);
+                        $('.collection_object').html(results.data.nickname);
                         $('.mail-detail').data('oid',oidstr).html(mailStr);
                         var total = results.data.total;
                         $(".total-price").data('total_except_mail',record.mail_free?total:total - record.mail_pay).html('<span>总计：</span>'+'<span>'+results.data.total+'元</span>');
