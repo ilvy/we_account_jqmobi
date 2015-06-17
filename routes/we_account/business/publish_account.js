@@ -41,6 +41,7 @@ function register(req,res){
     var body = req.body;
     var openId = session.openId,
         username = body.username,
+        weixin = body.weixin,
         pwd = body.pwd;
     if(!openId){
         res.redirect("/err.html");
@@ -49,13 +50,13 @@ function register(req,res){
 //    console.log(session);
 //    console.log("**************"+session.name+"*********openId:"+openId);
 //    res.send("**************"+session.name+"*********openId:"+openId);
-    dbOperator.query('call pro_register(?,?,?,?)',[openId,username,username,pwd],function(err,rows){
+    dbOperator.query('call pro_register(?,?,?,?,?)',[openId,username,username,pwd,weixin],function(err,rows){
         if(err){
             console.log(err);
             res.redirect("/err.html");
         }else{
             console.log(rows);
-            res.redirect('/we_account/live-room?room_id='+rows[0][0].room_id);
+            res.redirect('/we_account/live-room#live_room-'+rows[0][0].room_id);
             asyncAccountInfoFromWeix(openId);
         }
     });
