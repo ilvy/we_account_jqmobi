@@ -50,4 +50,8 @@ function formatTime(date){
     return (hh >= 10?"":"0")+hh+":"+(mm >= 10?"":"0")+mm+":"+(ss >= 10?"":"0")+ss;
 }
 
+exports.getImageExt = function getImageExt(imageName){
+
+}
+
 exports.formatDate = formatDate;

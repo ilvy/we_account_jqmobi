@@ -1,7 +1,7 @@
 /**
  * Created by man on 15-4-3.
  */
-define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpopup'],function(router,util){
+define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEvent','jpopup'],function(router,util,wx){
     var disableClick = false;
     function LiveRoom(){
         this.hasSetToolBox = 0;//标记是否已经初始化toolbox
@@ -24,6 +24,7 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
         do:function(){
             this.flushPage();
             this.getHostInfo();
+            $('title').text('代代');
         },
         flushPage:function(){
             var room_id = globalVar.room_id;
@@ -51,6 +52,23 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
                         }
                         that.setToolBox(data);
                         $('.room_num').html(' 代代号:'+data.room);
+                        setTimeout(function(){
+                            wx.onMenuShareAppMessage({
+                                title:' 代代号:'+data.room,
+                                desc:'看看有没有需要带的',
+                                imgUrl:$('#header img').attr('src'),
+                                success:function(){
+                                    alert('分享成功');
+                                },
+                                cancel:function(){
+                                    alert("取消分享");
+                                },
+                                error:function(){
+                                    alert('分享失败，请重试！');
+                                }
+                            });
+                        },3000);
+
                         currentPage = 0;
                         totalPage = -1;
                         waterfall.cleanWaterfall();
