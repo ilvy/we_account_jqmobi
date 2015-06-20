@@ -229,7 +229,10 @@ router.post("/upload",function(req,res){
 
     form.on('file', function(field, file) {
         //rename the incoming file to the file's name
-        newFileName = newFileName + "." +file.name.split(".")[1];
+        var originNameParts =  file.name.split(".");
+        newFileName = newFileName + "." +originNameParts[originNameParts.length - 1];
+        console.log( "detail-info:",file);
+        console.log( "origin-name:"+path.normalize(process.cwd()+"/public/images/" + file.name));
         console.log( "rename:"+path.normalize(process.cwd()+"/public/images/" + newFileName));
         fs.rename(file.path, path.normalize(process.cwd()+"/public/images/" + newFileName),function(err){
             console.log("newPath:"+file.path);
