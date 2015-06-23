@@ -57,8 +57,12 @@ define(['router','util','jqmobiTouch'],function(router,util){
             $(document).on("vclick","#submit",function(){
                 var desc = $(".product-desc").val();//TODO 检验字符串合法性
                 var title = $(".product-title").val();
+                if(!title){
+                    $("#warn").fadeInAndOut("商品名称不能为空！");
+                    return;
+                }
                 if(productArray.length == 0 || !title){
-                    $("#warn").fadeInAndOut();
+                    $("#warn").fadeInAndOut('至少需要发布一张图片');
                     return;
                 }
                 $("#uploading-mask").css("display","block");
@@ -158,7 +162,10 @@ define(['router','util','jqmobiTouch'],function(router,util){
      * 渐入渐出
      * @returns {*|jQuery}
      */
-    $.fn.fadeInAndOut = function(){
+    $.fn.fadeInAndOut = function(title){
+        if(title){
+            $('#warn').text(title);
+        }
         return $(this).each(function(){
             var $this = $(this);
             $this.fadeIn(2000,function(){

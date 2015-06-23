@@ -224,3 +224,10 @@ exports.query = query;
 //    }
 //});
 
+query('call pro_edit_product(?,?,?,?,?)',['888888','oxfQVswUSy2KXBPOjNi_BqdNI3aA',2,'test','test_1420352079715.jpg;test_1420352084239.jpg;'],function(err,rows){
+    if(err){
+        response.failed(-1,res,0);
+    }else{
+        console.log(rows)
+    }
+});

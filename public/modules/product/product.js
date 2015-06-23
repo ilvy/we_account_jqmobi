@@ -1,9 +1,10 @@
 /**
  * Created by man on 15-4-15.
  */
-define(['router','wxAPI','jqmobiTouch'],function(router,wx){
+define(['router','util','wxAPI','jqmobiTouch','ajaxupload'],function(router,util,wx){
 
     function Product(){
+        this.newImgName = '';
         this.init = function(){
             this.do();
             this.addListener();
@@ -16,6 +17,7 @@ define(['router','wxAPI','jqmobiTouch'],function(router,wx){
             if(!globalVar.room_id){
 
             }
+            this.cleanEditInfo();
             globalVar.showLoading();
             $.ajax({
                 url:url,
@@ -41,10 +43,12 @@ define(['router','wxAPI','jqmobiTouch'],function(router,wx){
                             }
                         });
                         var isPublisher = window.sessionStorage.getItem('moment_publisher');
-                        if(isPublisher == 1){
+                        if(isPublisher != 1){
                             $("#take_order").remove();
+                            $("#edit_product").addClass('visible');
                         }else{
-                            $("#take_order").css("display","block");
+                            $("#edit_product").remove();
+                            $("#take_order").addClass('visible');
                         }
                     }
                 },
@@ -126,8 +130,81 @@ define(['router','wxAPI','jqmobiTouch'],function(router,wx){
                 }
             });
 
+            $(document).on('vclick','#edit_product',function(){
+                $('.desc').addClass('hide');
+                $('textarea.edit-desc').addClass('visible');
+                $('.product-photo').addClass('edit-display-img');
+                $('#edit_product_btn_group .edit-desc').val($('.desc').text());
+                $('#edit_product_btn_group').addClass('visible');
+                $(this).removeClass('visible');
+            });
+
+            $(document).on('vclick','.edit-display-img',function(){
+                $('#product-photo-edit_file_type').click()
+            });
+
+            $(document).on('vclick','#edit_product_btn_group .edit-sure',function(){
+                var newImg = _this.newImgName;
+                var desc = $('textarea.edit-desc').val();
+                var data = {
+                    imageUrl:newImg,
+                    desc:desc
+                };
+                $.ajax({
+                    url:'/account/edit-product',
+                    type:'post',
+                    data:data,
+                    success:function(results){
+                        console.log(results);
+                    },
+                    error:function(err,status){
+                        console.log(err,status);
+                    }
+                })
+            });
+
+            if($("#edit_product").length > 0){
+                $(function(){
+                    new AjaxUpload("#product-photo-edit",{
+                        action:"/we_account/upload",
+//                action:"http://120.24.224.144:80/we_account/upload",
+                        name:'file',
+                        onSubmit:function(file,ext){
+                            console.log(file +" "+ ext);
+                            if(util.filterFile(ext)){
+                                $("#uploading-mask").css("display","block");
+                            }else{
+                                return false;
+                            }
+                        },
+                        onComplete:function(file,res){
+//                            util.compress(res,function(err,result){
+//                                if(result.flag == 1){
+                                _this.newImgName = res;
+                                    $('.img-box img').attr('src','http://120.24.224.144/images/'+res+'?v='+(Math.random()+"").replace(/0./,""));
+//                                }else{
+//                                    alert("上传失败");
+//                                }
+                                $("#uploading-mask").css("display","none");
+//                            });
+                            console.log(res);
+                            globalVar.productArray.push(res);
+//                    products?products  += ";"+ res:products += res;
+                        }
+                    })
+                });
+            }
+
         };
 
+        this.cleanEditInfo = function(){
+            $('.desc').removeClass('hide');
+            $('textarea.edit-desc').removeClass('visible');
+            $('.product-photo').removeClass('edit-display-img');
+            $('#edit_product_btn_group .edit-desc').val("");
+            $('#edit_product_btn_group').removeClass('visible');
+            $('#edit_product').addClass('visible');
+        };
         this.checkUserAgent = function(){
             var userAgent = navigator.userAgent,
                 isOnline = navigator.onLine;

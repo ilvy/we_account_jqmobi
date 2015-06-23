@@ -130,6 +130,46 @@ a {
     color: #47d3f5;
 }
 
+#edit_product{
+    background-color: rgba(200,30,40,1);
+    color: #ffffff;
+    text-align: center;
+    padding: 6px 0;
+    margin-bottom: 16px;
+    display: none;
+}
+
+#edit_product_btn_group{
+    display: none;
+}
+
+#edit_product_btn_group .edit-sure{
+    background-color: rgba(200,30,40,1);
+    color: #ffffff;
+    text-align: center;
+    padding: 6px 0;
+    margin-bottom: 16px;
+}
+#edit_product_btn_group .edit-cancel{
+    background-color: rgba(200,30,40,1);
+    color: #ffffff;
+    text-align: center;
+    padding: 6px 0;
+    margin-bottom: 16px;
+}
+
+#edit_product_btn_group .edit-sure:active{
+    color: #47d3f5;
+}
+
+#edit_product_btn_group .edit-cancel:active{
+    color: #47d3f5;
+}
+
+#edit_product:active{
+    color: #47d3f5;
+}
+
 #order_info{
     display: none;
 }
@@ -165,6 +205,16 @@ a {
 }
 .order_remark textarea{
     width: 80%;
+}
+
+.edit-desc{
+    border: 3px solid rgb(163, 201, 241);
+    display: none;
+}
+
+.edit-display-img{
+    border: 3px solid rgb(163, 201, 241);
+    margin-top: 10px ;
 }
 
 /*************end product********************/
@@ -1013,7 +1063,10 @@ li.favour_room_option > div{
 }
 
 .visible{
-    display: block;
+    display: block !important;
+}
+.hide{
+    display: none;
 }
 
 /**************personality start*******************/
