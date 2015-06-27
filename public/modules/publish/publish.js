@@ -1,7 +1,7 @@
 /**
  * Created by man on 15-4-15.
  */
-define(['router','util','jqmobiTouch'],function(router,util){
+define(['router','util','touchEvent'],function(router,util){
     var products = '',desc = '',productArray = globalVar.productArray;
 
     function Publish(){
@@ -22,8 +22,8 @@ define(['router','util','jqmobiTouch'],function(router,util){
                 cleanPosition();
                 router.changeHash('live_room-'+globalVar.room_id,0);//不重新加载
             });
-            $(document).on("vclick",".adjustImg .fa-rotate-right",function(){
-                var $this = $(this),
+            $(".adjustImg .fa-rotate-right").touch("click",function(event){
+                var $this = event.$this,
                     $uploadBox = $this.parents(".upload-display"),
                     $img;
 //                var imgSrc = ($img = $this.siblings("img")).attr("src").split("?")[0];
@@ -53,8 +53,9 @@ define(['router','util','jqmobiTouch'],function(router,util){
                         console.log(err);
                     }
                 })
-            });
-            $(document).on("vclick","#submit",function(){
+            },true);
+            $("#submit").touch("click",function(event){
+                var $this = event.$this;
                 var desc = $(".product-desc").val();//TODO 检验字符串合法性
                 var title = $(".product-title").val();
                 if(!title){
@@ -66,12 +67,19 @@ define(['router','util','jqmobiTouch'],function(router,util){
                     return;
                 }
                 $("#uploading-mask").css("display","block");
+                var submitType = $this.data('type');
+//                alert(submitType)
                 var url = "/we_account/publish",
                     postData = {
                         products:getProducts(),
                         desc:desc,
                         title:title
                     };
+                if(submitType == 2){
+                    url = '/we_account/edit-product';
+                    postData.room_id = globalVar.room_id;
+                    postData.product_id = globalVar.product_id;
+                }
                 $.ajax({
                     url:url,
                     type:"post",
@@ -79,7 +87,7 @@ define(['router','util','jqmobiTouch'],function(router,util){
                     success:function(data){
                         console.log(data);
                         if(data && data.flag == 1){
-                            showNewUploadImg(data.data.id,productArray,title);
+                            showNewUploadImg(data.data.id || postData.product_id,productArray,title,submitType);
                             cleanPosition();
                             router.changeHash("live_room-"+globalVar.room_id,0);
                         }else{
@@ -92,16 +100,49 @@ define(['router','util','jqmobiTouch'],function(router,util){
                         $("#uploading-mask").css("display","none");
                     }
                 });
-            });
+            },true);
 
-            $(document).on("vclick",".delete-img",function(event){
-                stopPropagation(event);
-                var delIndex = $(this).parents(".upload-display").index();
-                var _this = $(this);
+            $(".delete-img").touch("click",function(event){
+                var $this = event.$this;
+                var delIndex = $this.parents(".upload-display").index();
                 setTimeout(function(){
-                    _this.parents(".upload-display").remove();
+                    $this.parents(".upload-display").remove();
                 },200);
                 productArray.splice(delIndex,1);
+            },true);
+
+            $('.upload-display').touch('click',function(event){
+                $('#product-photo-edit_file_type').click();
+            });
+
+            $(function(){
+                new AjaxUpload("#product-photo-edit",{
+                    action:"/we_account/upload",
+//                action:"http://120.24.224.144:80/we_account/upload",
+                    name:'file',
+                    onSubmit:function(file,ext){
+                        console.log(file +" "+ ext);
+                        if(util.filterFile(ext)){
+                            $("#uploading-mask").css("display","block");
+                        }else{
+                            return false;
+                        }
+                    },
+                    onComplete:function(file,res){
+                        util.compress(res,function(err,result){
+                            if(result.flag == 1){
+//                                setTimeout(function(){
+                                    $('.upload-display').css("background-image",'url(http://120.24.224.144/images/'+res + '?v='+ new Date().getTime()+')');
+//                                },200);
+                            }else{
+                                alert("上传失败");
+                            }
+                            $("#uploading-mask").css("display","none");
+                        });
+                        console.log(res);
+                        productArray = [res];
+                    }
+                })
             });
         }
     }
@@ -134,10 +175,17 @@ define(['router','util','jqmobiTouch'],function(router,util){
      * @param productArray
      * @param title
      */
-    function showNewUploadImg(product_id,productArray,title){
+    function showNewUploadImg(product_id,productArray,title,submitType){
         var minColIndex = waterfall.getMinHeightColumnIndex();
 //    alert(minColIndex);
         var imgstr = '';
+        if(submitType == 2){
+            var $product = $("#"+product_id);
+//            alert(productArray[0]+" "+title+" "+"#"+product_id);
+            $product.find('img').attr('src','http://120.24.224.144/images/'+productArray[0]+'?v='+new Date().getTime());
+            $product.find('.desc').text(title).attr('data-desc',title);
+            return;
+        }
         productArray.forEach(function(item,i){
             if(i == 0){
                 imgstr += '<img class="lazy" src="http://120.24.224.144/images/'+item+'" data-num="'+i+'">';

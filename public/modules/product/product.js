@@ -1,10 +1,11 @@
 /**
  * Created by man on 15-4-15.
  */
-define(['router','util','wxAPI','jqmobiTouch','ajaxupload'],function(router,util,wx){
+define(['router','util','wxAPI','ajaxupload','touchEvent'],function(router,util,wx){
 
     function Product(){
         this.newImgName = '';
+        this.product = '';
         this.init = function(){
             this.do();
             this.addListener();
@@ -26,8 +27,10 @@ define(['router','util','wxAPI','jqmobiTouch','ajaxupload'],function(router,util
                     if(result.flag == 1){
                         globalVar.hideLoading();
                         var product = result.data;
+                        _this.product = product;
                         $(".product_display .desc").html(product.text);
                         $(".product_display img").attr("src",'http://120.24.224.144/images/'+product.image_url[0]);
+                        _this.newImgName = product.image_url[0];
                         wx.onMenuShareAppMessage({
                             title:product.title+',要不要',
                             desc:product.text,
@@ -43,7 +46,7 @@ define(['router','util','wxAPI','jqmobiTouch','ajaxupload'],function(router,util
                             }
                         });
                         var isPublisher = window.sessionStorage.getItem('moment_publisher');
-                        if(isPublisher != 1){
+                        if(isPublisher == 1){//!=
                             $("#take_order").remove();
                             $("#edit_product").addClass('visible');
                         }else{
@@ -67,7 +70,7 @@ define(['router','util','wxAPI','jqmobiTouch','ajaxupload'],function(router,util
         }
         this.addListener = function(){
             var _this = this;
-            $(document).on("vclick","#back-live-room",function(){
+            $("#back-live-room").touch("click",function(){
                 if(globalVar.room_id){
                     router.changeHash('live_room-'+globalVar.room_id,0);
                 }else{
@@ -76,9 +79,9 @@ define(['router','util','wxAPI','jqmobiTouch','ajaxupload'],function(router,util
                 }
                 _this.cleanEarlierInputs();
                 $(".img-box img").attr('src',"http://120.24.224.144/images/default.jpg");
-            });
-            $(document).on('vclick',"#take_order",function(){
-                var $this = $(this);
+            },true);
+            $("#take_order").touch('click',function(event){
+                var $this = event.$this;
                 if(!$this.hasClass("ready")){
                     $this.addClass('ready').text("提交订单");
                     $("#order_info").slideToggle();
@@ -117,9 +120,9 @@ define(['router','util','wxAPI','jqmobiTouch','ajaxupload'],function(router,util
                         }
                     });
                 }
-            });
-            $(document).on("vclick",".sub-order .fa-minus,.add-order .fa-plus",function(){
-                var $this = $(this);
+            },true);
+            $(".sub-order .fa-minus,.add-order .fa-plus").touch("click",function(event){
+                var $this = event.$this;
                 var quantity = Number($(".order_quantity .qtt_num").text());
                 if($this.hasClass('fa-minus')){
                     if(quantity > 0){
@@ -128,72 +131,93 @@ define(['router','util','wxAPI','jqmobiTouch','ajaxupload'],function(router,util
                 }else if($this.hasClass('fa-plus')){
                     $(".order_quantity .qtt_num").text(++quantity);
                 }
-            });
+            },true);
 
-            $(document).on('vclick','#edit_product',function(){
-                $('.desc').addClass('hide');
-                $('textarea.edit-desc').addClass('visible');
-                $('.product-photo').addClass('edit-display-img');
-                $('#edit_product_btn_group .edit-desc').val($('.desc').text());
-                $('#edit_product_btn_group').addClass('visible');
-                $(this).removeClass('visible');
-            });
+            $('#edit_product').touch('click',function(event){
+                var $this = event.$this;
+//                $('.desc').addClass('hide');
+//                $('textarea.edit-desc').addClass('visible');
+//                $('.product-photo').addClass('edit-display-img');
+//                $('#edit_product_btn_group .edit-desc').val($('.desc').text());
+//                $('#edit_product_btn_group').addClass('visible');
+//                $this.removeClass('visible');
+                var imgName = $('#product-photo img').attr('src');
+                imgName = imgName.split('/images/')[1];
+                globalVar.productArray.push(imgName);
+                $("#image_content").append('<div class="upload-display" style="background:url(http://120.24.224.144/images/'+imgName+') center no-repeat;background-size:100%;">' +
+                    '<div class="adjustImg"><i class="fa fa-rotate-right"></i></div></div>');
+                $('#upload-panel .product-title').val(_this.product.title);
+                $('#upload-panel .product-desc').val(_this.product.text);
+                $('#submit').attr('data-type','2');//修改商品
+                router.changeHash('publish',0);
+            },true);
 
-            $(document).on('vclick','.edit-display-img',function(){
+            $('.edit-display-img').touch('click',function(){
                 $('#product-photo-edit_file_type').click()
-            });
+            },true);
 
-            $(document).on('vclick','#edit_product_btn_group .edit-sure',function(){
+            $('#edit_product_btn_group .edit-sure').touch('click',function(){
                 var newImg = _this.newImgName;
                 var desc = $('textarea.edit-desc').val();
                 var data = {
-                    imageUrl:newImg,
+                    image_url:newImg,
                     desc:desc
                 };
+                if(!desc){
+                    if(!confirm("商品介绍是否确认不填？")){
+                        return;
+                    }
+                }
                 $.ajax({
-                    url:'/account/edit-product',
+                    url:'/we_account/edit-product?desc='+desc+'&image_url='+newImg+'&room_id='+globalVar.room_id+'&product_id='+globalVar.product_id,
                     type:'post',
-                    data:data,
                     success:function(results){
+                        if(results.flag == 1){
+                            $('.product_display .desc').text(desc);
+                            _this.cleanEditInfo();
+                        }
                         console.log(results);
                     },
                     error:function(err,status){
                         console.log(err,status);
                     }
                 })
-            });
+            },true);
+            $('#edit_product_btn_group .edit-cancel').touch('click',function(){
+                _this.cleanEditInfo();
+            },true);
 
-            if($("#edit_product").length > 0){
-                $(function(){
-                    new AjaxUpload("#product-photo-edit",{
-                        action:"/we_account/upload",
-//                action:"http://120.24.224.144:80/we_account/upload",
-                        name:'file',
-                        onSubmit:function(file,ext){
-                            console.log(file +" "+ ext);
-                            if(util.filterFile(ext)){
-                                $("#uploading-mask").css("display","block");
-                            }else{
-                                return false;
-                            }
-                        },
-                        onComplete:function(file,res){
+//            if($("#edit_product").length > 0){
+//                $(function(){
+//                    new AjaxUpload("#product-photo-edit",{
+//                        action:"/we_account/upload",
+////                action:"http://120.24.224.144:80/we_account/upload",
+//                        name:'file',
+//                        onSubmit:function(file,ext){
+//                            console.log(file +" "+ ext);
+//                            if(util.filterFile(ext)){
+//                                $("#uploading-mask").css("display","block");
+//                            }else{
+//                                return false;
+//                            }
+//                        },
+//                        onComplete:function(file,res){
 //                            util.compress(res,function(err,result){
 //                                if(result.flag == 1){
-                                _this.newImgName = res;
-                                    $('.img-box img').attr('src','http://120.24.224.144/images/'+res+'?v='+(Math.random()+"").replace(/0./,""));
+//                                _this.newImgName = res;
+//                                    $('.img-box img').attr('src','http://120.24.224.144/images/'+res+'?v='+(Math.random()+"").replace(/0./,""));
 //                                }else{
 //                                    alert("上传失败");
 //                                }
-                                $("#uploading-mask").css("display","none");
+//                                $("#uploading-mask").css("display","none");
 //                            });
-                            console.log(res);
-                            globalVar.productArray.push(res);
-//                    products?products  += ";"+ res:products += res;
-                        }
-                    })
-                });
-            }
+//                            console.log(res);
+//                            globalVar.productArray.push(res);
+////                    products?products  += ";"+ res:products += res;
+//                        }
+//                    })
+//                });
+//            }
 
         };
 
@@ -204,6 +228,7 @@ define(['router','util','wxAPI','jqmobiTouch','ajaxupload'],function(router,util
             $('#edit_product_btn_group .edit-desc').val("");
             $('#edit_product_btn_group').removeClass('visible');
             $('#edit_product').addClass('visible');
+            this.newImgName = '';
         };
         this.checkUserAgent = function(){
             var userAgent = navigator.userAgent,

@@ -244,6 +244,9 @@ define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEven
             var waterfallHeight,
                 scrollTop;
             $(document).on("scroll",function(){
+                if(window.location.hash.indexOf('#live_room') == -1){
+                    return;
+                }
 //        alert("test");
                 $("#disableClick-mask").css("display","none");
 //        if(!waterfallHeight){
@@ -298,6 +301,7 @@ define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEven
                             console.log(file +" "+ ext);
                             if(util.filterFile(ext)){
                                 $("#uploading-mask").css("display","block");
+                                $('#submit').attr('data-type','1');//修改商品
                                 router.changeHash('publish',0);
                             }else{
                                 return false;

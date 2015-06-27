@@ -647,11 +647,13 @@ function vagueSearchProduct(req,res){
  */
 function editProduct(req,res){
     var openId = req.session.openId,
-        roomId = req.query.room_id,
-        product_id = req.query.product_id,
-        text = req.query.desc,
-        image_url = req.query.image_url;
-    dbOperator.query('call pro_edit_product(?,?,?,?,?)',[roomId,openId,product_id,text,image_url],function(err,rows){
+        body = req.body,
+        roomId = body.room_id,
+        product_id = body.product_id,
+        title = body.title,
+        text = body.desc,
+        image_url = body.products;
+    dbOperator.query('call pro_edit_product(?,?,?,?,?,?)',[roomId,openId,product_id,title,text,image_url],function(err,rows){
         if(err){
             response.failed(-1,res,0);
         }else{

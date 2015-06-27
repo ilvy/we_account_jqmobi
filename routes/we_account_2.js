@@ -369,7 +369,7 @@ router.get("/vagueSearchProduct",live_room.vagueSearchProduct);
 
 router.get('/searchProductByName',live_room.searchProductByName);
 
-router.get('/edit-product',live_room.editProduct);
+router.post('/edit-product',live_room.editProduct);
 
 router.get("/xml",function(req,res){
     xmlParser.parseXml("<xml><ToUserName><![CDATA[gh_d28b25ec1197]]></ToUserName>" +
