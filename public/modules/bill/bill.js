@@ -118,8 +118,8 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 }
                 tableStr += '</div>';
                 var cardStr = '<div class="card"><div class="card-title">' +
-                    '<div class="product"><span class="name">'+procductName+'</span> × <span class="total-quantity">'+quantity+'</span> <i class="fa fa-caret-right"></i></div>' +
-                    '<div class="all-status ignore"><i class="fa fa-square-o"></i></div></div>';
+                    '<i class="fa fa-caret-right"></i><div class="product"><span>商品：</span><span class="name">'+procductName+'</span><span class="total-quantity"> × '+quantity+'</span> </div>' +
+                    '<div class="all-status ignore"><span>买到:</span><i class="fa fa-square-o"></i></div></div>';
                 var lastRow = '<div class="extra-row"><div class="t-col-5 product-detail" data-pid="'+key.split('_')[1]+'">【商品详情】</span></div></div>';
                 cardStr += tableStr + lastRow +'</div>';
                 $("#order-list").append(cardStr);
@@ -166,11 +166,11 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     '<input type="text" class="mailpay" placeholder="0" value="'+(record.mail_pay?record.mail_pay:"")+'">' +
                     '<span class="unit">元</span></div></div>';
                 tableStr += mailStr+'</div>';
-                var cardStr = '<div class="card"><div class="card-title">' +
-                    '<div class="product"><span class="name">'+nickname+'</span> 总计: <span class="total-quantity">'+totalMoney+'</span> <i class="fa fa-caret-right"></i></div>' +
+                var cardStr = '<div class="card"><div class="card-title"><i class="fa fa-caret-right"></i>' +
+                    '<div class="product"><span class="name-span">买家:</span><span class="name">'+nickname+'</span> <span class="tq-span">合计: </span><span class="total-quantity">'+totalMoney+'</span> </div>' +
                     '<div class="all-status"><span>已付：</span><i class="fa fa-square-o"></i></div></div>';
-                var lastRow = '<div class="extra-row"><div class="t-col-5 remark-col">备注：<span>'+(record.remark || "无")+'</span></div>' +
-                    '<div class="t-col-5 getpay-btn"><input type="button" value="向买家收款"/></div></div>';
+                var lastRow = '<div class="extra-row">' +
+                    '<div class="t-col-5 getpay-btn"><input type="button" value="收款"/></div></div>';
                 cardStr += tableStr +lastRow+'</div>';
                 $("#pay-list").append(cardStr);
             }
@@ -341,12 +341,12 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
 //                    }
 //                });
             });
-            $(".card .product").touch("click",function(e){
+            $(".card .card-title").touch("click",function(e){
                 var event = e;
                 var $this = event.$this,
                     $caret;
                 setTimeout(function(){
-                    $this.parent().siblings('.table').toggle(500);
+                    $this.siblings('.table').toggle(500);
                     if(($caret = $this.find(".fa-caret-right")).length > 0){
                         $caret.removeClass("fa-caret-right").addClass("fa-caret-down");
                         $this.parents(".card").siblings(".card").each(function(){
@@ -354,10 +354,13 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                             if(($table = $c.find(".table")).css("display") != 'none'){
                                 $table.toggle(500);
                                 $c.find(".product .fa-caret-down").addClass("fa-caret-right").removeClass("fa-caret-down");
+                                $c.find('.active').removeClass('active');
                             }
                         });
+                        $this.addClass('active');
                     }else if(($caret = $this.find(".fa-caret-down")).length > 0){
                         $caret.addClass("fa-caret-right").removeClass("fa-caret-down");
+                        $this.removeClass('active');
                     }
                 },100);
             });

@@ -40,7 +40,7 @@ define(['router'],function(router){
                         $('.collection_object').html(results.data.nickname);
                         $('.mail-detail').data('oid',oidstr).html(mailStr);
                         var total = results.data.total;
-                        $(".total-price").data('total_except_mail',record.mail_free?total:total - record.mail_pay).html('<span>总计：</span>'+'<span>'+results.data.total+'元</span>');
+                        $(".total-price").data('total_except_mail',record.mail_free?total:total - record.mail_pay).html('<span>总计：</span>'+'<span class="money">'+results.data.total+'</span><span class="money-type">rmb</span>');
                         $("#getpay .table").append(rowStr);
                     }else if(results.flag == 0){
                         if(results.data == -1){
@@ -118,7 +118,7 @@ define(['router'],function(router){
                         if(!isMailFree){
                             total += Number(mailPay||0);
                         }
-                        $('.total-price').html('<span>总计：</span>'+'<span>'+total+'元</span>');
+                        $('.total-price').html('<span>总计：</span>'+'<span class="money">'+total+'</span><span class="money-type">rmb</span>');
                     }else{
 
                     }

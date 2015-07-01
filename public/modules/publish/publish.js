@@ -67,7 +67,7 @@ define(['router','util','touchEvent'],function(router,util){
                     return;
                 }
                 $("#uploading-mask").css("display","block");
-                var submitType = $this.data('type');
+                var submitType = $this.attr('data-type');
 //                alert(submitType)
                 var url = "/we_account/publish",
                     postData = {

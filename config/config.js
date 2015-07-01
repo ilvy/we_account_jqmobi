@@ -9,7 +9,7 @@ var menusObj = {
             url:"http://www.daidai2u.com/we_account/publish?type=1"
         },
         {
-            name:"进入直播间",
+            name:"我的代代",
             sub_button:[
 //                {
 //                    type:"click",

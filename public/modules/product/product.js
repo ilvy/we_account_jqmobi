@@ -92,6 +92,9 @@ define(['router','util','wxAPI','ajaxupload','touchEvent'],function(router,util,
                         alert('请选择购买数量！');
                         return;
                     }
+                    if(!confirm('购买数量'+quantity+',是否确定下单？')){
+                        return;
+                    }
                     globalVar.showLoading();
                     var isWeChat = _this.checkUserAgent();
                     var data = {

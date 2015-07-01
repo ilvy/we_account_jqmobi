@@ -175,8 +175,9 @@ html
                     span 邮费:
                     span #{mailPay}
             .total-price
-                span 总计：
-                span #{total}
+                span 合计：
+                span.money #{total}
+                span.money-type rmb
             input(type='button' value='回到账单')#backtobill
         div.page.contact-page
             div.curr-product
