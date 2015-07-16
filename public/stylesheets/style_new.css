@@ -285,6 +285,19 @@ a {
     text-align: left;
 }
 
+.room-num{
+    font-size: 1rem;
+    text-align: right;
+}
+
+.nick-name{
+    text-align: left;
+}
+
+.host-intro{
+    clear: both;
+}
+
 .delete-product{
     /*position: absolute;*/
     text-decoration: underline;
