@@ -27,13 +27,15 @@ html
         div.page.products-page.live_room.slide-init
             #header
                 .head.col-xxs-3.col-xs-2
-                    img(src="")
+                    img(src="/images/test_1429245238251.jpg")
                 .detail-personal-info.col-xxs-9.col-xs-10
                     .nick-name.col-xxs-6 香港代购
                     .room-num.col-xxs-6 代代号:888888
                     .host-intro 专注于代购事业，应有尽有，越南新娘都可以有哦
-                    .level.col-xxs-6 weix_47828325
-                    .qr-code-btn.col-xxs-6 二维码
+                    .level.col-xxs-5 weix_47828325
+                    .attention.col-xxs-4 关注者:
+                        span.attention-num 110
+                    .qr-code-btn.col-xxs-3 加TA微信
                 //.detail-personal-info.col-xxs-9.col-xs-10
                     .room_num 代代号:
                     .cell.col-xxs-12
@@ -238,6 +240,21 @@ html
             .btn-group.col-xxs-12
                 input(type='button',value="取消").input-cancel
                 input(type='button',value="确定").input-sure
+        #qr-code.light-popup.customer
+            img.qr-code-img(src="/images/qr-code.png")
+            .upload-qr-code
+            //p 上传微信二维码
+            .detail-info
+                .di_weix_account
+                    span 微信号：
+                    span.account_num weix_478283225
+                .sex
+                    span 性别：
+                    span.sex_desc 男
+                .region
+                    span 地区：
+                    span.region_desc 浙江台州
+            .long-tap-tip 长按扫码添加代手微信
 
 script(src="/javascripts/jquery.js")
 script(src="/touchUtil.js")
