@@ -1266,8 +1266,7 @@ li.favour_room_option > div{
     top: 190px;
     color: black;
     text-align: center;
-    display: block;
-    display: block;
+    display: none;
 }
 
 #qr-code:not(.customer){

@@ -1,7 +1,8 @@
 /**
  * Created by man on 15-4-3.
  */
-define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEvent','jpopup'],function(router,util,wx){
+//define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEvent','jpopup'],function(router,util,wx){
+define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpopup'],function(router,util){
     var disableClick = false;
     function LiveRoom(){
         this.hasSetToolBox = 0;//标记是否已经初始化toolbox
@@ -434,6 +435,9 @@ define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEven
                         }
                     })
                 });
+                $('.qr-code-btn').touch('click',function(){
+                    $('#qr-code').pop();
+                },true);
             }
         },
         renderVagueProductBox:function(datas){
