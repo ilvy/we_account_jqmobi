@@ -1327,6 +1327,10 @@ li.favour_room_option > div{
     top: 60px;
 }
 
+.re-upload{
+    color: #BBBBBB;
+}
+
 .long-tap-tip{
     display: none;
 }
