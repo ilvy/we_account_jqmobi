@@ -353,7 +353,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                             var $c = $(this),$table;
                             if(($table = $c.find(".table")).css("display") != 'none'){
                                 $table.toggle(500);
-                                $c.find(".product .fa-caret-down").addClass("fa-caret-right").removeClass("fa-caret-down");
+                                $c.find(".fa-caret-down").addClass("fa-caret-right").removeClass("fa-caret-down");
                                 $c.find('.active').removeClass('active');
                             }
                         });
@@ -593,6 +593,10 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
 
             $(".getpay-btn input").touch('click',function(event){
                 var $this = event.$this;
+                if(!canGetPay($this)){
+                    alert('请编辑进价和售价!');
+                    return;
+                }
                 var title = '亲，东西已经买好',
                     desc = '代购总费用:'+$this.parents(".card").find(".total-quantity").text()+',详情请点开',
                     nickname = $this.parents('.card').find('.name').text(),
@@ -612,6 +616,30 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 });
                 router.changeHash('getpay',1);
 //                alert("账单已选好，试试点击右上角按钮发送给相关好友哦");
+                function canGetPay($getpayBtn){
+                    var $unitCosts = $getpayBtn.find('.unit_cost'),
+                        $unitPrices = $getpayBtn.find('input.unit_price');
+                    var isLegal = true;
+                    $unitCosts.each(function(){
+                        if(!$(this).text().trim() && $(this).text() !== '0'){
+                            isLegal = false;
+                            return false;
+                        }
+                    });
+                    if(!isLegal){
+                        return false;
+                    }
+                    $unitPrices.each(function(){
+                        if(!$(this).val().trim() && $(this).val() !== '0'){
+                            isLegal = false;
+                            return false;
+                        }
+                    });
+                    if(!isLegal){
+                        return false;
+                    }
+                    return true;
+                }
             });
             $('.input-div-cost').touch('click',function(event){
 //                wx.scanQRCode({

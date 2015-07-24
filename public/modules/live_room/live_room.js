@@ -52,22 +52,7 @@ define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEven
                         }
                         that.setToolBox(data);
                         $('.room_num').html(' 代代号:'+data.room);
-                        setTimeout(function(){
-                            wx.onMenuShareAppMessage({
-                                title:' 代代号:'+data.room,
-                                desc:'看看有没有需要带的',
-                                imgUrl:$('#header img').attr('src'),
-                                success:function(){
-                                    alert('分享成功');
-                                },
-                                cancel:function(){
-                                    alert("取消分享");
-                                },
-                                error:function(){
-                                    alert('分享失败，请重试！');
-                                }
-                            });
-                        },3000);
+                        that.wxShare();
 
                         currentPage = 0;
                         totalPage = -1;
@@ -83,7 +68,7 @@ define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEven
         setVagueBox:function(){
             var $searchInput = $('.search-product'),
                 offset = $searchInput.offset(),
-                left = offset.left,
+                left = $searchInput.position().left + 8,
                 top = offset.top,
                 height = $searchInput.outerHeight(),
                 width = $searchInput.width();
@@ -443,8 +428,29 @@ define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEven
                 liStr += '<li data-id="'+record.id+'">'+record.product_name+'</li>';
             }
             $('#vagueProduct').html(liStr).css('display','block');
+//            alert($('#vagueProduct').offset().left);
+        },
+        wxShare:function(){
+            setTimeout(function(){
+                var title = $('.nickname').text();
+                title = title ? title : ' 代代号:'+data.room;
+                wx.onMenuShareAppMessage({
+                    title:title,
+                    desc:'看看有没有需要带的',
+                    imgUrl:$('#header img').attr('src'),
+                    success:function(){
+                        alert('分享成功');
+                    },
+                    cancel:function(){
+                        alert("取消分享");
+                    },
+                    error:function(){
+                        alert('分享失败，请重试！');
+                    }
+                });
+            },3000);
         }
-    }
+    };
 
 
     globalVar.modules['live_room'] = new LiveRoom();

@@ -32,7 +32,7 @@ define(['router','util','wxAPI','ajaxupload','touchEvent'],function(router,util,
                         $(".product_display img").attr("src",'http://120.24.224.144/images/'+product.image_url[0]);
                         _this.newImgName = product.image_url[0];
                         wx.onMenuShareAppMessage({
-                            title:product.title+',要不要',
+                            title:product.title+',赶紧下单吧',
                             desc:product.text,
                             imgUrl:'http://120.24.224.144/images/thumb/'+product.image_url[0],
                             success:function(){
@@ -46,12 +46,16 @@ define(['router','util','wxAPI','ajaxupload','touchEvent'],function(router,util,
                             }
                         });
                         var isPublisher = window.sessionStorage.getItem('moment_publisher');
-                        if(isPublisher == 1){//!=
+                        if(isPublisher == 1 || !globalVar.room_id){//!=
                             $("#take_order").remove();
                             $("#edit_product").addClass('visible');
+                            $('.text-box').removeClass('visible');
+                            $('.icon-box').addClass('visible');
                         }else{
                             $("#edit_product").remove();
                             $("#take_order").addClass('visible');
+                            $('.icon-box').removeClass('visible');
+                            $('.text-box').addClass('visible');
                         }
                     }
                 },

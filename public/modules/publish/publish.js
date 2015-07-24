@@ -62,6 +62,10 @@ define(['router','util','touchEvent'],function(router,util){
                     $("#warn").fadeInAndOut("商品名称不能为空！");
                     return;
                 }
+                if(util.calcChars(title) > 40){
+                    alert('商品名称过长，请重新编辑');
+                    return;
+                }
                 if(productArray.length == 0 || !title){
                     $("#warn").fadeInAndOut('至少需要发布一张图片');
                     return;

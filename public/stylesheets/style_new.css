@@ -93,6 +93,17 @@ a {
     padding: 14px;
     border-radius: 25px;
     margin: auto;
+    display: none;
+}
+.back-live-room .text-box{
+    background: rgba(200,30,40,1);
+    width: 120px;
+    margin: 0 auto;
+    padding: 1rem;
+    font-weight: bolder;
+    font-size: 2rem;
+    border-radius: 1.2rem;
+    display: none;
 }
 .back-live-room .icon{
     border: 3px solid #ffffff;

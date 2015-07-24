@@ -89,6 +89,17 @@ define([],function(){
                 }
             }
             return true;
+        },
+        /**
+         * 英文字母算一个字，中文字算两个
+         * @param string
+         * @returns {number}
+         */
+        calcChars:function(string){
+            var cnWordReg = /[\u4E00-\u9FA5\uF900-\uFA2D]/g;
+            var cnWordNum = string.match(cnWordReg).length;
+            var strLen = string.length;
+            return cnWordNum * 2 + strLen - cnWordNum;
         }
     }
 });
