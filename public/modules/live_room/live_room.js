@@ -1,7 +1,8 @@
 /**
  * Created by man on 15-4-3.
  */
-define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEvent','jpopup'],function(router,util,wx){
+//define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEvent','jpopup'],function(router,util,wx){
+define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpopup'],function(router,util){
     var disableClick = false;
     function LiveRoom(){
         this.hasSetToolBox = 0;//标记是否已经初始化toolbox
@@ -51,6 +52,7 @@ define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEven
                             }
                         }
                         that.setToolBox(data);
+
                         $('.room_num').html(' 代代号:'+data.room);
                         that.wxShare();
 
@@ -78,12 +80,21 @@ define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEven
                 width:width + $('.search-btn').width()
             });
         },
+        setQrcodeBox:function(userInfo){
+            if(userInfo.qrCode){
+                $('.qr-code-img').attr('src',userInfo.qrCode);
+                $('.upload-qr-code').remove();
+            }else{
+                $(".re-upload").remove();
+            }
+        },
         setToolBox : function(data){
             if(data.publisher){
 //                alert(data.publisher)
     //                $("#tools-box").html('<div id="upload-div-box"><div id="upload-div"><div id="upload"><i class="fa fa-plus"></i></div></div></div>');
                 $("#upload-div-box").removeClass('remove').siblings().addClass('remove');
                 $('.edit-personality').removeClass('remove');
+                $('.customer').removeClass('customer');
             }else{
 //                alert('hehe')
                 var favHeart = '';
@@ -118,6 +129,7 @@ define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEven
                         var userInfo = results.data.user;
                         console.log(userInfo);
                         _this.setHostInfo(userInfo);
+                        _this.setQrcodeBox(userInfo);
                     }
                 }
             });
@@ -419,6 +431,68 @@ define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEven
                         }
                     })
                 });
+                $('.qr-code-btn').touch('click',function(){
+                    $('#qr-code').pop();
+                },true);
+                $('.re-upload,.upload-qr-code').touch('click',function(){
+
+                });
+                if($('#upload-qr-code').length){
+                    $(function(){
+                        new AjaxUpload("#upload-qr-code",{
+                            action:"/we_account/upload_qrcode",
+//                action:"http://120.24.224.144:80/we_account/upload",
+                            name:'file',
+                            onSubmit:function(file,ext){
+                                console.log(file +" "+ ext);
+                                if(util.filterFile(ext)){
+                                    $("#uploading-mask").css("display","block");
+                                }else{
+                                    return false;
+                                }
+                            },
+                            onComplete:function(file,res){
+                                util.compress(res,function(err,result){
+                                    if(result.flag == 1){
+                                        
+                                    }else{
+                                        alert("上传失败");
+                                    }
+                                    $("#uploading-mask").css("display","none");
+                                });
+                                console.log(res);
+                            }
+                        })
+                    });
+                }
+                if($('#re-upload').length){
+                    $(function(){
+                        new AjaxUpload("#re-upload",{
+                            action:"/we_account/upload_qrcode",
+//                action:"http://120.24.224.144:80/we_account/upload",
+                            name:'file',
+                            onSubmit:function(file,ext){
+                                console.log(file +" "+ ext);
+                                if(util.filterFile(ext)){
+                                    $("#uploading-mask").css("display","block");
+                                }else{
+                                    return false;
+                                }
+                            },
+                            onComplete:function(file,res){
+                                util.compress(res,function(err,result){
+                                    if(result.flag == 1){
+
+                                    }else{
+                                        alert("上传失败");
+                                    }
+                                    $("#uploading-mask").css("display","none");
+                                });
+                                console.log(res);
+                            }
+                        })
+                    });
+                }
             }
         },
         renderVagueProductBox:function(datas){

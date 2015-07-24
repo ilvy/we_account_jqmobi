@@ -296,6 +296,50 @@ a {
     text-align: left;
 }
 
+.room-num{
+    font-size: 1rem;
+    text-align: right;
+    color: #999;
+}
+
+.nick-name{
+    text-align: left;
+    font-size: 1.5rem;
+    font-weight: bolder;
+    margin-bottom: 8px;
+}
+
+.host-intro{
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+.level{
+    text-align: left;
+    height: 24px;
+    line-height: 24px;
+    vertical-align: middle;
+}
+
+.attention{
+    color: #12c6d1;
+    font-size: 1rem;
+    height: 24px;
+    line-height: 24px;
+    vertical-align: middle;
+}
+
+.qr-code-btn{
+    background-color: rgb(236, 64, 64);
+    color: white;
+    padding: 3px;
+    font-size: 1rem;
+}
+
+.host-intro{
+    clear: both;
+}
+
 .delete-product{
     /*position: absolute;*/
     text-decoration: underline;
@@ -1223,6 +1267,91 @@ li.favour_room_option > div{
 
 /************个人信息修改 end**************/
 
+
+/******************弹出框 start******************/
+
+#qr-code{
+    width: 200px;
+    position: fixed;
+    left: calc(50% - 100px);
+    top: 190px;
+    color: black;
+    text-align: center;
+    display: none;
+}
+
+#qr-code:not(.customer){
+    height: 230px;
+}
+
+#qr-code > p{
+    color: #BBBBBB;
+}
+
+#qr-code .detail-info{
+    margin-bottom: 8px;
+}
+
+#qr-code .detail-info > div{
+    line-height: 20px;
+    font-size: 1rem;
+}
+
+.customer{
+    padding-top: 8px;
+    height: 270px;
+}
+
+.qr-code-img{
+    display: none;
+}
+
+.customer .qr-code-img{
+    width: 84%;
+    display: initial;
+}
+
+#qr-code:not(.customer) .upload-qr-code{
+    width: 80px;
+    height: 10px;
+    background-color: #E5E5E5;
+    margin: 70px auto;
+    position: relative;
+}
+
+#qr-code:not(.customer) .upload-qr-code:before{
+    content: '';
+    position: absolute;
+    left: 35px;
+    top: -35px;
+    width: 10px;
+    height: 80px;
+    background-color: #E5E5E5;
+}
+
+#qr-code:not(.customer) .upload-qr-code:after{
+    content: '上传微信二维码';
+    color: #BBBBBB;
+    width: 200px;
+    position: absolute;
+    left: -61px;
+    top: 60px;
+}
+
+.re-upload{
+    color: #BBBBBB;
+}
+
+.long-tap-tip{
+    display: none;
+}
+
+.customer .long-tap-tip{
+    display: block;
+    font-weight: bolder;
+}
+
+/******************弹出框 end******************/
 
 #header .col-xxs-8{/**挤出一个间距**/
     width: 63.666667%;
