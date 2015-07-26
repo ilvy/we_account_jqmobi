@@ -113,16 +113,17 @@ function updatePersonality(req,res){
  */
 function updatePersonality_all(req,res){
     var body = req.body;
-    var open_id = req.session.openId,
+    var open_id = req.session.openId||'oxfQVswUSy2KXBPOjNi_BqdNI3aA',
         nickname = body.nickname,
         weixAccount = body.weix_account,
         sex = body.sex,
         city = body.city,
-        country = body.country;
+        country = body.country,
+        introduce = body.introduce;
     var sql = dataviewConfig.personality;
 //    console.log(sql+" "+key+" "+value);
-    dbOperator.query('call pro_update_weix_account_info(?,?,?,?,?,?)',
-        [open_id,weixAccount,nickname,sex,city,country],function(err,rows){
+    dbOperator.query('call pro_update_weix_account_info(?,?,?,?,?,?,?)',
+        [open_id,weixAccount,nickname,sex,city,country,introduce],function(err,rows){
         if(err){
             console.log("personality err:"+err);
             response.failed("0",res,"");
@@ -141,7 +142,7 @@ function updatePersonality_all(req,res){
  */
 function getPersonalInfo(req,res,isHost){
     var session = req.session;
-    var open_id = session.openId,
+    var open_id = session.openId||'oxfQVswUSy2KXBPOjNi_BqdNI3aA',
         args = [open_id,null],
         room_id = req.query.room_id;
     if(!isHost){
