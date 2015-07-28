@@ -99,12 +99,13 @@ Waterfall.prototype.setPosition = function(boxes){
 Waterfall.prototype.setHeader = function(){
     var headerW = this.win_w - 2 * this.margin;
     $("#header").css({
-        width:headerW,
-        'margin-left':this.margin
+        //width:headerW,
+        'padding-left':this.margin,
+        'padding-right':this.margin
     });
-    $(".search-group").css({
-        width:headerW
-    });
+    //$(".search-group").css({
+    //    width:headerW
+    //});
     $(".stick-width").css("height",3);
 }
 

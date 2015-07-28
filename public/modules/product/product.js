@@ -28,11 +28,11 @@ define(['router','util','wxAPI','ajaxupload','touchEvent'],function(router,util,
                         globalVar.hideLoading();
                         var product = result.data;
                         _this.product = product;
-                        $(".product_display .desc").html(product.text);
+                        product.text?$(".product_display .desc").addClass('visible').html(product.text):$(".product_display .desc").removeClass('visible');
                         $(".product_display img").attr("src",'http://120.24.224.144/images/'+product.image_url[0]);
                         _this.newImgName = product.image_url[0];
                         wx.onMenuShareAppMessage({
-                            title:product.title+',赶紧下单吧',
+                            title:product.title+',猛戳这里下单吧',
                             desc:product.text,
                             imgUrl:'http://120.24.224.144/images/thumb/'+product.image_url[0],
                             success:function(){
@@ -63,7 +63,7 @@ define(['router','util','wxAPI','ajaxupload','touchEvent'],function(router,util,
                     console.log(err);
                 }
             });
-            $("title").html("要么，在这里告诉我");
+            //$("title").html("要么，在这里告诉我");
         }
         this.cleanEarlierInputs = function(){
             $(".order_quantity .qtt_num option[selected=true]").attr('selected',false);
