@@ -263,6 +263,8 @@ router.post("/upload",function(req,res){
     });
 });
 
+router.post("/upload_qrcode",live_room.uploadQrcode);
+
 router.post("/compressPic",live_room.compressPic);
 
 /**

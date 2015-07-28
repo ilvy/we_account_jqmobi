@@ -1,12 +1,15 @@
 ﻿(function (jquery) {
-    var popup = null;
+    var popups = [];
     jquery.fn.pop = function (options) {
         options = jquery.extend({},jquery.fn.pop.defaults, options);
         return this.each(function () {
             var jquerythis = jquery(this);
-            if (!popup) {//若没有初始化，则先初始化
+            var ind,popup;
+            if (typeof (ind = hasTheSameJqobj(popups,jquerythis)) == 'undefined') {//若没有初始化，则先初始化
                 popup = new Popup(jquerythis,options);
+                popups.push(popup);
             } else {//弹出框已初始化完成，只需要显示即可
+                popup = popups[ind];
                 if(options.hidden == 'true' || options.hidden === true){
                     popup.hide(options.callback);//代码隐藏弹出框时，传入回调函数
                     return;
@@ -15,6 +18,21 @@
             }
         });
     };
+
+    /**
+     * jqs数组是否存在与jq对象相同的jq对象
+     * @param jqs
+     * @param jq
+     * @returns {number}
+     */
+    function hasTheSameJqobj(jqs,jq){
+        for(var i = 0; i < jqs.length; i++){
+            if(jqs[i].jqueryele.is(jq)){
+                return i;
+            }
+
+        }
+    }
 
     jquery.fn.pop.defaults = { width: "500px", height: "400px" };//暴露pop的默认属性
     /*

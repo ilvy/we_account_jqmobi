@@ -53,23 +53,8 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
                         }
                         that.setToolBox(data);
 
-                        $('.room_num').html(' 代代号:'+data.room);
-                        setTimeout(function(){
-                            wx.onMenuShareAppMessage({
-                                title:' 代代号:'+data.room,
-                                desc:'看看有没有需要带的',
-                                imgUrl:$('#header img').attr('src'),
-                                success:function(){
-                                    alert('分享成功');
-                                },
-                                cancel:function(){
-                                    alert("取消分享");
-                                },
-                                error:function(){
-                                    alert('分享失败，请重试！');
-                                }
-                            });
-                        },3000);
+                        $('.room-num').html(' 代代号:'+data.room);
+                        that.wxShare();
 
                         currentPage = 0;
                         totalPage = -1;
@@ -85,7 +70,7 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
         setVagueBox:function(){
             var $searchInput = $('.search-product'),
                 offset = $searchInput.offset(),
-                left = offset.left,
+                left = $searchInput.position().left + 8,
                 top = offset.top,
                 height = $searchInput.outerHeight(),
                 width = $searchInput.width();
@@ -96,12 +81,35 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
             });
         },
         setQrcodeBox:function(userInfo){
-            if(userInfo.qrCode){
-                $('.qr-code-img').attr('src',userInfo.qrCode);
-                $('.upload-qr-code').remove();
+            if(userInfo.ishost){
+                $('.customer').removeClass('customer');
+                $('.qr-code-btn').text('二维码');
+                $('.no-upload-qrcode').removeClass('visible');
+                if(userInfo.qrcode){
+                    $('.qr-code-img').addClass('visible-inline').attr('src','/images/'+userInfo.qrcode);
+                    $('.upload-qr-code').removeClass('visible');
+                    $(".re-upload").addClass('visible');
+                }else{
+                    $('.upload-qr-code').addClass('visible');
+                    $('.qr-code-img').removeClass('visible-inline');
+                    $(".re-upload").removeClass('visible');
+                }
             }else{
-                $(".re-upload").remove();
+                $('.upload-qr-code').removeClass('visible');
+                $('.customer').addClass('customer');
+                $('.qr-code-btn').text('加TA微信');
+                $(".re-upload").removeClass('visible');
+                if(userInfo.qrcode){
+                    $('.qr-code-img').addClass('visible-inline').attr('src','/images/'+userInfo.qrcode);
+                    $('.upload-qr-code').removeClass('visible');
+                    $('.no-upload-qrcode').removeClass('visible');
+                }else{
+                    $('.qr-code-img').removeClass('visible-inline');
+                    $('.upload-qr-code').addClass('visible');
+                    $('.no-upload-qrcode').addClass('visible');
+                }
             }
+
         },
         setToolBox : function(data){
             if(data.publisher){
@@ -109,7 +117,6 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
     //                $("#tools-box").html('<div id="upload-div-box"><div id="upload-div"><div id="upload"><i class="fa fa-plus"></i></div></div></div>');
                 $("#upload-div-box").removeClass('remove').siblings().addClass('remove');
                 $('.edit-personality').removeClass('remove');
-                $('.customer').removeClass('customer');
             }else{
 //                alert('hehe')
                 var favHeart = '';
@@ -142,7 +149,29 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
                 success:function(results){
                     if(results.flag == 1){
                         var userInfo = results.data.user;
+
+                        if(userInfo.ishost){
+                            $('.nick-name,.room-num,.host-intro').touch('click',function(event){
+                                if(!confirm("进入个人主页修改？")){
+                                    return;
+                                }
+                                $('#host-info').pop();
+//                    alert('host info')
+                                $('#host-info [type=text]').each(function(){
+                                    var type = $(this).data('type');
+                                    var userInfo = _this.userInfo;
+                                    $(this).val(userInfo[type]);
+                                });
+                                if($('.sex select').val() == 0){
+                                    $('select#sex').html('<option value="0">女</option><option value="1">男</option>');
+                                }else{
+                                    $('select#sex').html('<option value="0">女</option><option value="1" selected>男</option>');
+                                }
+
+                            },true);
+                        }
                         console.log(userInfo);
+                        this.userInfo = userInfo;
                         _this.setHostInfo(userInfo);
                         _this.setQrcodeBox(userInfo);
                     }
@@ -150,11 +179,14 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
             });
         },
         setHostInfo:function(userInfo){
-            $('.c-city').html('<span class="country">'+(userInfo.country||'')+'</span><span class="city">'+(userInfo.city||'')+'</span>');
-            $('.nickname').text(userInfo.nickname||'');
-            $('.weix_account').text(userInfo.weix_account||'');
+            this.userInfo = $.extend({},this.userInfo,userInfo);
+            $('.region_desc').html('<span class="country">'+(userInfo.country||'')+'</span><span class="city">'+(userInfo.city||'')+'</span>');
+            $('.nick-name').text(userInfo.nickname||'');
+            $('.account_num').text(userInfo.weix_account||'');
             userInfo.headimgurl ? $('.head img').attr('src',userInfo.headimgurl) : '';
             $('.sex').text(userInfo.sex ? '男':'女');
+            $('.host-intro').text(userInfo.introduce||"主人太懒，走路太急，啥话都没留下");
+            $('.attention-num').text(userInfo.favcount);
         },
         initToolsPosition : function(){
             var $fav = $(".favorite"),
@@ -399,20 +431,7 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
                         }
                     })
                 },true);
-                $('.edit-personality').touch('click',function(event){
-                    $('#host-info').pop();
-//                    alert('host info')
-                    $('#host-info input[type=text]').each(function(){
-                        var type = $(this).data('type');
-                        $(this).val($('#header .'+type).text());
-                    });
-                    if($('.sex select').val() == 0){
-                        $('select#sex').html('<option value="0">女</option><option value="1">男</option>');
-                    }else{
-                        $('select#sex').html('<option value="0">女</option><option value="1" selected>男</option>');
-                    }
 
-                },true);
                 $('.light-popup').touch('click',function(){},true);//弹出框防止穿透
                 $('.input-cancel').touch('click',function(){
                     $('#host-info').pop({hidden:true,callback:function(){
@@ -423,7 +442,7 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
                 },true);
                 $('.input-sure').touch('click',function(event){
                     var data = {};
-                    $('#host-info input[type=text]').each(function(){
+                    $('#host-info [type=text]').each(function(){
                         var type = $(this).data('type');
                         data[type] = $(this).val();
                     });
@@ -449,9 +468,11 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
                 $('.qr-code-btn').touch('click',function(){
                     $('#qr-code').pop();
                 },true);
-                $('.re-upload,.upload-qr-code').touch('click',function(){
-
-                });
+                $('.re-upload,.upload-qr-code').touch('click',function(event){
+                    var $this = event.$this;
+                    var btn_id = $this.attr("id");
+                    $("#"+btn_id+"_file_type").click();
+                },true);
                 if($('#upload-qr-code').length){
                     $(function(){
                         new AjaxUpload("#upload-qr-code",{
@@ -467,14 +488,10 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
                                 }
                             },
                             onComplete:function(file,res){
-                                util.compress(res,function(err,result){
-                                    if(result.flag == 1){
-
-                                    }else{
-                                        alert("上传失败");
-                                    }
-                                    $("#uploading-mask").css("display","none");
-                                });
+                                $('img.qr-code-img').addClass('visible-inline').attr('src','/images/'+res);
+                                $('.upload-qr-code').remove();
+                                $('.re-upload').addClass('visible');
+                                $("#uploading-mask").css("display","none");
                                 console.log(res);
                             }
                         })
@@ -495,14 +512,10 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
                                 }
                             },
                             onComplete:function(file,res){
-                                util.compress(res,function(err,result){
-                                    if(result.flag == 1){
-
-                                    }else{
-                                        alert("上传失败");
-                                    }
-                                    $("#uploading-mask").css("display","none");
-                                });
+                                $('img.qr-code-img').addClass('visible-inline').attr('src','/images/'+res);
+                                $('.upload-qr-code').remove();
+                                $('.re-upload').addClass('visible');
+                                $("#uploading-mask").css("display","none");
                                 console.log(res);
                             }
                         })
@@ -517,8 +530,29 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
                 liStr += '<li data-id="'+record.id+'">'+record.product_name+'</li>';
             }
             $('#vagueProduct').html(liStr).css('display','block');
+//            alert($('#vagueProduct').offset().left);
+        },
+        wxShare:function(){
+            setTimeout(function(){
+                var title = $('.nickname').text();
+                title = title ? title : ' 代代号:'+globalVar.room_id;
+                wx.onMenuShareAppMessage({
+                    title:title,
+                    desc:'看看有没有需要带的',
+                    imgUrl:$('#header img').attr('src'),
+                    success:function(){
+                        alert('分享成功');
+                    },
+                    cancel:function(){
+                        alert("取消分享");
+                    },
+                    error:function(){
+                        alert('分享失败，请重试！');
+                    }
+                });
+            },3000);
         }
-    }
+    };
 
 
     globalVar.modules['live_room'] = new LiveRoom();

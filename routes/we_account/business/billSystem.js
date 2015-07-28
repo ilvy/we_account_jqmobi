@@ -250,9 +250,9 @@ function getPayment(req,res,isRequestBySeller){//需要验证openid
     var paras = [nickname,room_id];
     if(!room_id || !nickname){
         if(!isRequestBySeller){
-            res.render('error')
+            res.render('error');
         }else{
-            response.failed(0,res,'')
+            response.failed(0,res,'');
         }
         return;
     }

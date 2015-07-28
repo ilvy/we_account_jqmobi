@@ -31,9 +31,9 @@ html
                 .detail-personal-info.col-xxs-9.col-xs-10
                     .nick-name.col-xxs-6 香港代购
                     .room-num.col-xxs-6 代代号:888888
-                    .host-intro 专注于代购事业，应有尽有，越南新娘都可以有哦
-                    .level.col-xxs-5 weix_47828325
-                    .attention.col-xxs-4 关注者:
+                    .host-intro.introduce
+                    //.level.col-xxs-5 weix_47828325
+                    .attention.col-xxs-9 关注者:
                         span.attention-num 110
                     .qr-code-btn.col-xxs-3 加TA微信
                 //.detail-personal-info.col-xxs-9.col-xs-10
@@ -58,7 +58,7 @@ html
                 .line
                 .text 货架内容已更新
             ul#vagueProduct
-                li hhhhhh
+                li
             section().waterfall
                 div.column
                 div.column
@@ -136,6 +136,7 @@ html
                     .back-live-room.col-xxs-12
                         .icon-box
                             .icon
+                        .text-box TA的代代
             div.stick-width
         div.page.myFavorite
             ul#room-list
@@ -169,6 +170,9 @@ html
             .getpay-title
                 span.collection_object
                 span 的账单
+                .share-tip
+                    i.fa.fa-hand-o-up
+                    p 分享给买家
             .table
                 .t-row.t-row-header
                     .t-col.t-col-2 品名
@@ -221,6 +225,10 @@ html
                 span.col-xxs-3.col-xxs-offset-2 昵称
                 div.col-xxs-7
                     input#nickname(type='text',data-type='nickname',value='')
+            .col-xxs-12
+                span.col-xxs-3.col-xxs-offset-2 简介
+                div.col-xxs-7
+                    textarea#introduce(type='text',data-type='introduce',value='',palceholder='说点啥介绍一下呗...')
             div.col-xxs-12
                 span.col-xxs-3.col-xxs-offset-2 微信账号
                 .col-xxs-7
@@ -240,8 +248,9 @@ html
             .btn-group.col-xxs-12
                 input(type='button',value="取消").input-cancel
                 input(type='button',value="确定").input-sure
-        #qr-code.light-popup
+        #qr-code.light-popup.customer
             img.qr-code-img(src="/images/qr-code.png")
+            div.no-upload-qrcode 主人很懒，二维码都没留下
             #upload-qr-code.upload-qr-code
             p#re-upload.re-upload 重新上传
             .detail-info

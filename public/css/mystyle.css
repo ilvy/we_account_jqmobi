@@ -318,7 +318,7 @@ body{
 }
 
 .t-col input.mailpay{
-    width: 26px;
+    width: 4rem;
     height: 100%;
 }
 
@@ -387,7 +387,7 @@ body{
 /********getpay start********/
 
 #getpay{
-    margin-bottom: 3rem;
+    margin-bottom: 9rem;
     float: left;
     width: 100%;
 }
@@ -414,6 +414,9 @@ body{
     width: 100%;
     background-color: white;
     padding: 8px;
+    position: fixed;
+    bottom: 3rem;
+    left: 0;
 }
 
 .total-price > span:first-child{
@@ -449,6 +452,23 @@ body{
     margin-top: 15px;
     margin-bottom: 15px;
     width: 50px;
+    border: none;
+}
+
+.share-tip{
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 1rem;
+    color: rgb(255, 121, 137);
+}
+
+.share-tip .fa-hand-o-up{
+    font-size: 1.5rem;
+}
+
+.share-tip p{
+    margin: 0;
 }
 
 .getpay-title{

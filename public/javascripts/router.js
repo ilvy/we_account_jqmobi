@@ -110,6 +110,9 @@ define(['routerConfig'],function(routerConfig){
         switch (hash){
             case '#live_room':
                 globalVar.room_id = hashParts[1] || globalVar.room_id;
+                if(globalVar.modules['live_room']){
+                    globalVar.modules['live_room'].wxShare();
+                }
                 break;
             case '#product_display':
                 globalVar.product_id = hashParts[1];

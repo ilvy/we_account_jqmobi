@@ -7,6 +7,9 @@ var dbOperator = require("../../../db/dbOperator"),
     response = require("../response/response"),
     async = require("async"),
     http = require("http"),
+    formidable = require("formidable"),
+    path = require("path"),
+    fs = require("fs"),
     querystring = require("querystring");
 
 
@@ -666,7 +669,55 @@ function editProduct(req,res){
     });
 }
 
+function uploadQrcode(req,res){
+    var openId = req.session.openId||'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
+    //console.log(req);
+    var form = new formidable.IncomingForm();
+    form.uploadDir = __dirname+'';
+    console.log(process.cwd()+" ******** "+__dirname);
+    var newFileName = "qrcode_"+new Date().getTime();//test换成用户的唯一识别
 
+    form.on('file', function(field, file) {
+        //rename the incoming file to the file's name
+        var originNameParts =  file.name.split(".");
+        newFileName = newFileName + "." +originNameParts[originNameParts.length - 1];
+        console.log( "detail-info:",file);
+        console.log( "origin-name:"+path.normalize(process.cwd()+"/public/images/" + file.name));
+        console.log( "rename:"+path.normalize(process.cwd()+"/public/images/" + newFileName));
+        fs.rename(file.path, path.normalize(process.cwd()+"/public/images/" + newFileName),function(err){
+            console.log("newPath:"+file.path);
+//            live_room.compressImg(res,newFileName);
+        });
+    })
+        .on('error', function(err) {
+            console.log("an error has occured with form upload");
+            console.log(err);
+//            request.resume();
+        })
+        .on('aborted', function(err) {
+            console.log("user aborted upload");
+        })
+        .on('end', function() {
+            console.log('-> upload done');
+//            live_room.compressImg(res,newFileName);
+        });
+
+    form.parse(req,function(err,fields,files){
+//            fs.renameSync(files.upload.path,"/image/test.png");
+        if(err){
+            console.log(err);
+            res.send("err");
+        }
+        dbOperator.query('call pro_add_qrcode(?,?)',[openId,newFileName],function(err,results){
+            if(err){
+                console.log('pro_add_qrcode err',err);
+            }
+        });
+//        response.success({qrcode:newFileName},res);
+        res.send(newFileName);
+//        live_room.compressImg(res,newFileName);
+    });
+}
 
 //exports.renderLiveRoom = gotoLiveRoom;
 exports.renderLiveRoom_new = gotoLiveRoom_new;
@@ -687,3 +738,4 @@ exports.rotateImg = rotateImg;
 exports.vagueSearchProduct = vagueSearchProduct;
 exports.searchProductByName = searchProductByName;
 exports.editProduct = editProduct;
+exports.uploadQrcode = uploadQrcode;
