@@ -469,7 +469,7 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
                             onComplete:function(file,res){
                                 util.compress(res,function(err,result){
                                     if(result.flag == 1){
-                                        
+
                                     }else{
                                         alert("上传失败");
                                     }
@@ -523,3 +523,4 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
 
     globalVar.modules['live_room'] = new LiveRoom();
 });
+
