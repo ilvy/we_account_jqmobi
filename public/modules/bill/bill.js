@@ -617,8 +617,9 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 router.changeHash('getpay',1);
 //                alert("账单已选好，试试点击右上角按钮发送给相关好友哦");
                 function canGetPay($getpayBtn){
-                    var $unitCosts = $getpayBtn.find('.unit_cost'),
-                        $unitPrices = $getpayBtn.find('input.unit_price');
+                    var $card = $getpayBtn.parents('.card');
+                    var $unitCosts = $card.find('.unit_cost'),
+                        $unitPrices = $card.find('input.unit_price');
                     var isLegal = true;
                     $unitCosts.each(function(){
                         if(!$(this).text().trim() && $(this).text() !== '0'){

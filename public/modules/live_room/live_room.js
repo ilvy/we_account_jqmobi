@@ -53,7 +53,7 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
                         }
                         that.setToolBox(data);
 
-                        $('.room-num').html(' 代代号:'+data.room);
+                        $('.room-num').html(' 代袋号:'+data.room);
                         that.wxShare();
 
                         currentPage = 0;
@@ -535,7 +535,7 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
         wxShare:function(){
             setTimeout(function(){
                 var title = $('.nickname').text();
-                title = title ? title : ' 代代号:'+globalVar.room_id;
+                title = title ? title : ' 代袋号:'+globalVar.room_id;
                 wx.onMenuShareAppMessage({
                     title:title,
                     desc:'看看有没有需要带的',
