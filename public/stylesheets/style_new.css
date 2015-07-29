@@ -334,6 +334,7 @@ a {
     line-height: 24px;
     vertical-align: middle;
     text-align: left;
+    left: 0;
 }
 
 .qr-code-btn{
@@ -341,6 +342,12 @@ a {
     color: white;
     padding: 3px;
     font-size: 1rem;
+    right: 0;
+}
+
+.attention,.qr-code-btn{
+    position: absolute;
+    bottom: 8px;
 }
 
 .host-intro{
@@ -1147,10 +1154,12 @@ li.favour_room_option > div{
 
 #header{
     float: left;
+    height: 122px;
 }
 
 #header .head img{
     width: 100%;
+    /*width: 108px;*/
 }
 
 .no-padding{
@@ -1189,7 +1198,8 @@ li.favour_room_option > div{
 }
 
 .search-group{
-    margin-top: 3px;
+    margin-top: 8px;
+    margin-bottom: 6px;
     padding-left: 8px;
     padding-right: 8px;
 }

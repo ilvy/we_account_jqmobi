@@ -101,7 +101,8 @@ Waterfall.prototype.setHeader = function(){
     $("#header").css({
         //width:headerW,
         'padding-left':this.margin,
-        'padding-right':this.margin
+        'padding-right':this.margin,
+        "height":$('.head').width() + this.margin * 2
     });
     //$(".search-group").css({
     //    width:headerW

@@ -256,7 +256,7 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
                         }else if(result.data == 0){
                             alert("房间不存在");
                         }else if(result.data == -2){
-                            window.location.href = '/follow_account.html';
+                            window.location.href = '/tutorial-buy.html';
                         }else if(result.data == -10){
                             alert("取消关注失败");
                         }
