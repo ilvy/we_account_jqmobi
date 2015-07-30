@@ -5,11 +5,11 @@ var menusObj = {
     "button": [
         {
             type:"view",
-            name:"我要发布",
+            name:"我的代袋",
             url:"http://www.daidai2u.com/we_account/publish?type=1"
         },
         {
-            name:"我的代代",
+            name:"我要代带",
             sub_button:[
 //                {
 //                    type:"click",
@@ -23,7 +23,7 @@ var menusObj = {
                 },
                 {
                     type:"view",
-                    name:"直播间",
+                    name:"寻找代手",
                     url:"http://www.daidai2u.com/we_account/publish?type=2"
                 }
             ]

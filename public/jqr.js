@@ -88,7 +88,7 @@ define(['text','router','wxAPI'],function(text,router,wx){
             wx.ready(function(){
 //                alert("wxjssdkinit success");
                 wx.checkJsApi({
-                    jsApiList: ['onMenuShareAppMessage','scanQRCode','startRecord','stopRecord','onVoiceRecordEnd','translateVoice'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+                    jsApiList: ['onMenuShareAppMessage','onMenuShareTimeline','scanQRCode','startRecord','stopRecord','onVoiceRecordEnd','translateVoice'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
                     success: function(res) {
                         // 以键值对的形式返回，可用的api值true，不可用为false
                         // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}

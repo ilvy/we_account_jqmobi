@@ -2,7 +2,7 @@
  * Created by man on 15-4-3.
  */
 //define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEvent','jpopup'],function(router,util,wx){
-define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpopup'],function(router,util){
+define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEvent','jpopup'],function(router,util,wx){
     var disableClick = false;
     function LiveRoom(){
         this.hasSetToolBox = 0;//标记是否已经初始化toolbox
@@ -54,7 +54,6 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
                         that.setToolBox(data);
 
                         $('.room-num').html(' 代袋号:'+data.room);
-                        that.wxShare();
 
                         currentPage = 0;
                         totalPage = -1;
@@ -173,6 +172,7 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
                         console.log(userInfo);
                         this.userInfo = userInfo;
                         _this.setHostInfo(userInfo);
+                        _this.wxShare();
                         _this.setQrcodeBox(userInfo);
                     }
                 }
@@ -534,12 +534,25 @@ define(['router','util','preloadImg','waterfall','ajaxupload','touchEvent','jpop
         },
         wxShare:function(){
             setTimeout(function(){
-                var title = $('.nickname').text();
-                title = title ? title : ' 代袋号:'+globalVar.room_id;
+                var title = $('.nick-name').text();
+                title = title ? title + "的代袋" : ' 代袋号:'+globalVar.room_id;
                 wx.onMenuShareAppMessage({
                     title:title,
                     desc:'看看有没有需要带的',
                     imgUrl:$('#header img').attr('src'),
+                    success:function(){
+                        alert('分享成功');
+                    },
+                    cancel:function(){
+                        alert("取消分享");
+                    },
+                    error:function(){
+                        alert('分享失败，请重试！');
+                    }
+                });
+                wx.onMenuShareTimeline({
+                    title:$(".nick-name").text()+'的代袋',
+                    imgUrl:'https://mp.weixin.qq.com/misc/getheadimg?token=843506446&fakeid=3004560581&r=422186',
                     success:function(){
                         alert('分享成功');
                     },

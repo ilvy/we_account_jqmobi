@@ -45,6 +45,20 @@ define(['router','util','wxAPI','ajaxupload','touchEvent'],function(router,util,
                                 alert('分享失败，请重试！');
                             }
                         });
+                        wx.onMenuShareTimeline({
+                            title:product.title+',猛戳这里下单吧',
+                            desc:product.text,
+                            imgUrl:'http://120.24.224.144/images/thumb/'+product.image_url[0],
+                            success:function(){
+                                alert('分享成功');
+                            },
+                            cancel:function(){
+                                alert("取消分享");
+                            },
+                            error:function(){
+                                alert('分享失败，请重试！');
+                            }
+                        });
                         var isPublisher = window.sessionStorage.getItem('moment_publisher');
                         if(isPublisher == 1 || !globalVar.room_id){//!=
                             $("#take_order").remove();
