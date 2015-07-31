@@ -27,6 +27,8 @@ define(['router','util','wxAPI','ajaxupload','touchEvent'],function(router,util,
                     if(result.flag == 1){
                         globalVar.hideLoading();
                         var product = result.data;
+                        $('title').text(product.title+',猛戳这里下单吧');
+                        $('#for-share').attr('src','http://120.24.224.144/images/thumb/'+product.image_url[0]);
                         _this.product = product;
                         product.text?$(".product_display .desc").addClass('visible').html(product.text):$(".product_display .desc").removeClass('visible');
                         $(".product_display img").attr("src",'http://120.24.224.144/images/'+product.image_url[0]);

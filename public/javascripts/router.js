@@ -139,6 +139,8 @@ define(['routerConfig'],function(routerConfig){
             globalVar.reload[objHash] = reload || 0;
             if(objHash == 'live_room' && reload){
                 globalVar.lv_scroll_top = 0;
+            }else if(objHash == 'live_room' && !reload){
+                globalVar.modules['live_room'].dealForCompactShare();//从产品页面返回直播页面时，恢复对应title和第一张图片，兼容朋友圈分享
             }
             window.location.hash = '#'+hash;
         }

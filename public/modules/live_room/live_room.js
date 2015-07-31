@@ -25,7 +25,7 @@ define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEven
         do:function(){
             this.flushPage();
             this.getHostInfo();
-            $('title').text('代代');
+            //$('title').text('代代');
         },
         flushPage:function(){
             var room_id = globalVar.room_id;
@@ -170,13 +170,21 @@ define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEven
                             },true);
                         }
                         console.log(userInfo);
-                        this.userInfo = userInfo;
+                        _this.userInfo = userInfo;
+                        _this.dealForCompactShare();
                         _this.setHostInfo(userInfo);
                         _this.wxShare();
                         _this.setQrcodeBox(userInfo);
                     }
                 }
             });
+        },
+        /**
+         * 兼容分享处理
+         */
+        dealForCompactShare:function(){
+            $('title').text(this.userInfo.nickname + '的代袋');
+            $('#for-share').attr('src',"http://www.daidai2u.com/images/test_test1.jpg");
         },
         setHostInfo:function(userInfo){
             this.userInfo = $.extend({},this.userInfo,userInfo);

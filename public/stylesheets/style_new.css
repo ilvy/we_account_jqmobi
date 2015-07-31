@@ -9,6 +9,11 @@ a {
     color: #00B7FF;
 }
 
+img#for-share{
+    width: 0;
+    height: 0;
+}
+
 /*************start register.html****************/
 #form{
     width: 60%;
