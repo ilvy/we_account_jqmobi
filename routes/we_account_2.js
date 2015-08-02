@@ -206,6 +206,8 @@ router.get("/live-room",function(req,res){
                 '&product_id='+productId+'&quantity='+quantity,res);
             return;
         }
+    }else if(typeof roomId != 'undefined' && openId){
+
     }
     var orderStatus = req.session.orderStatus;
     if(orderStatus){

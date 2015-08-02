@@ -155,7 +155,7 @@ Waterfall.prototype.renderWaterfall = function(results){
     loadDatas.forEach(function(item){
 //        $(this).clone().css(_this.lastPosition).appendTo(".waterfall");
         var imgstr = '',descStr,bottomStr = '';
-        imgstr = '<img class="lazy" src="http://120.24.224.144/images/'+item.image_url[0]+'" data-num="0">' + imgstr;
+        imgstr = '<img class="lazy" src="http://120.24.224.144/images/thumb/'+item.image_url[0]+'" data-num="0">' + imgstr;
         descStr = '';
         if(item.title){
             descStr = '<div class="desc" style="'+("border-bottom:1px solid #e6e6e6;")+'" data-desc="'+item.title+'">'+(item.title?item.title:"") +'</div>';

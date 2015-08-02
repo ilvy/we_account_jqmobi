@@ -184,7 +184,7 @@ define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEven
          */
         dealForCompactShare:function(){
             $('title').text(this.userInfo.nickname + '的代袋');
-            $('#for-share').attr('src',"http://www.daidai2u.com/images/test_test1.jpg");
+            $('#for-share').attr('src',"http://www.daidai2u.com/images/logo.jpg");
         },
         setHostInfo:function(userInfo){
             this.userInfo = $.extend({},this.userInfo,userInfo);
@@ -264,7 +264,7 @@ define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEven
                         }else if(result.data == 0){
                             alert("房间不存在");
                         }else if(result.data == -2){
-                            window.location.href = '/tutorial-buy.html';
+                            window.location.href = '/follow_account.html';
                         }else if(result.data == -10){
                             alert("取消关注失败");
                         }
@@ -363,7 +363,7 @@ define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEven
                             $('#image_content').html("");
                             util.compress(res,function(err,result){
                                 if(result.flag == 1){
-                                    $("#image_content").append('<div class="upload-display" style="background:url(http://120.24.224.144/images/'+res+') center no-repeat;background-size:100%;">' +
+                                    $("#image_content").append('<div class="upload-display" style="background:url(http://120.24.224.144/images/thumb/'+res+') center no-repeat;background-size:100%;">' +
                                         '<div class="adjustImg"><i class="fa fa-rotate-right"></i></div></div>');//×
                                 }else{
                                     alert("上传失败");
@@ -496,7 +496,7 @@ define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEven
                                 }
                             },
                             onComplete:function(file,res){
-                                $('img.qr-code-img').addClass('visible-inline').attr('src','/images/'+res);
+                                $('img.qr-code-img').addClass('visible-inline').attr('src','/images/thumb/'+res);
                                 $('.upload-qr-code').remove();
                                 $('.re-upload').addClass('visible');
                                 $("#uploading-mask").css("display","none");
@@ -520,7 +520,7 @@ define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEven
                                 }
                             },
                             onComplete:function(file,res){
-                                $('img.qr-code-img').addClass('visible-inline').attr('src','/images/'+res);
+                                $('img.qr-code-img').addClass('visible-inline').attr('src','/images/thumb/'+res);
                                 $('.upload-qr-code').remove();
                                 $('.re-upload').addClass('visible');
                                 $("#uploading-mask").css("display","none");
@@ -541,12 +541,13 @@ define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEven
 //            alert($('#vagueProduct').offset().left);
         },
         wxShare:function(){
+            var _this = this;
             setTimeout(function(){
                 var title = $('.nick-name').text();
                 title = title ? title + "的代袋" : ' 代袋号:'+globalVar.room_id;
                 wx.onMenuShareAppMessage({
                     title:title,
-                    desc:'看看有没有需要带的',
+                    desc:_this.userInfo.introduce,
                     imgUrl:$('#header img').attr('src'),
                     success:function(){
                         alert('分享成功');
@@ -560,7 +561,7 @@ define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEven
                 });
                 wx.onMenuShareTimeline({
                     title:$(".nick-name").text()+'的代袋',
-                    imgUrl:'https://mp.weixin.qq.com/misc/getheadimg?token=843506446&fakeid=3004560581&r=422186',
+                    imgUrl:'http://www.daidai2u.com/images/logo.jpg',
                     success:function(){
                         alert('分享成功');
                     },

@@ -28,7 +28,8 @@ define(['router','util','wxAPI','ajaxupload','touchEvent'],function(router,util,
                         globalVar.hideLoading();
                         var product = result.data;
                         $('title').text(product.title+',猛戳这里下单吧');
-                        $('#for-share').attr('src','http://120.24.224.144/images/thumb/'+product.image_url[0]);
+                        $('#for-share').attr('src','http://120.24.224.144/images/'+product.image_url[0]);
+//                        alert(product.image_url[0])
                         _this.product = product;
                         product.text?$(".product_display .desc").addClass('visible').html(product.text):$(".product_display .desc").removeClass('visible');
                         $(".product_display img").attr("src",'http://120.24.224.144/images/'+product.image_url[0]);
@@ -136,6 +137,8 @@ define(['router','util','wxAPI','ajaxupload','touchEvent'],function(router,util,
                             }else if(results.flag == 0 && results.data == 0){//订单失败且openId为null,微信客户端打开
                                 window.location.href = '/we_account/live-room?room_id='+data.room_id+'&remark='+data.remark+'' +
                                     '&product_id='+data.product_id+'&quantity='+data.quantity+window.location.hash;
+                            }else if(results.flag == -1){
+                                window.location.href = '/follow_account.html';
                             }
                         },
                         error:function(err){

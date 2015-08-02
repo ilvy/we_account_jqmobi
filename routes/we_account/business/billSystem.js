@@ -7,6 +7,7 @@ var dbOperator = require("../../../db/dbOperator"),
     accountInfo = require("../accountInfo"),
     tokenManager = require("../access_token"),
     util = require("../util/util"),
+    async = require('async'),
     we_auth = require('../we_auth');
 
 /**
@@ -34,30 +35,64 @@ function takeOrder(req,res,callback){
         response.failed(0,res,'');
         return;
     }
+    var checkSubscribe = function(cb){
+        dbOperator.query('call pro_check_customer_subscribe(?)',[openId],function(err,rows){
+            cb(err,rows);
+        });
+    };
+    var takeOrderFun = function(results,cb){
+        if(!(results[0] && results[0][0] && results[0][0]['isSubscribe'])){
+            response.failed(-1,res,'');
+            cb('not subscribe',null);
+            return;
+        }
+        var paras = [openId,roomId,remark,productId,quantity,create_time];
+        dbOperator.query('call pro_take_order(?,?,?,?,?,?)',paras,function(err,rows){
+            if(err){
+                console.log(err);
+                if(callback){
+                    callback(err,null,res);
+                    return;
+                }
+                response.failed(-2,res,'');
+            }else{
+                if(callback){
+                    callback(null,rows,res);
+                    return;
+                }
+                console.log(rows);
+                if(rows[0] && rows[0][0] && rows[0][0].isExistCustomer){
+                    getNicknameFromWeix(openId,roomId);
+                }
+                response.success('',res,'');
+            }
+            cb(err,results);
+        });
+    };
+    async.waterfall([checkSubscribe,takeOrderFun],function(err,results){
+        if(err){
+            console.log(err);
+        }
+    });
 //    else if(!openId && isWeChat){//若是微信客户端打开，获取openid
 //        we_auth.getWeAuth('/we_account/getAuthAndTakeOrder?room_id='+roomId+'&remark='+remark+'' +
 //            '&product_id='+productId+'&quantity='+quantity+'&create_time='+create_time);
 //        return;
 //    }
-    var paras = [openId,roomId,remark,productId,quantity,create_time];
-    dbOperator.query('call pro_take_order(?,?,?,?,?,?)',paras,function(err,rows){
+
+}
+
+/**
+ * 检测买家是否已经关注
+ * @param openId
+ * @param callback
+ */
+function checkCustomerSubscribe(openId,callback){
+    dbOperator.query('call pro_check_customer_subscribe(?)',[openId],function(err,rows){
         if(err){
-            console.log(err);
-            if(callback){
-                callback(err,null,res);
-                return;
-            }
-            response.failed(-2,res,'');
+            console.log('call pro_check_customer_subscribe err',err);
         }else{
-            if(callback){
-                callback(null,rows,res);
-                return;
-            }
-            console.log(rows);
-            if(rows[0] && rows[0][0] && rows[0][0].isExistCustomer){
-                getNicknameFromWeix(openId,roomId);
-            }
-            response.success('',res,'');
+            callback(rows);
         }
     });
 }
@@ -319,3 +354,4 @@ exports.updateMailPay = updateMailPay;
 exports.getNicknameFromWeix = getNicknameFromWeix;
 exports.vagueMatchNames = vagueMatchNames;
 exports.getPayment = getPayment;
+exports.checkCustomerSubscribe = checkCustomerSubscribe;

@@ -10,8 +10,12 @@ a {
 }
 
 img#for-share{
-    width: 0;
-    height: 0;
+    width: 201px;
+    height: 201px;
+    position: absolute;
+    left: 0;
+    top: -300px;
+    /*display: none;*/
 }
 
 /*************start register.html****************/
