@@ -17,12 +17,14 @@ function dispatch(data,res){
             var text = data.Content.trim();
             data.replyContent = "小主您好，我是小代";
             if(text == 0){
-                var imageTexts = [{
-                    title:'买家代代使用教程',
-                    description:'想用代代找货，下单，不会用？点击查看教程，一分钟就会，就是这么简单',
-                    picUrl:'http://www.daidai2u.com/images/replyTutotion.png?v=1',
-                    url:'http://www.daidai2u.com/tutorial-buy.html'
-                },{
+                var imageTexts = [
+//                    {
+//                    title:'买家代代使用教程',
+//                    description:'想用代代找货，下单，不会用？点击查看教程，一分钟就会，就是这么简单',
+//                    picUrl:'http://www.daidai2u.com/images/replyTutotion.png?v=1',
+//                    url:'http://www.daidai2u.com/tutorial-buy.html'
+//                },
+                    {
                     title:'卖家看代代使用教程',
                     description:'想用代代管理代购信息，点击查看教程，一分钟就会，就是这么简单',
                     picUrl:'http://www.daidai2u.com/images/replyTutotion.png?v=1',

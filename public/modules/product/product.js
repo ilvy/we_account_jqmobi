@@ -132,8 +132,8 @@ define(['router','util','wxAPI','ajaxupload','touchEvent'],function(router,util,
                             globalVar.hideLoading();
                             if(results.flag == 1){
                                 _this.cleanEarlierInputs();
-                                alert('订单确定，请联系卖家！')
-                                router.changeHash('live_room-'+globalVar.room_id,0);
+                                alert('订单确定，请联系卖家！');
+                                router.changeHash('live_room-'+globalVar.room_id,1);
                             }else if(results.flag == 0 && results.data == 0){//订单失败且openId为null,微信客户端打开
                                 window.location.href = '/we_account/live-room?room_id='+data.room_id+'&remark='+data.remark+'' +
                                     '&product_id='+data.product_id+'&quantity='+data.quantity+window.location.hash;
