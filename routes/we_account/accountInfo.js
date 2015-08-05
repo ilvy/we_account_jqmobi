@@ -71,6 +71,9 @@ function fix(data,cb){
             getAccountInfo(tokenManager.access_token,openId,function(accountInfo){
                 console.log(accountInfo);
                 accountInfo = JSON.parse(accountInfo);
+                if(!(accountInfo && accountInfo.nickname)){
+                    return;
+                }
                 var args = [openId,roomId,accountInfo.nickname];
                 console.log(openId,roomId);
                 dbOperator.query('call pro_set_customer_nickname(?,?,?)',args,function(err,rows){

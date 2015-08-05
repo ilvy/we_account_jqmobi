@@ -101,6 +101,9 @@ function getNicknameFromWeix(openid,roomid,callback){
     accountInfo.getAccountInfo(tokenManager.access_token,openid,function(accountInfo){
         console.log(accountInfo);
         accountInfo = JSON.parse(accountInfo);
+        if(!(accountInfo && accountInfo.nickname)){
+            return;
+        }
         var args = [openid,roomid,accountInfo.nickname];
         dbOperator.query('call pro_set_customer_nickname(?,?,?)',args,function(err,rows){
             if(err){
