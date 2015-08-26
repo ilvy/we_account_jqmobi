@@ -55,6 +55,8 @@ function dispatch(data,res){
             if(data.Event == 'subscribe'){
                 data.replyContent = '欢迎关注代代！\n 回复0查看代代使用教程';
                 response(data,res);
+            }else if(data.Event == 'unsubscribe'){
+
             }else if(data.Event == 'CLICK'){
                 console.log("event:click");
                 if(data.EventKey == 'input_room_num'){

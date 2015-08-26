@@ -36,16 +36,17 @@ function takeOrder(req,res,callback){
         return;
     }
     var checkSubscribe = function(cb){
-        dbOperator.query('call pro_check_customer_subscribe(?)',[openId],function(err,rows){
-            cb(err,rows);
-        });
+//        dbOperator.query('call pro_check_customer_subscribe(?)',[openId],function(err,rows){
+//            cb(err,rows);
+//        });
+        cb(null,null);
     };
     var takeOrderFun = function(results,cb){
-        if(!(results[0] && results[0][0] && results[0][0]['isSubscribe'])){
-            response.failed(-1,res,'');
-            cb('not subscribe',null);
-            return;
-        }
+//        if(!(results[0] && results[0][0] && results[0][0]['isSubscribe'])){
+//            response.failed(-1,res,'');
+//            cb('not subscribe',null);
+//            return;
+//        }
         var paras = [openId,roomId,remark,productId,quantity,create_time];
         dbOperator.query('call pro_take_order(?,?,?,?,?,?)',paras,function(err,rows){
             if(err){
