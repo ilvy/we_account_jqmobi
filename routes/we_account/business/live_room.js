@@ -719,6 +719,10 @@ function uploadQrcode(req,res){
     });
 }
 
+function cut(req,res){
+    res.render("cut_off",{});
+}
+
 //exports.renderLiveRoom = gotoLiveRoom;
 exports.renderLiveRoom_new = gotoLiveRoom_new;
 exports.knockDoor = knockDoor;
@@ -739,3 +743,4 @@ exports.vagueSearchProduct = vagueSearchProduct;
 exports.searchProductByName = searchProductByName;
 exports.editProduct = editProduct;
 exports.uploadQrcode = uploadQrcode;
+exports.cut = cut;

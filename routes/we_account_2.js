@@ -375,6 +375,8 @@ router.get('/searchProductByName',live_room.searchProductByName);
 
 router.post('/edit-product',live_room.editProduct);
 
+router.get('/cut',live_room.cut);
+
 router.get("/xml",function(req,res){
     xmlParser.parseXml("<xml><ToUserName><![CDATA[gh_d28b25ec1197]]></ToUserName>" +
         "<FromUserName><![CDATA[oHbq1t0enasGWD7eQoJuslZY6R-4]]></FromUserName>" +
