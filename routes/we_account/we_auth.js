@@ -6,10 +6,10 @@ var urlencode = require('urlencode'),
     appConfig = require('../../config/config').appConfig,
     https = require('https');
 
-function getWeAuth(redirect_uri,res){
+function getWeAuth(redirect_uri,res,scope){
     redirect_uri = urlencode(redirect_uri);
     res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?" +
-        "appid="+appConfig.appId+"&redirect_uri="+redirect_uri+"&response_type=code&scope=snsapi_base&state=123#wechat_redirect");
+        "appid="+appConfig.appId+"&redirect_uri="+redirect_uri+"&response_type=code&scope="+(scope||'snsapi_base')+"&state=123#wechat_redirect");
 }
 
 function redirectToUrl(req,resp,callback){
@@ -42,5 +42,31 @@ function redirectToUrl(req,resp,callback){
     });
 }
 
+/**
+ * 网页获取用户授权信息第四步
+ * @param req
+ * @param resp
+ * @param ACCESS_TOKEN
+ * @param OPENID
+ * @param callback
+ */
+function getSnsapi_userinfo(req,resp,ACCESS_TOKEN,OPENID,callback){
+    var url = "https://api.weixin.qq.com/sns/userinfo?access_token="+ACCESS_TOKEN+"&openid="+OPENID+"&lang=zh_CN";
+    https.get(url,function(res){
+        var chunks = "";
+        res.on("data",function(data){
+            chunks += data;
+        });
+        res.on('end',function(){
+//            console.log(chunks.toString());
+            callback(null,JSON.parse(chunks),req,resp);
+        })
+    }).on("error",function(e){
+        console.log("getSnsapi_userinfo error:"+ e.message);
+        callback(e,null);
+    });
+}
+
 exports.getWeAuth = getWeAuth;
 exports.redirectToUrl = redirectToUrl;
+exports.getSnsapi_userinfo = getSnsapi_userinfo;

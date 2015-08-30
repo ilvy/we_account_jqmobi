@@ -231,3 +231,12 @@ exports.query = query;
 //        console.log(rows)
 //    }
 //});
+
+query("call pro_help_cut(?,?,?)",[1,"oxfQVs4zCT1ZW0XJysajkbL9CIrY",1],function(err,rows){
+    if(err){
+        console.log("call pro_help_cut err:",err);
+
+    }else{
+        console.log(rows);
+    }
+});

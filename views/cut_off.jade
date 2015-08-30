@@ -9,14 +9,10 @@ html
         meta(name="viewport",content="width=device-width,initial-scale=1.0,user-scalable=no")
         link(rel='stylesheet', href='/stylesheets/bootstrap.css')
         link(rel='stylesheet', href='/stylesheets/bootstrap-grid.css')
-        link(rel='stylesheet', href='/stylesheets/style_new.css')
-        style.
-             .page {
-                 display: block;
-             }
+        link(rel='stylesheet', href='/stylesheets/cut.css')
     body
         div.page.register
-        div.page.products-page.live_room.slide-init
+        div(style="display:block;").page.products-page.live_room.slide-init
             #header
                 .head.col-xxs-3.col-xs-2
                     img(src="/images/test_1429245238251.jpg")
@@ -28,7 +24,19 @@ html
                     .attention.col-xxs-7 关注者:
                         span.attention-num 110
                     .qr-code-btn.col-xxs-5 加TA微信
-            .
+            #cut-body
+                H2.fuli-desc 又发福利啦!!
+                H3.help-who 我是
+                    span.obj #{customer_name}
+                    span ,快来帮我砍一刀!
+                img(src="/images/test_1429248716888.jpg")#product-img
+                H5.origin-price 价格:
+                    span.price #{price}
+                    span 元
+                H5.product
+                    span.product-name #{product_name}
+                    span 随你砍!砍掉多少算多少
+                input(type="button" value="帮TA砍一刀")#cut-btn
 
     script(src="/javascripts/jquery.js")
     script(src="/javascripts/cut.js")
