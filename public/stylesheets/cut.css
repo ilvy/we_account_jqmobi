@@ -1,0 +1,141 @@
+body {
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    overflow-x: hidden;
+    /* padding: 6px; */
+    background-color: #f1f1f1 !important;
+}
+
+.page{
+    width: 100%;
+    left: 0;
+}
+
+#header{
+    width: 100%;
+    text-align: center;
+    background-color: white;
+    /*background-color: rgba(233, 234, 234, 1);*/
+    /*color: white;*/
+    /*padding: 8px 6px;*/
+    font-size: 1.5rem;
+    padding-top: 8px;
+    margin-bottom: 10px;
+}
+
+
+#header{
+    float: left;
+    height: 122px;
+}
+
+#cut-body{
+    width: 100%;
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+#header .head img{
+    width: 100%;
+    /*width: 108px;*/
+}
+
+.nick-name {
+    text-align: left;
+    font-size: 1.5rem;
+    font-weight: bolder;
+    margin-bottom: 8px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.room-num {
+    font-size: 1rem;
+    text-align: right;
+    color: #999;
+    line-height: 17px;
+    vertical-align: bottom;
+}
+.host-intro {
+    clear: both;
+    font-size: 1.3rem;
+    color: #999;
+}
+
+.host-intro {
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+.attention, .qr-code-btn {
+    position: absolute;
+    bottom: 8px;
+}
+
+.attention {
+    color: #12c6d1;
+    font-size: 1rem;
+    height: 24px;
+    line-height: 24px;
+    vertical-align: middle;
+    text-align: left;
+    left: 0;
+}
+
+.qr-code-btn {
+    background-color: rgb(236, 64, 64);
+    color: white;
+    padding: 3px;
+    font-size: 1rem;
+    right: 0;
+}
+
+.attention, .qr-code-btn {
+    position: absolute;
+    bottom: 8px;
+}
+
+.detail-personal-info {
+    color: rgb(73, 69, 69);
+    margin-left: 3%;
+    height: 100%;
+}
+#header .col-xs-1, #header .col-xs-2, #header .col-xs-3, #header .col-xs-4, #header .col-xs-5, #header .col-xs-6, #header .col-xs-7, #header .col-xs-8, #header .col-xs-9, #header .col-xs-10, #header .col-xs-11, #header .col-xs-12 {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+#header .col-xxs-1, #header .col-xxs-2, #header .col-xxs-3, #header .col-xxs-4, #header .col-xxs-5, #header .col-xxs-6, #header .col-xxs-7, #header .col-xxs-8, #header .col-xxs-9, #header .col-xxs-10, #header .col-xxs-11, #header .col-xxs-12 {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+#header .col-xxs-9 {
+    width: 72%;
+}
+
+.fuli-desc{
+    clear: both;
+    color: rgb(236, 64, 64);
+    padding-top: 18px;
+}
+
+.product-name,
+.origin-price .price,
+.help-who .obj{
+    text-decoration: underline;
+}
+.origin-price .price{
+    color: rgb(236, 64, 64);
+}
+
+#cut-btn{
+    background-color: rgb(236, 64, 64);
+    border: none;
+    color: white;
+    padding: 3px 12px;
+}
+
+#product-img{
+    max-width: 200px;
+}

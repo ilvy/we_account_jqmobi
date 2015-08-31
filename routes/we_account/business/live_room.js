@@ -10,6 +10,7 @@ var dbOperator = require("../../../db/dbOperator"),
     formidable = require("formidable"),
     path = require("path"),
     fs = require("fs"),
+    we_auth = require("../we_auth"),
     querystring = require("querystring");
 
 
@@ -719,8 +720,116 @@ function uploadQrcode(req,res){
     });
 }
 
+/**
+ * 砍价信息页面
+ * @param req
+ * @param res
+ */
 function cut(req,res){
-    res.render("cut_off",{});
+    var cut_id = req.query.cutserial,
+        room_id = req.query.room_id;
+    if(req.session.openId){
+        getCutInfo(cut_id,res)();
+        return;
+    }
+    if(!req.session.authority){
+        req.session.authority = true;
+        var redirect_uri = "http://www.daidai2u.com/we_account/cut?cutserial="+cut_id+"&room_id="+room_id+"#"+room_id;
+        we_auth.getWeAuth(redirect_uri,res,"snsapi_userinfo");
+    }else{
+        we_auth.redirectToUrl(req,res,function(err,results,requ,resp,nocode){
+            if(err){
+                console.log('getAuth snsapi_userinfo failed:',err);
+            }else if(nocode){
+                delete req.session.authority;
+                return;
+            }else if(results){
+                var openId = req.session.openId = results.openid;
+                var accessToken = results.access_token;
+                console.log("get openId:"+results.openid);
+                we_auth.getSnsapi_userinfo(req,res,accessToken,openId,function(err,userInfo){
+                    async.series([
+                        helpCut(cut_id,openId,1,userInfo.nickname,userInfo.sex,userInfo.headimgurl),
+                        getCutInfo(cut_id,res)
+                    ],function(err,results){
+                        if(err){
+                            res.render("error",{});
+                        }
+                    });
+                });
+
+            }
+        });
+    }
+}
+
+/**
+ * 进入帮帮砍的页面，尚未开砍，建立t_cutlist_detail基本信息
+ * @param cut_id
+ * @param openId
+ * @param cutMoney
+ * @param nicknam
+ * @param sex
+ * @param headimgurl
+ * @returns {Function}
+ */
+var helpCut = function(cut_id,openId,cutMoney,nicknam,sex,headimgurl){
+    var args = [cut_id,openId,cutMoney,nicknam,sex,headimgurl];//cut_id,open_id,cut_money,nicknam,sex,headimgurl
+    return function(cb){
+        dbOperator.query("call pro_ready_help_cut(?,?,?,?,?,?)",args,function(err,rows){
+            if(err){
+                console.log("pro_ready_help_cut error");
+            }
+            cb(err,rows);
+        })
+    }
+};
+/**
+ * 砍价信息页面
+ * @param cut_id
+ * @param res
+ * @returns {Function}
+ */
+var getCutInfo = function(cut_id,res){
+    return function(cb){
+        dbOperator.query("call pro_get_cut_info(?)",[cut_id],function(err,rows){
+            if(err){
+                res.render("error",{});
+            }else{
+                if(rows && rows[0] && rows[0][0]){
+                    res.render("cut_off",rows[0][0]);
+                }else{
+                    res.render("error",{});
+                }
+                cb?cb(null,rows):"";
+            }
+        });
+    }
+}
+
+/**
+ * 砍一刀咯
+ * @param req
+ * @param res
+ */
+function helpCutOff(req,res){
+    var openId = req.session.openId;
+    var cutId = req.query.cut_id;
+    dbOperator.query("call pro_help_cut(?,?,?)",[cutId,openId,1],function(err,rows){
+        if(err){
+            console.log("call pro_help_cut err:",err);
+            response.failed(0,res,"");
+        }else{
+            if(rows && rows[0] && rows[0][0]){
+                var alreadyCut = rows[0][0].alreadyCut;
+                if(alreadyCut){
+                    response.success(2,res,"");//已经砍过了
+                }else{
+                    response.success(1,res,"");//没砍过，成功了
+                }
+            }
+        }
+    });
 }
 
 //exports.renderLiveRoom = gotoLiveRoom;
@@ -744,3 +853,4 @@ exports.searchProductByName = searchProductByName;
 exports.editProduct = editProduct;
 exports.uploadQrcode = uploadQrcode;
 exports.cut = cut;
+exports.helpCutOff = helpCutOff;
