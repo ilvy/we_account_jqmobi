@@ -17,9 +17,7 @@ $(document).ready(function(){
 
 function addListener(){
     $(document).on("click","#cut-btn",function(){
-        
-        alert("Å£Æø£¬Äã°ïËû¿³ÁË10¿é");
-        window.location.href = "/we_account/live-room#live_room-"+roomId;
+
     });
 }
 
