@@ -726,6 +726,7 @@ function uploadQrcode(req,res){
  * @param res
  */
 function cut(req,res){
+//    req.session.openId = 'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
     var cut_id = req.query.cutserial,
         room_id = req.query.room_id;
     if(req.session.openId){
@@ -818,7 +819,7 @@ function helpCutOff(req,res){
     dbOperator.query("call pro_help_cut(?,?,?)",[cutId,openId,1],function(err,rows){
         if(err){
             console.log("call pro_help_cut err:",err);
-            response.failed(0,res,"");
+            response.failed(-1,res,"");
         }else{
             if(rows && rows[0] && rows[0][0]){
                 var alreadyCut = rows[0][0].alreadyCut;
