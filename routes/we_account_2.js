@@ -9,6 +9,7 @@ var express = require("express"),
     crypto = require("crypto"),
     checkWeAuth = require("./we_account/wexin_check").check,
     xmlParser = require("./we_account/util/xml_parser"),
+    util = require("./we_account/util/util"),
     formidable = require("formidable"),
     path = require("path"),
     fs = require("fs"),
@@ -377,7 +378,7 @@ router.post('/edit-product',live_room.editProduct);
 
 router.get('/cut',live_room.cut);
 
-router.post("/help-cut-off".live_room.helpCutOff);
+router.post("/help-cut-off",util.filterLoginAjax,live_room.helpCutOff);
 
 router.get("/xml",function(req,res){
     xmlParser.parseXml("<xml><ToUserName><![CDATA[gh_d28b25ec1197]]></ToUserName>" +

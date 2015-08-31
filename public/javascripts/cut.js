@@ -2,7 +2,7 @@
  * Created by Administrator on 2015/8/29.
  */
 var margin = 8;
-var roomId = window.location.hash;
+var roomId = window.location.hash.substring(1);
 $(document).ready(function(){
     var headerW = this.win_w - 2 * margin;
     $("#header").css({
@@ -17,12 +17,34 @@ $(document).ready(function(){
 
 function addListener(){
     $(document).on("click","#cut-btn",function(){
-
+        var cutId = getUrlParam("cutserial");
+        var url = "/we_account/help-cut-off?cut_id="+cutId;
+        $.ajax({
+            url:url,
+            type:"post"
+        })
+            .success(function(results){
+                if(results.flag == 1){
+                    if(results.data == 1){
+                        alert("ç‰›æ°”ï¼Œå¸®ä»–ç äº?1ä¸ªå¤§æ´?");
+                    }else if(results.data == 2){
+                        alert("æ‚¨å¤ªå®¢æ°”äº†ï¼Œå·²ç»ç è¿‡ä¸?åˆ?å’?");
+                    }
+                    window.location.href = "/we_account/live-room#live_room-"+roomId;
+                }else if(results.flag == 0){
+                    if(results.data == 0){//è¯´æ˜æœªæˆæ?
+                        alert("æ‚¨å°šæœªæˆæƒï¼Œæ— æ³•æ­£å¸¸æ“ä½œ");
+                    }
+                }
+            })
+            .error(function(err){
+                console.log(err)
+            });
     });
 }
 
 /**
- * »ñÈ¡Âô¼ÒĞÅÏ¢
+ * ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
  */
 function getHostInfo(){
     var _this = this;
@@ -53,7 +75,14 @@ function setHostInfo(userInfo){
     $('.nick-name').text(userInfo.nickname||'');
     $('.account_num').text(userInfo.weix_account||'');
     userInfo.headimgurl ? $('.head img').attr('src',userInfo.headimgurl) : '';
-    $('.sex').text(userInfo.sex ? 'ÄĞ':'Å®');
-    $('.host-intro').text(userInfo.introduce||"Ö÷ÈËÌ«ÀÁ£¬×ßÂ·Ì«¼±£¬É¶»°¶¼Ã»ÁôÏÂ");
+    $('.sex').text(userInfo.sex ? 'ï¿½ï¿½':'Å®');
+    $('.host-intro').text(userInfo.introduce||"ï¿½ï¿½ï¿½ï¿½Ì«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â·Ì«ï¿½ï¿½ï¿½ï¿½É¶ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½");
     $('.attention-num').text(userInfo.favcount);
+}
+
+//è·å–urlä¸­çš„å‚æ•°
+function getUrlParam(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //æ„é? ä¸€ä¸ªå«æœ‰ç›®æ ‡å‚æ•°çš„æ­£åˆ™è¡¨è¾¾å¼å¯¹è±?
+    var r = window.location.search.substr(1).match(reg);  //åŒ¹é…ç›®æ ‡å‚æ•°
+    if (r != null) return unescape(r[2]); return null; //è¿”å›å‚æ•°å€?
 }

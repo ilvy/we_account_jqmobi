@@ -50,8 +50,26 @@ function formatTime(date){
     return (hh >= 10?"":"0")+hh+":"+(mm >= 10?"":"0")+mm+":"+(ss >= 10?"":"0")+ss;
 }
 
+/**
+ * 过滤未登陆的用户
+ * @param req
+ * @param res
+ * @param next
+ */
+function filterLoginAjax(req,res,next){
+    if(!req.session.openId){
+        res.send({
+            flag:0,//失败
+            data:0//失败原因：未登陆
+        });
+    }else{
+        next();
+    }
+}
+
 exports.getImageExt = function getImageExt(imageName){
 
 }
 
 exports.formatDate = formatDate;
+exports.filterLoginAjax = filterLoginAjax;

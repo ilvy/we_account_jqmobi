@@ -1,7 +1,6 @@
 /**
  * Created by man on 15-4-28.
  */
-
 define([],function(){
     return {
         formatDate:function(date,isFormatTime, thedaybefore,formatType) {
