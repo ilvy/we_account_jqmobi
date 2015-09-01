@@ -36,6 +36,12 @@ html
                 H5.product
                     span.product-name #{product_name}
                     span 随你砍!砍掉多少算多少
+                H5.cut-total-since
+                    span 已经
+                    span.person-quantity #{cut_money}
+                    span 人参与，砍掉
+                    span.has-cut-money #{cutCount}
+                    span 元
                 input(type="button" value="帮TA砍一刀")#cut-btn
 
     script(src="/javascripts/jquery.js")

@@ -726,7 +726,7 @@ function uploadQrcode(req,res){
  * @param res
  */
 function cut(req,res){
-//    req.session.openId = 'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
+    req.session.openId = 'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
     var cut_id = req.query.cutserial,
         room_id = req.query.room_id;
     if(req.session.openId){
