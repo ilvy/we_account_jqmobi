@@ -122,7 +122,9 @@ body {
 
 .product-name,
 .origin-price .price,
-.help-who .obj{
+.help-who .obj,
+.person-quantity,
+.has-cut-money {
     text-decoration: underline;
 }
 .origin-price .price{
@@ -138,4 +140,8 @@ body {
 
 #product-img{
     max-width: 200px;
+}
+
+.person-quantity{
+
 }
