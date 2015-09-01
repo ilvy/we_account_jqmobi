@@ -750,7 +750,7 @@ function cut(req,res){
                 console.log("get openId:"+results.openid);
                 we_auth.getSnsapi_userinfo(req,res,accessToken,openId,function(err,userInfo){
                     async.series([
-                        helpCut(cut_id,openId,1,userInfo.nickname,userInfo.sex,userInfo.headimgurl),
+                        helpCut(cut_id,openId,0,userInfo.nickname,userInfo.sex,userInfo.headimgurl),
                         getCutInfo(cut_id,res)
                     ],function(err,results){
                         if(err){
