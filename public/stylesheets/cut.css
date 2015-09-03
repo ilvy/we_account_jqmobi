@@ -142,6 +142,7 @@ body {
     max-width: 200px;
 }
 
-.person-quantity{
-
+.person-quantity,
+.has-cut-money{
+    margin: 0 3px;
 }
