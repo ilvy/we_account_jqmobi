@@ -1,0 +1,29 @@
+//
+    Created by Administrator on 15-1-23.
+
+doctype html
+html
+    head
+        title 代代
+        meta(name="viewport",content="width=device-width,initial-scale=1.0,user-scalable=no")
+        link(rel='stylesheet', href='/stylesheets/bootstrap.css')
+        link(rel='stylesheet', href='/stylesheets/bootstrap-grid.css')
+        link(rel='stylesheet', href='/stylesheets/cut.css')
+    body
+        div#cutlist-wrapper
+            ul#cutlist.col-xxs-12
+                li
+                    img(src="http://bs.baidu.com/dulife/558944e54eead.jpg").col-xxs-2
+                    div.c-li-attrs.col-xxs-4
+                        div.c-l-cname jiangxuefeng
+                        div.c-l-pubtime 2015-09-01
+                    div.c-li-attrs.col-xxs-4
+                        div.c-l-cut-money 88
+                        div.c-l-curr-price 8888
+                    div.c-li-status.col-xxs-2
+                        input(value="完成").status-btn
+            #add-cut.col-xxs-12
+                .plus.btn
+    script(src="/javascripts/jquery.js")
+    script(src="/util/util.js")
+    script(src="/javascripts/cut.js")
