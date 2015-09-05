@@ -672,7 +672,7 @@ function editProduct(req,res){
 }
 
 function uploadQrcode(req,res){
-    var openId = req.session.openId||'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
+    var openId = req.session.openId;//||'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
     //console.log(req);
     var form = new formidable.IncomingForm();
     form.uploadDir = __dirname+'';
@@ -727,7 +727,7 @@ function uploadQrcode(req,res){
  * @param res
  */
 function cut(req,res){
-    req.session.openId = 'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
+    //req.session.openId = 'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
     var cut_id = req.query.cutserial,
         room_id = req.query.room_id;
     if(req.session.openId){
@@ -840,7 +840,7 @@ function helpCutOff(req,res){
  * @param res
  */
 function getCutList(req,res){
-    req.session.openId = 'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
+    //req.session.openId = 'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
     var openId = req.session.openId;
     dbOperator.query("call pro_get_cut_list(?)",[openId],function(err,rows){
         if(err){
@@ -868,13 +868,18 @@ function create_cut_info(req,res){
         productName = query.product_name,
         price = query.price,
         create_time = util.formatDate(new Date(),1),
-        product_img = query.product_img;
-    dbOperator.query("call pro_create_cut_info(?,?,?,?,?,?)",[openId,username,productName,price,create_time,product_img], function (err,rows) {
+        product_img = query.product_img,
+        activity_duration = query.activity_duration;
+    dbOperator.query("call pro_create_cut_info(?,?,?,?,?,?,?)",[openId,username,productName,price,create_time,product_img,activity_duration], function (err,rows) {
         if(err){
             console.log("call pro_create_cut_info err:"+err);
             response.failed(-1,res,"")
         }else{
-            response.success(1,res,"");
+            if(rows && rows[0] && rows[0][0]){
+                response.success(rows[0][0],res,"");
+            }else{
+                response.success(2,res,"")
+            }
         }
     })
 }

@@ -111,6 +111,7 @@ define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEven
 
         },
         setToolBox : function(data){
+            $(".spread-btn").attr("href","http://www.daidai2u.com/we_account/cut-list#"+globalVar.room_id);
             if(data.publisher){
 //                alert(data.publisher)
     //                $("#tools-box").html('<div id="upload-div-box"><div id="upload-div"><div id="upload"><i class="fa fa-plus"></i></div></div></div>');

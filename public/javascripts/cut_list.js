@@ -14,6 +14,7 @@ $(document).ready(function(){
     });
     getHostInfo();
     addListener();
+    wxInit();
 });
 
 function addListener(){
@@ -49,13 +50,16 @@ function addListener(){
     $(document).on("click","#submit-btn",function(){
         var username = $("input.obj").val(),
             product_name = $("input.product-name").val(),
-            price = $("input.price").val();
-        var url = "/we_account/create_cut_info?username="+username+"&product_name="+product_name+"&price="+price+"&product_img="+productImg;
+            price = $("input.price").val(),
+            activity_duration = $("input.many-days").val();
+        var url = "/we_account/create_cut_info?username="+username+"&product_name="+product_name+"&price="+price+"&product_img="+productImg+"&activity_duration="+activity_duration;
         $.ajax({
             url:url,
             type:"post",
             success:function(results){
                 if(results.flag == 1){
+                    if(typeof results.cut_id != 'undefined')
+                    wxShare("","","http://www.daidai2u.com/we_account/cut?cutserial="+results.cut_id+"&room_id="+roomId+"#"+roomId);
                     alert("添加成功");
                 }
             },
@@ -105,6 +109,78 @@ function setHostInfo(userInfo){
     $('.sex').text(userInfo.sex ? '男':'女');
     $('.host-intro').text(userInfo.introduce||"主人太懒，走路太急，啥话都没留下");
     $('.attention-num').text(userInfo.favcount);
+    $(".room-num").html("代代号:"+roomId);
+}
+
+/**
+ * 初始化wx js sdk
+ */
+function wxInit(){
+    util.wxjssdkInit(function(err,results){
+        var config;
+        if(results.flag == 1){
+            var data = results.data;
+//            alert(data.url);
+            config = {
+//                debug:true,
+                appId:"wx2f81c72f4e91b732",
+                jsapi_ticket: data.jsapi_ticket,
+                nonceStr: data.nonceStr,
+                timestamp: data.timestamp,
+                signature:data.signature,
+                url: data.url,
+                jsApiList: ['onMenuShareAppMessage','scanQRCode','onMenuShareTimeline']
+            };
+            wx.config(config);
+            wx.ready(function(){
+//                alert("wxjssdkinit success");
+                wx.checkJsApi({
+                    jsApiList: ['onMenuShareAppMessage','onMenuShareTimeline'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+                    success: function(res) {
+                        // 以键值对的形式返回，可用的api值true，不可用为false
+                        // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+//                        (res.checkResult.onMenuShareAppMessage);
+                    }
+                });
+            });
+            wx.error(function(res){
+                alert("wxjssdkinit failed");
+            });
+        }
+    })
+}
+
+function wxShare(title,desc,link){
+    wx.onMenuShareAppMessage({
+        title:title||"帮帮忙咯",
+        desc:desc||"我是"+$(".help-who .obj").val()+",快来帮我砍一刀!",
+        link:link,
+        imgUrl:"http://www.daidai2u.com/images/logo.jpg",
+        success:function(){
+            alert('分享成功');
+        },
+        cancel:function(){
+            alert("取消分享");
+        },
+        error:function(){
+            alert('分享失败，请重试！');
+        }
+    });
+    wx.onMenuShareTimeline({
+        title:title||"帮帮忙咯",
+        desc:desc||"我是"+$(".help-who .obj").val()+",快来帮我砍一刀!",
+        link:link,
+        imgUrl:'http://www.daidai2u.com/images/logo.jpg',
+        success:function(){
+            alert('分享成功');
+        },
+        cancel:function(){
+            alert("取消分享");
+        },
+        error:function(){
+            alert('分享失败，请重试！');
+        }
+    });
 }
 
 //获取url中的参数

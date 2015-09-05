@@ -339,8 +339,8 @@ img#for-share{
 .attention{
     color: #12c6d1;
     font-size: 1rem;
-    height: 24px;
-    line-height: 24px;
+    /*height: 24px;*/
+    /*line-height: 24px;*/
     vertical-align: middle;
     text-align: left;
     left: 0;
@@ -357,6 +357,13 @@ img#for-share{
 .attention,.qr-code-btn{
     position: absolute;
     bottom: 8px;
+}
+
+.spread-btn{
+    color: rgb(236, 64, 64);
+    text-decoration: none;
+    float: right;
+    margin-right: 10px;
 }
 
 .host-intro{

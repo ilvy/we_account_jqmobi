@@ -37,6 +37,11 @@ body {
     font-size: 1.5rem;
 }
 
+H2,H3,H4,H5{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 #header .head img{
     width: 100%;
     /*width: 108px;*/
@@ -123,18 +128,32 @@ body {
     padding-top: 18px;
 }
 
-.product-name,
 .origin-price .price,
 .help-who .obj,
 .person-quantity,
-.has-cut-money {
+.has-cut-money,
+.many-hours,
+.many-days{
     text-decoration: underline;
 }
+
+.product{
+    margin-top: 3px;
+}
+
 .origin-price .price{
     color: rgb(236, 64, 64);
 }
 
 #cut-btn{
+    background-color: rgb(236, 64, 64);
+    border: none;
+    color: white;
+    padding: 3px 12px;
+    margin-bottom: 20px;
+}
+
+.red-btn{
     background-color: rgb(236, 64, 64);
     border: none;
     color: white;
@@ -235,14 +254,15 @@ body {
     margin-top: 5px;
 }
 
-.plus-btn{
+.plus-btn-wrapper{
     width: 40px;
     height: 40px;
     background-color: #A9A9A9;
     position: relative;
+    border: none;
 }
 
-.plus-btn:before{
+.plus-btn-wrapper:before{
     content: '';
     position: absolute;
     border-top: 4px solid white;
@@ -252,7 +272,7 @@ body {
     top: 18px;
 }
 
-.plus-btn:after{
+.plus-btn-wrapper:after{
     content: '';
     position: absolute;
     border-left: 4px solid white;
@@ -260,6 +280,16 @@ body {
     width: 0;
     left: 18px;
     top: 10px;
+}
+
+.plus-btn{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: none;
 }
 
 #add-cut{
@@ -273,6 +303,7 @@ body {
 
 input.obj,
 input.price,
+input.many-days,
 input.product-name{
     width: 100px;
     background-color: #f1f1f1;
@@ -282,6 +313,7 @@ input.product-name{
 }
 
 input.price,
+input.many-days,
 input.product-name{
     width: 60px;
 }
@@ -299,3 +331,38 @@ input.product-name{
     background-color: #ffffff;
     z-index: 10000;
 }
+
+.enter-cut{
+    float: right;
+    margin-top: 10px;
+    padding: 3px;
+    border-radius: 4px;
+}
+
+#back-cutlist-btn{
+    float: right;
+}
+
+#uploading-mask{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("../images/loading.GIF");
+    background-repeat: no-repeat;
+    background-position: center;
+    display: none;
+    background-color: #ffffff;
+    z-index: 10000;
+}
+
+#product-img_file_type{
+    z-index: -1;
+}
+
+#submit-btn{
+    margin-bottom: 20px;
+}
+
+

@@ -27,7 +27,7 @@ html
                 H3.help-who 我是
                     span.obj #{customer_name}
                     span ,快来帮我砍一刀!
-                img(src="/images/test_1429248716888.jpg")#product-img
+                img(src="http://120.24.224.144/images/#{product_img}")#product-img
                 H4.product
                     span.product-name #{product_name}
                 H5.origin-price 价格:
@@ -39,7 +39,16 @@ html
                     span 刀，现价
                     span.has-cut-money #{price - cut_money}
                     span 元
-                input(type="button" value="帮TA砍一刀")#cut-btn
+                - if (remaind_hour <= 0)
+                    H5 对不起，该活动已经结束
+                - else
+                    H5.activity-duration
+                        span 活动剩余时间：
+                        span.many-days #{Math.floor(remaind_hour / 24)}
+                        span 天
+                        span.many-hours #{remaind_hour % 24}
+                        span 小时
+                    input(type="button" value="帮TA砍一刀")#cut-btn.red-btn
 
     script(src="/javascripts/jquery.js")
     script(src="/util/util.js")
