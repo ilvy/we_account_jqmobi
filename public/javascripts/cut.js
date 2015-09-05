@@ -1,5 +1,5 @@
 /**
- * Created by Administrator on 2015/8/29.
+ * Created by gogo on 2015/8/29.
  */
 var margin = 8;
 var roomId = window.location.hash.substring(1);
@@ -26,13 +26,13 @@ function addListener(){
             .success(function(results){
                 if(results.flag == 1){
                     if(results.data == 1){
-                        alert("牛气，帮他砍�?1个大�?");
+                        alert("牛气，帮他砍了1个大￥");
                     }else if(results.data == 2){
-                        alert("您太客气了，已经砍过�?�?�?");
+                        alert("您太客气了，已经砍过一次了！！！");
                     }
                     window.location.href = "/we_account/live-room#live_room-"+roomId;
                 }else if(results.flag == 0){
-                    if(results.data == 0){//说明未授�?
+                    if(results.data == 0){//说明未授权
                         alert("您尚未授权，无法正常操作");
                     }
                 }
@@ -40,6 +40,10 @@ function addListener(){
             .error(function(err){
                 console.log(err)
             });
+    });
+    $(document).on("click",".plus-btn",function(event){
+        var $this = $(this);
+        $this.parents(".page").addClass("visible").siblings(".page").removeClass("visible");
     });
 }
 
@@ -75,14 +79,14 @@ function setHostInfo(userInfo){
     $('.nick-name').text(userInfo.nickname||'');
     $('.account_num').text(userInfo.weix_account||'');
     userInfo.headimgurl ? $('.head img').attr('src',userInfo.headimgurl) : '';
-    $('.sex').text(userInfo.sex ? '��':'Ů');
-    $('.host-intro').text(userInfo.introduce||"����̫������·̫����ɶ����û����");
+    $('.sex').text(userInfo.sex ? '男':'女');
+    $('.host-intro').text(userInfo.introduce||"主人太懒，走路太急，啥话都没留下");
     $('.attention-num').text(userInfo.favcount);
 }
 
 //获取url中的参数
 function getUrlParam(name) {
-    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构�?�一个含有目标参数的正则表达式对�?
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构�?�一个含有目标参数的正则表达式对�?
     var r = window.location.search.substr(1).match(reg);  //匹配目标参数
-    if (r != null) return unescape(r[2]); return null; //返回参数�?
+    if (r != null) return unescape(r[2]); return null; //返回参数�?
 }

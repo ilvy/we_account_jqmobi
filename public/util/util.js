@@ -1,6 +1,17 @@
 /**
  * Created by man on 15-4-28.
  */
+/**
+ * 兼容非模块化页面
+ */
+if(typeof define == 'undefined'){
+    var define = function(deps,callback){
+        if(callback && typeof callback == 'function'){
+            util = callback();
+        }
+    }
+}
+
 define([],function(){
     return {
         formatDate:function(date,isFormatTime, thedaybefore,formatType) {

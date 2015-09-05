@@ -11,7 +11,8 @@ var dbOperator = require("../../../db/dbOperator"),
     path = require("path"),
     fs = require("fs"),
     we_auth = require("../we_auth"),
-    querystring = require("querystring");
+    querystring = require("querystring"),
+    util = require("../util/util");
 
 
 /**
@@ -833,6 +834,51 @@ function helpCutOff(req,res){
     });
 }
 
+/**
+ * 获取砍价列表
+ * @param req
+ * @param res
+ */
+function getCutList(req,res){
+    req.session.openId = 'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
+    var openId = req.session.openId;
+    dbOperator.query("call pro_get_cut_list(?)",[openId],function(err,rows){
+        if(err){
+            console.log("call pro_get_cut_list err");
+            res.render("error",{});
+        }else{
+            if(rows && rows[0]){
+                res.render("cut_list",{datalist:rows[0]});
+            }else{
+                res.render("error",{});
+            }
+        }
+    });
+}
+
+/**
+ *
+ * @param req
+ * @param res
+ */
+function create_cut_info(req,res){
+    var openId = req.session.openId;
+    var query = req.query;
+    var username = query.username,
+        productName = query.product_name,
+        price = query.price,
+        create_time = util.formatDate(new Date(),1),
+        product_img = query.product_img;
+    dbOperator.query("call pro_create_cut_info(?,?,?,?,?,?)",[openId,username,productName,price,create_time,product_img], function (err,rows) {
+        if(err){
+            console.log("call pro_create_cut_info err:"+err);
+            response.failed(-1,res,"")
+        }else{
+            response.success(1,res,"");
+        }
+    })
+}
+
 //exports.renderLiveRoom = gotoLiveRoom;
 exports.renderLiveRoom_new = gotoLiveRoom_new;
 exports.knockDoor = knockDoor;
@@ -855,3 +901,5 @@ exports.editProduct = editProduct;
 exports.uploadQrcode = uploadQrcode;
 exports.cut = cut;
 exports.helpCutOff = helpCutOff;
+exports.getCutList = getCutList;
+exports.create_cut_info = create_cut_info;

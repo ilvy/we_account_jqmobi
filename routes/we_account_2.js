@@ -376,9 +376,13 @@ router.get('/searchProductByName',live_room.searchProductByName);
 
 router.post('/edit-product',live_room.editProduct);
 
+router.get("/cut-list",live_room.getCutList);
+
 router.get('/cut',live_room.cut);
 
 router.post("/help-cut-off",util.filterLoginAjax,live_room.helpCutOff);
+
+router.post("/create_cut_info",live_room.create_cut_info);
 
 router.get("/xml",function(req,res){
     xmlParser.parseXml("<xml><ToUserName><![CDATA[gh_d28b25ec1197]]></ToUserName>" +

@@ -10,20 +10,60 @@ html
         link(rel='stylesheet', href='/stylesheets/bootstrap-grid.css')
         link(rel='stylesheet', href='/stylesheets/cut.css')
     body
-        div#cutlist-wrapper
-            ul#cutlist.col-xxs-12
-                li
-                    img(src="http://bs.baidu.com/dulife/558944e54eead.jpg").col-xxs-2
-                    div.c-li-attrs.col-xxs-4
-                        div.c-l-cname jiangxuefeng
-                        div.c-l-pubtime 2015-09-01
-                    div.c-li-attrs.col-xxs-4
-                        div.c-l-cut-money 88
-                        div.c-l-curr-price 8888
-                    div.c-li-status.col-xxs-2
-                        input(value="完成").status-btn
+        div#cutlist-wrapper.page.products-page.visible-block
+            ul#cutlist.col-xxs-12.col-no-padding
+                each data in datalist
+                    li.col-xxs-12.col-no-padding
+                        .col-xxs-12
+                            div(style="background-image:url('#{data.product_img}')").c-l-headimg.col-xxs-2
+                            div.c-li-attrs.col-xxs-4.col-no-padding
+                                div.c-l-cname #{data.customerName}
+                                div.c-l-pubtime #{data.create_time.substring(0,10)}
+                            div.c-li-attrs.col-xxs-4.col-no-padding
+                                div.c-l-cut-money
+                                    span 已砍:
+                                    span #{data.cut_money}
+                                div.c-l-curr-price
+                                    span 剩余价格:
+                                    span #{data.price - data.cut_money}
+                            div.c-li-status.col-xxs-2.col-no-padding
+                                input(type="button" value="完成").status-btn
             #add-cut.col-xxs-12
-                .plus.btn
+                .plus-btn
+        div.page.products-page
+            #header
+                .head.col-xxs-3.col-xs-2
+                    img(src="/images/test_1429245238251.jpg")
+                .detail-personal-info.col-xxs-9.col-xs-10
+                    .nick-name.col-xxs-6 香港代购
+                    .room-num.col-xxs-6 代代号:888888
+                    .host-intro.introduce 下单立减哦
+                    //.level.col-xxs-5 weix_47828325
+                    .attention.col-xxs-7 关注者:
+                        span.attention-num 110
+                    .qr-code-btn.col-xxs-5 加TA微信
+            #cut-body
+                H2.fuli-desc 又发福利啦!!
+                H3.help-who 我是
+                    input.obj
+                    span ,快来帮我砍一刀!
+                img(src="/images/test_1429248716888.jpg")#product-img
+                H5.origin-price 价格:
+                    input(type="text" placeholder="原价").price
+                    span 元
+                H5.product
+                    input(type="text" placeholder="商品名").product-name
+                    span 随你砍!砍掉多少算多少
+                H5.cut-total-since
+                    span 已经 0
+                    span.person-quantity
+                    span 人参与，砍掉
+                    span.has-cut-money 0
+                    span 元
+                input(type="button" value="提交")#submit-btn
+            div#uploading-mask
     script(src="/javascripts/jquery.js")
+    script(src="/javascripts/ajaxupload.js")
     script(src="/util/util.js")
-    script(src="/javascripts/cut.js")
+    script(src="/javascripts/cut_list.js")
+    //script(src="/util/util.js")

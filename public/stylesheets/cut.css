@@ -3,8 +3,11 @@ body {
     overflow-x: hidden;
     /* padding: 6px; */
     background-color: #f1f1f1 !important;
+    margin: 0;
 }
-
+.visible-block{
+    display: block !important;
+}
 .page{
     width: 100%;
     left: 0;
@@ -145,4 +148,154 @@ body {
 .person-quantity,
 .has-cut-money{
     margin: 0 3px;
+}
+/*******************start cut_list.html**********************/
+.col-no-padding{
+    padding-left: 0;
+    padding-right: 0;
+}
+
+#cutlist{
+    list-style: none;
+}
+
+#cutlist li{
+    font-size: 1rem;
+    border-bottom: 1px solid rgba(183, 183, 183, 1);
+    padding-bottom: 6px;
+    padding-top: 6px;
+}
+
+#cutlist li:first-child{
+    border-top: none;
+}
+
+.c-li-attrs{
+    padding-left: 6px;
+}
+
+.c-l-cname{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 1.8rem;
+}
+
+.c-l-headimg{
+    background: url("http://bs.baidu.com/dulife/558944e54eead.jpg") no-repeat center;
+    background-size: cover;
+    width: 40px;
+    height: 40px;
+}
+
+.c-l-pubtime{
+    font-size: 1rem;
+    color: #A9A9A9;
+    margin-top: 5px;
+}
+
+.c-l-curr-price span,
+.c-l-cut-money span{
+    float: left;
+}
+
+.c-l-curr-price{
+    clear: both;
+}
+
+.c-l-cut-money span:first-child,
+.c-l-curr-price span:first-child {
+    margin-top: 3px;
+}
+
+.c-l-cut-money span:last-child{
+    color: rgb(236, 64, 64);
+    font-size: 1.8rem;
+}
+
+.c-l-curr-price span:last-child{
+    color: #A9A9A9;
+    font-size: 1.6rem;
+}
+
+.c-li-status{
+    padding-top: 5px;
+}
+
+.status-btn{
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+    background-color: rgb(236, 64, 64);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    padding: 0;
+    float: right;
+    margin-top: 5px;
+}
+
+.plus-btn{
+    width: 40px;
+    height: 40px;
+    background-color: #A9A9A9;
+    position: relative;
+}
+
+.plus-btn:before{
+    content: '';
+    position: absolute;
+    border-top: 4px solid white;
+    width: 20px;
+    height: 0;
+    left: 10px;
+    top: 18px;
+}
+
+.plus-btn:after{
+    content: '';
+    position: absolute;
+    border-left: 4px solid white;
+    height: 20px;
+    width: 0;
+    left: 18px;
+    top: 10px;
+}
+
+#add-cut{
+    border-bottom: 1px solid rgba(183, 183, 183, 1);
+    padding-bottom: 10px;
+}
+
+.page{
+    display: none;
+}
+
+input.obj,
+input.price,
+input.product-name{
+    width: 100px;
+    background-color: #f1f1f1;
+    border: none;
+    border-bottom: 1px solid white;
+    text-align: center;
+}
+
+input.price,
+input.product-name{
+    width: 60px;
+}
+
+#uploading-mask{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("../images/loading.GIF");
+    background-repeat: no-repeat;
+    background-position: center;
+    display: none;
+    background-color: #ffffff;
+    z-index: 10000;
 }

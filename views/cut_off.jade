@@ -28,17 +28,16 @@ html
                     span.obj #{customer_name}
                     span ,快来帮我砍一刀!
                 img(src="/images/test_1429248716888.jpg")#product-img
+                H4.product
+                    span.product-name #{product_name}
                 H5.origin-price 价格:
                     span.price #{price}
                     span 元
-                H5.product
-                    span.product-name #{product_name}
-                    span 随你砍!砍掉多少算多少
                 H5.cut-total-since
-                    span 已经
-                    span.person-quantity #{cut_money}
-                    span 人参与，砍掉
-                    span.has-cut-money #{cutCount}
+                    span 已砍
+                    span.person-quantity #{cutCount}
+                    span 刀，现价
+                    span.has-cut-money #{price - cut_money}
                     span 元
                 input(type="button" value="帮TA砍一刀")#cut-btn
 

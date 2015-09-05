@@ -40,7 +40,7 @@ Icon
 .idea/
 
 # ignore images
-image/
+images/
 
 #node modules
 node_modules/
