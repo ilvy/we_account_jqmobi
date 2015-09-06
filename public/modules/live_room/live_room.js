@@ -111,12 +111,12 @@ define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEven
 
         },
         setToolBox : function(data){
-            $(".spread-btn").attr("href","http://www.daidai2u.com/we_account/cut-list#"+globalVar.room_id);
             if(data.publisher){
 //                alert(data.publisher)
     //                $("#tools-box").html('<div id="upload-div-box"><div id="upload-div"><div id="upload"><i class="fa fa-plus"></i></div></div></div>');
                 $("#upload-div-box").removeClass('remove').siblings().addClass('remove');
                 $('.edit-personality').removeClass('remove');
+                $(".spread-btn").attr("href","http://www.daidai2u.com/we_account/cut-list#"+globalVar.room_id).css("display","initial");
             }else{
 //                alert('hehe')
                 var favHeart = '';
@@ -132,6 +132,7 @@ define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEven
                     $("#tools-box .favorite").html(favHeart);
                     $("#upload-div-box").addClass('remove').siblings().removeClass('remove');
 //                $("#upload-div-box").siblings().remove();
+                $(".spread-btn").css("display","none");
             }
             if(this.hasSetToolBox){
                 return;

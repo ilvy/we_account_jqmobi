@@ -377,4 +377,9 @@ input.product-name{
     border: 2px solid red;
 }
 
-
+.visible{
+    display: block !important;
+}
+.visible-inline{
+    display: inline !important;
+}
