@@ -138,6 +138,38 @@ define([],function(){
                     }
                 }
             });
+        },
+        wxShare:function(title,desc,link,imgUrl){
+            wx.onMenuShareAppMessage({
+                title:title,
+                desc:desc,
+                link:link,
+                imgUrl:imgUrl,
+                success:function(){
+                    alert('分享成功');
+                },
+                cancel:function(){
+                    alert("取消分享");
+                },
+                error:function(){
+                    alert('分享失败，请重试！');
+                }
+            });
+            wx.onMenuShareTimeline({
+                title:title,
+                desc:desc,
+                link:link,
+                imgUrl:imgUrl,
+                success:function(){
+                    alert('分享成功');
+                },
+                cancel:function(){
+                    alert("取消分享");
+                },
+                error:function(){
+                    alert('分享失败，请重试！');
+                }
+            });
         }
     }
 

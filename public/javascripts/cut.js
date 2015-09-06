@@ -13,6 +13,7 @@ $(document).ready(function(){
     });
     getHostInfo();
     addListener();
+    wxInit();
 });
 
 function addListener(){
@@ -82,6 +83,46 @@ function setHostInfo(userInfo){
     $('.sex').text(userInfo.sex ? '男':'女');
     $('.host-intro').text(userInfo.introduce||"主人太懒，走路太急，啥话都没留下");
     $('.attention-num').text(userInfo.favcount);
+}
+
+/**
+ * 初始化wx js sdk
+ */
+function wxInit(){
+    util.wxjssdkInit(function(err,results){
+        var config;
+        if(results.flag == 1){
+            var data = results.data;
+//            alert(data.url);
+            config = {
+//                debug:true,
+                appId:"wx2f81c72f4e91b732",
+                jsapi_ticket: data.jsapi_ticket,
+                nonceStr: data.nonceStr,
+                timestamp: data.timestamp,
+                signature:data.signature,
+                url: data.url,
+                jsApiList: ['onMenuShareAppMessage','scanQRCode','onMenuShareTimeline']
+            };
+            wx.config(config);
+            wx.ready(function(){
+//                alert("wxjssdkinit success");
+                wx.checkJsApi({
+                    jsApiList: ['onMenuShareAppMessage','onMenuShareTimeline'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+                    success: function(res) {
+                        // 以键值对的形式返回，可用的api值true，不可用为false
+                        // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+//                        (res.checkResult.onMenuShareAppMessage);
+                        util.wxShare("帮帮忙咯","我是"+$(".help-who .obj").text()+",快来帮我砍一刀!","",
+                                'http://www.daidai2u.com/images/logo.jpg');
+                    }
+                });
+            });
+            wx.error(function(res){
+                alert("wxjssdkinit failed");
+            });
+        }
+    })
 }
 
 //获取url中的参数

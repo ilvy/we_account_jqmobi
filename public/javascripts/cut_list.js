@@ -52,6 +52,10 @@ function addListener(){
             product_name = $("input.product-name").val(),
             price = $("input.price").val(),
             activity_duration = $("input.many-days").val();
+        if(!validateInput(["input[type='text']","#product-img"])){
+            alert("信息录入未完，请继续");
+            return;
+        }
         var url = "/we_account/create_cut_info?username="+username+"&product_name="+product_name+"&price="+price+"&product_img="+productImg+"&activity_duration="+activity_duration;
         $.ajax({
             url:url,
@@ -59,7 +63,9 @@ function addListener(){
             success:function(results){
                 if(results.flag == 1){
                     if(typeof results.cut_id != 'undefined')
-                    wxShare("","","http://www.daidai2u.com/we_account/cut?cutserial="+results.cut_id+"&room_id="+roomId+"#"+roomId);
+                    util.wxShare("帮帮忙咯","我是"+$(".help-who .obj").val()+",快来帮我砍一刀!",
+                            "http://www.daidai2u.com/we_account/cut?cutserial="+results.cut_id+"&room_id="+roomId+"#"+roomId,
+                            'http://www.daidai2u.com/images/logo.jpg');
                     alert("添加成功");
                 }
             },
@@ -71,7 +77,10 @@ function addListener(){
     $(document).on("click","#product-img",function(){
         $("#product-img_file_type").click();
     });
-
+    $(document).on("click","#back-cutlist-btn",function(event){
+        var $this = $(this);
+        $this.parents(".page").removeClass("visible-block").siblings(".page").addClass("visible-block");
+    });
 }
 
 /**
@@ -150,42 +159,37 @@ function wxInit(){
     })
 }
 
-function wxShare(title,desc,link){
-    wx.onMenuShareAppMessage({
-        title:title||"帮帮忙咯",
-        desc:desc||"我是"+$(".help-who .obj").val()+",快来帮我砍一刀!",
-        link:link,
-        imgUrl:"http://www.daidai2u.com/images/logo.jpg",
-        success:function(){
-            alert('分享成功');
-        },
-        cancel:function(){
-            alert("取消分享");
-        },
-        error:function(){
-            alert('分享失败，请重试！');
-        }
-    });
-    wx.onMenuShareTimeline({
-        title:title||"帮帮忙咯",
-        desc:desc||"我是"+$(".help-who .obj").val()+",快来帮我砍一刀!",
-        link:link,
-        imgUrl:'http://www.daidai2u.com/images/logo.jpg',
-        success:function(){
-            alert('分享成功');
-        },
-        cancel:function(){
-            alert("取消分享");
-        },
-        error:function(){
-            alert('分享失败，请重试！');
-        }
-    });
-}
-
 //获取url中的参数
 function getUrlParam(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构�?�一个含有目标参数的正则表达式对�?
     var r = window.location.search.substr(1).match(reg);  //匹配目标参数
     if (r != null) return unescape(r[2]); return null; //返回参数�?
 }
+
+var validateInput = function(input_selectors){
+    var $validateObj ,
+        isValidate;
+    for(var i = 0; i < input_selectors.length; i++){
+        $validateObj = $(input_selectors[i]);
+        $validateObj.each(function(){
+            var tagName = $(this)[0].tagName.toLocaleLowerCase(),
+                value;
+            switch (tagName){
+                case 'input':
+                    value = $(this).val();
+                    break;
+                case 'div':
+                    value = productImg;
+                    break;
+                default :
+                    break;
+            }
+            if(!value){
+                isValidate = false;
+//                $(this).addClass("input-invalidate");
+            }
+        });
+    }
+    return isValidate;
+
+};

@@ -135,6 +135,7 @@ H2,H3,H4,H5{
 .many-hours,
 .many-days{
     text-decoration: underline;
+    border-radius: 0;
 }
 
 .product{
@@ -310,6 +311,11 @@ input.product-name{
     border: none;
     border-bottom: 1px solid white;
     text-align: center;
+    -webkit-transition: border 1s linear;
+    -moz-transition: border 1s linear;
+    -ms-transition: border 1s linear;
+    -o-transition: border 1s linear;
+    transition: border 1s linear;
 }
 
 input.price,
@@ -340,7 +346,7 @@ input.product-name{
 }
 
 #back-cutlist-btn{
-    float: right;
+    float: left;
 }
 
 #uploading-mask{
@@ -358,11 +364,17 @@ input.product-name{
 }
 
 #product-img_file_type{
-    z-index: -1;
+    width: 0;
+    height: 0;
 }
 
 #submit-btn{
     margin-bottom: 20px;
+}
+
+.input-invalidate{
+    box-sizing: border-box;
+    border: 2px solid red;
 }
 
 

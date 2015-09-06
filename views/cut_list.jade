@@ -51,13 +51,13 @@ html
             #cut-body
                 H2.fuli-desc 又发福利啦!!
                 H3.help-who 我是
-                    input(type="text" placeholder="被砍人").obj
+                    input(type="text" placeholder="被砍人" required).obj
                     span ,快来帮我砍一刀!
-                img(src="/images/test_1429248716888.jpg")#product-img
+                img(src="/images/addcutproduct.jpg")#product-img
                 H5.product
-                    input(type="text" placeholder="商品名").product-name
+                    input(type="text" placeholder="商品名" required).product-name
                 H5.origin-price 价格:
-                    input(type="text" placeholder="原价").price
+                    input(type="" placeholder="原价" ).price
                     span 元
                 //H5.cut-total-since
                     span 已砍
@@ -69,8 +69,10 @@ html
                     span 活动持续：
                     input(value="" ).many-days
                     span 天
-                input(type="button" value="回到列表")#back-cutlist-btn.red-btn
-                input(type="button" value="提交")#submit-btn.red-btn
+                .col-xxs-3.col-no-padding
+                    input(type="button" value="回到列表")#back-cutlist-btn.red-btn
+                .col-xxs-6.col-no-padding
+                    input(type="button" value="提交")#submit-btn.red-btn
             div#uploading-mask
     script(src="/javascripts/jquery.js")
     script(src="/javascripts/ajaxupload.js")
