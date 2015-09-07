@@ -383,3 +383,105 @@ input.product-name{
 .visible-inline{
     display: inline !important;
 }
+
+/******************弹出框 start******************/
+
+#qr-code{
+    width: 200px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    color: black;
+    text-align: center;
+    display: none;
+    padding-top: 10px;
+    margin: auto;
+}
+
+#qr-code:not(.customer){
+    height: 280px;
+}
+
+#qr-code > p{
+    color: #BBBBBB;
+}
+
+#qr-code .detail-info{
+    margin-bottom: 8px;
+}
+
+#qr-code .detail-info > div{
+    line-height: 20px;
+    font-size: 1rem;
+}
+
+.customer{
+    padding-top: 8px;
+    height: 270px;
+}
+
+.no-upload-qrcode{
+    padding: 50px 0;
+    color: rgb(95, 89, 89);
+    display: none;
+}
+
+.qr-code-img{
+    display: none;
+    max-width: 150px;
+}
+
+.customer .qr-code-img{
+    width: 84%;
+    display: none;
+}
+
+#qr-code:not(.customer) .upload-qr-code{
+    width: 80px;
+    height: 10px;
+    background-color: #E5E5E5;
+    margin: 70px auto;
+    position: relative;
+    display: none;
+}
+
+#qr-code:not(.customer) .upload-qr-code:before{
+    content: '';
+    position: absolute;
+    left: 35px;
+    top: -35px;
+    width: 10px;
+    height: 80px;
+    background-color: #E5E5E5;
+}
+
+#qr-code:not(.customer) .upload-qr-code:after{
+    content: '上传微信二维码';
+    color: #BBBBBB;
+    width: 200px;
+    position: absolute;
+    left: -61px;
+    top: 60px;
+}
+
+.re-upload{
+    color: #BBBBBB;
+    display: none;
+}
+
+.long-tap-tip{
+    display: none;
+}
+
+.customer .long-tap-tip{
+    display: block;
+    font-weight: bolder;
+}
+
+#introduce{
+    max-width: 100%;
+}
+
+/******************弹出框 end******************/

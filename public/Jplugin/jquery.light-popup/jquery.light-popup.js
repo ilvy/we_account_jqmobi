@@ -35,6 +35,7 @@
     }
 
     jquery.fn.pop.defaults = { width: "500px", height: "400px" };//暴露pop的默认属性
+    !jquery.fn.touch ? jquery.fn.touch = jquery.fn.on : "";
     /*
     *@初始化弹出框
     **/

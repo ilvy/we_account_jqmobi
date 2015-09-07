@@ -27,6 +27,7 @@ function addListener(){
 //                action:"http://120.24.224.144:80/we_account/upload",
                     name:'file',
                     onSubmit:function(file,ext){
+                        $("#uploading-mask").css("display","block");
                         console.log(file +" "+ ext);
                     },
                     onComplete:function(file,res){
@@ -121,20 +122,6 @@ function setHostInfo(userInfo){
     $(".room-num").html("代代号:"+roomId);
 }
 
-function setQrcodeBox(userInfo){
-    $('.upload-qr-code').removeClass('visible');
-    $('.customer').addClass('customer');
-    $(".re-upload").removeClass('visible');
-    if(userInfo.qrcode){
-        $('.qr-code-img').addClass('visible-inline').attr('src','/images/'+userInfo.qrcode);
-        $('.upload-qr-code').removeClass('visible');
-        $('.no-upload-qrcode').removeClass('visible');
-    }else{
-        $('.qr-code-img').removeClass('visible-inline');
-        $('.upload-qr-code').addClass('visible');
-        $('.no-upload-qrcode').addClass('visible');
-    }
-}
 
 /**
  * 初始化wx js sdk
@@ -183,7 +170,7 @@ function getUrlParam(name) {
 
 var validateInput = function(input_selectors){
     var $validateObj ,
-        isValidate;
+        isValidate = true;
     for(var i = 0; i < input_selectors.length; i++){
         $validateObj = $(input_selectors[i]);
         $validateObj.each(function(){
@@ -193,7 +180,7 @@ var validateInput = function(input_selectors){
                 case 'input':
                     value = $(this).val();
                     break;
-                case 'div':
+                case 'img':
                     value = productImg;
                     break;
                 default :

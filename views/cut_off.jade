@@ -6,6 +6,7 @@ html
     head
         title 代代
         meta(name="viewport",content="width=device-width,initial-scale=1.0,user-scalable=no")
+        link(rel='stylesheet', href='/Jplugin/jquery.light-popup/jquery.light-popup.css')
         link(rel='stylesheet', href='/stylesheets/bootstrap.css')
         link(rel='stylesheet', href='/stylesheets/bootstrap-grid.css')
         link(rel='stylesheet', href='/stylesheets/cut.css')
@@ -49,8 +50,24 @@ html
                         span.many-hours #{remaind_hour % 24}
                         span 小时
                     input(type="button" value="帮TA砍一刀")#cut-btn.red-btn
-
+            #qr-code.light-popup.customer
+                img.qr-code-img(src="/images/qr-code.png")
+                div.no-upload-qrcode 主人很懒，二维码都没留下
+                #upload-qr-code.upload-qr-code
+                p#re-upload.re-upload 重新上传
+                .detail-info
+                    .di_weix_account
+                        span 微信号：
+                        span.account_num weix_478283225
+                    .sex
+                        span 性别：
+                        span.sex_desc 男
+                    .region
+                        span 地区：
+                        span.region_desc 浙江台州
+                .long-tap-tip 长按扫码添加代手微信
     script(src="/javascripts/jquery.js")
     script(src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js")
     script(src="/util/util.js")
+    script(src="/Jplugin/jquery.light-popup/jquery.light-popup.js")
     script(src="/javascripts/cut.js")

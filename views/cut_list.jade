@@ -32,7 +32,7 @@ html
                             div.col-xxs-7
                                 //span 活动剩余时间：
                             div.col-xxs-5.col-no-padding
-                                a(href="http://www.daidai2u.com/we_account/cut?cutserial="+data.cut_id+"&room_id="+data.room_id+"#"+data.room_id).enter-cut.red-btn 进入页面
+                                a(href="http://www.daidai2u.com/we_account/cut?cutserial=#{data.cut_id}&room_id=#{data.room_id}##{data.room_id}").enter-cut.red-btn 进入页面
             #add-cut.col-xxs-12
                 .plus-btn-wrapper
                     input(type="button" value="").plus-btn
@@ -74,22 +74,6 @@ html
                 .col-xxs-6.col-no-padding
                     input(type="button" value="提交")#submit-btn.red-btn
             div#uploading-mask
-            #qr-code.light-popup.customer
-                img.qr-code-img(src="/images/qr-code.png")
-                div.no-upload-qrcode 主人很懒，二维码都没留下
-                #upload-qr-code.upload-qr-code
-                p#re-upload.re-upload 重新上传
-                .detail-info
-                    .di_weix_account
-                        span 微信号：
-                        span.account_num weix_478283225
-                    .sex
-                        span 性别：
-                        span.sex_desc 男
-                    .region
-                        span 地区：
-                        span.region_desc 浙江台州
-                .long-tap-tip 长按扫码添加代手微信
     script(src="/javascripts/jquery.js")
     script(src="/javascripts/ajaxupload.js")
     script(src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js")

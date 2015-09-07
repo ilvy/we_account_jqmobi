@@ -42,9 +42,13 @@ function addListener(){
                 console.log(err)
             });
     });
-    $(document).on("click",".plus-btn",function(event){
-        var $this = $(this);
-        $this.parents(".page").addClass("visible").siblings(".page").removeClass("visible");
+    $(".qr-code-btn").on("click",function(event){
+        if(event.stopPropagation){
+            event.stopPropagation();
+        }else{
+            event.cancelBubble = true;
+        }
+        $("#qr-code").pop();
     });
 }
 
@@ -83,6 +87,22 @@ function setHostInfo(userInfo){
     $('.sex').text(userInfo.sex ? '男':'女');
     $('.host-intro').text(userInfo.introduce||"主人太懒，走路太急，啥话都没留下");
     $('.attention-num').text(userInfo.favcount);
+    $(".room-num").html("代代号:"+roomId);
+    setQrcodeBox(userInfo);
+}
+
+function setQrcodeBox(userInfo){
+    $('.upload-qr-code').removeClass('visible');
+    $('.customer').addClass('customer');
+    if(userInfo.qrcode){
+        $('.qr-code-img').addClass('visible-inline').attr('src','/images/'+userInfo.qrcode);
+        $('.upload-qr-code').removeClass('visible');
+        $('.no-upload-qrcode').removeClass('visible');
+    }else{
+        $('.qr-code-img').removeClass('visible-inline');
+        $('.upload-qr-code').addClass('visible');
+        $('.no-upload-qrcode').addClass('visible');
+    }
 }
 
 /**
