@@ -35,7 +35,7 @@
     }
 
     jquery.fn.pop.defaults = { width: "500px", height: "400px" };//暴露pop的默认属性
-    !jquery.fn.touch ? jquery.fn.touch = jquery.fn.on : "";
+    !jquery.fn.touch ? jquery.fn.touch = jquery.fn.bind : "";
     /*
     *@初始化弹出框
     **/
@@ -51,6 +51,7 @@
             var _this = this;
 //            jquery(document).bind("click", hideModel);
             jquery(document).touch('click',function(event){
+//                alert(event.target);
                 hideModel(event);
                 if(options.callback){
                     options.callback();//点击空白处消失时调用回调

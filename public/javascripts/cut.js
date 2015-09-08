@@ -27,7 +27,7 @@ function addListener(){
             .success(function(results){
                 if(results.flag == 1){
                     if(results.data == 1){
-                        alert("牛气，帮他砍了1个大￥");
+                        alert("牛气，帮他砍了1个大￥！关注卖家微信可能有惊喜哦！");
                     }else if(results.data == 2){
                         alert("您太客气了，已经砍过一次了！！！");
                     }
