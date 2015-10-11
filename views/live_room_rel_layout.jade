@@ -289,6 +289,28 @@ html
                     span 地区：
                     span.region_desc 浙江台州
             .long-tap-tip 长按扫码添加代手微信
+        #addOrderPanel.light-popup(style="display:block;background-color: white;z-index: 100000;opacity:1")
+            .aop_product.col-xxs-8.col-xxs-offset-2
+                span.col-xxs-3.no-horizontal-padding 品名：
+                span.aopp_name.col-xxs-9.no-horizontal-padding iphone6Plus
+            .aop_customer.col-xxs-8.col-xxs-offset-2
+                span.col-xxs-3.no-horizontal-padding 买家：
+                input.aopc_name.col-xxs-9.no-horizontal-padding
+            .aop_upload_product.col-xxs-8.col-xxs-offset-2
+                img
+            .aop_quantity.col-xxs-8.col-xxs-offset-2
+                span.col-xxs-3.no-horizontal-padding 数量：
+                select.aopq_quantity.col-xxs-9.no-horizontal-padding
+                    option(value=-1) 请选择
+            .aop_purchase.col-xxs-8.col-xxs-offset-2
+                span.col-xxs-3.no-horizontal-padding 进价：
+                input.aoppurchase_money.col-xxs-9.no-horizontal-padding
+            .aop_price.col-xxs-8.col-xxs-offset-2
+                span.col-xxs-3.no-horizontal-padding 售价：
+                input.aopprice_money.col-xxs-9.no-horizontal-padding
+            .aop_btn_group.col-xxs-8.col-xxs-offset-2
+                input(type="button" value="取消")#aop_cancel.aop_cancel.yellow-btn
+                input(type="button" value="确定")#aop_submit.aop_submit.green-btn
 
 script(src="/javascripts/jquery.js")
 script(src="/touchUtil.js")

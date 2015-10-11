@@ -1,0 +1,147 @@
+delimiter $$
+drop procedure if exists pro_get_cut_info;
+create procedure pro_get_cut_info(in id int)
+begin 
+
+select ci.res_u_name customer_name,ci.product_name,max(ci.price) price,ifnull(cld.cut_money,0) cut_money,ifnull(cut_count,0) cutCount,(activity_duration * 24 - TIMESTAMPDIFF(hour,ci.create_time,now())) remaind_hour,ci.product_img
+    from t_cut_info ci 
+    left join (select cut_id,count(1) cut_count,sum(cut_money) cut_money from t_cutlist_detail group by cut_id) cld
+    on ci.id = cld.cut_id
+    where ci.id = id and id is not null
+    group by ci.req_u_id,ci.res_u_name,ci.product_name;
+
+end; $$
+delimiter ;
+
+
+
+delimiter $$
+drop procedure if exists pro_ready_help_cut;
+create procedure pro_ready_help_cut(in cutId int,in openId varchar(100),in cutMoney int,in nickname varchar(60),in sex tinyint,in headimgurl varchar(100))
+begin 
+
+insert into t_cutlist_detail(cut_id,open_id,cut_money,nickname,sex,headimgurl) 
+select cutId,openId,cutMoney,nickname,sex,headimgurl
+from dual
+where not exists(
+select open_id from t_cutlist_detail where open_id = openId
+) and openId is not null;
+
+end; $$
+delimiter ;
+
+
+/**砍一刀**/
+delimiter $$
+drop procedure if exists pro_help_cut;
+create procedure pro_help_cut(in cutId int,in openId varchar(100),in cutMoney int)
+begin 
+
+start transaction;
+set @alreadyCut = (select count(1) from t_cutlist_detail cld where cld.cut_id = cutId and cld.open_id = openId);
+update t_cutlist_detail set cut_money = cutMoney 
+where cut_id = cutId and open_id = openId and cut_money = 0;
+select @alreadyCut alreadyCut ;
+commit;
+
+end; $$
+delimiter ;
+
+
+/**砍价列表**/
+delimiter $$
+drop procedure if exists pro_get_cut_list;
+create procedure pro_get_cut_list(in openId varchar(100))
+begin 
+
+start transaction;
+select c.id cut_id,c.res_u_name customerName,c.product_name,c.price,c.status,product_img,date_format(c.create_time,'%Y-%m-%d %h:%m:%s') create_time,ifnull(cld.cut_money,0) cut_money,u.room_id
+from t_cut_info c 
+join user u 
+on c.req_u_id = u.id 
+left join (select cut_id,ifnull(sum(cut_money),0) cut_money from t_cutlist_detail group by cut_id)cld
+on cld.cut_id = c.id
+where u.open_id = openId;
+commit;
+
+end; $$
+
+
+
+delimiter ;
+
+/**新建砍价信息**/
+delimiter $$
+drop procedure if exists pro_create_cut_info;
+create procedure pro_create_cut_info(in openId varchar(100),in username varchar(60),in product_name varchar(60),in price decimal(8,1),in create_time datetime,in product_img varchar(100),in activity_duration int)
+begin 
+
+start transaction;
+
+insert into t_cut_info(req_u_id,res_u_name,product_name,price,create_time,product_img,activity_duration) 
+select (select id from user where open_id = openId),username,product_name,price,create_time,product_img,activity_duration;
+select LAST_INSERT_ID() cut_id;
+
+commit;
+
+end; $$
+delimiter ;
+
+
+/**关注者信息表**/
+create table t_follow(id int auto_increment,open_id varchar(200),create_time datetime,status tinyint, primary key(id));
+
+/**添加关注者**/
+delimiter $$
+drop procedure if exists pro_follow;
+create procedure pro_follow(in open_id varchar(200),in create_time datetime,in status tinyint)
+begin 
+
+insert into t_follow(open_id,create_time,status)
+    select open_id,create_time,status from dual;
+
+end;$$
+delimiter ;
+
+/**原商品加单**/
+delimiter $$
+drop procedure if exists pro_add_order_in_exist_product;
+create procedure pro_add_order_in_exist_product(in cnickname varchar(200),in sell_room_id varchar(16),in remark varchar(60),in productid int,in in_quantity int,in create_time datetime)
+begin 
+
+start transaction;
+
+
+UPDATE t_order o , t_customer c
+SET o.quantity = o.quantity + in_quantity
+where o.c_id = c.id AND o.product_id = productid AND c.c_openid = c_open_id  AND c.seller_room_id = sell_room_id AND STATUS != 0
+ AND o.create_time > '2015-05-11';
+
+set @update_count = (SELECT ROW_COUNT()); 
+	-- SELECT @update_count;
+	if @update_count = 0 THEN 
+	
+			SET @Cid = (SELECT c.id from t_customer c JOIN user u 
+												ON c.seller_room_id = u.room_id 
+												WHERE c.seller_room_id = sell_room_id AND c.c_openid = c_open_id);
+-- SELECT @Cid;
+			if @Cid is NULL THEN
+				INSERT INTO t_customer(c_openid,seller_room_id,create_time)
+					VALUES(c_open_id ,sell_room_id,create_time);
+			SELECT 1 isExistCustomer;
+			end if;
+			
+				INSERT INTO t_order(product_id,c_id,status,quantity,create_time,exchange_rate,exchange_type)
+					SELECT productid ,c.id,1,in_quantity,create_time,r.exchange_rate,r.exchange_type
+							FROM t_customer c JOIN user u 
+						ON c.seller_room_id = u.room_id 
+						JOIN t_exchange_rate r
+						ON r.exchange_type = 2 -- ????????
+						WHERE c.seller_room_id = sell_room_id AND c.c_openid = c_open_id 
+									AND r.open_id = (SELECT open_id from user WHERE room_id = seller_room_id);
+	end IF;
+
+commit;
+
+end; $$
+delimiter ;

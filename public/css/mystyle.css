@@ -10,6 +10,15 @@ body{
     box-sizing: border-box;
 }
 
+/********************start common style**********************/
+
+.no-horizontal-padding{
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/********************end common style**********************/
+
 #pay-list,#bill-list{
     display: none;
 }
@@ -385,7 +394,20 @@ body{
 }
 
 /***********add order start***********/
-
+.yellow-btn{
+    background-color: #b4ac67;
+    border: 1px solid #b4ac67;
+    border-radius: 3px;
+    padding: 6px 16px;
+    color: white;
+}
+.green-btn{
+    background-color: #00b487;
+    border: 1px solid #00b487;
+    border-radius: 3px;
+    padding: 6px 16px;
+    color: white;
+}
 .order-add-btn{
     background-color: #00b487;
     border: 1px solid #00b487;
@@ -441,6 +463,15 @@ body{
     left: 42%;
     top: 20%;
 }
+
+    /************start add order panel**************/
+
+.aop_btn_group{
+    text-align: center;
+}
+
+    /************end add order panel**************/
+
 /***********add order end***********/
 
 /********getpay start********/

@@ -800,6 +800,9 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             $("#create-order-box").touch("click",function(event){
                 router.changeHash("add_order",1);
             },true);
+            $("#addOrderPanel").on("click","#aop_submit",function(event){
+
+            });
         },
         /**
          * 更新每条记录用于显示的汇率
