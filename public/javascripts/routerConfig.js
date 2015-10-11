@@ -12,6 +12,6 @@ define([],function(){
         room_door:'modules/room_door/room_door',
         personality:'modules/personality/personality',
         billSystem:'modules/bill/bill',
-        getpay:'modules/Payment/Payment'
+        add_order:'modules/add_order/add_order'
     }
 });

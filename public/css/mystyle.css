@@ -384,6 +384,65 @@ body{
     border: 1px solid #cecece;
 }
 
+/***********add order start***********/
+
+.order-add-btn{
+    background-color: #00b487;
+    border: 1px solid #00b487;
+    border-radius: 3px;
+    padding: 6px 16px;
+    color: white;
+    width: 60px;
+    float: right;
+}
+#create-order-box{
+    position: absolute;
+    background-color: rgba(200,30,40,1);
+    padding: 5px;
+    bottom: 5%;
+    left: 44%;
+    border-radius: 32px;
+}
+
+#create-order-div{
+    width: 40px;
+    height: 40px;
+    margin: 0 auto;
+    border: 4px solid white;
+    padding: 3px;
+    border-radius: 20px;
+}
+#create{
+    border: none;
+    background-color: transparent;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    padding-top: 15%;
+}
+#create i{
+    color: white;
+    font-size: 20px;
+}
+#create .horizon{
+    width: 60%;
+    height: 16%;
+    background-color: white;
+    position: absolute;
+    top: 42%;
+    left: 20%;
+}
+#create .vertical{
+    width: 16%;
+    height: 60%;
+    background-color: white;
+    position: absolute;
+    left: 42%;
+    top: 20%;
+}
+/***********add order end***********/
+
 /********getpay start********/
 
 #getpay{

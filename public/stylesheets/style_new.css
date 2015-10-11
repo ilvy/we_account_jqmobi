@@ -686,7 +686,8 @@ img#for-share{
     opacity: 0;
 }
 
-#upload-panel{
+#upload-panel,
+#add_order-panel{
     position: fixed;
     width: 100%;
     height: 100%;
@@ -735,7 +736,8 @@ input.product-title{
     /*float: left;*/
 }
 
-#cancel-btn > div{
+#cancel-btn > div,
+#aop_cancel-btn > div{
     float: right;
     margin-right: 15px;
     width: 36px;
@@ -744,14 +746,16 @@ input.product-title{
     border-radius: 20px;
 }
 
-#sub-btn{
+#sub-btn,
+#aop_sub-btn{
     /*margin-top: 10px;*/
     /*width: 30px;*/
     font-size: 26px;
     /*margin-left: 10%;*/
 }
 
-#sub-btn > div{
+#sub-btn > div,
+#aop_sub-btn > div{
     width: 36px;
     height: 36px;
     background-color: #58bba7;
@@ -761,7 +765,8 @@ input.product-title{
     /*margin: 3px auto;*/
 }
 
-#submit{
+#submit,
+#aop_submit{
     margin: 0 auto;
     /*padding: 4px 8px;*/
     border: none;
@@ -771,11 +776,13 @@ input.product-title{
     font-weight: lighter;
     font-size: 3rem;
 }
-#submit:active{
+#submit:active,
+#aop_submit:active{
     background: purple;
 }
 
-#cancel-btn{
+#cancel-btn,
+#aop_cancel-btn{
     /*text-align: center;position: fixed;bottom: 0;width: 100%;*/
     margin: 0 auto;
     /*width: 30px;*/
@@ -783,7 +790,8 @@ input.product-title{
     font-size: 40px;
 }
 
-#cancel{
+#cancel,
+#aop_cancel{
     margin: 0 auto;
     border: none;
     color: white;
@@ -866,7 +874,8 @@ input.product-title{
     /*text-align: center;*/
 /*}*/
 
-#image_content{
+#image_content,
+#aop_image_content{
     border-top: 1px solid transparent;
     margin-top: 30px;
     width: 150px;

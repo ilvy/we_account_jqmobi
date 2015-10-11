@@ -171,6 +171,26 @@ html
                 input(type='button' value='预购清单')#to_order.current-list
                 input(type='button' value='收款列表')#to_pay
                 input(type='button' value='总账单')#to_bill
+            div#create-order-box
+                div#create-order-div
+                    div#create
+                        i.fa.fa-plus
+        div.page.add_order
+            div#add_order-panel
+                .text-group
+                    input(type="text" placeholder="商品名称...").product-title
+                    textarea(placeholder="详细说点什么吧，让顾客更好的了解您的产品...").product-desc
+                div#aop_image_content
+                    //.upload-display(style="background:url(http://120.24.224.144/images/test_1430359628167.jpg) center no-repeat;background-size:100%;")
+                        .adjustImg
+                            i.fa.fa-rotate-right
+                .lr-btn-group.col-xxs-12
+                    div#aop_cancel-btn.col-xxs-6
+                        div
+                            i#aop_cancel.fa.fa-times
+                    div#aop_sub-btn.col-xxs-6
+                        div
+                            i#aop_submit.fa.fa-arrow-up
         div.page.getpay#getpay
             .getpay-title
                 span.collection_object

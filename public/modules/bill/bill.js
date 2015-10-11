@@ -120,7 +120,8 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 var cardStr = '<div class="card"><div class="card-title">' +
                     '<i class="fa fa-caret-right"></i><div class="product"><span>商品：</span><span class="name">'+procductName+'</span><span class="total-quantity"> × '+quantity+'</span> </div>' +
                     '<div class="all-status ignore"><span>买到:</span><i class="fa fa-square-o"></i></div></div>';
-                var lastRow = '<div class="extra-row"><div class="t-col-5 product-detail" data-pid="'+key.split('_')[1]+'">【商品详情】</span></div></div>';
+                var lastRow = '<div class="extra-row"><div class="t-col-5 product-detail" data-pid="'+key.split('_')[1]+'">【商品详情】</span></div>' +
+                    '<div class="t-col-5 order-add"><input class="order-add-btn" type="button" value="加单"/></div></div>';
                 cardStr += tableStr + lastRow +'</div>';
                 $("#order-list").append(cardStr);
             }
@@ -796,7 +797,9 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     }
                 });
             },true)
-
+            $("#create-order-box").touch("click",function(event){
+                router.changeHash("add_order",1);
+            },true);
         },
         /**
          * 更新每条记录用于显示的汇率
