@@ -8,7 +8,8 @@ var dbOperator = require("../../../db/dbOperator"),
     tokenManager = require("../access_token"),
     dataviewConfig = require("../../../config/config").dataviewConfig,
     access_token = require('../access_token'),
-    wxsign = require('../sign');
+    wxsign = require('../sign'),
+    util = require("../util/util");
 
 function applyAccount(data,res){
 
@@ -57,7 +58,7 @@ function register(req,res){
         }else{
             console.log(rows);
             res.redirect('/we_account/live-room#live_room-'+rows[0][0].room_id);
-            asyncAccountInfoFromWeix(openId);
+//            asyncAccountInfoFromWeix(openId);
         }
     });
 }
@@ -71,6 +72,9 @@ function asyncAccountInfoFromWeix(openid,res){
         accountInfo = JSON.parse(accountInfo);
         if(res){
             response.success(accountInfo,res);
+        }
+        if(!(accountInfo && accountInfo.nickname)){
+            return;
         }
         var args = [openid,accountInfo.nickname,accountInfo.headimgurl,accountInfo.sex,accountInfo.province+accountInfo.city,accountInfo.country,accountInfo.unionid,accountInfo.subscribe_time];
         dbOperator.query('call pro_weix_account_info(?,?,?,?,?,?,?,?)',args,function(err,rows){
@@ -203,6 +207,23 @@ function wxJssdkInit(req,res){
     response.success(ret,res,1);
 }
 
+/**
+ * 用户关注
+ * @param args
+ */
+function follow(openId,timestamp){
+    var create_time = util.formatDate(new Date(Number(timestamp+"000")),true);
+    var args = [openId,create_time,1];
+    asyncAccountInfoFromWeix(openId);
+//    dbOperator.query("call pro_follow(?,?,?)",args,function(err,rows){
+//        if(err){
+//            console.log('关注失败');
+//        }else{
+//            console.log(openId," 关注成功");
+//        }
+//    });
+}
+
 exports.applyAccount = applyAccount;
 exports.publishProduct = publishProduct;
 exports.checkUser = checkUser;
@@ -212,3 +233,4 @@ exports.updatePersonality = updatePersonality;
 exports.updatePersonality_all = updatePersonality_all;
 exports.asyncAccountInfoFromWeix = asyncAccountInfoFromWeix;
 exports.wxJssdkInit = wxJssdkInit;
+exports.follow = follow;

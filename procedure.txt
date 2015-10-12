@@ -31,7 +31,7 @@ end; $$
 delimiter ;
 
 
-/**¿³Ò»µ¶**/
+/**ï¿½ï¿½Ò»ï¿½ï¿½**/
 delimiter $$
 drop procedure if exists pro_help_cut;
 create procedure pro_help_cut(in cutId int,in openId varchar(100),in cutMoney int)
@@ -48,7 +48,7 @@ end; $$
 delimiter ;
 
 
-/**¿³¼ÛÁĞ±í**/
+/**ï¿½ï¿½ï¿½ï¿½ï¿½Ğ±ï¿½**/
 delimiter $$
 drop procedure if exists pro_get_cut_list;
 create procedure pro_get_cut_list(in openId varchar(100))
@@ -70,7 +70,7 @@ end; $$
 
 delimiter ;
 
-/**ĞÂ½¨¿³¼ÛĞÅÏ¢**/
+/**ï¿½Â½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢**/
 delimiter $$
 drop procedure if exists pro_create_cut_info;
 create procedure pro_create_cut_info(in openId varchar(100),in username varchar(60),in product_name varchar(60),in price decimal(8,1),in create_time datetime,in product_img varchar(100),in activity_duration int)
@@ -88,60 +88,66 @@ end; $$
 delimiter ;
 
 
-/**¹Ø×¢ÕßĞÅÏ¢±í**/
+/**ï¿½ï¿½×¢ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½**/
 create table t_follow(id int auto_increment,open_id varchar(200),create_time datetime,status tinyint, primary key(id));
 
-/**Ìí¼Ó¹Ø×¢Õß**/
+/**ï¿½ï¿½Ó¹ï¿½×¢ï¿½ï¿½**/
 delimiter $$
 drop procedure if exists pro_follow;
-create procedure pro_follow(in open_id varchar(200),in create_time datetime,in status tinyint)
+create procedure pro_follow(in openId varchar(200),in create_time datetime,in status tinyint)
 begin 
 
 insert into t_follow(open_id,create_time,status)
-    select open_id,create_time,status from dual;
+    select openId,create_time,status from dual
+    where (select count(1) from t_follow where open_id = openId) = 0
+    ;
 
 end;$$
 delimiter ;
 
-/**Ô­ÉÌÆ·¼Óµ¥**/
+/**Ô­ï¿½ï¿½Æ·ï¿½Óµï¿½**/
 delimiter $$
-drop procedure if exists pro_add_order_in_exist_product;
-create procedure pro_add_order_in_exist_product(in cnickname varchar(200),in sell_room_id varchar(16),in remark varchar(60),in productid int,in in_quantity int,in create_time datetime)
+drop procedure if exists pro_add_order_by_seller;
+create procedure pro_add_order_by_seller(in cnickname varchar(50),in title varchar(40),in text varchar(600),in image_urls varchar(200),in sell_room_id varchar(16),in remark varchar(60),in productid int,in in_quantity int,in create_time datetime)
 begin 
 
 start transaction;
 
+set @openId = (select open_id from t_weix_account_info where nickname = cnickname);--ç¬¬ä¸€æ­¥ã€å…ˆæ ¹æ®æ˜µç§°è·å–ä¹°å®¶openId
 
-UPDATE t_order o , t_customer c
-SET o.quantity = o.quantity + in_quantity
-where o.c_id = c.id AND o.product_id = productid AND c.c_openid = c_open_id  AND c.seller_room_id = sell_room_id AND STATUS != 0
- AND o.create_time > '2015-05-11';
+if productid is null then
+call pro_publish(image_urls,text,@openId,title);--ç¬¬äºŒæ­¥ã€å‘å¸ƒå•†å“
+set @productId = (select last_insert_id());
+else
+set @productId = productid;
+end if;
 
-set @update_count = (SELECT ROW_COUNT()); 
-	-- SELECT @update_count;
-	if @update_count = 0 THEN 
-	
-			SET @Cid = (SELECT c.id from t_customer c JOIN user u 
-												ON c.seller_room_id = u.room_id 
-												WHERE c.seller_room_id = sell_room_id AND c.c_openid = c_open_id);
--- SELECT @Cid;
-			if @Cid is NULL THEN
-				INSERT INTO t_customer(c_openid,seller_room_id,create_time)
-					VALUES(c_open_id ,sell_room_id,create_time);
-			SELECT 1 isExistCustomer;
-			end if;
-			
-				INSERT INTO t_order(product_id,c_id,status,quantity,create_time,exchange_rate,exchange_type)
-					SELECT productid ,c.id,1,in_quantity,create_time,r.exchange_rate,r.exchange_type
-							FROM t_customer c JOIN user u 
-						ON c.seller_room_id = u.room_id 
-						JOIN t_exchange_rate r
-						ON r.exchange_type = 2 -- ????????
-						WHERE c.seller_room_id = sell_room_id AND c.c_openid = c_open_id 
-									AND r.open_id = (SELECT open_id from user WHERE room_id = seller_room_id);
-	end IF;
+call pro_take_order(@openId,sell_room_id,remark,@productId,in_quantity,create_time);--ç¬¬ä¸‰æ­¥ã€ä¸‹å•
 
 commit;
 
 end; $$
 delimiter ;
+
+
+
+--ç›¸åŒp_idçš„è®¢å•å–å’Œï¼Œå¹¶åˆ é™¤status=1çš„è®¢å•
+update t_order t0,
+(select product_id,quantity from t_order o WHERE o.id IN ('+order_id+')' and o.status = 1) t1,
+(select product_id,quantity from t_order o2 where o2.status = 2) t2
+set t0.status = 2,t0.quantity = t1.quantity + t2.quantity
+where t1.product_id = t2.product_id and t0.status = 2
+	--åˆ é™¤
+update t_order t0,
+(select product_id,quantity from t_order o WHERE o.id IN ('+order_id+')' and o.status = 1) t1,
+(select product_id,quantity from t_order o2 where o2.status = 2) t2
+set t0.status = 0
+where t1.product_id = t2.product_id and t0.status = 1
+
+update t_order t11,
+(select * from
+	(select product_id,quantity from t_order o WHERE o.id IN ('+order_id+')' and o.status = 1) t1 left join
+	(select product_id,quantity from t_order o2 where o2.status = 2) t2
+	on t1.product_id = t2.product_id
+	where t2.product_id is null)t12
+set t11.quantity = t11.quantity + 1,t11.status = 2;

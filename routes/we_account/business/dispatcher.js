@@ -8,7 +8,8 @@ var applyAccount = require("./publish_account").applyAccount,
     transition = '',//apply_account、enter-live-room、apply_nice_num:申请靓号
     checkUser = require("./publish_account").checkUser,
     async = require("async"),
-    live_room = require("./live_room");
+    live_room = require("./live_room"),
+    follow = require("./publish_account").follow;
 
 function dispatch(data,res){
     switch (data.MsgType){
@@ -54,6 +55,7 @@ function dispatch(data,res){
             console.log("msgtype:event");
             if(data.Event == 'subscribe'){
                 data.replyContent = '欢迎关注代代！\n 回复0查看代代使用教程';
+                follow(data["FromUserName"],data["CreateTime"]);
                 response(data,res);
             }else if(data.Event == 'unsubscribe'){
 

@@ -49,7 +49,7 @@ app.use(session({
 app.use('/', routes);
 app.use('/users', users);
 app.use("/we_account",we_account);
-app.use('/test',test);
+//app.use('/test',test);
 
 
 // catch 404 and forward to error handler
