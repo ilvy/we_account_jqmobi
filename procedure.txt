@@ -113,36 +113,76 @@ begin
 
 start transaction;
 
-set @openId = (select open_id from t_weix_account_info where nickname = cnickname);--第一步、先根据昵称获取买家openId
+set @openId = (select open_id from t_weix_account_info where nickname = cnickname);-- 第一步、先根据昵称获取买家openId
 
-if productid is null then
-call pro_publish(image_urls,text,@openId,title);--第二步、发布商品
+if productid = -1 then
+call pro_publish(image_urls,text,@openId,title);-- 第二步、发布商品
 set @productId = (select last_insert_id());
 else
 set @productId = productid;
 end if;
 
-call pro_take_order(@openId,sell_room_id,remark,@productId,in_quantity,create_time);--第三步、下单
+call pro_take_order(@openId,sell_room_id,remark,@productId,in_quantity,create_time);-- 第三步、下单
 
 commit;
 
 end; $$
 delimiter ;
 
+-- 下单 pro_take_order
+delimiter $$
+drop procedure if exists pro_take_order;
+CREATE  PROCEDURE pro_take_order(in c_open_id varchar(200),in sell_room_id varchar(16),in remark varchar(60),in productid int,in in_quantity int,in create_time datetime)
+BEGIN
 
+START TRANSACTION;
 
---相同p_id的订单取和，并删除status=1的订单
+UPDATE t_order o , t_customer c
+SET o.quantity = o.quantity + in_quantity
+where o.c_id = c.id AND o.product_id = productid AND c.c_openid = c_open_id  AND c.seller_room_id = sell_room_id AND STATUS not in (0,2,3)
+ AND o.create_time > '2015-05-11';
+
+set @update_count = (SELECT ROW_COUNT());
+	-- SELECT @update_count;
+	if @update_count = 0 THEN
+
+			SET @Cid = (SELECT c.id from t_customer c JOIN user u
+												ON c.seller_room_id = u.room_id
+												WHERE c.seller_room_id = sell_room_id AND c.c_openid = c_open_id);
+-- SELECT @Cid;
+			if @Cid is NULL THEN
+				INSERT INTO t_customer(c_openid,seller_room_id,create_time)
+					VALUES(c_open_id ,sell_room_id,create_time);
+			SELECT 1 isExistCustomer;
+			end if;
+
+				INSERT INTO t_order(product_id,c_id,status,quantity,create_time,exchange_rate,exchange_type)
+					SELECT productid ,c.id,1,in_quantity,create_time,r.exchange_rate,r.exchange_type
+							FROM t_customer c JOIN user u
+						ON c.seller_room_id = u.room_id
+						JOIN t_exchange_rate r
+						ON r.exchange_type = 2 -- ????????
+						WHERE c.seller_room_id = sell_room_id AND c.c_openid = c_open_id
+									AND r.open_id = (SELECT open_id from user WHERE room_id = seller_room_id);
+	end IF;
+
+COMMIT;
+end; $$
+delimiter ;
+
+-- 预购列表 --> 已购列表
+-- --相同p_id的订单取和，并删除status=1的订单
 update t_order t0,
 (select product_id,quantity from t_order o WHERE o.id IN ('+order_id+')' and o.status = 1) t1,
 (select product_id,quantity from t_order o2 where o2.status = 2) t2
 set t0.status = 2,t0.quantity = t1.quantity + t2.quantity
-where t1.product_id = t2.product_id and t0.status = 2
-	--删除
+where t1.product_id = t2.product_id and t0.status = 2;
+	-- ----删除
 update t_order t0,
 (select product_id,quantity from t_order o WHERE o.id IN ('+order_id+')' and o.status = 1) t1,
 (select product_id,quantity from t_order o2 where o2.status = 2) t2
 set t0.status = 0
-where t1.product_id = t2.product_id and t0.status = 1
+where t1.product_id = t2.product_id and t0.status = 1;
 
 update t_order t11,
 (select * from
@@ -150,4 +190,4 @@ update t_order t11,
 	(select product_id,quantity from t_order o2 where o2.status = 2) t2
 	on t1.product_id = t2.product_id
 	where t2.product_id is null)t12
-set t11.quantity = t11.quantity + 1,t11.status = 2;
+set t11.status = 2;
