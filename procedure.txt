@@ -170,24 +170,97 @@ COMMIT;
 end; $$
 delimiter ;
 
+------------bought tobuylist to getpaylist-------------start
+
+delimiter $$
+drop procedure if exists pro_bought;
+CREATE  PROCEDURE pro_bought(in idStr varchar(200))
+BEGIN
+
+START TRANSACTION;
 -- 预购列表 --> 已购列表
 -- --相同p_id的订单取和，并删除status=1的订单
+delete from t_serial;
+call sp_print_result(idStr,',');
 update t_order t0,
-(select product_id,quantity from t_order o WHERE o.id IN ('+order_id+')' and o.status = 1) t1,
+(select product_id,quantity from t_order o,t_serial s WHERE o.id = s.sid and o.status = 1) t1,
 (select product_id,quantity from t_order o2 where o2.status = 2) t2
 set t0.status = 2,t0.quantity = t1.quantity + t2.quantity
 where t1.product_id = t2.product_id and t0.status = 2;
 	-- ----删除
 update t_order t0,
-(select product_id,quantity from t_order o WHERE o.id IN ('+order_id+')' and o.status = 1) t1,
+(select product_id,quantity from t_order o,t_serial s WHERE o.id = s.sid and o.status = 1) t1,
 (select product_id,quantity from t_order o2 where o2.status = 2) t2
 set t0.status = 0
 where t1.product_id = t2.product_id and t0.status = 1;
 
 update t_order t11,
 (select * from
-	(select product_id,quantity from t_order o WHERE o.id IN ('+order_id+')' and o.status = 1) t1 left join
+	(select product_id,quantity from t_order o,t_serial s WHERE o.id = s.sid and o.status = 1) t1 left join
 	(select product_id,quantity from t_order o2 where o2.status = 2) t2
 	on t1.product_id = t2.product_id
 	where t2.product_id is null)t12
 set t11.status = 2;
+
+COMMIT;
+end; $$
+delimiter ;
+
+------------bought tobuylist to getpaylist-------------end
+
+-------------split string-------------
+DELIMITER $$
+
+drop function if exists func_get_split_string;
+CREATE FUNCTION `func_get_split_string`(
+f_string varchar(1000),f_delimiter varchar(5),f_order int) RETURNS varchar(255) CHARSET utf8
+BEGIN
+  -- Get the separated number of given string.
+  declare result varchar(255) default '';
+  set result = reverse(substring_index(reverse(substring_index(f_string,f_delimiter,f_order)),f_delimiter,1));
+  return result;
+END$$
+
+DELIMITER ;
+--------------
+
+DELIMITER $$
+
+drop function if exists func_get_split_string_total;
+CREATE FUNCTION `func_get_split_string_total`(
+f_string varchar(1000),f_delimiter varchar(5)
+) RETURNS int(11)
+BEGIN
+  -- Get the total number of given string.
+  return 1+(length(f_string) - length(replace(f_string,f_delimiter,'')));
+END$$
+
+DELIMITER ;
+
+-------------
+
+DELIMITER $$
+
+drop PROCEDURE if exists sp_print_result;
+CREATE PROCEDURE `sp_print_result`(
+ IN f_string varchar(1000),IN f_delimiter varchar(5)
+)
+BEGIN
+  -- Get the separated string.
+  declare cnt int default 0;
+  declare i int default 0;
+  set cnt = func_get_split_string_total(f_string,f_delimiter);
+  drop table if exists tmp_print;
+  create temporary table tmp_print (num int not null);
+  while i < cnt
+  do
+    set i = i + 1;
+    insert into tmp_print(num) values (func_get_split_string(f_string,f_delimiter,i));
+  end while;
+  insert into t_serial select * from tmp_print;
+
+END$$
+
+DELIMITER ;
+
+---------------------------------------------
