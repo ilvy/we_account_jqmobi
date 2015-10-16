@@ -232,10 +232,28 @@ exports.query = query;
 //    }
 //});
 
-query("call pro_help_cut(?,?,?)",[1,"oxfQVs4zCT1ZW0XJysajkbL9CIrY",1],function(err,rows){
-    if(err){
-        console.log("call pro_help_cut err:",err);
+//query("call pro_help_cut(?,?,?)",[1,"oxfQVs4zCT1ZW0XJysajkbL9CIrY",1],function(err,rows){
+//    if(err){
+//        console.log("call pro_help_cut err:",err);
+//
+//    }else{
+//        console.log(rows);
+//    }
+//});
 
+//in cnickname varchar(50),in title varchar(40),in text varchar(600),in image_urls varchar(200),
+// in sell_room_id varchar(16),in remark varchar(60),in productid int,in in_quantity int,in create_time datetime
+//query("call pro_add_order_by_seller(?,?,?,?,?,?,?,?)",['GOer','GOer buy title','后台上传测试text','','888888','',-1,2],function(err,rows){
+//    if(err){
+//        console.log("call pro_add_order_by_seller err:",err);
+//    }else{
+//        console.log(rows);
+//    }
+//});
+
+query("call pro_bought(?,?)",['705,706,707,710','2015-10-16 14:12:00'],function(err,rows){
+    if(err){
+        console.log("call pro_bought err:",err);
     }else{
         console.log(rows);
     }
