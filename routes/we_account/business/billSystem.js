@@ -63,7 +63,7 @@ function takeOrder(req,res,callback){
                 }
                 console.log(rows);
                 if(rows[0] && rows[0][0] && rows[0][0].isExistCustomer){
-                    getNicknameFromWeix(openId,roomId);
+//                    getNicknameFromWeix(openId,roomId);
                 }
                 response.success('',res,'');
             }

@@ -801,7 +801,16 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 router.changeHash("add_order",1);
             },true);
             $("#addOrderPanel").on("click","#aop_submit",function(event){
+                var nickname = $("#aopc_name").val(),
+                    title = $(".aopp_name").val(),
+                    desc = $("#aopc_desc").val(),
+                    quantity = $("#aopq_quantity").val(),
+                    cost = $("#aoppurchase_money").val(),
+                    price = $("#aopprice_money").val();
+                var url = "/we_account/addOrder?title="+title+"&desc="+desc+"&quantity="+quantity+"&cost="+cost+"&price="+price+"&nickname="+nickname;
+                $.ajax({
 
+                })
             });
         },
         /**
