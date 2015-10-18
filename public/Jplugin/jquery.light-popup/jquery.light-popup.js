@@ -92,7 +92,7 @@
             jquery(".popup-header").append(closeBtn);
         },
         stopPropagation:function(){
-            jquery('#light-popup').touch("click",function(event){
+            jquery('.light-popup').touch("click",function(event){
 
             },true);
         }

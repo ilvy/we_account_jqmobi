@@ -800,18 +800,49 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             $("#create-order-box").touch("click",function(event){
                 router.changeHash("add_order",1);
             },true);
-            $("#addOrderPanel").on("click","#aop_submit",function(event){
+            $("#aop_seller_submit").touch("click",function(event){
                 var nickname = $("#aopc_name").val(),
-                    title = $(".aopp_name").val(),
-                    desc = $("#aopc_desc").val(),
+                    title = $(".aopp_name").text(),
+                    desc = $("#aopc_desc").val() || "苹果6呀",
                     quantity = $("#aopq_quantity").val(),
                     cost = $("#aoppurchase_money").val(),
-                    price = $("#aopprice_money").val();
-                var url = "/we_account/addOrder?title="+title+"&desc="+desc+"&quantity="+quantity+"&cost="+cost+"&price="+price+"&nickname="+nickname;
+                    price = $("#aopprice_money").val(),
+                    productId = $("#addOrderPanel").data("productid") || "781";
+                var url = "/we_account/add_order?title="+title+"&desc="+desc+"&quantity="+quantity+"&cost="+cost+"&price="+price+"&nickname="+nickname+"&productid="+productId;
                 $.ajax({
-
+                    url:url,
+                    type:'post'
+                }).success(function(results){
+                    if(results.flag == 1){
+                        alert("加单成功");
+                    }else{
+                        alert("失败");
+                    }
+                }).error(function(err){
+                    console.log(err);
                 })
-            });
+            },true);
+            $(".order-add-btn").touch("click",function(event){
+                var $this = $(this);
+                var productId = $this.parents(".extra-row").find(".product-detail").data("pid"),
+                    title = $this.parents(".card").find(".name").text();
+                _this.showAddOrderPanel(productId,title);
+            },true);
+        },
+
+        showAddOrderPanel:function(productId,title){
+            if(arguments.length){
+                $("#addOrderPanel span.aopp_name").addClass("visible-inline").removeClass("hide");
+                $("#addOrderPanel input.aopp_name").removeClass("visible-inline").addClass("hide");
+                $("#addOrderPanel .aop_product_desc").addClass("hide");
+                $("#aopc_desc").removeAttr("required");
+            }else{
+                $("#addOrderPanel input.aopp_name").addClass("visible-inline").removeClass("hide");
+                $("#addOrderPanel span.aopp_name").removeClass("visible-inline").addClass("hide");
+                $("#addOrderPanel .aop_product_desc").removeClass("hide").addClass("visible-inline");
+                $("#aopc_desc").attr("required","required");
+            }
+            $("#addOrderPanel").pop();
         },
         /**
          * 更新每条记录用于显示的汇率
@@ -833,6 +864,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             var date2 = util.formatDate(null,false);
             $("#date1").val(date1);
             $("#date2").val(date2);
+            document.getElementById("aopq_quantity").outerHTML = this.generateNumSelect(100,1);
         },
         getMarginLeft:function($row){
             var ml = 0;

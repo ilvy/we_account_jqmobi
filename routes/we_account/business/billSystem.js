@@ -202,7 +202,7 @@ function updateOrderStatus(req,res){
         return;
     }
     if(status == 2){
-        var sql = 'UPDATE t_order o SET o.status = '+status+',o.buy_time=\''+buy_time+'\' WHERE o.id IN ('+order_id+')';
+        var sql = 'call pro_bought('+order_id+');';//'UPDATE t_order o SET o.status = '+status+',o.buy_time=\''+buy_time+'\' WHERE o.id IN ('+order_id+')';
     }else if(status == 3){
         sql = 'UPDATE t_order o SET o.status = '+status+',o.pay_time=\''+buy_time+'\' WHERE o.id IN ('+order_id+');';
     }else if(status == 0){
@@ -347,6 +347,38 @@ function vagueMatchNames(req,res){
     });
 }
 
+//in cnickname varchar(50),in title varchar(40),in text varchar(600),in image_urls varchar(200),
+// in sell_room_id varchar(16),in remark varchar(60),in productid int,in in_quantity int
+/**
+ * 卖家帮买家下单
+ * @param req
+ * @param res
+ */
+function addOrderBySeller(req,res){
+    var nickname = req.query.nickname,
+        title = req.query.title,
+        desc = req.query.desc,
+        image_urls = req.query.image_urls || "",
+        remark = req.query.remark || "",
+        productid = req.query.productid || -1,
+        in_quantity = req.query.quantity,
+        cost = req.query.cost,
+        price = req.query.price;
+    var openId = req.session.openId || "oxfQVswUSy2KXBPOjNi_BqdNI3aA";
+    dbOperator.query("call pro_add_order_by_seller(?,?,?,?,?,?,?,?,?,?)",[nickname,title,desc,image_urls,openId,remark,productid,in_quantity,cost,price],function(err,rows){
+        if(err){
+            console.log("call pro_add_order_by_seller err:",err);
+        }else{
+            console.log("pro_add_order_by_seller results:",rows);
+            if(rows && rows[0] && rows[0][0] && rows[0][0]['result'] == 0){
+                response.failed(-1,res,"");//改昵称用户非关注用户
+            }else{
+                response.success(1,res,"");
+            }
+        }
+    });
+}
+
 exports.takeOrder = takeOrder;
 exports.filter_takeOrder = filter_takeOrder;
 exports.getBillList = getBillList;
@@ -359,3 +391,4 @@ exports.getNicknameFromWeix = getNicknameFromWeix;
 exports.vagueMatchNames = vagueMatchNames;
 exports.getPayment = getPayment;
 exports.checkCustomerSubscribe = checkCustomerSubscribe;
+exports.addOrderBySeller = addOrderBySeller;

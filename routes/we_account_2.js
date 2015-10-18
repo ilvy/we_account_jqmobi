@@ -384,6 +384,8 @@ router.post("/help-cut-off",util.filterLoginAjax,live_room.helpCutOff);
 
 router.post("/create_cut_info",live_room.create_cut_info);
 
+router.post("/add_order",billSystem.addOrderBySeller);
+
 router.get("/xml",function(req,res){
     xmlParser.parseXml("<xml><ToUserName><![CDATA[gh_d28b25ec1197]]></ToUserName>" +
         "<FromUserName><![CDATA[oHbq1t0enasGWD7eQoJuslZY6R-4]]></FromUserName>" +

@@ -170,6 +170,20 @@ define([],function(){
                     alert('分享失败，请重试！');
                 }
             });
+        },
+        validateForm:function(formSelector){
+            var $f = $(formSelector);
+            var tag = "";
+            $f.find(".required").each(function(){
+                tag = $(this)[0].tagName.toLowerCase();
+                switch (tag){
+                    case 'input':
+                        if(!($.trim($(this).val())+"")){
+
+                        }
+                        break;
+                }
+            });
         }
     }
 

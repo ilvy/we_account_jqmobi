@@ -289,28 +289,34 @@ html
                     span 地区：
                     span.region_desc 浙江台州
             .long-tap-tip 长按扫码添加代手微信
-        #addOrderPanel.light-popup(style="display:block;background-color: white;z-index: 100000;opacity:1")
-            .aop_product.col-xxs-8.col-xxs-offset-2
-                span.col-xxs-3.no-horizontal-padding 品名：
-                span.aopp_name.col-xxs-9.no-horizontal-padding iphone6Plus
-            .aop_customer.col-xxs-8.col-xxs-offset-2
-                span.col-xxs-3.no-horizontal-padding 买家：
-                input#aopc_name.aopc_name.col-xxs-9.no-horizontal-padding
-            .aop_upload_product.col-xxs-8.col-xxs-offset-2
+        #addOrderPanel.light-popup
+            //(style="display:block;background-color: white;z-index: 100000;opacity:1")
+            .aop_product.col-xxs-8.col-xxs-offset-2.no-horizontal-padding
+                span.col-xxs-4.no-horizontal-padding 品名：
+                span.aopp_name.col-xxs-8.no-horizontal-padding iphone6Plus
+                input.aopp_name.col-xxs-8.no-horizontal-padding
+            .aop_product_desc.col-xxs-8.col-xxs-offset-2.no-horizontal-padding
+                span.col-xxs-4.no-horizontal-padding 商品简介：
+                input#aopc_desc.aopc_name.col-xxs-8.no-horizontal-padding
+            .aop_customer.col-xxs-8.col-xxs-offset-2.no-horizontal-padding
+                span.col-xxs-4.no-horizontal-padding 买家：
+                input#aopc_name.aopc_name.col-xxs-8.no-horizontal-padding
+            .aop_upload_product.col-xxs-8.col-xxs-offset-2.no-horizontal-padding
                 img
-            .aop_quantity.col-xxs-8.col-xxs-offset-2
-                span.col-xxs-3.no-horizontal-padding 数量：
-                select#aopq_quantity.aopq_quantity.col-xxs-9.no-horizontal-padding
+            .aop_quantity.col-xxs-8.col-xxs-offset-2.no-horizontal-padding
+                span.col-xxs-4.no-horizontal-padding 数量：
+                select#aopq_quantity.aopq_quantity.col-xxs-8.no-horizontal-padding
                     option(value=-1) 请选择
-            .aop_purchase.col-xxs-8.col-xxs-offset-2
-                span.col-xxs-3.no-horizontal-padding 进价：
-                input#aoppurchase_money.aoppurchase_money.col-xxs-9.no-horizontal-padding
-            .aop_price.col-xxs-8.col-xxs-offset-2
-                span.col-xxs-3.no-horizontal-padding 售价：
-                input#aopprice_money.aopprice_money.col-xxs-9.no-horizontal-padding
-            .aop_btn_group.col-xxs-8.col-xxs-offset-2
-                input(type="button" value="取消")#aop_cancel.aop_cancel.yellow-btn
-                input(type="button" value="确定")#aop_submit.aop_submit.green-btn
+                    option(value=1) -- 1  --
+            .aop_purchase.col-xxs-8.col-xxs-offset-2.no-horizontal-padding
+                span.col-xxs-4.no-horizontal-padding 进价：
+                input#aoppurchase_money.aoppurchase_money.col-xxs-8.no-horizontal-padding
+            .aop_price.col-xxs-8.col-xxs-offset-2.no-horizontal-padding
+                span.col-xxs-4.no-horizontal-padding 售价：
+                input#aopprice_money.aopprice_money.col-xxs-8.no-horizontal-padding
+            .aop_btn_group.col-xxs-6.col-xxs-offset-3.no-horizontal-padding
+                input(type="button" value="取消")#aop_seller_cancel.aop_cancel.yellow-btn.col-xxs-6
+                input(type="button" value="确定")#aop_seller_submit.aop_submit.green-btn.col-xxs-6
 
 script(src="/javascripts/jquery.js")
 script(src="/touchUtil.js")
