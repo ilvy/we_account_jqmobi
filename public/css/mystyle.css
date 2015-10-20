@@ -16,7 +16,15 @@ body{
     padding-left: 0;
     padding-right: 0;
 }
-
+.visible{
+    display: block !important;
+}
+.visible-inline{
+    display: inline !important;
+}
+.hide{
+    display: none;
+}
 /********************end common style**********************/
 
 #pay-list,#bill-list{
@@ -469,6 +477,63 @@ body{
 .aop_btn_group{
     text-align: center;
 }
+
+#addOrderPanel{
+    width: 100%;
+    left: 0;
+    top: 0;
+    height: 100%;
+    padding-top: 36px;
+}
+
+#addOrderPanel > div{
+    margin-top: 16px;
+}
+
+#addOrderPanel > div input[type="text"]{
+    border: transparent;
+    border-bottom: 1px solid #B5B3B3;
+    border-radius: 0;
+    height: 26px;
+    outline: none;
+}
+#search_group{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+#search-user-panel{
+    position: absolute;
+    display: none;
+    background: white;
+    list-style: none;
+    text-align: left;
+    margin-top: 2px;
+    /*border: 1px solid #cdcdcd;*/
+    padding-left: 0px;
+    z-index: 10000;
+}
+
+#search-user-panel > li{
+    font-size: 1rem;
+    padding: 0.6rem;
+    border: 1px solid #cecece;
+}
+
+/*#exists_customers{*/
+    /*position: absolute;*/
+    /*right: -10px;*/
+    /*bottom: 0;*/
+    /*text-decoration: underline;*/
+/*}*/
+
+/*#search_user{*/
+    /*position: absolute;*/
+    /*right: -10px;*/
+    /*bottom: 0;*/
+    /*text-decoration: underline;*/
+/*}*/
 
     /************end add order panel**************/
 

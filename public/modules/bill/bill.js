@@ -822,25 +822,66 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     console.log(err);
                 })
             },true);
+            $("#aop_seller_cancel").touch("click",function(event){
+                $("#addOrderPanel").pop({hidden:true});
+            });
             $(".order-add-btn").touch("click",function(event){
-                var $this = $(this);
+                var $this = event.$this;
                 var productId = $this.parents(".extra-row").find(".product-detail").data("pid"),
                     title = $this.parents(".card").find(".name").text();
                 _this.showAddOrderPanel(productId,title);
             },true);
-        },
+            $("#search_user").touch("click",function(event){
+                var $nameInput = $("#aopc_name");
+                var customer = $nameInput.val();
+                if(!customer.trim()){
+                    return;
+                }
+                var offset = $nameInput.offset();
+                $.ajax({
+                    url:"/we_account/vague_search_user?customer="+customer+"&type="+1,
+                    type:"get"
+                }).success(function(results){
+                    if(results.flag == 1){
+                        _this.renderSearchUserPanel(results.data);
+                        $("#search-user-panel").css({
+                            width:$nameInput.width() + 30,
+                            top:offset.top + $nameInput.height() + 1,
+                            left:offset.left
+                        }).addClass('visible');
+                    }
+                }).error(function(err){
 
+                });
+
+            },true);
+            $("#search-user-panel li").touch("click",function(event){
+                var name = event.$this.text();
+                $("#aopc_name").val(name);
+                $("#search-user-panel").removeClass('visible');
+            },true);
+        },
+        renderSearchUserPanel:function(customers){
+            var len = customers.length,
+                listr = "";
+            for(var i = 0; i < len; i++){
+                listr += '<li>'+customers[i].nickname+'</li>';
+            }
+            $("#search-user-panel").html(listr);
+        },
         showAddOrderPanel:function(productId,title){
             if(arguments.length){
-                $("#addOrderPanel span.aopp_name").addClass("visible-inline").removeClass("hide");
+                $("#addOrderPanel span.aopp_name").text(title).addClass("visible-inline").removeClass("hide");
                 $("#addOrderPanel input.aopp_name").removeClass("visible-inline").addClass("hide");
                 $("#addOrderPanel .aop_product_desc").addClass("hide");
                 $("#aopc_desc").removeAttr("required");
+                $("#addOrderPanel").data("productid",productId);
             }else{
                 $("#addOrderPanel input.aopp_name").addClass("visible-inline").removeClass("hide");
                 $("#addOrderPanel span.aopp_name").removeClass("visible-inline").addClass("hide");
                 $("#addOrderPanel .aop_product_desc").removeClass("hide").addClass("visible-inline");
                 $("#aopc_desc").attr("required","required");
+                $("#addOrderPanel").data("productid",-1);
             }
             $("#addOrderPanel").pop();
         },

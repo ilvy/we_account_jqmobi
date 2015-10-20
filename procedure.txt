@@ -313,4 +313,33 @@ END$$
 
 DELIMITER ;
 
----------------------------------------------
+----------------------split string-----------------------
+
+
+---------------------全站模糊匹配user------------------------start
+delimiter $$
+drop procedure if exists pro_vague_search_user;
+create procedure pro_vague_search_user(in username varchar(50),in type tinyint)
+begin
+
+start transaction;
+
+if type = 1 then
+select distinct nickname from
+(
+    select nickname from t_weix_account_info
+    where nickname like username
+    union all
+    select c_nickname from t_customer
+    where c_nickname like username
+) t;
+else
+select distinct c_nickname nickname from t_customer
+    where c_nickname like username;
+end if;
+
+commit;
+
+end; $$
+delimiter ;
+---------------------全站模糊匹配user------------------------end

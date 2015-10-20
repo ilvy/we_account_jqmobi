@@ -294,13 +294,16 @@ html
             .aop_product.col-xxs-8.col-xxs-offset-2.no-horizontal-padding
                 span.col-xxs-4.no-horizontal-padding 品名：
                 span.aopp_name.col-xxs-8.no-horizontal-padding iphone6Plus
-                input.aopp_name.col-xxs-8.no-horizontal-padding
+                input(type="text").aopp_name.col-xxs-8.no-horizontal-padding
             .aop_product_desc.col-xxs-8.col-xxs-offset-2.no-horizontal-padding
                 span.col-xxs-4.no-horizontal-padding 商品简介：
-                input#aopc_desc.aopc_name.col-xxs-8.no-horizontal-padding
+                input(type="text")#aopc_desc.aopc_name.col-xxs-8.no-horizontal-padding
             .aop_customer.col-xxs-8.col-xxs-offset-2.no-horizontal-padding
                 span.col-xxs-4.no-horizontal-padding 买家：
-                input#aopc_name.aopc_name.col-xxs-8.no-horizontal-padding
+                input(type="text")#aopc_name.aopc_name.col-xxs-5.no-horizontal-padding
+                #search_group.col-xxs-3.no-horizontal-padding
+                    a#search_user.col-xxs-4.no-horizontal-padding 搜
+                    a#exists_customers.col-xxs-8.no-horizontal-padding 熟客
             .aop_upload_product.col-xxs-8.col-xxs-offset-2.no-horizontal-padding
                 img
             .aop_quantity.col-xxs-8.col-xxs-offset-2.no-horizontal-padding
@@ -310,13 +313,17 @@ html
                     option(value=1) -- 1  --
             .aop_purchase.col-xxs-8.col-xxs-offset-2.no-horizontal-padding
                 span.col-xxs-4.no-horizontal-padding 进价：
-                input#aoppurchase_money.aoppurchase_money.col-xxs-8.no-horizontal-padding
+                input(type="text")#aoppurchase_money.aoppurchase_money.col-xxs-8.no-horizontal-padding
             .aop_price.col-xxs-8.col-xxs-offset-2.no-horizontal-padding
                 span.col-xxs-4.no-horizontal-padding 售价：
-                input#aopprice_money.aopprice_money.col-xxs-8.no-horizontal-padding
+                input(type="text")#aopprice_money.aopprice_money.col-xxs-8.no-horizontal-padding
             .aop_btn_group.col-xxs-6.col-xxs-offset-3.no-horizontal-padding
                 input(type="button" value="取消")#aop_seller_cancel.aop_cancel.yellow-btn.col-xxs-6
                 input(type="button" value="确定")#aop_seller_submit.aop_submit.green-btn.col-xxs-6
+        ul#search-user-panel
+            li SHU
+            li GOGO
+
 
 script(src="/javascripts/jquery.js")
 script(src="/touchUtil.js")

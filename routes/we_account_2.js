@@ -384,6 +384,8 @@ router.post("/help-cut-off",util.filterLoginAjax,live_room.helpCutOff);
 
 router.post("/create_cut_info",live_room.create_cut_info);
 
+router.get("/vague_search_user",billSystem.vagueSearchUser);
+
 router.post("/add_order",billSystem.addOrderBySeller);
 
 router.get("/xml",function(req,res){

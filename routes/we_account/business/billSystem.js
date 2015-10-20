@@ -379,6 +379,19 @@ function addOrderBySeller(req,res){
     });
 }
 
+function vagueSearchUser(req,res){
+    var customer = req.query.customer,
+        type = req.query.type;
+    dbOperator.query("call pro_vague_search_user(?,?)",['%'+customer+'%',type],function(err,rows){
+        if(err){
+            console.log("call pro_vague_search_user err:",err);
+        }else{
+//            console.log("pro_add_order_by_seller results:",rows);
+            response.success(rows[0],res,"");
+        }
+    });
+}
+
 exports.takeOrder = takeOrder;
 exports.filter_takeOrder = filter_takeOrder;
 exports.getBillList = getBillList;
@@ -392,3 +405,4 @@ exports.vagueMatchNames = vagueMatchNames;
 exports.getPayment = getPayment;
 exports.checkCustomerSubscribe = checkCustomerSubscribe;
 exports.addOrderBySeller = addOrderBySeller;
+exports.vagueSearchUser = vagueSearchUser;
