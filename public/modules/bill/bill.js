@@ -318,6 +318,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             $(document).touch("click",function(event){
                 $(".operateObj").css("margin-left",0).removeClass('operateObj');
                 $("#vagueBox").css("display","none");
+                $("#search-user-panel").css("display","none");
 //                var $target =$(event.target);
 //                if(!($target.hasClass("sub")||$target.hasClass("add")||$target.hasClass("num") || $target.hasClass(".quantity"))){
 //                    $('.add,.sub').css("display",'none');
@@ -798,13 +799,24 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 });
             },true)
             $("#create-order-box").touch("click",function(event){
-                router.changeHash("add_order",1);
+//                router.changeHash("add_order",1);
+                _this.showAddOrderPanel();
+            },true);
+            $(".order-add-btn").touch("click",function(event){
+                var $this = event.$this;
+                var productId = $this.parents(".extra-row").find(".product-detail").data("pid"),
+                    title = $this.parents(".card").find(".name").text();
+                _this.showAddOrderPanel(productId,title);
             },true);
             $("#aop_seller_submit").touch("click",function(event){
+                if(!util.validateForm("#addOrderPanel")){
+                    return;
+                }
+                globalVar.showLoading();
                 var nickname = $("#aopc_name").val(),
                     title = $(".aopp_name").text(),
                     desc = $("#aopc_desc").val() || "苹果6呀",
-                    quantity = $("#aopq_quantity").val(),
+                    quantity = $("#aopq_quantity select").val(),
                     cost = $("#aoppurchase_money").val(),
                     price = $("#aopprice_money").val(),
                     productId = $("#addOrderPanel").data("productid") || "781";
@@ -815,9 +827,12 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 }).success(function(results){
                     if(results.flag == 1){
                         alert("加单成功");
+                        _this.cleanOrderPanel();
+                        $("#addOrderPanel").pop({hidden:true});
                     }else{
-                        alert("失败");
+                        alert("加单失败");
                     }
+                    globalVar.hideLoading();
                 }).error(function(err){
                     console.log(err);
                 })
@@ -825,12 +840,6 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             $("#aop_seller_cancel").touch("click",function(event){
                 $("#addOrderPanel").pop({hidden:true});
             });
-            $(".order-add-btn").touch("click",function(event){
-                var $this = event.$this;
-                var productId = $this.parents(".extra-row").find(".product-detail").data("pid"),
-                    title = $this.parents(".card").find(".name").text();
-                _this.showAddOrderPanel(productId,title);
-            },true);
             $("#search_user").touch("click",function(event){
                 var $nameInput = $("#aopc_name");
                 var customer = $nameInput.val();
@@ -843,7 +852,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     type:"get"
                 }).success(function(results){
                     if(results.flag == 1){
-                        _this.renderSearchUserPanel(results.data);
+                        _this.renderSearchUserPanel("#search-user-panel",results.data);
                         $("#search-user-panel").css({
                             width:$nameInput.width() + 30,
                             top:offset.top + $nameInput.height() + 1,
@@ -855,35 +864,65 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 });
 
             },true);
+            $("#exists_customers").touch("click",function(event){
+                $.ajax({
+                    url:"/we_account/vague_search_user?type=2",
+                    type:"get"
+                }).success(function(results){
+                    if(results.flag == 1){
+                        _this.renderSearchUserPanel("#search-customers",results.data);
+                        $("#search-customers-panel,#mask").addClass('visible');
+                    }
+                }).error(function(err){
+
+                });
+            });
+            $("#scp-cancel-btn").touch("click",function(event){
+                $("#search-customers-panel,#mask").removeClass('visible');
+            },true);
+            $("#search-customers li").touch("click",function(event){
+                var $this = event.$this;
+                var name = $this.text();
+                $("#aopc_name").val(name);
+                $("#search-customers-panel,#mask").removeClass('visible');
+            },true);
             $("#search-user-panel li").touch("click",function(event){
                 var name = event.$this.text();
                 $("#aopc_name").val(name);
                 $("#search-user-panel").removeClass('visible');
             },true);
+
         },
-        renderSearchUserPanel:function(customers){
+        renderSearchUserPanel:function(wrapperSelector,customers){
             var len = customers.length,
                 listr = "";
             for(var i = 0; i < len; i++){
                 listr += '<li>'+customers[i].nickname+'</li>';
             }
-            $("#search-user-panel").html(listr);
+            $(wrapperSelector).html(listr);
         },
         showAddOrderPanel:function(productId,title){
             if(arguments.length){
                 $("#addOrderPanel span.aopp_name").text(title).addClass("visible-inline").removeClass("hide");
                 $("#addOrderPanel input.aopp_name").removeClass("visible-inline").addClass("hide");
                 $("#addOrderPanel .aop_product_desc").addClass("hide");
-                $("#aopc_desc").removeAttr("required");
+                $("#aopc_desc,input.aopp_name").removeClass("required");
                 $("#addOrderPanel").data("productid",productId);
             }else{
                 $("#addOrderPanel input.aopp_name").addClass("visible-inline").removeClass("hide");
                 $("#addOrderPanel span.aopp_name").removeClass("visible-inline").addClass("hide");
                 $("#addOrderPanel .aop_product_desc").removeClass("hide").addClass("visible-inline");
-                $("#aopc_desc").attr("required","required");
+                $("#aopc_desc,input.aopp_name").addClass("required");
                 $("#addOrderPanel").data("productid",-1);
             }
             $("#addOrderPanel").pop();
+        },
+        /**
+         * 加单完成后，清理加单panel
+         */
+        cleanOrderPanel:function(){
+            $("input.required").val("");
+            $("#aopq_quantity option").eq(1).attr('checked',true);
         },
         /**
          * 更新每条记录用于显示的汇率
@@ -905,7 +944,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             var date2 = util.formatDate(null,false);
             $("#date1").val(date1);
             $("#date2").val(date2);
-            document.getElementById("aopq_quantity").outerHTML = this.generateNumSelect(100,1);
+            $("#aopq_quantity select")[0].outerHTML = this.generateNumSelect(100,1);
         },
         getMarginLeft:function($row){
             var ml = 0;

@@ -11,6 +11,37 @@ body{
 }
 
 /********************start common style**********************/
+ul{
+    margin: 0;
+    padding: 0;
+}
+
+#mask{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #787878;
+    z-index: 1001;
+    display: none;
+}
+
+input.required{
+    -webkit-transition: border-color 1s ease-in;
+    -moz-transition: border-color 1s ease-in;
+    -ms-transition: border-color 1s ease-in;
+    -o-transition: border-color 1s ease-in;
+    transition: border-color 1s ease-in;
+}
+
+input.invalid{
+    border: 1px solid red !important;
+}
+
+.renew-input{
+    border-bottom:1px solid #B5B3B3 !important;
+}
 
 .no-horizontal-padding{
     padding-left: 0;
@@ -476,6 +507,7 @@ body{
 
 .aop_btn_group{
     text-align: center;
+    margin-top: 60px;
 }
 
 #addOrderPanel{
@@ -483,11 +515,17 @@ body{
     left: 0;
     top: 0;
     height: 100%;
-    padding-top: 36px;
+    padding-top: 76px;
 }
 
 #addOrderPanel > div{
     margin-top: 16px;
+    line-height: 26px;
+    vertical-align: bottom;
+}
+
+#addOrderPanel > div > span{
+    padding-top: 3px;
 }
 
 #addOrderPanel > div input[type="text"]{
@@ -508,7 +546,7 @@ body{
     display: none;
     background: white;
     list-style: none;
-    text-align: left;
+    text-align: center;
     margin-top: 2px;
     /*border: 1px solid #cdcdcd;*/
     padding-left: 0px;
@@ -519,6 +557,58 @@ body{
     font-size: 1rem;
     padding: 0.6rem;
     border: 1px solid #cecece;
+    border-bottom: transparent;
+}
+
+#search-customers-panel{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10002;
+    background-color: #787878;
+    display: none;
+}
+
+#search-customers-panel > ul{
+    width: 100%;
+    height: 90%;
+    background: white;
+    list-style: none;
+    text-align: left;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow: scroll;
+}
+
+#search-customers-panel > ul > li{
+    font-size: 1.8rem;
+    padding: 1.2rem;
+    border-top: 1px solid #cecece;
+    text-align: center;
+}
+
+#search-customers-panel > ul > li:last-child,#search-user-panel > li:last-child{
+    border-bottom: 1px solid #cecece;
+}
+
+#scp-cancel-btn{
+    width: 100%;
+    text-align: center;
+    font-size: 55px;
+    position: fixed;
+    bottom: 0;
+    color: white;
+}
+
+#aop_seller_submit{
+    font-size: 1.8rem;
+}
+
+#addOrderPanel > div.aop_btn_group {
+    margin-top: 60px;
 }
 
 /*#exists_customers{*/

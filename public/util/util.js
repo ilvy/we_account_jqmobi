@@ -174,16 +174,28 @@ define([],function(){
         validateForm:function(formSelector){
             var $f = $(formSelector);
             var tag = "";
+            var flag = true;
+            var $this;
             $f.find(".required").each(function(){
-                tag = $(this)[0].tagName.toLowerCase();
+                $this = $(this);
+                tag = $this[0].tagName.toLowerCase();
                 switch (tag){
                     case 'input':
-                        if(!($.trim($(this).val())+"")){
-
+                        if(!($.trim($this.val())+"")){
+                            $this.addClass("invalid");
+                            (function(){
+                                var $input = $this;
+                                setTimeout(function(){
+                                    $input.removeClass("invalid").addClass("renew-input");
+                                },3000);
+                            })();
+                            flag = false;
+                            return;
                         }
                         break;
                 }
             });
+            return flag;
         }
     }
 

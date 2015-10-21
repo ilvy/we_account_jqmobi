@@ -319,7 +319,7 @@ DELIMITER ;
 ---------------------全站模糊匹配user------------------------start
 delimiter $$
 drop procedure if exists pro_vague_search_user;
-create procedure pro_vague_search_user(in username varchar(50),in type tinyint)
+create procedure pro_vague_search_user(in username varchar(50),in openId varchar(200),in type tinyint)
 begin
 
 start transaction;
@@ -334,8 +334,10 @@ select distinct nickname from
     where c_nickname like username
 ) t;
 else
-select distinct c_nickname nickname from t_customer
-    where c_nickname like username;
+select distinct c.c_nickname nickname from t_customer c
+    join user u
+    where u.room_id = c.seller_room_id and u.open_id = openId;
+
 end if;
 
 commit;

@@ -382,7 +382,8 @@ function addOrderBySeller(req,res){
 function vagueSearchUser(req,res){
     var customer = req.query.customer,
         type = req.query.type;
-    dbOperator.query("call pro_vague_search_user(?,?)",['%'+customer+'%',type],function(err,rows){
+    var openId = req.session.openId || 'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
+    dbOperator.query("call pro_vague_search_user(?,?,?)",['%'+customer+'%',openId,type],function(err,rows){
         if(err){
             console.log("call pro_vague_search_user err:",err);
         }else{
