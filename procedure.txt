@@ -115,7 +115,11 @@ begin
 start transaction;
 
 set @sell_room_id = (select room_id from user where open_id = sell_open_id);
-set @openId = (select open_id from t_weix_account_info where nickname = cnickname);-- 第一步、先根据昵称获取买家openId
+set @openId = (select open_id from t_weix_account_info where nickname = cnickname);-- 第一步、1先根据昵称获取买家openId
+if @openId is null then
+set @openId = (select c_openid from t_customer where c_nickname = cnickname);-- 第一步、2根据昵称从熟客获取买家openId
+end if;
+
 if @openId is not null then
 set @now = now();
 if productid = -1 then
@@ -345,3 +349,21 @@ commit;
 end; $$
 delimiter ;
 ---------------------全站模糊匹配user------------------------end
+
+
+select * from t_customer where c_nickname in
+(select c_nickname from
+(select c_nickname,count(1) count from
+    (select c.c_nickname,c.c_openid
+    from t_customer c left
+    join t_weix_account_info w
+    on c.c_nickname = w.nickname
+    where w.nickname is null group by c.c_nickname,c.c_openid
+    )t group by c_nickname
+)t2 where count > 1 and c_nickname is not null);
+
+select c.c_openid
+   from t_customer c
+   left join t_weix_account_info w
+       on c.c_nickname = w.nickname
+          where w.nickname is null and c.c_nickname is not null group by c.c_nickname,c.c_openid;

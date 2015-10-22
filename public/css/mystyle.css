@@ -457,11 +457,13 @@ input.invalid{
     float: right;
 }
 #create-order-box{
-    position: absolute;
+    position: fixed;
     background-color: rgba(200,30,40,1);
     padding: 5px;
     bottom: 5%;
-    left: 44%;
+    left: calc(50% - 25px);
+    left: -webkit-calc(50% - 25px);
+    left: -moz-calc(50% - 25px);
     border-radius: 32px;
 }
 

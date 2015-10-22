@@ -814,12 +814,17 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 }
                 globalVar.showLoading();
                 var nickname = $("#aopc_name").val(),
-                    title = $(".aopp_name").text(),
-                    desc = $("#aopc_desc").val() || "苹果6呀",
+                    $titleWrapper = $(".aopp_name").filter(function(){
+                        if($(this).hasClass("visible-inline")){
+                            return true;
+                        }
+                    }),
+                    desc = $("#aopc_desc").val(),
                     quantity = $("#aopq_quantity select").val(),
                     cost = $("#aoppurchase_money").val(),
                     price = $("#aopprice_money").val(),
-                    productId = $("#addOrderPanel").data("productid") || "781";
+                    productId = $("#addOrderPanel").data("productid");
+                var title = $titleWrapper[0].tagName.toLowerCase() == 'span'?$titleWrapper.text() : $titleWrapper.val();
                 var url = "/we_account/add_order?title="+title+"&desc="+desc+"&quantity="+quantity+"&cost="+cost+"&price="+price+"&nickname="+nickname+"&productid="+productId;
                 $.ajax({
                     url:url,

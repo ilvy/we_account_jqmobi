@@ -89,9 +89,9 @@ function fix(data,cb){
     }
 
 }
-setTimeout(function(){
-    fixAccountInfo();
-},1000 * 3);
+//setTimeout(function(){
+//    fixAccountInfo();
+//},1000 * 3);
 
 
 //getAccountInfo("h8_jbKsP3KIqGSX-wBGF9LD1qnvXvRHU95WjyohDLIoLdCStPJh421YTIsONxwNExb5WYZkBOA5bY141H7g7rVPN9KDxlvH-7SrBJCxxI9A","oHbq1t0enasGWD7eQoJuslZY6R-4",function(accountInfo){
