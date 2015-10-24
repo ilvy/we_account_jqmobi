@@ -318,7 +318,6 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             $(document).touch("click",function(event){
                 $(".operateObj").css("margin-left",0).removeClass('operateObj');
                 $("#vagueBox").css("display","none");
-                $("#search-user-panel").css("display","none");
 //                var $target =$(event.target);
 //                if(!($target.hasClass("sub")||$target.hasClass("add")||$target.hasClass("num") || $target.hasClass(".quantity"))){
 //                    $('.add,.sub').css("display",'none');
@@ -343,6 +342,9 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
 //                    }
 //                });
             });
+            $("#addOrderPanel").touch("click",function(){
+                $("#search-user-panel").removeClass("visible");
+            },true);
             $(".card .card-title").touch("click",function(e){
                 var event = e;
                 var $this = event.$this,
@@ -869,6 +871,29 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 });
 
             },true);
+            $("#search_exists_customers").touch("click",function(event){
+                var $nameInput = $("#aopc_name");
+                var customer = $nameInput.val();
+                if(!customer.trim()){
+                    return;
+                }
+                var offset = $nameInput.offset();
+                $.ajax({
+                    url:"/we_account/vague_search_user?customer="+customer+"&type=3",
+                    type:"get"
+                }).success(function(results){
+                    if(results.flag == 1){
+                        _this.renderSearchUserPanel("#search-user-panel",results.data);
+                        $("#search-user-panel").css({
+                            width:$nameInput.width() + 30,
+                            top:offset.top + $nameInput.height() + 1,
+                            left:offset.left
+                        }).addClass('visible');
+                    }
+                }).error(function(err){
+
+                });
+            },true);
             $("#exists_customers").touch("click",function(event){
                 $.ajax({
                     url:"/we_account/vague_search_user?type=2",
@@ -910,13 +935,13 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             if(arguments.length){
                 $("#addOrderPanel span.aopp_name").text(title).addClass("visible-inline").removeClass("hide");
                 $("#addOrderPanel input.aopp_name").removeClass("visible-inline").addClass("hide");
-                $("#addOrderPanel .aop_product_desc").addClass("hide");
+                $("#addOrderPanel .aop_product_desc").addClass("hide").removeClass("visible-inline").removeClass("required");
                 $("#aopc_desc,input.aopp_name").removeClass("required");
                 $("#addOrderPanel").data("productid",productId);
             }else{
                 $("#addOrderPanel input.aopp_name").addClass("visible-inline").removeClass("hide");
                 $("#addOrderPanel span.aopp_name").removeClass("visible-inline").addClass("hide");
-                $("#addOrderPanel .aop_product_desc").removeClass("hide").addClass("visible-inline");
+                $("#addOrderPanel .aop_product_desc").removeClass("hide").addClass("visible-inline").addClass("required");
                 $("#aopc_desc,input.aopp_name").addClass("required");
                 $("#addOrderPanel").data("productid",-1);
             }

@@ -329,14 +329,18 @@ begin
 start transaction;
 
 if type = 1 then
-select distinct nickname from
-(
-    select nickname from t_weix_account_info
-    where nickname like username
-    union all
-    select c_nickname from t_customer
-    where c_nickname like username
-) t;
+ select distinct nickname from
+ (
+     select nickname from t_weix_account_info
+     where nickname like username
+     union all
+     select c_nickname nickname from t_customer
+     where c_nickname like username
+ ) t;
+elseif type = 3 then
+    select distinct c.c_nickname nickname from t_customer c
+        join user u
+        where u.room_id = c.seller_room_id and u.open_id = openId and c.c_nickname like username;
 else
 select distinct c.c_nickname nickname from t_customer c
     join user u
