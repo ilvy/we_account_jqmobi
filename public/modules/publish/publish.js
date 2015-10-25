@@ -30,7 +30,7 @@ define(['router','util','touchEvent'],function(router,util){
                 var imgSrc = ($img = $this.parents('.upload-display')).css("background-image").split("url(")[1].split(")")[0].split('?')[0];
 //                alert('adjustImg',imgSrc);
                 var data = {
-                    filePath:imgSrc.split('/images/')[1],//去掉协议以及ip信息
+                    filePath:imgSrc.split('/images/thumb/')[1],//去掉协议以及ip信息
                     type:1
                 }
                 $.ajax({
@@ -136,7 +136,7 @@ define(['router','util','touchEvent'],function(router,util){
                         util.compress(res,function(err,result){
                             if(result.flag == 1){
 //                                setTimeout(function(){
-                                    $('.upload-display').css("background-image",'url(http://120.24.224.144/images/'+res + '?v='+ new Date().getTime()+')');
+                                    $('.upload-display').css("background-image",'url(http://120.24.224.144/images/thumb/'+res + '?v='+ new Date().getTime()+')');
 //                                },200);
                             }else{
                                 alert("上传失败");

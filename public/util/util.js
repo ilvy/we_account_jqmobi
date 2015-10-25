@@ -107,9 +107,10 @@ define([],function(){
          */
         calcChars:function(string){
             var cnWordReg = /[\u4E00-\u9FA5\uF900-\uFA2D]/g;
-            var cnWordNum = string.match(cnWordReg).length;
+            var matchResults = string.match(cnWordReg) || [];
+            var cnWordNum = matchResults.length;
             var strLen = string.length;
-            return cnWordNum * 2 + strLen - cnWordNum;
+            return strLen + cnWordNum;
         },
         //获取url中的参数
         getUrlParam:function(name) {

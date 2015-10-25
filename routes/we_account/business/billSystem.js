@@ -193,7 +193,7 @@ function getBillList(req,res){
  * @param res
  */
 function updateOrderStatus(req,res){
-    var openId = req.session.openId||'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
+    var openId = req.session.openId ||'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
     var status = req.query.status,
         order_id = req.query.oid,
         buy_time = util.formatDate(null,true);
@@ -260,7 +260,7 @@ function filter_bill(req,res,next){
  * @param res
  */
 function getFinalBill(req,res){
-    var openId = req.session.openId||'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
+    var openId = req.session.openId ||'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
     var query = req.query,
         date1 = query.date1,
         date2 = query.date2,

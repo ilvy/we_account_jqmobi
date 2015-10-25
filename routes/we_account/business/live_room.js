@@ -651,7 +651,7 @@ function vagueSearchProduct(req,res){
  * @param res
  */
 function editProduct(req,res){
-    var openId = req.session.openId,
+    var openId = req.session.openId,//||'oxfQVswUSy2KXBPOjNi_BqdNI3aA',
         body = req.body,
         roomId = body.room_id,
         product_id = body.product_id,
@@ -662,11 +662,12 @@ function editProduct(req,res){
         if(err){
             response.failed(-1,res,0);
         }else{
-            if(rows && rows.affectedRows > 0){
+            console.log(rows);
+            //if(rows && rows.affectedRows > 0){
                 response.success(1,res,0);
-            }else{
-                response.failed(0,res,0);
-            }
+            //}else{
+            //    response.failed(0,res,0);
+            //}
         }
     });
 }

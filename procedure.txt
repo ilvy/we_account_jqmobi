@@ -355,6 +355,28 @@ delimiter ;
 ---------------------全站模糊匹配user------------------------end
 
 
+---------------------商品编辑------------------------start
+delimiter $$
+drop procedure if exists pro_edit_product;
+create procedure pro_edit_product(in roomid varchar(16),in openid varchar(100),in productid int,in title varchar(40),in text varchar(600),in image_url varchar(200))
+begin
+
+start transaction;
+set @roomid = roomid;
+if roomid is null then
+set @roomid = (select room_id from user where open_id = openid);
+end if;
+
+update product p , user u set p.text = text,p.image_url = image_url,p.title = title
+where p.room_id = u.room_id and p.room_id = @roomid and u.open_id = openid and p.id = productid;
+
+commit;
+
+end; $$
+delimiter ;
+---------------------商品编辑------------------------end
+
+
 select * from t_customer where c_nickname in
 (select c_nickname from
 (select c_nickname,count(1) count from
