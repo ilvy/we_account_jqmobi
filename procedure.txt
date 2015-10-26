@@ -114,14 +114,19 @@ begin
 
 start transaction;
 
+set @now = now();
 set @sell_room_id = (select room_id from user where open_id = sell_open_id);
 set @openId = (select open_id from t_weix_account_info where nickname = cnickname);-- 第一步、1先根据昵称获取买家openId
 if @openId is null then
 set @openId = (select c_openid from t_customer where c_nickname = cnickname);-- 第一步、2根据昵称从熟客获取买家openId
 end if;
+if @openId is null then -- add customer hasn't follow daidai
+select @openId = (select concat('lopid_',unix_timestamp(@now),cast(rand() as char(10))));
+insert into t_customer(c_openid,seller_room_id,c_nickname,remark,create_time)
+select @openId,@sell_room_id,cnickname,remark,@now;
+end if;
 
 if @openId is not null then
-set @now = now();
 if productid = -1 then
 -- SELECT @roomid;
 insert into product(image_url,text,room_id,create_time,status,title) values(image_urls,text,@sell_room_id,@now,1,title);
