@@ -110,7 +110,7 @@ delimiter $$
 drop procedure if exists pro_add_order_by_seller;
 create procedure pro_add_order_by_seller(in cnickname varchar(50),in title varchar(40),in text varchar(600),in image_urls varchar(200),in sell_open_id varchar(200),in remark varchar(60),in productid int
 ,in in_quantity int,in cost int,in price int)
-begin 
+begin
 
 start transaction;
 
@@ -140,6 +140,22 @@ call pro_take_order_by_seller(@openId,@sell_room_id,remark,@productId,in_quantit
 else
 select 0 result;
 end if;
+
+commit;
+
+end; $$
+delimiter ;
+
+/***************通过账单确认补全未关注的买家信息***************/
+
+delimiter $$
+drop procedure if exists pro_integrate_customer_info;
+create procedure pro_integrate_customer_info(in cnickname varchar(50),in roomid varchar(40),in c_open_id varchar(200))
+begin
+
+start transaction;
+
+
 
 commit;
 
