@@ -343,6 +343,8 @@ router.get('/getAuth',function(req,res){
 /**
  * 收款账单
  */
+router.get('/payit',billSystem.wxauth_pay);
+
 router.get('/payit',function(req,res){
     billSystem.getPayment(req,res);
 });
@@ -398,7 +400,7 @@ router.get("/xml",function(req,res){
         "</xml>",function(result){
         console.log("*****************************");
         for(var key in result){
-            console.log(key+": "+result[key]);
+//            console.log(key+": "+result[key]);
         }
     });
     res.send("OK");

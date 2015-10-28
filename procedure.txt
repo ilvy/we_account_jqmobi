@@ -121,9 +121,9 @@ if @openId is null then
 set @openId = (select c_openid from t_customer where c_nickname = cnickname);-- 第一步、2根据昵称从熟客获取买家openId
 end if;
 if @openId is null then -- add customer hasn't follow daidai
-select @openId = (select concat('lopid_',unix_timestamp(@now),cast(rand() as char(10))));
+set @openId = (select concat('lopid_',unix_timestamp(@now),cast(rand() as char(10))));
 insert into t_customer(c_openid,seller_room_id,c_nickname,remark,create_time)
-select @openId,@sell_room_id,cnickname,remark,@now;
+    select @openId,@sell_room_id,cnickname,remark,@now;
 end if;
 
 if @openId is not null then
@@ -150,12 +150,27 @@ delimiter ;
 
 delimiter $$
 drop procedure if exists pro_integrate_customer_info;
-create procedure pro_integrate_customer_info(in cnickname varchar(50),in roomid varchar(40),in c_open_id varchar(200))
+create procedure pro_integrate_customer_info(in cnickname varchar(50),in roomid varchar(40),in c_openid varchar(200),
+in headimgurl varchar(150),in sex bit,in city varchar(30),in country varchar(30),in unionid varchar(200),in subscribe_time datetime)
 begin
 
 start transaction;
 
+set @now = now();
+set @isSubscribed = (select count(1) from t_weix_account_info w
+                         where w.open_id = c_openid);
+set @isBind = (select count(1) from t_customer c
+    join user u
+    on u.room_id = c.seller_room_id and c.c_nickname = cnickname and c.seller_room_id = roomid
+    join t_weix_account_info w
+    on w.open_id = u.open_id);
 
+if @isBind = 0 and @isSubscribed >= 1 then
+    update t_customer set c_open_id =  c_openid where c_nickname = cnickname and seller_room_id = roomid;
+elseif @isBind = 0 and @isSubscribed = 0 then
+    call pro_weix_account_info(c_openid,cnickname,headimgurl,sex,city,country,unionid,@now);
+    update t_customer set c_open_id =  c_openid where c_nickname = cnickname and seller_room_id = roomid;
+end if;
 
 commit;
 
@@ -397,7 +412,7 @@ end; $$
 delimiter ;
 ---------------------商品编辑------------------------end
 
-
+/***
 select * from t_customer where c_nickname in
 (select c_nickname from
 (select c_nickname,count(1) count from
@@ -414,3 +429,20 @@ select c.c_openid
    left join t_weix_account_info w
        on c.c_nickname = w.nickname
           where w.nickname is null and c.c_nickname is not null group by c.c_nickname,c.c_openid;
+
+          ****/
+
+delimiter $$
+drop procedure if exists pro_vague_match_product;
+CREATE  PROCEDURE pro_vague_match_product(in product_name varchar(50),in roomid varchar(16),in openId varchar(200))
+
+if roomid is not null then
+SELECT p.id,p.title product_name from product p WHERE p.title LIKE product_name AND p.room_id = roomid;
+else
+SELECT p.id,p.title product_name from product p
+    join user u
+    WHERE p.title LIKE product_name AND p.room_id = u.room_id and u.open_id = openId;
+end if;
+
+end; $$
+delimiter ;

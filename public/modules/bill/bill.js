@@ -132,7 +132,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 return;
             }
             var totalMoney = 0,cards = {};
-            this.room_id = data[0].room_id;
+            globalVar.room_id = this.room_id = data[0].room_id;
             for(var i = 0; i < data.length; i++){
                 var record = data[i];
                 if(!cards[record.nickname+"_"+record.cid]){

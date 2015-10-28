@@ -393,6 +393,45 @@ function vagueSearchUser(req,res){
     });
 }
 
+function wxauth_pay(req,res,next){
+    var openId = req.session.openId;
+    var room_id = req.query.room_id,
+        nickname = req.query.nickname;
+    if(openId){
+        next();
+    }
+    if(!req.session.authority){
+        req.session.authority = true;
+        var redirect_uri = "http://www.daidai2u.com/we_account/payit?nickname="+nickname+"&room_id="+room_id;
+        we_auth.getWeAuth(redirect_uri,res,"snsapi_userinfo");
+    }else{
+        we_auth.redirectToUrl(req,res,function(err,results,requ,resp,nocode){
+            if(err){
+                console.log('getAuth snsapi_userinfo failed in payit:',err);
+            }else if(nocode){
+                delete req.session.authority;
+                return;
+            }else if(results){
+                var openId = req.session.openId = results.openid;
+                var accessToken = results.access_token;
+                console.log("get openId:"+results.openid);
+                we_auth.getSnsapi_userinfo(req,res,accessToken,openId,function(err,userInfo){
+                    //in cnickname varchar(50),in roomid varchar(40),in c_openid varchar(200),
+                    //in headimgurl varchar(150),in sex bit,in city varchar(30),in country varchar(30),in unionid varchar(200),in subscribe_time datetime
+                    dbOperator.query("call pro_integrate_customer_info(?,?,?,?,?,?,?,?)",[userInfo.nickname,room_id,openId,userInfo.headimgurl,userInfo.sex,
+                                    userInfo.city,userInfo.country,userInfo.unionid,userInfo.subscribe_time],function(err,rows){
+                        if(err){
+                            console.log("call pro_integrate_customer_info err",err);
+                        }
+                        next();
+                    })
+                });
+
+            }
+        });
+    }
+}
+
 exports.takeOrder = takeOrder;
 exports.filter_takeOrder = filter_takeOrder;
 exports.getBillList = getBillList;
@@ -407,3 +446,4 @@ exports.getPayment = getPayment;
 exports.checkCustomerSubscribe = checkCustomerSubscribe;
 exports.addOrderBySeller = addOrderBySeller;
 exports.vagueSearchUser = vagueSearchUser;
+exports.wxauth_pay = wxauth_pay;

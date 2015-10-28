@@ -19,22 +19,22 @@ var parser = new xml.SaxParser(function(cb) {
 //        util.log("<= End: " + elem + " uri="+uri + "\n");
 //            parser.pause();// pause the parser
 //            setTimeout(function (){parser.resume();}, 200); //resume the parser
-        console.log("onEndElementNS--"+elem+":"+resultObj[elem])
+//        console.log("onEndElementNS--"+elem+":"+resultObj[elem])
     });
     cb.onCharacters(function(chars) { // linux 上chars也是进了两次
-        console.log("*************************");
+//        console.log("*************************");
         if(!isCdata){
             resultObj[currEle] = chars.toString();
         }
         isCdata = true;
-        console.log(currEle+":"+resultObj[currEle]);
+//        console.log(currEle+":"+resultObj[currEle]);
         util.log('<CHARS>'+chars+"</CHARS>");
     });
     cb.onCdata(function(cdata) {
-        console.log("++++++++++++++++++++++++");
+//        console.log("++++++++++++++++++++++++");
         isCdata = true;
         resultObj[currEle] = cdata.toString();
-        console.log(currEle+":"+resultObj[currEle]);
+//        console.log(currEle+":"+resultObj[currEle]);
         util.log('<CDATA>'+cdata+"</CDATA>");
     });
     cb.onComment(function(msg) {
@@ -47,8 +47,8 @@ var parser = new xml.SaxParser(function(cb) {
         util.log('<ERROR>'+JSON.stringify(msg)+"</ERROR>");
     });
     cb.onEndDocument(function() {
-        console.log("the end of xml");
-        console.log(resultObj);
+//        console.log("the end of xml");
+//        console.log(resultObj);
         callback(resultObj);
         resultObj = {};
     });
