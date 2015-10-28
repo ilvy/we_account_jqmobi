@@ -150,26 +150,26 @@ delimiter ;
 
 delimiter $$
 drop procedure if exists pro_integrate_customer_info;
-create procedure pro_integrate_customer_info(in cnickname varchar(50),in roomid varchar(40),in c_openid varchar(200),
-in headimgurl varchar(150),in sex bit,in city varchar(30),in country varchar(30),in unionid varchar(200),in subscribe_time datetime)
+create procedure pro_integrate_customer_info(in cnickname varchar(50),in roomid varchar(40),in c_open_id varchar(200),
+in headimgurl varchar(150),in sex bit,in nickname varchar(50),in city varchar(30),in country varchar(30),in unionid varchar(200),in subscribe_time datetime)
 begin
 
 start transaction;
 
 set @now = now();
 set @isSubscribed = (select count(1) from t_weix_account_info w
-                         where w.open_id = c_openid);
+                         where w.open_id = c_open_id);
 set @isBind = (select count(1) from t_customer c
     join user u
     on u.room_id = c.seller_room_id and c.c_nickname = cnickname and c.seller_room_id = roomid
     join t_weix_account_info w
-    on w.open_id = u.open_id);
+    on w.open_id = c.c_openid);
 
 if @isBind = 0 and @isSubscribed >= 1 then
-    update t_customer set c_open_id =  c_openid where c_nickname = cnickname and seller_room_id = roomid;
+    update t_customer set c_openid =  c_open_id where c_nickname = cnickname and seller_room_id = roomid;
 elseif @isBind = 0 and @isSubscribed = 0 then
-    call pro_weix_account_info(c_openid,cnickname,headimgurl,sex,city,country,unionid,@now);
-    update t_customer set c_open_id =  c_openid where c_nickname = cnickname and seller_room_id = roomid;
+    call pro_weix_account_info(c_open_id,nickname,headimgurl,sex,city,country,unionid,@now);
+    update t_customer set c_openid =  c_open_id where c_nickname = cnickname and seller_room_id = roomid;
 end if;
 
 commit;

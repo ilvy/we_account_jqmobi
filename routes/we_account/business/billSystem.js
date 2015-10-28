@@ -418,7 +418,7 @@ function wxauth_pay(req,res,next){
                 we_auth.getSnsapi_userinfo(req,res,accessToken,openId,function(err,userInfo){
                     //in cnickname varchar(50),in roomid varchar(40),in c_openid varchar(200),
                     //in headimgurl varchar(150),in sex bit,in city varchar(30),in country varchar(30),in unionid varchar(200),in subscribe_time datetime
-                    dbOperator.query("call pro_integrate_customer_info(?,?,?,?,?,?,?,?)",[userInfo.nickname,room_id,openId,userInfo.headimgurl,userInfo.sex,
+                    dbOperator.query("call pro_integrate_customer_info(?,?,?,?,?,?,?,?,?,?)",[nickname,room_id,openId,userInfo.headimgurl,userInfo.sex,userInfo.nickname,
                                     userInfo.city,userInfo.country,userInfo.unionid,userInfo.subscribe_time],function(err,rows){
                         if(err){
                             console.log("call pro_integrate_customer_info err",err);
