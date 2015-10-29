@@ -907,6 +907,27 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
 
                 });
             });
+            //搜商品名
+            $("#search_product_btn").touch("click",function(event){
+                var $productInput = $("input.aopp_name");
+                var productName = $productInput.val(),
+                    offset = $productInput.offset();
+                $.ajax({
+                    url:"/we_account/vagueSearchProduct?product_name="+productName,
+                    type:"get"
+                }).success(function(results){
+                    if(results.flag == 1){
+                        _this.renderSearchProductPanel("#search-products-panel",results.data);
+                        $("#search-products-panel").css({
+                            width:$productInput.width() + 30,
+                            top:offset.top + $productInput.height() + 1,
+                            left:offset.left
+                        }).addClass('visible');
+                    }
+                }).error(function(err){
+
+                });
+            });
             $("#scp-cancel-btn").touch("click",function(event){
                 $("#search-customers-panel,#mask").removeClass('visible');
             },true);
@@ -921,6 +942,12 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 $("#aopc_name").val(name);
                 $("#search-user-panel").removeClass('visible');
             },true);
+            $("#search-products-panel li").touch("click",function(event){
+                var name = event.$this.text(),
+                    pid = event.$this.data("id");
+                $("input.aopp_name").data("id",pid).val(name);
+                $("#search-products-panel").removeClass('visible');
+            },true);
 
         },
         renderSearchUserPanel:function(wrapperSelector,customers){
@@ -928,6 +955,14 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 listr = "";
             for(var i = 0; i < len; i++){
                 listr += '<li>'+customers[i].nickname+'</li>';
+            }
+            $(wrapperSelector).html(listr);
+        },
+        renderSearchProductPanel:function(wrapperSelector,products){
+            var len = products.length,
+                listr = "";
+            for(var i = 0; i < len; i++){
+                listr += '<li data-id="'+products[i].id+'">'+products[i].product_name+'</li>';
             }
             $(wrapperSelector).html(listr);
         },

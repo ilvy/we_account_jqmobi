@@ -432,17 +432,35 @@ select c.c_openid
 
           ****/
 
+/****************模糊匹配商品名***************/
 delimiter $$
 drop procedure if exists pro_vague_match_product;
-CREATE  PROCEDURE pro_vague_match_product(in product_name varchar(50),in roomid varchar(16),in openId varchar(200))
+CREATE  PROCEDURE pro_vague_match_product(in product_name varchar(50),in openId varchar(200))
+begin
 
-if roomid is not null then
-SELECT p.id,p.title product_name from product p WHERE p.title LIKE product_name AND p.room_id = roomid;
-else
+
 SELECT p.id,p.title product_name from product p
     join user u
     WHERE p.title LIKE product_name AND p.room_id = u.room_id and u.open_id = openId;
-end if;
+
+end; $$
+delimiter ;
+
+/****************收账，账单详情***************/
+delimiter $$
+drop procedure if exists pro_getpayment;
+CREATE  PROCEDURE pro_getpayment(in nickname varchar(50),in roomid varchar(16))
+begin
+
+SELECT c.id c_id,o.id oid,p.title,o.price,o.quantity,o.remark,c.seller_room_id room_id,o.mail_free,o.mail_pay,w.nickname
+	from t_order o
+	left JOIN t_customer c
+	ON o.c_id = c.id AND o.`status` = 2 AND c.c_nickname = nickname AND c.seller_room_id = roomid
+	left JOIN product p
+	ON p.id = o.product_id
+	left join t_weix_account_info w
+	on c.c_openid = w.open_id
+	where c.c_nickname = nickname AND c.seller_room_id = roomid;
 
 end; $$
 delimiter ;

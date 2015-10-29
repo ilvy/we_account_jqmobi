@@ -511,6 +511,10 @@ input.invalid{
 
     /************start add order panel**************/
 
+#search_product_btn{
+    text-align: center;
+}
+
 .aop_btn_group{
     text-align: center;
     margin-top: 60px;
@@ -547,7 +551,7 @@ input.invalid{
     bottom: 0;
 }
 
-#search-user-panel{
+#search-user-panel,#search-products-panel{
     position: absolute;
     display: none;
     background: white;
@@ -559,7 +563,7 @@ input.invalid{
     z-index: 10000;
 }
 
-#search-user-panel > li{
+#search-user-panel > li,#search-products-panel > li{
     font-size: 1rem;
     padding: 0.6rem;
     border: 1px solid #cecece;

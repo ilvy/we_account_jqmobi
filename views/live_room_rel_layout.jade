@@ -294,7 +294,9 @@ html
             .aop_product.col-xxs-11.col-xxs-offset-1.no-horizontal-padding
                 span.col-xxs-3.no-horizontal-padding 品名：
                 span.aopp_name.col-xxs-7.no-horizontal-padding iphone6Plus
-                input(type="text").aopp_name.col-xxs-7.no-horizontal-padding.required
+                .ap_box.col-xxs-7.no-horizontal-padding
+                    input(type="text").aopp_name.col-xxs-10.no-horizontal-padding.required
+                    a#search_product_btn.col-xxs-2.no-horizontal-padding 搜
             .aop_product_desc.col-xxs-11.col-xxs-offset-1.no-horizontal-padding
                 span.col-xxs-3.no-horizontal-padding 商品简介：
                 input(type="text")#aopc_desc.aopc_name.col-xxs-7.no-horizontal-padding
@@ -325,6 +327,7 @@ html
             .aop_btn_group.col-xxs-6.col-xxs-offset-3.no-horizontal-padding
                 input(type="button" value="取消")#aop_seller_cancel.aop_cancel.yellow-btn.col-xxs-5
                 input(type="button" value="确定")#aop_seller_submit.aop_submit.green-btn.col-xxs-5.col-xxs-offset-2
+        ul#search-products-panel
         ul#search-user-panel
         #search-customers-panel
             ul#search-customers

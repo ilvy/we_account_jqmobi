@@ -318,7 +318,7 @@ function getPayment(req,res,isRequestBySeller){//需要验证openid
             }
 
             if(!isRequestBySeller){
-                res.render('payment',{dataList:data,roomId:room_id,total:total,isMailFree:data[0].mail_free,mailPay:data[0].mail_pay,nickname:nickname})
+                res.render('payment',{dataList:data,roomId:room_id,total:total,isMailFree:data[0].mail_free,mailPay:data[0].mail_pay,nickname:data[0].nickname})
             }else{
                 response.success({dataList:data,roomId:room_id,total:total,isMailFree:data[0].mail_free,mailPay:data[0].mail_pay,nickname:nickname},res,'')
             }
@@ -393,6 +393,12 @@ function vagueSearchUser(req,res){
     });
 }
 
+/**
+ * 收账前先授权
+ * @param req
+ * @param res
+ * @param next
+ */
 function wxauth_pay(req,res,next){
     var openId = req.session.openId;
     var room_id = req.query.room_id,

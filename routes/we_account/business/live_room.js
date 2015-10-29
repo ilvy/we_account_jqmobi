@@ -634,9 +634,10 @@ function searchProductByName(req,res){
  * 需要验证openId
  */
 function vagueSearchProduct(req,res){
+    var openId = req.session.openId;
     var roomId = req.query.room_id,
         productName = req.query.product_name;
-    dbOperator.query('call pro_vague_match_product(?,?)',['%'+productName+'%',roomId],function(err,rows){
+    dbOperator.query('call pro_vague_match_product(?,?)',['%'+productName+'%',openId],function(err,rows){
         if(err){
             response.failed(-1,res,'');
         }else{

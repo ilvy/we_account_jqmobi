@@ -389,7 +389,8 @@ define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEven
                     var $this = $(this);
                     var roomId = globalVar.room_id,
                         value = $this.val();
-                    var url = '/we_account/vagueSearchProduct?room_id='+roomId+'&product_name='+value;
+//                    var url = '/we_account/vagueSearchProduct?room_id='+roomId+'&product_name='+value;
+                    var url = '/we_account/vagueSearchProduct?product_name='+value;
                     $.ajax({
                         url:url,
                         type:'get',
