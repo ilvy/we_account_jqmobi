@@ -108,13 +108,14 @@ delimiter ;
 /**ԭ��Ʒ�ӵ�**/
 delimiter $$
 drop procedure if exists pro_add_order_by_seller;
-create procedure pro_add_order_by_seller(in cnickname varchar(50),in title varchar(40),in text varchar(600),in image_urls varchar(200),in sell_open_id varchar(200),in remark varchar(60),in productid int
+create procedure pro_add_order_by_seller(in cnickname varchar(50),in product_name varchar(40),in text varchar(600),in image_urls varchar(200),in sell_open_id varchar(200),in remark varchar(60),in productid int
 ,in in_quantity int,in cost int,in price int)
 begin
 
 start transaction;
 
 set @now = now();
+set @pname = product_name;
 set @sell_room_id = (select room_id from user where open_id = sell_open_id);
 set @openId = (select open_id from t_weix_account_info where nickname = cnickname);-- 第一步、1先根据昵称获取买家openId
 if @openId is null then
@@ -126,27 +127,29 @@ insert into t_customer(c_openid,seller_room_id,c_nickname,remark,create_time)
     select @openId,@sell_room_id,cnickname,remark,@now;
 end if;
 
-if @openId is not null then
 if productid = -1 then
+set @productId = (select max(id) from product where title = @pname and room_id = @sell_room_id);
 -- SELECT @roomid;
-insert into product(image_url,text,room_id,create_time,status,title) values(image_urls,text,@sell_room_id,@now,1,title);
--- call pro_publish(image_urls,text,@openId,title);-- 第二步、发布商品
-set @productId = (select last_insert_id());
 else
 set @productId = productid;
 end if;
-call pro_take_order_by_seller(@openId,@sell_room_id,remark,@productId,in_quantity,@now,cost,price);-- 第三步、下单
 
+if @productId is null then
+insert into product(image_url,text,room_id,create_time,status,title) values(image_urls,text,@sell_room_id,@now,1,@pname);-- 第二步、发布商品
+set @productId = (select last_insert_id());
+call pro_take_order_by_seller(@openId,@sell_room_id,remark,@productId,in_quantity,@now,cost,price);-- 第三步、下单
 else
-select 0 result;
+call pro_take_order_by_seller(@openId,@sell_room_id,remark,@productId,in_quantity,@now,cost,price);-- 第三步、下单
 end if;
+
 
 commit;
 
 end; $$
 delimiter ;
 
-/***************通过账单确认补全未关注的买家信息***************/
+/******
+*********通过账单确认补全未关注的买家信息***************/
 
 delimiter $$
 drop procedure if exists pro_integrate_customer_info;

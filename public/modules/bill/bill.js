@@ -343,7 +343,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
 //                });
             });
             $("#addOrderPanel").touch("click",function(){
-                $("#search-user-panel").removeClass("visible");
+                $("#search-user-panel,#search-products-panel").removeClass("visible");
             },true);
             $(".card .card-title").touch("click",function(e){
                 var event = e;
@@ -601,8 +601,11 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     alert('请编辑进价和售价!');
                     return;
                 }
+                var totalMoney = Number($this.parents(".card").find(".total-quantity").text());
+                var $mailRow = $this.parents(".card").find(".mail-row");
+                var mailpay = $mailRow.find(".fa-check-square").length ? 0:Number($mailRow.find(".mailpay").val());
                 var title = '亲，东西已经买好',
-                    desc = '代购总费用:'+$this.parents(".card").find(".total-quantity").text()+',详情请点开',
+                    desc = '代购总费用:'+(totalMoney + mailpay)+',详情请点开',
                     nickname = $this.parents('.card').find('.name').text(),
                     link = 'http://www.daidai2u.com/we_account/payit?room_id='+_this.room_id+'&nickname='+nickname;
                 globalVar.room_id = _this.room_id;
@@ -835,6 +838,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     if(results.flag == 1){
                         alert("加单成功");
                         _this.cleanOrderPanel();
+                        $(".page.billSystem").addClass("visible");
                         $("#addOrderPanel").pop({hidden:true});
                     }else{
                         alert("加单失败");
@@ -845,6 +849,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 })
             },true);
             $("#aop_seller_cancel").touch("click",function(event){
+                $(".page.billSystem").addClass("visible");
                 $("#addOrderPanel").pop({hidden:true});
             });
             $("#search_user").touch("click",function(event){
@@ -980,7 +985,9 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 $("#aopc_desc,input.aopp_name").addClass("required");
                 $("#addOrderPanel").data("productid",-1);
             }
-            $("#addOrderPanel").pop();
+            $("#addOrderPanel").pop({callback:function(){
+                $(".page.billSystem").removeClass("visible");
+            }});
         },
         /**
          * 加单完成后，清理加单panel
