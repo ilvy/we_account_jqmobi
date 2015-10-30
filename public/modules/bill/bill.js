@@ -80,7 +80,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             });
         },
         dealOrderList:function(data){
-            $("#order-list").html("");
+            $("#order-list-content").html("");
             if(!(data && data.length > 0)){
                 return;
             }
@@ -123,7 +123,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 var lastRow = '<div class="extra-row"><div class="t-col-5 product-detail" data-pid="'+key.split('_')[1]+'">【商品详情】</span></div>' +
                     '<div class="t-col-5 order-add"><input class="order-add-btn" type="button" value="加单"/></div></div>';
                 cardStr += tableStr + lastRow +'</div>';
-                $("#order-list").append(cardStr);
+                $("#order-list-content").append(cardStr);
             }
         },
         dealPayList:function(data){
