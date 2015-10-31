@@ -172,8 +172,8 @@ define(['router','util','wxAPI','preloadImg','waterfall','ajaxupload','touchEven
                             },true);
                         }
                         console.log(userInfo);
-                        _this.userInfo = userInfo;
-                        _this.dealForCompactShare();
+                        globalVar.userInfo = _this.userInfo = userInfo;
+                        util.dealForCompactShare(userInfo.nickname);
                         _this.setHostInfo(userInfo);
                         _this.wxShare();
                         _this.setQrcodeBox(userInfo);

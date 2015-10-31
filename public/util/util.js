@@ -197,6 +197,13 @@ define([],function(){
                 }
             });
             return flag;
+        },
+        /**
+         * 兼容分享处理
+         */
+        dealForCompactShare:function(nickname){
+            $('title').text(nickname + '的代袋');
+            $('#for-share').attr('src',"http://www.daidai2u.com/images/logo.jpg");
         }
     }
 

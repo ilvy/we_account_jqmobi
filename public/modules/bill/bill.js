@@ -16,7 +16,22 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
         do:function(){
             this.flushOrderList();
         },
-        flushOrderList:function(){
+        getHostInfo:function(){
+            var _this = this;
+            var roomId = globalVar.room_id;
+            var url = '/we_account/personalInfo';
+            $.ajax({
+                url:url,
+                type:'get',
+                success:function(results){
+                    if(results.flag == 1){
+                        var userInfo = results.data.user;
+
+                    }
+                }
+            });
+        },
+        flushOrderList:function(type){
             var _this = this;
             this.showLoading();
             $.ajax({
@@ -26,7 +41,11 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     _this.hideLoading();
                     if(results.flag == 1){
                         var data = results.data;
-                        _this.dealOrderList(data);
+                        if(type == 'c'){
+                            _this.dealOrderListOrderByCustomer(data);
+                        }else{
+                            _this.dealOrderList(data);
+                        }
                     }else if(results.flag == 0){
                         window.location.href = '/follow_account.html';
                     }
@@ -126,6 +145,55 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 $("#order-list-content").append(cardStr);
             }
         },
+        dealOrderListOrderByCustomer:function(data){
+            $("#order-list-content").html("");
+            if(!(data && data.length > 0)){
+                return;
+            }
+            var totalMoney = 0,cards = {};
+            globalVar.room_id = this.room_id = data[0].room_id;
+            for(var i = 0; i < data.length; i++){
+                var record = data[i];
+                if(!cards[record.nickname+"_"+record.cid]){
+                    cards[record.nickname+"_"+record.cid] = [];
+                }
+                cards[record.nickname+"_"+record.cid].push(record);
+            }
+            for(var key in cards){
+                totalMoney = 0;
+                var cates = cards[key];
+                var quantity = 0;
+                var nickname = cates[0].nickname;
+                var tableStr = '<div class="table"><div class="t-row t-row-over-1 t-row-header">' +
+                    '<div class="t-col t-col-3">品名</div><div class="t-col t-col-2">数量</div>' +
+                    '<div class="t-col t-col-4">备注</div>' +
+                    '<div class="t-col t-col-1 extra">操作</div></div>';
+                for(var j = 0; j < cates.length; j++){
+                    var record = cates[j];
+                    totalMoney += record.quantity * (record.unit_price ? record.unit_price:0);
+                    tableStr += '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'><div class="t-col t-col-3 product_name" data-type="1" data-value="'+record.product_name+'">'+record.product_name+'</div>' +
+                        '<div class="t-col t-col-2 quantity" data-value="'+record.quantity+'">' +
+                        this.generateNumSelect(100,record.quantity)+'</div>' +
+                        '<div class="t-col t-col-4 input-div input-div-cost unit_cost overflow-ellipsis" >'+(record.remark?record.remark:"")+'</div>' +
+                        '<div class="t-col t-col-1 extra">删除</div></div>';
+                }
+                if(!record.mail_free){
+                    totalMoney += record.mail_pay;
+                }
+                var mailStr = '<div class="t-row t-row-over-1 mail-row"><div class="t-col t-col-9">' +
+                    '<i class="fa '+(record.mail_free?'fa-check-square':'fa-square-o')+' mailFree"></i><span>包邮</span> <span>邮费：</span>' +
+                    '<input type="text" class="mailpay" placeholder="0" value="'+(record.mail_pay?record.mail_pay:"")+'">' +
+                    '<span class="unit">元</span></div></div>';
+                tableStr += '</div>';
+                var cardStr = '<div class="card"><div class="card-title"><i class="fa fa-caret-right"></i>' +
+                    '<div class="product"><span class="name-span">买家:</span><span class="name">'+nickname+'</span> <span class="tq-span">合计: </span><span class="total-quantity">'+totalMoney+'</span> </div>' +
+                    '</div>';
+                var lastRow = '<div class="extra-row">' +
+                    '<div class="t-col-10 c-add-order-btn"><input type="button" value="加单"/></div></div>';
+                cardStr += tableStr +lastRow+'</div>';
+                $("#order-list-content").append(cardStr);
+            }
+        },
         dealPayList:function(data){
             $("#pay-list").html("");
             if(!(data && data.length > 0)){
@@ -152,7 +220,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 for(var j = 0; j < cates.length; j++){
                     var record = cates[j];
                     totalMoney += record.quantity * (record.unit_price ? record.unit_price:0);
-                    tableStr += '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'><div class="t-col t-col-3 product_name" data-type="1" data-value="'+record.product_name+'" contenteditable="true">'+record.product_name+'</div>' +
+                    tableStr += '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'><div class="t-col t-col-3 product_name" data-type="1" data-value="'+record.product_name+'">'+record.product_name+'</div>' +
                         '<div class="t-col t-col-2 quantity" data-value="'+record.quantity+'">' +
                         this.generateNumSelect(100,record.quantity)+'</div>' +
                         '<div class="t-col t-col-2 input-div input-div-cost unit_cost" data-value="'+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+'" data-type="2" data-exrate="'+record.exchange_rate+'">'+((!record.unit_cost && record.unit_cost != 0)?"":this.exchangeMoney(record.unit_cost,record.exchange_rate))+'</div>' +
@@ -259,6 +327,19 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     _this.flushBillList();
                 }
             });
+            $(".cate_product_btn,.cate_customer_btn").touch("click",function(event){
+                var $this = event.$this;
+                var type = $this.data("type");
+                $this.addClass("btn-check").siblings(".btn").removeClass("btn-check");
+                _this.flushOrderList(type);
+            });
+
+            $(".c-add-order-btn input").touch("click",function(event){
+                var $this = event.$this;
+                var customer = $this.parents(".card").find(".product > .name").text();
+                _this.showAddOrderPanel("","",customer);
+            });
+
             $('.product-detail').touch('click',function(event){
                 var $this = event.$this;
                 var product_id = $this.data('pid');
@@ -971,18 +1052,20 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             }
             $(wrapperSelector).html(listr);
         },
-        showAddOrderPanel:function(productId,title){
-            if(arguments.length){
+        showAddOrderPanel:function(productId,title,customer){
+            if(arguments.length == 2){
                 $("#addOrderPanel span.aopp_name").text(title).addClass("visible-inline").removeClass("hide");
                 $("#addOrderPanel input.aopp_name").removeClass("visible-inline").addClass("hide");
                 $("#addOrderPanel .aop_product_desc").addClass("hide").removeClass("visible-inline").removeClass("required");
                 $("#aopc_desc,input.aopp_name").removeClass("required");
+                $("#aopc_name").val("");
                 $("#addOrderPanel").data("productid",productId);
             }else{
                 $("#addOrderPanel input.aopp_name").addClass("visible-inline").removeClass("hide");
                 $("#addOrderPanel span.aopp_name").removeClass("visible-inline").addClass("hide");
                 $("#addOrderPanel .aop_product_desc").removeClass("hide").addClass("visible-inline").addClass("required");
                 $("#aopc_desc,input.aopp_name").addClass("required");
+                $("#aopc_name").val(customer?customer:"");
                 $("#addOrderPanel").data("productid",-1);
             }
             $("#addOrderPanel").pop({callback:function(){

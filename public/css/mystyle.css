@@ -11,6 +11,16 @@ body{
 }
 
 /********************start common style**********************/
+.overflow-ellipsis{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    -webkit-text-overflow: ellipsis;
+    -moz-text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+}
+
 .btn{
     display: inline-block;
     padding: 6px 12px;
@@ -30,13 +40,17 @@ body{
     user-select: none;
     background-image: none;
     border: 1px solid transparent;
-    border-radius: 4px;
+    /*border-radius: 4px;*/
 }
 
 .btn-default{
     color: #333;
     background-color: #fff;
     border-color: #ccc;
+}
+
+input.btn-check{
+    background-color: #cdcdcd;
 }
 
 ul{
@@ -338,9 +352,24 @@ input.invalid{
     margin-top: 40px;
 }
 
+.cate_btn_group{
+    margin-bottom: 5px;
+    margin-top: 44px;
+}
+
 .cate_btn_group > input{
     padding: 3px 8px;
-    background-color: #cdcdcd;
+    background-color: #F9F9F9;
+    border: 1px solid #cdcdcd;
+    border-radius: 0;
+}
+
+.cate_btn_group > input.btn-check {
+    background-color: #EAE6E6;
+}
+
+.cate_btn_group > input:first-child{
+    border-right: transparent;
 }
 
 #switchList{
@@ -411,12 +440,17 @@ input.invalid{
     float: right;
 }
 
-.getpay-btn > input{
+.getpay-btn > input,
+.c-add-order-btn > input{
     background-color: #00b487;
     border: 1px solid #00b487;
     border-radius: 3px;
     padding: 6px 16px;
     color: white;
+}
+
+.c-add-order-btn{
+    text-align: right;
 }
 
 #bill-list .position > div{

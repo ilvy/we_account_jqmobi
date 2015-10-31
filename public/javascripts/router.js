@@ -1,7 +1,7 @@
 /**
  * Created by Administrator on 2015/4/5.
  */
-define(['routerConfig'],function(routerConfig){
+define(['routerConfig','util'],function(routerConfig,util){
     var key = window.location.hash,
         path = routerConfig[key];
     dealOrderFromWeb();
@@ -140,7 +140,8 @@ define(['routerConfig'],function(routerConfig){
             if(objHash == 'live_room' && reload){
                 globalVar.lv_scroll_top = 0;
             }else if(objHash == 'live_room' && !reload){
-                globalVar.modules['live_room'].dealForCompactShare();//从产品页面返回直播页面时，恢复对应title和第一张图片，兼容朋友圈分享
+//                globalVar.modules['live_room'].dealForCompactShare();//从产品页面返回直播页面时，恢复对应title和第一张图片，兼容朋友圈分享
+                util.dealForCompactShare(globalVar.userInfo.nickname);
             }
             window.location.hash = '#'+hash;
         }
