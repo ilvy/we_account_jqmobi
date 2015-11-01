@@ -117,18 +117,18 @@ start transaction;
 set @now = now();
 set @pname = product_name;
 set @sell_room_id = (select room_id from user where open_id = sell_open_id);
-set @openId = (select open_id from t_weix_account_info where nickname = cnickname);-- 第一步、1先根据昵称获取买家openId
+set @openId = (select distinct open_id from t_weix_account_info where nickname = cnickname);-- 第一步、1先根据昵称获取买家openId
 if @openId is null then
-set @openId = (select c_openid from t_customer where c_nickname = cnickname);-- 第一步、2根据昵称从熟客获取买家openId
+set @openId = (select distinct c_openid from t_customer where c_nickname = cnickname);-- 第一步、2根据昵称从熟客获取买家openId
 end if;
 if @openId is null then -- add customer hasn't follow daidai
 set @openId = (select concat('lopid_',unix_timestamp(@now),cast(rand() as char(10))));
-insert into t_customer(c_openid,seller_room_id,c_nickname,remark,create_time)
-    select @openId,@sell_room_id,cnickname,remark,@now;
+insert into t_customer(c_openid,seller_room_id,c_nickname,create_time)
+    select @openId,@sell_room_id,cnickname,@now;
 end if;
 
 if productid = -1 then
-set @productId = (select max(id) from product where title = @pname and room_id = @sell_room_id);
+set @productId = (select max(id) from product where title = @pname and room_id = @sell_room_id and status = 1);
 -- SELECT @roomid;
 else
 set @productId = productid;
@@ -137,11 +137,14 @@ end if;
 if @productId is null then
 insert into product(image_url,text,room_id,create_time,status,title) values(image_urls,text,@sell_room_id,@now,1,@pname);-- 第二步、发布商品
 set @productId = (select last_insert_id());
-call pro_take_order_by_seller(@openId,@sell_room_id,remark,@productId,in_quantity,@now,cost,price);-- 第三步、下单
+call pro_take_order_by_seller(@openId,@sell_room_id,remark,@productId,in_quantity,@now,cost,price,@oid);-- 第三步、下单
 else
-call pro_take_order_by_seller(@openId,@sell_room_id,remark,@productId,in_quantity,@now,cost,price);-- 第三步、下单
+call pro_take_order_by_seller(@openId,@sell_room_id,remark,@productId,in_quantity,@now,cost,price,@oid);-- 第三步、下单
 end if;
 
+select @productId product_id,@oid order_id,c.id c_id
+from t_customer c
+where c.c_nickname = cnickname and c.seller_room_id = @sell_room_id;
 
 commit;
 
@@ -223,15 +226,18 @@ set @update_count = (SELECT ROW_COUNT());
 -- 下单 pro_take_order_by_seller
 delimiter $$
 drop procedure if exists pro_take_order_by_seller;
-CREATE  PROCEDURE pro_take_order_by_seller(in c_open_id varchar(200),in sell_room_id varchar(16),in remark varchar(60),in productid int,in in_quantity int,in create_time datetime,in in_cost int,in in_price int)
+CREATE  PROCEDURE pro_take_order_by_seller(in c_open_id varchar(200),in sell_room_id varchar(16),in order_remark varchar(60),in productid int,in in_quantity int,in create_time datetime,in in_cost int,in in_price int,out o_id int)
 BEGIN
 
 START TRANSACTION;
 
 UPDATE t_order o , t_customer c
 SET o.quantity = o.quantity + in_quantity
-where o.c_id = c.id AND o.product_id = productid AND c.c_openid = c_open_id  AND c.seller_room_id = sell_room_id AND STATUS not in (0,2,3)
+where o.c_id = c.id AND o.product_id = productid AND c.c_openid = c_open_id  AND c.seller_room_id = sell_room_id AND STATUS = 1
 AND o.create_time > '2015-05-11';
+
+set o_id = (select o.id from t_order o , t_customer c
+where o.c_id = c.id AND o.product_id = productid AND c.c_openid = c_open_id  AND c.seller_room_id = sell_room_id AND STATUS = 1);
 
 set @update_count = (SELECT ROW_COUNT());
   -- SELECT @update_count;
@@ -247,14 +253,16 @@ set @update_count = (SELECT ROW_COUNT());
       SELECT 1 isExistCustomer;
       end if;
 
-            INSERT INTO t_order(product_id,c_id,status,quantity,create_time,exchange_rate,exchange_type,cost,price)
-                SELECT productid ,c.id,1,in_quantity,create_time,r.exchange_rate,r.exchange_type,in_cost,in_price
+            INSERT INTO t_order(product_id,c_id,status,quantity,create_time,exchange_rate,exchange_type,cost,price,remark)
+                SELECT productid ,c.id,1,in_quantity,create_time,r.exchange_rate,r.exchange_type,in_cost,in_price,order_remark
                     FROM t_customer c JOIN user u
                     ON c.seller_room_id = u.room_id
                     JOIN t_exchange_rate r
                     ON r.exchange_type = 2
                     WHERE c.seller_room_id = sell_room_id AND c.c_openid = c_open_id
                         AND r.open_id = (SELECT open_id from user WHERE room_id = seller_room_id);
+
+            set o_id = (select LAST_INSERT_ID());
       end IF;
   commit;
   end; $$
@@ -444,7 +452,7 @@ begin
 
 SELECT p.id,p.title product_name from product p
     join user u
-    WHERE p.title LIKE product_name AND p.room_id = u.room_id and u.open_id = openId;
+    WHERE p.title LIKE product_name AND p.room_id = u.room_id and u.open_id = openId and p.status = 1;
 
 end; $$
 delimiter ;
@@ -464,6 +472,36 @@ SELECT c.id c_id,o.id oid,p.title,o.price,o.quantity,o.remark,c.seller_room_id r
 	left join t_weix_account_info w
 	on c.c_openid = w.open_id
 	where c.c_nickname = nickname AND c.seller_room_id = roomid;
+
+end; $$
+delimiter ;
+
+
+delimiter $$
+drop procedure if exists pro_weix_account_info_get_new;
+CREATE PROCEDURE `pro_weix_account_info_get_new`(in openid varchar(200),in roomid varchar(20))
+begin
+
+if roomid is not null then
+    SET @isHost = (SELECT count(*) from `user` WHERE open_id = openid and room_id = roomid) ;
+     set @favCount = (select count(1) from favourite where room_id = roomid);
+     if @isHost != 0 THEN
+     SELECT w.nickname,w.headimgurl,w.sex,w.city,w.country,u.weixin weix_account,u.qrcode,u.introduce,@favCount favcount,1 ishost
+      FROM t_weix_account_info w
+      JOIN user u ON u.open_id = w.open_id
+      where w.open_id = openid;
+      ELSE
+      SELECT w.nickname,w.headimgurl,w.sex,w.city,w.country,u.weixin weix_account,u.qrcode,u.introduce,@favCount favcount
+      from user u
+      JOIN t_weix_account_info w
+      ON u.room_id = roomid and w.open_id = u.open_id;
+      END IF;
+else
+     SELECT w.nickname,w.headimgurl,w.sex,w.city,w.country,u.weixin weix_account,u.qrcode,u.introduce,u.room_id
+      FROM t_weix_account_info w
+      JOIN user u ON u.open_id = w.open_id
+      where w.open_id = openid;
+  end if;
 
 end; $$
 delimiter ;

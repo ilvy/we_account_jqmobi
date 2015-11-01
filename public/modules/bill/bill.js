@@ -8,6 +8,8 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
     };
     Bill.prototype = {
         room_id:'',
+        orderListData:{},
+        $objOrderTable:null,
         init:function(){
             this.do();
             this.addListener();
@@ -18,7 +20,6 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
         },
         getHostInfo:function(){
             var _this = this;
-            var roomId = globalVar.room_id;
             var url = '/we_account/personalInfo';
             $.ajax({
                 url:url,
@@ -26,7 +27,8 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 success:function(results){
                     if(results.flag == 1){
                         var userInfo = results.data.user;
-
+                        globalVar.userInfo = userInfo;
+                        globalVar.room_id = userInfo.room_id;
                     }
                 }
             });
@@ -41,6 +43,8 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     _this.hideLoading();
                     if(results.flag == 1){
                         var data = results.data;
+                        _this.orderListData = data;
+                        _this.exchange_rate = data[0].exchange_rate;
                         if(type == 'c'){
                             _this.dealOrderListOrderByCustomer(data);
                         }else{
@@ -98,8 +102,10 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 }
             });
         },
-        dealOrderList:function(data){
-            $("#order-list-content").html("");
+        dealOrderList:function(data,isAppend){
+            if(!isAppend){
+                $("#order-list-content").html("");
+            }
             if(!(data && data.length > 0)){
                 return;
             }
@@ -137,7 +143,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 }
                 tableStr += '</div>';
                 var cardStr = '<div class="card"><div class="card-title">' +
-                    '<i class="fa fa-caret-right"></i><div class="product"><span>商品：</span><span class="name">'+procductName+'</span><span class="total-quantity"> × '+quantity+'</span> </div>' +
+                    '<i class="fa fa-caret-right"></i><div class="product"><span>商品：</span><span class="name">'+procductName+'</span> ×<span class="total-quantity"> '+quantity+'</span> </div>' +
                     '<div class="all-status ignore"><span>买到:</span><i class="fa fa-square-o"></i></div></div>';
                 var lastRow = '<div class="extra-row"><div class="t-col-5 product-detail" data-pid="'+key.split('_')[1]+'">【商品详情】</span></div>' +
                     '<div class="t-col-5 order-add"><input class="order-add-btn" type="button" value="加单"/></div></div>';
@@ -145,13 +151,16 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 $("#order-list-content").append(cardStr);
             }
         },
-        dealOrderListOrderByCustomer:function(data){
-            $("#order-list-content").html("");
+        dealOrderListOrderByCustomer:function(data,isAppend){
+            if(!isAppend){
+                $("#order-list-content").html("");
+            }
             if(!(data && data.length > 0)){
                 return;
             }
             var totalMoney = 0,cards = {};
             globalVar.room_id = this.room_id = data[0].room_id;
+            this.exchange_rate = data[0].exchange_rate;
             for(var i = 0; i < data.length; i++){
                 var record = data[i];
                 if(!cards[record.nickname+"_"+record.cid]){
@@ -186,12 +195,55 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     '<span class="unit">元</span></div></div>';
                 tableStr += '</div>';
                 var cardStr = '<div class="card"><div class="card-title"><i class="fa fa-caret-right"></i>' +
-                    '<div class="product"><span class="name-span">买家:</span><span class="name">'+nickname+'</span> <span class="tq-span">合计: </span><span class="total-quantity">'+totalMoney+'</span> </div>' +
+                    '<div class="product"><span class="name-span">买家:</span><span class="name">'+nickname+'</span></div>' +
                     '</div>';
                 var lastRow = '<div class="extra-row">' +
                     '<div class="t-col-10 c-add-order-btn"><input type="button" value="加单"/></div></div>';
                 cardStr += tableStr +lastRow+'</div>';
                 $("#order-list-content").append(cardStr);
+            }
+        },
+        //cid: result.c_id,
+        //exchange_rate: _this.exchange_rate,
+        //mail_free: 0,
+        //mail_pay: 0,
+        //nickname: nickname,
+        //oid: result.order_id,
+        //product_id: result.product_id,
+        //product_name: title,
+        //quantity: quantity,
+        //status: 1,
+        //unit_cost: cost,
+        //unit_price: price
+        addOrderDataToList:function(orderInfo){
+            this.orderListData.push(orderInfo);
+            var record = orderInfo;
+            if(this.$objOrderTable){
+                var newOrderRow = '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'>' +
+                    '<div class="t-col t-col-4 nickname" data-type="1" data-value="'+record.nickname+'" contenteditable="true">'+record.nickname+'</div>' +
+                    '<div class="t-col t-col-2 quantity" data-value="'+record.quantity+'">' +
+                    this.generateNumSelect(100,record.quantity)+'</div>' +
+                    '<div class="t-col t-col-2 input-div input-div-cost unit_cost" data-type="2" data-value="'+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+'" data-exrate="'+record.exchange_rate+'">'+((!record.unit_cost && record.unit_cost != 0)?"":this.exchangeMoney(record.unit_cost,record.exchange_rate))+'</div>' +
+                    '<div class="t-col t-col-1 buy-status"><i class="fa fa-square-o"></i></div>' +
+                    '<div class="t-col t-col-1 extra">删除</div></div>';
+                if($(".cate_btn_group .btn-check").data("type") == 'c'){
+                    newOrderRow = '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'>' +
+                        '<div class="t-col t-col-3 product_name" data-type="1" data-value="'+record.product_name+'">'+record.product_name+'</div>' +
+                        '<div class="t-col t-col-2 quantity" data-value="'+record.quantity+'">' +
+                        this.generateNumSelect(100,record.quantity)+'</div>' +
+                        '<div class="t-col t-col-4 input-div unit_cost overflow-ellipsis" style="padding: 6px;">'+(record.remark?record.remark:"")+'</div>' +
+                        '<div class="t-col t-col-1 extra">删除</div></div>';
+                }
+                this.$objOrderTable.append(newOrderRow);
+
+                this.updateTotalNum(this.$objOrderTable);   
+            }else{
+                if($(".cate_btn_group .btn-check").data("type") == 'p'){
+                    this.dealOrderList([orderInfo],true);
+                }else{
+                    this.dealOrderListOrderByCustomer([orderInfo],true);
+                }
+
             }
         },
         dealPayList:function(data){
@@ -315,34 +367,44 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     $("#pay-list").css("display",'none');
                     $("#order-list").css("display",'block');
                     _this.flushOrderList();
+                    $("#create-order-box").removeClass('hide');
                 }else if($this.attr("id") == 'to_pay'){
                     $("#pay-list").css("display",'block');
                     $("#order-list").css("display",'none');
                     $("#bill-list").css("display",'none');
                     _this.flushPayList();
+                    $("#create-order-box").addClass('hide');
                 }else{
                     $("#bill-list").css("display",'block');
                     $("#order-list").css("display",'none');
                     $("#pay-list").css("display",'none');
                     _this.flushBillList();
+                    $("#create-order-box").addClass('hide');
                 }
             });
             $(".cate_product_btn,.cate_customer_btn").touch("click",function(event){
                 var $this = event.$this;
                 var type = $this.data("type");
                 $this.addClass("btn-check").siblings(".btn").removeClass("btn-check");
-                _this.flushOrderList(type);
+                if(type == 'c'){
+                    _this.dealOrderListOrderByCustomer(_this.orderListData);
+                }else{
+                    _this.dealOrderList(_this.orderListData);
+                }
+                //_this.flushOrderList(type);
             });
 
             $(".c-add-order-btn input").touch("click",function(event){
                 var $this = event.$this;
                 var customer = $this.parents(".card").find(".product > .name").text();
                 _this.showAddOrderPanel("","",customer);
-            });
+                _this.$objOrderTable = $this.parents(".card").find(".table");
+            },true);
 
             $('.product-detail').touch('click',function(event){
                 var $this = event.$this;
                 var product_id = $this.data('pid');
+                globalVar.product_id = product_id;
                 $('#take_order').remove();
                 router.changeHash("product_display-"+product_id,1);
             },true);
@@ -372,7 +434,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     var orderIds = $currRow.data("oid");
                     _this.updateOrderStatus($currRow,orderIds,0);
                 }
-            });
+            },true);
 
             $(".buy-status").touch('click',function(event){
                 var $this = event.$this,
@@ -393,7 +455,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 }else{
                     $this.find(".fa-check-square").removeClass('fa-check-square').addClass('fa-square-o');
                 }
-            });
+            },true);
 
 
             $(document).touch("click",function(event){
@@ -448,7 +510,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                         $this.removeClass('active');
                     }
                 },100);
-            });
+            },true);
             $(".all-status").touch("click",function(event){
                 var $this = event.$this;
                 var $card = $this.parents(".card");
@@ -887,12 +949,14 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             $("#create-order-box").touch("click",function(event){
 //                router.changeHash("add_order",1);
                 _this.showAddOrderPanel();
+                _this.$objOrderTable = null;
             },true);
             $(".order-add-btn").touch("click",function(event){
                 var $this = event.$this;
                 var productId = $this.parents(".extra-row").find(".product-detail").data("pid"),
                     title = $this.parents(".card").find(".name").text();
                 _this.showAddOrderPanel(productId,title);
+                _this.$objOrderTable = $this.parents('.card').find(".table");
             },true);
             $("#aop_seller_submit").touch("click",function(event){
                 if(!util.validateForm("#addOrderPanel")){
@@ -909,9 +973,10 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     quantity = $("#aopq_quantity select").val(),
                     cost = $("#aoppurchase_money").val(),
                     price = $("#aopprice_money").val(),
-                    productId = $("#addOrderPanel").data("productid");
+                    productId = $("#addOrderPanel").data("productid"),
+                    remark = $("#aopo_remark").val();
                 var title = $titleWrapper[0].tagName.toLowerCase() == 'span'?$titleWrapper.text() : $titleWrapper.val();
-                var url = "/we_account/add_order?title="+title+"&desc="+desc+"&quantity="+quantity+"&cost="+cost+"&price="+price+"&nickname="+nickname+"&productid="+productId;
+                var url = "/we_account/add_order?title="+title+"&desc="+desc+"&quantity="+quantity+"&cost="+cost+"&price="+price+"&nickname="+nickname+"&productid="+productId+"&remark="+remark;
                 $.ajax({
                     url:url,
                     type:'post'
@@ -919,6 +984,21 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     if(results.flag == 1){
                         alert("加单成功");
                         _this.cleanOrderPanel();
+                        var result = results.data;
+                        _this.addOrderDataToList({
+                            cid: result.c_id,
+                            exchange_rate: _this.exchange_rate,
+                            mail_free: 0,
+                            mail_pay: 0,
+                            nickname: nickname,
+                            oid: result.order_id,
+                            product_id: result.product_id,
+                            product_name: title,
+                            quantity: quantity,
+                            status: 1,
+                            unit_cost: cost || 0,
+                            unit_price: price || 0
+                        });
                         $(".page.billSystem").addClass("visible");
                         $("#addOrderPanel").pop({hidden:true});
                     }else{
@@ -1068,8 +1148,9 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 $("#aopc_name").val(customer?customer:"");
                 $("#addOrderPanel").data("productid",-1);
             }
+            $(".page.billSystem").removeClass("visible");
             $("#addOrderPanel").pop({callback:function(){
-                $(".page.billSystem").removeClass("visible");
+
             }});
         },
         /**
@@ -1095,6 +1176,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             $('#money-input').val('');
         },
         initDates:function(){
+            this.getHostInfo();
             var date1 = util.formatDate(null,false,7);
             var date2 = util.formatDate(null,false);
             $("#date1").val(date1);

@@ -175,6 +175,7 @@ define(['router','util','wxAPI','ajaxupload','touchEvent'],function(router,util,
                 $('#upload-panel .product-title').val(_this.product.title);
                 $('#upload-panel .product-desc').val(_this.product.text);
                 $('#submit').attr('data-type','2');//修改商品
+                $(".page.publish").addClass("from-product");
                 router.changeHash('publish',0);
             },true);
 

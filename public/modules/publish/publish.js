@@ -20,7 +20,12 @@ define(['router','util','touchEvent'],function(router,util){
 //        removeUploadPanel();
 //                window.location.hash = '#live_room';
                 cleanPosition();
-                router.changeHash('live_room-'+globalVar.room_id,0);//不重新加载
+                if($(".page.publish").hasClass("from-product")){
+                    $(".page.publish").removeClass("from-product");
+                    router.changeHash('product_display-'+globalVar.product_id,0);
+                }else{
+                    router.changeHash('live_room-'+globalVar.room_id,0);//不重新加载
+                }
             });
             $(".adjustImg .fa-rotate-right").touch("click",function(event){
                 var $this = event.$this,
@@ -91,9 +96,14 @@ define(['router','util','touchEvent'],function(router,util){
                     success:function(data){
                         console.log(data);
                         if(data && data.flag == 1){
-                            showNewUploadImg(data.data.id || postData.product_id,productArray,title,submitType);
                             cleanPosition();
-                            router.changeHash("live_room-"+globalVar.room_id,0);
+                            if($(".page.publish").hasClass("from-product")){
+                                $(".page.publish").removeClass("from-product");
+                                router.changeHash('product_display-'+globalVar.product_id,0);
+                            }else{
+                                showNewUploadImg(data.data.id || postData.product_id,productArray,title,submitType);
+                                router.changeHash('live_room-'+globalVar.room_id,0);//不重新加载
+                            }
                         }else{
                             alert("上传失败，请重试！！");
                         }

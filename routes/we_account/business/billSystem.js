@@ -370,10 +370,10 @@ function addOrderBySeller(req,res){
             console.log("call pro_add_order_by_seller err:",err);
         }else{
             console.log("pro_add_order_by_seller results:",rows);
-            if(rows && rows[0] && rows[0][0] && rows[0][0]['result'] == 0){
-                response.failed(-1,res,"");//改昵称用户非关注用户
+            if(rows && rows[0] && rows[0][0]){
+                response.success(rows[0][0],res,"");
             }else{
-                response.success(1,res,"");
+                response.failed(-1,res,"");
             }
         }
     });
