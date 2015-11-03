@@ -1136,15 +1136,15 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             if(arguments.length == 2){
                 $("#addOrderPanel span.aopp_name").text(title).addClass("visible-inline").removeClass("hide");
                 $("#addOrderPanel input.aopp_name").removeClass("visible-inline").addClass("hide");
-                $("#addOrderPanel .aop_product_desc").addClass("hide").removeClass("visible-inline").removeClass("required");
+                $("#addOrderPanel .aop_product_desc").addClass("hide").removeClass("visible-inline");
                 $("#aopc_desc,input.aopp_name").removeClass("required");
                 $("#aopc_name").val("");
                 $("#addOrderPanel").data("productid",productId);
             }else{
                 $("#addOrderPanel input.aopp_name").addClass("visible-inline").removeClass("hide");
                 $("#addOrderPanel span.aopp_name").removeClass("visible-inline").addClass("hide");
-                $("#addOrderPanel .aop_product_desc").removeClass("hide").addClass("visible-inline").addClass("required");
-                $("#aopc_desc,input.aopp_name").addClass("required");
+                $("#addOrderPanel .aop_product_desc").removeClass("hide").addClass("visible-inline");
+                $("input.aopp_name").addClass("required");
                 $("#aopc_name").val(customer?customer:"");
                 $("#addOrderPanel").data("productid",-1);
             }
