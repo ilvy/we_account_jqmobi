@@ -202,7 +202,7 @@ function updateOrderStatus(req,res){
         return;
     }
     if(status == 2){
-        var sql = 'call pro_bought('+order_id+');';//'UPDATE t_order o SET o.status = '+status+',o.buy_time=\''+buy_time+'\' WHERE o.id IN ('+order_id+')';
+        var sql = 'call pro_bought(\''+order_id+'\');';//'UPDATE t_order o SET o.status = '+status+',o.buy_time=\''+buy_time+'\' WHERE o.id IN ('+order_id+')';
     }else if(status == 3){
         sql = 'UPDATE t_order o SET o.status = '+status+',o.pay_time=\''+buy_time+'\' WHERE o.id IN ('+order_id+');';
     }else if(status == 0){
