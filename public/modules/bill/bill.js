@@ -218,7 +218,9 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
         addOrderDataToList:function(orderInfo){
             this.orderListData.push(orderInfo);
             var record = orderInfo;
-            if(this.$objOrderTable){
+            var type = $(".cate_btn_group .btn-check").data("type");
+            var name = type == 'c'?orderInfo.nickname:orderInfo.product_name;
+            if(this.$objOrderTable || (this.$objOrderTable = this.findOrderAddedObjTable(type,name))){
                 var newOrderRow = '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'>' +
                     '<div class="t-col t-col-4 nickname" data-type="1" data-value="'+record.nickname+'" contenteditable="true">'+record.nickname+'</div>' +
                     '<div class="t-col t-col-2 quantity" data-value="'+record.quantity+'">' +
@@ -226,7 +228,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     '<div class="t-col t-col-2 input-div input-div-cost unit_cost" data-type="2" data-value="'+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+'" data-exrate="'+record.exchange_rate+'">'+((!record.unit_cost && record.unit_cost != 0)?"":this.exchangeMoney(record.unit_cost,record.exchange_rate))+'</div>' +
                     '<div class="t-col t-col-1 buy-status"><i class="fa fa-square-o"></i></div>' +
                     '<div class="t-col t-col-1 extra">删除</div></div>';
-                if($(".cate_btn_group .btn-check").data("type") == 'c'){
+                if(type == 'c'){
                     newOrderRow = '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'>' +
                         '<div class="t-col t-col-3 product_name" data-type="1" data-value="'+record.product_name+'">'+record.product_name+'</div>' +
                         '<div class="t-col t-col-2 quantity" data-value="'+record.quantity+'">' +
@@ -997,7 +999,8 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                             quantity: quantity,
                             status: 1,
                             unit_cost: cost || 0,
-                            unit_price: price || 0
+                            unit_price: price || 0,
+                            remark:remark
                         });
                         $(".page.billSystem").addClass("visible");
                         $("#addOrderPanel").pop({hidden:true});
@@ -1116,6 +1119,22 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             },true);
 
         },
+        /**
+         *
+         * @param orderType
+         * @param name
+         */
+        findOrderAddedObjTable:function(orderType,name){
+            var _this = this,
+                objTable = false;
+            $("#order-list .card").each(function(){
+                var $this = $(this);
+                if($this.find(".name").text() == name){
+                    objTable = $this.find(".table");
+                }
+            });
+            return objTable;
+        },
         renderSearchUserPanel:function(wrapperSelector,customers){
             var len = customers.length,
                 listr = "";
@@ -1136,15 +1155,15 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             if(arguments.length == 2){
                 $("#addOrderPanel span.aopp_name").text(title).addClass("visible-inline").removeClass("hide");
                 $("#addOrderPanel input.aopp_name").removeClass("visible-inline").addClass("hide");
-                $("#addOrderPanel .aop_product_desc").addClass("hide").removeClass("visible-inline").removeClass("required");
+                $("#addOrderPanel .aop_product_desc").addClass("hide").removeClass("visible-inline");
                 $("#aopc_desc,input.aopp_name").removeClass("required");
                 $("#aopc_name").val("");
                 $("#addOrderPanel").data("productid",productId);
             }else{
                 $("#addOrderPanel input.aopp_name").addClass("visible-inline").removeClass("hide");
                 $("#addOrderPanel span.aopp_name").removeClass("visible-inline").addClass("hide");
-                $("#addOrderPanel .aop_product_desc").removeClass("hide").addClass("visible-inline").addClass("required");
-                $("#aopc_desc,input.aopp_name").addClass("required");
+                $("#addOrderPanel .aop_product_desc").removeClass("hide").addClass("visible-inline");
+                $("input.aopp_name").addClass("required");
                 $("#aopc_name").val(customer?customer:"");
                 $("#addOrderPanel").data("productid",-1);
             }
