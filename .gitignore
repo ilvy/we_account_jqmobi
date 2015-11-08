@@ -44,3 +44,6 @@ images/
 
 #node modules
 node_modules/
+
+# output
+public/output/

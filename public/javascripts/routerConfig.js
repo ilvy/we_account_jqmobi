@@ -12,6 +12,7 @@ define([],function(){
         room_door:'modules/room_door/room_door',
         personality:'modules/personality/personality',
         billSystem:'modules/bill/bill',
-        add_order:'modules/add_order/add_order'
+        add_order:'modules/add_order/add_order',
+        getpay:'modules/Payment/Payment'
     }
 });

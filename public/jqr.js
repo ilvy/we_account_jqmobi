@@ -18,7 +18,9 @@ requirejs.config({
         waterfall:"javascripts/waterfall_relative",
         ajaxupload:"javascripts/ajaxupload",
         jpopup:'Jplugin/jquery.light-popup/jquery.light-popup',
-        wxAPI:'http://res.wx.qq.com/open/js/jweixin-1.0.0'
+        //wxAPI:'http://res.wx.qq.com/open/js/jweixin-1.0.0'
+        wxAPI:'javascripts/jweixin-1.0.0'
+        //bill:'modules/bill/bill'
     },
     shim:{
         jquery:{

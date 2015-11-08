@@ -418,6 +418,10 @@ function wxauth_pay(req,res,next){
                 delete req.session.authority;
                 return;
             }else if(results){
+                if(!(results && results.openId)){
+                    res.render("error",{reason:'no permit'});
+                    return;
+                }
                 var openId = req.session.openId = results.openid;
                 var accessToken = results.access_token;
                 console.log("get openId:"+results.openid);

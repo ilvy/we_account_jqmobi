@@ -90,7 +90,7 @@ define(['routerConfig','util'],function(routerConfig,util){
             var path = routerConfig[hash];
             if(!globalVar.modules[hash]){
                 require([path],function(module){
-
+                    console.log(module);
                 });
             }else{
                 if(globalVar.modules[hash].do && globalVar.reload[hash]){

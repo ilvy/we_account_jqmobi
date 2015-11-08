@@ -13,6 +13,7 @@ if(typeof define == 'undefined'){
 }
 
 define([],function(){
+    console.log("util");
     return {
         formatDate:function(date,isFormatTime, thedaybefore,formatType) {
             if(!date){

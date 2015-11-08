@@ -14,6 +14,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             this.do();
             this.addListener();
             this.initDates();
+            console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
         },
         do:function(){
             this.flushOrderList();

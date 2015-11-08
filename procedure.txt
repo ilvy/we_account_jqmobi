@@ -163,21 +163,27 @@ begin
 start transaction;
 
 set @now = now();
-set @isSubscribed = (select count(1) from t_weix_account_info w
-                         where w.open_id = c_open_id);
-set @isBind = (select count(1) from t_customer c
-    join user u
-    on u.room_id = c.seller_room_id and c.c_nickname = cnickname and c.seller_room_id = roomid
-    join t_weix_account_info w
-    on w.open_id = c.c_openid);
+if c_open_id is not null then -- is permit
+    set @isSeller = (select count(1) from t_customer c
+         join user u
+         on u.room_id = c.seller_room_id and c.c_nickname = cnickname and c.seller_room_id = roomid and u.open_id = c_open_id);
+    if @isSeller = 0 then    -- is this a seller,if not then
+        set @isSubscribed = (select count(1) from t_weix_account_info w
+                                 where w.open_id = c_open_id);
+        set @isBind = (select count(1) from t_customer c
+            join user u
+            on u.room_id = c.seller_room_id and c.c_nickname = cnickname and c.seller_room_id = roomid
+            join t_weix_account_info w
+            on w.open_id = c.c_openid);
 
-if @isBind = 0 and @isSubscribed >= 1 then
-    update t_customer set c_openid =  c_open_id where c_nickname = cnickname and seller_room_id = roomid;
-elseif @isBind = 0 and @isSubscribed = 0 then
-    call pro_weix_account_info(c_open_id,nickname,headimgurl,sex,city,country,unionid,@now);
-    update t_customer set c_openid =  c_open_id where c_nickname = cnickname and seller_room_id = roomid;
+        if @isBind = 0 and @isSubscribed >= 1 then
+            update t_customer set c_openid =  c_open_id where c_nickname = cnickname and seller_room_id = roomid;
+        elseif @isBind = 0 and @isSubscribed = 0 then
+            call pro_weix_account_info(c_open_id,nickname,headimgurl,sex,city,country,unionid,@now);
+            update t_customer set c_openid =  c_open_id where c_nickname = cnickname and seller_room_id = roomid;
+        end if;
+    end if;
 end if;
-
 commit;
 
 end; $$
@@ -463,7 +469,7 @@ drop procedure if exists pro_getpayment;
 CREATE  PROCEDURE pro_getpayment(in nickname varchar(50),in roomid varchar(16))
 begin
 
-SELECT c.id c_id,o.id oid,p.title,o.price,o.quantity,o.remark,c.seller_room_id room_id,o.mail_free,o.mail_pay,w.nickname
+SELECT c.id c_id,o.id oid,p.title,o.price,o.quantity,o.remark,c.seller_room_id room_id,o.mail_free,o.mail_pay,w.nickname,c.c_openid
 	from t_order o
 	left JOIN t_customer c
 	ON o.c_id = c.id AND o.`status` = 2 AND c.c_nickname = nickname AND c.seller_room_id = roomid
