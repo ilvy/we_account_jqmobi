@@ -482,6 +482,7 @@ SELECT c.id c_id,o.id oid,p.title,o.price,o.quantity,o.remark,c.seller_room_id r
 end; $$
 delimiter ;
 
+/********************获取当前用户信息***********************/
 
 delimiter $$
 drop procedure if exists pro_weix_account_info_get_new;
@@ -508,6 +509,28 @@ else
       JOIN user u ON u.open_id = w.open_id
       where w.open_id = openid;
   end if;
+
+end; $$
+delimiter ;
+
+/**********************修改order info************************/
+    /**备注等等**/
+delimiter $$
+drop procedure if exists pro_update_order_info;
+CREATE PROCEDURE `pro_update_order_info`(in openid varchar(200),in order_remark varchar(200),in order_id int)
+begin
+
+set @isExist = (select count(1) from
+    (select id,product_id from t_order o where o.id = order_id)o
+    ,product p
+    ,user u
+    where o.product_id = p.id and p.room_id = u.room_id and u.open_id = openid );
+if @isExist = 1 then
+update t_order set remark = order_remark where id = order_id;
+select 1 result;
+else
+select 0 result;
+end if;
 
 end; $$
 delimiter ;

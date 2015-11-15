@@ -184,7 +184,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     tableStr += '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'><div class="t-col t-col-3 product_name" data-type="1" data-value="'+record.product_name+'">'+record.product_name+'</div>' +
                         '<div class="t-col t-col-2 quantity" data-value="'+record.quantity+'">' +
                         this.generateNumSelect(100,record.quantity)+'</div>' +
-                        '<div class="t-col t-col-4 input-div unit_cost overflow-ellipsis" style="padding: 6px;">'+(record.remark?record.remark:"")+'</div>' +
+                        '<div class="t-col t-col-4 input-div unit_cost overflow-ellipsis order-remark" style="padding: 6px;">'+(record.remark?record.remark:"")+'</div>' +
                         '<div class="t-col t-col-1 extra">删除</div></div>';
                 }
                 if(!record.mail_free){
@@ -1118,7 +1118,57 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 $("input.aopp_name").data("id",pid).val(name);
                 $("#search-products-panel").removeClass('visible');
             },true);
+            $(".order-remark").touch("click",function(event){
+                var $this = event.$this;
+                var remark = $this.text();
+                $(".order-remark-update-obj").removeClass("order-remark-update-obj");
+                $this.addClass("order-remark-update-obj");//标记当前更改备注的目标
+                $("#pep_remark").val(remark);
+                $("#order-edit-panel").pop();
+            });
+            $("#pep_cancel,#pep_submit").touch("click",function(event){
+                var $this = event.$this;
+                if($this.hasClass("yellow-btn")){
+                    $("#order-edit-panel").pop({hidden:true});
+                }else{
+                    _this.updateOrderInfo();
+                }
+            });
 
+        },
+        /**
+         * 修改订单信息（remark）
+         */
+        updateOrderInfo:function(){
+            var $remarkObj = $(".order-remark-update-obj");
+            var newRemark = $("#pep_remark").val();
+            if(!util.validateForm("#order-edit-panel") || newRemark == $remarkObj.text()){
+                return;
+            }
+            var data = {
+                order_id:$remarkObj.parents(".t-row").data("oid"),
+                remark:newRemark
+            };
+            var url = "/we_account/update_order_info";
+            $.ajax({
+                url:url,
+                type:"post",
+                data:data,
+                success:function(results){
+                    if(results.flag == 1){
+                        $(".order-remark-update-obj").text(newRemark);
+                    }else{
+                        alert("修改备注失败！");
+                    }
+                    //$remarkObj.removeClass("order-remark-update-obj");
+                    $("#order-edit-panel").pop({hidden:true});
+                },
+                error:function(err){
+                    alert("修改备注失败！！");
+                    $("#order-edit-panel").pop({hidden:true});
+                    //$remarkObj.removeClass("order-remark-update-obj");
+                }
+            });
         },
         /**
          *

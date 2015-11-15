@@ -1,7 +1,7 @@
 /**
  * Created by man on 15-4-16.
  */
-define(['router','jqmobiTouch'],function(router){
+define(['router','touchEvent'],function(router){
     function myFavorite(){
         this.init = function(){
             this.do();
@@ -34,8 +34,8 @@ define(['router','jqmobiTouch'],function(router){
             $("title").html('我的收藏');
         }
         this.addListener = function(){
-            $(document).on("vclick",".favour_room_option",function(){
-                var room = encodeURI($(this).data("id"));
+            $(".favour_room_option").touch("click",function(event){
+                var room = encodeURI(event.$this.data("id"));
                 $.ajax({
                     url:'/we_account/knock_door',
                     type:"post",
@@ -56,13 +56,13 @@ define(['router','jqmobiTouch'],function(router){
             /**
              * 取消该直播间收藏
              */
-            $(document).on("vclick",".fav-remove",function(event){
+            $(".fav-remove").touch("click",function(event){
                 if(event.stopPropagation){
                     event.stopPropagation();
                 }else if(event.cancelBubble){
                     event.cancelBubble = true;
                 }
-                var $this = $(this);
+                var $this = event.$this;
                 var roomId = $this.parents("li").find(".room").val();
                 if(!confirm("取消收藏该直播间?")){
                     return;

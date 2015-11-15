@@ -15,6 +15,7 @@ var we_account = require('./routes/we_account_2');
 var test = require('./routes/we_account/test/test');
 
 var app = express();
+var cluster = require("cluster");
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -28,15 +29,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public'),{
-//    etag:true,
-//    maxAge:'no-cache',
-//    expires:new Date().getTime() + 30000,//无效
-//    setHeaders:function(res,path){
-//        res.set('x-timestamp',new Date().getTime());
-//        res.set('x-hehe','set header test');
-//        res.set('Expires','Tuesday,19 May 2015 03:50:30 GMT');//无效
-////        res.set('Last-Modified','Tue, 19 May 2015 04:27:35 GMT');
-//    }
+    etag:true,
+    maxAge:'86400',
+    //expires:new Date().getTime() + 30000,//无效
+    setHeaders:function(res,path){
+        //res.set('x-timestamp',new Date().getTime());
+        //res.set('x-hehe','set header test');
+        //res.set('Expires','Tuesday,19 May 2015 03:50:30 GMT');//无效
+        res.set('Cache-Control','max-age=86400');
+//        res.set('Last-Modified','Tue, 19 May 2015 04:27:35 GMT');
+    }
 }));
 app.use(session({
     secret: 'keyboard cat',
@@ -45,7 +47,10 @@ app.use(session({
     cookie: { secure: false }
 }));
 
-
+//app.use("/we_account",function(req,res,next){
+//    console.log('worker'+cluster.worker.id,',PID:'+process.pid);
+//    next();
+//});
 app.use('/', routes);
 app.use('/users', users);
 app.use("/we_account",we_account);

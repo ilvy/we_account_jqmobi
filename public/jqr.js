@@ -5,8 +5,7 @@
 requirejs.config({
     baseUrl:'/',
     paths:{
-        text:'javascripts/libs/require/text',
-        jquery:'javascripts/jquery',
+        //jquery:'javascripts/jquery',
         router:'javascripts/router',
         routerConfig:'javascripts/routerConfig',
         'room-door':'javascripts/room-door',
@@ -22,6 +21,23 @@ requirejs.config({
         wxAPI:'javascripts/jweixin-1.0.0'
         //bill:'modules/bill/bill'
     },
+    //paths:{
+    //    //jquery:'javascripts/jquery',
+    //    router:'http://static.daidai2u.com/javascripts/router',
+    //    routerConfig:'http://static.daidai2u.com/javascripts/routerConfig',
+    //    'room-door':'http://static.daidai2u.com/javascripts/room-door',
+    //    touchEvent:'http://static.daidai2u.com/touchUtil',
+    //    laydate:'http://static.daidai2u.com/Jplugin/laydate/laydate',
+    //    util:'http://static.daidai2u.com/util/util',
+    //    jqmobiTouch:"http://static.daidai2u.com/javascripts/libs/jquery.mobile.custom",
+    //    preloadImg:"http://static.daidai2u.com/javascripts/preloadImg",
+    //    waterfall:"http://static.daidai2u.com/javascripts/waterfall_relative",
+    //    ajaxupload:"http://static.daidai2u.com/javascripts/ajaxupload",
+    //    jpopup:'http://static.daidai2u.com/Jplugin/jquery.light-popup/jquery.light-popup',
+    //    //wxAPI:'http://res.wx.qq.com/open/js/jweixin-1.0.0'
+    //    wxAPI:'http://static.daidai2u.com/javascripts/jweixin-1.0.0'
+    //    //bill:'modules/bill/bill'
+    //},
     shim:{
         jquery:{
             exports:'jquery'
@@ -70,7 +86,7 @@ var globalVar = {
     }
 };
 
-define(['text','router','wxAPI'],function(text,router,wx){
+define(['router','wxAPI'],function(router,wx){
     wxjssdkInit(function(err,results){
         var config;
         if(results.flag == 1){

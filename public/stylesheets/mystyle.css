@@ -116,6 +116,8 @@ input.invalid{
     overflow-x: hidden;
 }
 
+#order-list .card:last-child{margin-bottom: 75px;  }
+
 .card-title{
     text-align: center;
     padding: 8px 0 8px 0;
@@ -856,3 +858,21 @@ input.invalid{
 }
 
 /*************select 样式 end**************/
+
+/**************修改备注 style start*******************/
+
+#product-edit-panel{
+    height: 280px;
+}
+
+#pep_remark {
+    width: 60%;
+    height: 138px;
+    margin: 25px 20%;
+}
+
+#product-edit-panel .aop_btn_group{
+    margin-top: 16px;
+}
+
+/**************修改备注 style end*******************/

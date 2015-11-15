@@ -289,7 +289,7 @@ function getPayment(req,res,isRequestBySeller){//需要验证openid
     var paras = [nickname,room_id];
     if(!room_id || !nickname){
         if(!isRequestBySeller){
-            res.render('error');
+            res.render('error',{reason:"args invalid:102"});
         }else{
             response.failed(0,res,'');
         }
@@ -299,7 +299,7 @@ function getPayment(req,res,isRequestBySeller){//需要验证openid
         if(err){
             console.log(err);
             if(!isRequestBySeller){
-                res.render('error')
+                res.render('error',{reason:"gpm:101"})
             }else{
                 response.failed(-1,res,'')
             }
@@ -418,8 +418,8 @@ function wxauth_pay(req,res,next){
                 delete req.session.authority;
                 return;
             }else if(results){
-                if(!(results && results.openId)){
-                    res.render("error",{reason:'no permit'});
+                if(!(results && results.openid)){
+                    res.render("error",{reason:'no permit:103'});
                     return;
                 }
                 var openId = req.session.openId = results.openid;
@@ -442,6 +442,30 @@ function wxauth_pay(req,res,next){
     }
 }
 
+/**
+ * 更新订单信息
+ * @param req
+ * @param res
+ */
+function updateOrderInfo(req,res){
+    var openId = req.session.openId ||'oxfQVswUSy2KXBPOjNi_BqdNI3aA',
+        body = req.body;
+    var order_id = body.order_id,
+        remark = body.remark;
+    dbOperator.query("call pro_update_order_info(?,?,?)",[openId,remark,order_id],function(err,rows){
+        if(err){
+            console.log("call pro_update_order_info err:",err);
+            response.failed(-1,res,"");
+        }else{
+            if(rows && rows[0] && rows[0][0] && rows[0][0].result){
+                response.success(1,res,"");
+            }else{
+                response.failed(0,res,"");
+            }
+        }
+    })
+}
+
 exports.takeOrder = takeOrder;
 exports.filter_takeOrder = filter_takeOrder;
 exports.getBillList = getBillList;
@@ -457,3 +481,4 @@ exports.checkCustomerSubscribe = checkCustomerSubscribe;
 exports.addOrderBySeller = addOrderBySeller;
 exports.vagueSearchUser = vagueSearchUser;
 exports.wxauth_pay = wxauth_pay;
+exports.updateOrderInfo = updateOrderInfo;

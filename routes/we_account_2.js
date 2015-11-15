@@ -181,7 +181,18 @@ router.get("/goto_publish",function(req,resp){
             }else if(type == 4){//进入个人信息页面
                 publish_account.getPersonalInfo(req,resp,1);
             }else if(type == 5){//进入账单系统
-                resp.redirect("/we_account/live-room#billSystem");
+                checkUser(openId,function response(err,results){
+                    if(err){
+                        resp.redirect("err.html");
+                        return;
+                    }
+                    if(results[0]&&results[0]["count(1)"]){
+                        resp.redirect("/we_account/live-room#billSystem");
+                        //resp.redirect("/we_account/live-room#live_room-"+results[0]["room_id"]);
+                    }else{
+                        resp.redirect("/register.html");
+                    }
+                });
             }
         })
     }).on("error",function(e){
@@ -389,6 +400,8 @@ router.post("/create_cut_info",live_room.create_cut_info);
 router.get("/vague_search_user",billSystem.vagueSearchUser);
 
 router.post("/add_order",billSystem.addOrderBySeller);
+
+router.post("/update_order_info",billSystem.updateOrderInfo);
 
 router.get("/xml",function(req,res){
     xmlParser.parseXml("<xml><ToUserName><![CDATA[gh_d28b25ec1197]]></ToUserName>" +

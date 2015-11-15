@@ -195,6 +195,21 @@ define([],function(){
                             return;
                         }
                         break;
+                    case 'textarea':
+                        if(!($.trim($this.val())+"")){
+                            $this.addClass("invalid");
+                            (function(){
+                                var $input = $this;
+                                setTimeout(function(){
+                                    $input.removeClass("invalid");
+                                },3000);
+                            })();
+                            flag = false;
+                            return;
+                        }
+                        break;
+                    default :
+                        break;
                 }
             });
             return flag;

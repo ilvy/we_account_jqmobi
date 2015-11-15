@@ -10,10 +10,11 @@ html
         title 代代
         meta(name="viewport",content="width=device-width,initial-scale=1.0,user-scalable=no")
         link(rel='stylesheet', href='/Jplugin/jquery.light-popup/jquery.light-popup.css')
-        //link(rel='stylesheet', href='/stylesheets/bootstrap.css')
-        //link(rel='stylesheet', href='/stylesheets/bootstrap-grid.css')
-        //link(rel='stylesheet', href='/css/mystyle.css')
-        link(rel='stylesheet', href='/stylesheets/all.css')
+        link(rel='stylesheet', href='/stylesheets/bootstrap.css')
+        link(rel='stylesheet', href='/stylesheets/bootstrap-grid.css')
+        link(rel='stylesheet', href='/stylesheets/mystyle.css')
+        link(rel='stylesheet', href='/stylesheets/style_new.css')
+        //link(rel='stylesheet', href='/stylesheets/all.css')
         //link(rel='stylesheet', href='/build/css/af.ui.base.min.css')
         link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css')
         style.
@@ -340,26 +341,14 @@ html
         ul#search-user-panel
         #search-customers-panel
             ul#search-customers
-                li jiangxuefeng
-                li jiangxuefeng
-                li jiangxuefeng
-                li jiangxuefeng
-                li jiangxuefeng
-                li jiangxuefeng
-                li jiangxuefeng
-                li jiangxuefeng
-                li jiangxuefeng
-                li jiangxuefeng
-                li jiangxuefeng
-                li jiangxuefeng
-                li jiangxuefeng
-                li jiangxuefeng
-                li jiangxuefeng
-                li jiangxuefeng
-                li gogo
             #scp-cancel-btn
                 i.fa.fa-times
         //#mask
+        #order-edit-panel.light-popup
+            textarea#pep_remark
+            .aop_btn_group.col-xxs-6.col-xxs-offset-3.no-horizontal-padding
+                input(type="button" value="取消")#pep_cancel.yellow-btn.col-xxs-5
+                input(type="button" value="确定")#pep_submit.green-btn.col-xxs-5.col-xxs-offset-2
 
 script(src="/javascripts/jquery.js")
 script(src="/touchUtil.js")
