@@ -260,7 +260,7 @@ set @update_count = (SELECT ROW_COUNT());
       end if;
 
             INSERT INTO t_order(product_id,c_id,status,quantity,create_time,exchange_rate,exchange_type,cost,price,remark)
-                SELECT productid ,c.id,1,in_quantity,create_time,r.exchange_rate,r.exchange_type,in_cost,in_price,order_remark
+                SELECT productid ,c.id,1,in_quantity,create_time,r.exchange_rate,r.exchange_type,case when in_cost = -1 then null else in_cost end,case when in_price = -1 then null else in_price end,order_remark
                     FROM t_customer c JOIN user u
                     ON c.seller_room_id = u.room_id
                     JOIN t_exchange_rate r

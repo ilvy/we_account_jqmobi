@@ -285,7 +285,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 }
                 if(!record.mail_free){
                     addMailPay = record.mail_pay;
-                    totalMoney += record.mail_pay;
+                    //totalMoney += record.mail_pay;
                 }
                 var mailStr = '<div class="t-row t-row-over-1 mail-row"><div class="t-col t-col-9">' +
                     '<i class="fa '+(record.mail_free?'fa-check-square':'fa-square-o')+' mailFree"></i><span>包邮</span> <span>邮费：</span>' +
@@ -749,7 +749,10 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     alert('请编辑进价和售价!');
                     return;
                 }
-                var totalMoney = Number($this.parents(".card").find(".total-quantity").text());
+                $this.parents(".card").addClass("active-getpaybtn").siblings(".card").removeClass("active-getpaybtn");//TODO 与收账页面同步邮费
+                var $tq = $this.parents(".card").find(".total-quantity");
+                //var tq_addmailpay = $tq.data("addmailpay");//是否加上了多少邮费，若无邮费，则0
+                var totalMoney = Number($tq.text());
                 var $mailRow = $this.parents(".card").find(".mail-row");
                 var mailpay = $mailRow.find(".fa-check-square").length ? 0:Number($mailRow.find(".mailpay").val());
                 var title = '亲，东西已经买好',
@@ -976,8 +979,8 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     }),
                     desc = $("#aopc_desc").val(),
                     quantity = $("#aopq_quantity select").val(),
-                    cost = $("#aoppurchase_money").val(),
-                    price = $("#aopprice_money").val(),
+                    cost = ($("#aoppurchase_money").val() == ''?-1:$("#aoppurchase_money").val()),
+                    price = ($("#aopprice_money").val() == ''?-1:$("#aopprice_money").val()),
                     productId = $("#addOrderPanel").data("productid"),
                     remark = $("#aopo_remark").val();
                 var title = $titleWrapper[0].tagName.toLowerCase() == 'span'?$titleWrapper.text() : $titleWrapper.val();

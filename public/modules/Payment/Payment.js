@@ -1,7 +1,7 @@
 /**
  * Created by man on 15-5-8.
  */
-define(['router'],function(router){
+define(['router','util'],function(router,util){
     var Payment = function(){
         this.init();
     };
@@ -34,13 +34,13 @@ define(['router'],function(router){
                             oidstr = oidstr.substring(0,oidstr.length - 1);
                             mailStr = '<div class="t-col-10">' +
                                 '<i class="fa '+(record.mail_free?'fa-check-square':'fa-square-o')+' mailFree_getpay"></i><span>包邮</span> <span>邮费：</span>' +
-                                '<input type="text" class="mailpay_getpay" placeholder="0" data-value="'+(record.mail_pay?record.mail_pay:"")+'" value="'+(record.mail_pay?record.mail_pay:"")+'">' +
+                                '<input type="number" class="mailpay_getpay" placeholder="0" data-value="'+(record.mail_pay?record.mail_pay:"")+'" value="'+(record.mail_pay?record.mail_pay:"")+'">' +
                                 '<span class="unit">元</span></div>';
                         }
                         $('.collection_object').html(results.data.nickname);
                         $('.mail-detail').data('oid',oidstr).html(mailStr);
                         var total = results.data.total;
-                        $(".total-price").data('total_except_mail',record.mail_free?total:total - record.mail_pay).html('<span>总计：</span>'+'<span class="money">'+results.data.total+'</span><span class="money-type">rmb</span>');
+                        $(".total-price").data('total_except_mail',record.mail_free?total:total - record.mail_pay).html('<span>总计：</span>'+'<span class="money" data-addmailpay="'+record.mail_pay+'">'+results.data.total+'</span><span class="money-type">rmb</span>');
                         $("#getpay .table").append(rowStr);
                     }else if(results.flag == 0){
                         if(results.data == -1){
@@ -91,15 +91,15 @@ define(['router'],function(router){
 
                 }
             });
-            $(document).on("input",".mailpay_getpay",function(event){
-                var originV = $(this).val();
-                var currentInput = originV.substring(originV.length - 1);
-                originV=originV.substring(0,originV.length - 1);
-                if(!(currentInput >= 0 && currentInput <= 9 || currentInput == '.')){
-                    $(this).val(originV);
-                    return;
-                }
-            });
+            //$(document).on("input",".mailpay_getpay",function(event){
+            //    var originV = $(this).val();
+            //    var currentInput = originV.substring(originV.length - 1);
+            //    originV=originV.substring(0,originV.length - 1);
+            //    if(!(currentInput >= 0 && currentInput <= 9 || currentInput == '.')){
+            //        $(this).val(originV);
+            //        return;
+            //    }
+            //});
         },
         /**
          * 编辑邮费
@@ -108,6 +108,7 @@ define(['router'],function(router){
          * @param orderIds
          */
         updateMailPay:function(isMailFree,mailPay,orderIds){
+            var _this = this;
             $.ajax({
                 url:'/we_account/updateMailPay?mail_free='+isMailFree+'&mail_pay='+mailPay+'&oid='+orderIds,
                 type:'post',
@@ -119,6 +120,7 @@ define(['router'],function(router){
                             total += Number(mailPay||0);
                         }
                         $('.total-price').html('<span>总计：</span>'+'<span class="money">'+total+'</span><span class="money-type">rmb</span>');
+                        _this.wxShare();
                     }else{
 
                     }
@@ -127,6 +129,14 @@ define(['router'],function(router){
                     console.log(err);
                 }
             })
+        },
+        wxShare:function(){
+            var room_id = globalVar.room_id;
+            var title = '亲，东西已经买好',
+                desc = '代购总费用:'+Number($(".total-price .money").text())+',详情请点开',
+                nickname = globalVar.nickname,
+                link = 'http://www.daidai2u.com/we_account/payit?room_id='+room_id+'&nickname='+nickname;
+            util.wxShare(title,desc,link,'',"发送账单成功","取消发送");
         }
     }
 

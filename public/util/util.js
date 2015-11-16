@@ -12,7 +12,7 @@ if(typeof define == 'undefined'){
     }
 }
 
-define([],function(){
+define(['wxAPI'],function(wx){
     console.log("util");
     return {
         formatDate:function(date,isFormatTime, thedaybefore,formatType) {
@@ -141,20 +141,20 @@ define([],function(){
                 }
             });
         },
-        wxShare:function(title,desc,link,imgUrl){
+        wxShare:function(title,desc,link,imgUrl,successTip,cancelTip,fTip){
             wx.onMenuShareAppMessage({
                 title:title,
                 desc:desc,
                 link:link,
-                imgUrl:imgUrl,
+                imgUrl:imgUrl||"http://www.daidai2u.com/images/logo.jpg",
                 success:function(){
-                    alert('分享成功');
+                    alert(successTip||'分享成功');
                 },
                 cancel:function(){
-                    alert("取消分享");
+                    alert(cancelTip||"取消分享");
                 },
                 error:function(){
-                    alert('分享失败，请重试！');
+                    alert(fTip||'分享失败，请重试！');
                 }
             });
             wx.onMenuShareTimeline({
@@ -163,13 +163,13 @@ define([],function(){
                 link:link,
                 imgUrl:imgUrl,
                 success:function(){
-                    alert('分享成功');
+                    alert(successTip||'分享成功');
                 },
                 cancel:function(){
-                    alert("取消分享");
+                    alert(cancelTip||"取消分享");
                 },
                 error:function(){
-                    alert('分享失败，请重试！');
+                    alert(fTip||'分享失败，请重试！');
                 }
             });
         },
