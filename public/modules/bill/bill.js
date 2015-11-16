@@ -274,6 +274,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     '<div class="t-col t-col-2">售价</div><div class="t-col t-col-1 extra">操作</div></div>';
                 for(var j = 0; j < cates.length; j++){
                     var record = cates[j];
+                    var addMailPay = 0;
                     totalMoney += record.quantity * (record.unit_price ? record.unit_price:0);
                     tableStr += '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'><div class="t-col t-col-3 product_name" data-type="1" data-value="'+record.product_name+'">'+record.product_name+'</div>' +
                         '<div class="t-col t-col-2 quantity" data-value="'+record.quantity+'">' +
@@ -283,6 +284,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                         '<div class="t-col t-col-1 extra">删除</div></div>';
                 }
                 if(!record.mail_free){
+                    addMailPay = record.mail_pay;
                     totalMoney += record.mail_pay;
                 }
                 var mailStr = '<div class="t-row t-row-over-1 mail-row"><div class="t-col t-col-9">' +
@@ -291,7 +293,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     '<span class="unit">元</span></div></div>';
                 tableStr += mailStr+'</div>';
                 var cardStr = '<div class="card"><div class="card-title"><i class="fa fa-caret-right"></i>' +
-                    '<div class="product"><span class="name-span">买家:</span><span class="name">'+nickname+'</span> <span class="tq-span">合计: </span><span class="total-quantity">'+totalMoney+'</span> </div>' +
+                    '<div class="product"><span class="name-span">买家:</span><span class="name">'+nickname+'</span> <span class="tq-span">合计: </span><span class="total-quantity" data-addmailpay='+addMailPay+'>'+totalMoney+'</span> </div>' +
                     '<div class="all-status"><span>已付：</span><i class="fa fa-square-o"></i></div></div>';
                 var lastRow = '<div class="extra-row">' +
                     '<div class="t-col-5 getpay-btn"><input type="button" value="收款"/></div></div>';
@@ -1306,7 +1308,9 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 type:'post',
                 success:function(results){
                     if(results.flag == 1){
+                        if(isMailFree){
 
+                        }
                     }else{
 
                     }
