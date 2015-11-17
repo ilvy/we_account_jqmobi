@@ -97,6 +97,7 @@ define(['routerConfig','util'],function(routerConfig,util){
                     globalVar.modules[hash].do();
                 }
             }
+
         }
 
     }
