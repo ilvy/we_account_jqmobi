@@ -1,7 +1,7 @@
 /**
  * Created by Administrator on 2015/4/5.
  */
-define(['routerConfig','util'],function(routerConfig,util){
+define(['util'],function(util){
     var key = window.location.hash,
         path = routerConfig[key];
     dealOrderFromWeb();
@@ -97,6 +97,7 @@ define(['routerConfig','util'],function(routerConfig,util){
                     globalVar.modules[hash].do();
                 }
             }
+
         }
 
     }

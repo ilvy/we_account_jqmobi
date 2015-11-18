@@ -1004,8 +1004,8 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                             product_name: title,
                             quantity: quantity,
                             status: 1,
-                            unit_cost: cost || 0,
-                            unit_price: price || 0,
+                            unit_cost: cost == -1?'':cost,
+                            unit_price: price == -1? "":price,
                             remark:remark
                         });
                         $(".page.billSystem").addClass("visible");
@@ -1130,7 +1130,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 $this.addClass("order-remark-update-obj");//标记当前更改备注的目标
                 $("#pep_remark").val(remark);
                 $("#order-edit-panel").pop();
-            });
+            },true);
             $("#pep_cancel,#pep_submit").touch("click",function(event){
                 var $this = event.$this;
                 if($this.hasClass("yellow-btn")){
@@ -1138,7 +1138,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 }else{
                     _this.updateOrderInfo();
                 }
-            });
+            },true);
 
         },
         /**
