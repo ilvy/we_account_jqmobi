@@ -861,18 +861,18 @@ input.invalid{
 
 /**************修改备注 style start*******************/
 
-#product-edit-panel{
-    height: 280px;
+#order-edit-panel{
+    height: 220px;
 }
 
 #pep_remark {
     width: 60%;
-    height: 138px;
+    height: 82px;
     margin: 25px 20%;
 }
 
-#product-edit-panel .aop_btn_group{
-    margin-top: 16px;
+#order-edit-panel .aop_btn_group{
+    margin-top: 0;
 }
 
 /**************修改备注 style end*******************/
