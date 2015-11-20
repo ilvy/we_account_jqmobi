@@ -465,6 +465,7 @@ input.invalid{
     width: 100%;
     border: none;
     border-bottom: 1px solid #cdcdcd;
+    padding: 2px 6px 3px;
 }
 
 #search{

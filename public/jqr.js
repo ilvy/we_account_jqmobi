@@ -86,30 +86,30 @@ var globalVar = {
     }
 };
 
-//var routerConfig = {
-//    live_room:'modules/live_room/live_room',
-//    register:'modules/register/register',
-//    publish:'modules/publish/publish',
-//    product_display:'modules/product/product',
-//    myFavorite:'modules/myFavorite/myFavorite',//收藏夹
-//    room_door:'modules/room_door/room_door',
-//    personality:'modules/personality/personality',
-//    billSystem:'http://static.daidai2u.com/modules/bill/bill.js',
-//    add_order:'modules/add_order/add_order',
-//    getpay:'modules/Payment/Payment'
-//};
 var routerConfig = {
-    live_room:'http://static.daidai2u.com/modules/live_room/live_room.js',
-    register:'http://static.daidai2u.com/modules/register/register.js',
-    publish:'http://static.daidai2u.com/modules/publish/publish.js',
-    product_display:'http://static.daidai2u.com/modules/product/product.js',
-    myFavorite:'http://static.daidai2u.com/modules/myFavorite/myFavorite.js',//收藏夹
-    room_door:'http://static.daidai2u.com/modules/room_door/room_door.js',
-    personality:'http://static.daidai2u.com/modules/personality/personality.js',
-    billSystem:'http://static.daidai2u.com/modules/bill/bill.js',
-    add_order:'http://static.daidai2u.com/modules/add_order/add_order.js',
-    getpay:'http://static.daidai2u.com/modules/Payment/Payment.js'
+    live_room:'modules/live_room/live_room',
+    register:'modules/register/register',
+    publish:'modules/publish/publish',
+    product_display:'modules/product/product',
+    myFavorite:'modules/myFavorite/myFavorite',//收藏夹
+    room_door:'modules/room_door/room_door',
+    personality:'modules/personality/personality',
+    billSystem:'modules/bill/bill',
+    add_order:'modules/add_order/add_order',
+    getpay:'modules/Payment/Payment'
 };
+//var routerConfig = {
+//    live_room:'http://static.daidai2u.com/modules/live_room/live_room.js',
+//    register:'http://static.daidai2u.com/modules/register/register.js',
+//    publish:'http://static.daidai2u.com/modules/publish/publish.js',
+//    product_display:'http://static.daidai2u.com/modules/product/product.js',
+//    myFavorite:'http://static.daidai2u.com/modules/myFavorite/myFavorite.js',//收藏夹
+//    room_door:'http://static.daidai2u.com/modules/room_door/room_door.js',
+//    personality:'http://static.daidai2u.com/modules/personality/personality.js',
+//    billSystem:'http://static.daidai2u.com/modules/bill/bill.js',
+//    add_order:'http://static.daidai2u.com/modules/add_order/add_order.js',
+//    getpay:'http://static.daidai2u.com/modules/Payment/Payment.js'
+//};
 
 define(['router','wxAPI'],function(router,wx){
     wxjssdkInit(function(err,results){

@@ -28,16 +28,16 @@ define(['router','util','wxAPI','ajaxupload','touchEvent'],function(router,util,
                         globalVar.hideLoading();
                         var product = result.data;
                         $('title').text(product.title+',猛戳这里下单吧');
-                        $('#for-share').attr('src','http://120.24.224.144/images/'+product.image_url[0]);
+                        $('#for-share').attr('src','http://120.24.224.144/images/'+(product.image_url[0] || 'default.jpg'));
 //                        alert(product.image_url[0])
                         _this.product = product;
                         product.text?$(".product_display .desc").addClass('visible').html(product.text):$(".product_display .desc").removeClass('visible');
-                        $(".product_display img").attr("src",'http://120.24.224.144/images/'+product.image_url[0]);
+                        $(".product_display img").attr("src",'http://120.24.224.144/images/'+(product.image_url[0] || 'default.jpg'));
                         _this.newImgName = product.image_url[0];
                         wx.onMenuShareAppMessage({
                             title:product.title+',猛戳这里下单吧',
                             desc:product.text,
-                            imgUrl:'http://120.24.224.144/images/thumb/'+product.image_url[0],
+                            imgUrl:'http://120.24.224.144/images/thumb/'+(product.image_url[0] || 'default.jpg'),
                             success:function(){
                                 alert('分享成功');
                             },
@@ -51,7 +51,7 @@ define(['router','util','wxAPI','ajaxupload','touchEvent'],function(router,util,
                         wx.onMenuShareTimeline({
                             title:product.title+',猛戳这里下单吧',
                             desc:product.text,
-                            imgUrl:'http://120.24.224.144/images/thumb/'+product.image_url[0],
+                            imgUrl:'http://120.24.224.144/images/thumb/'+(product.image_url[0] || 'default.jpg'),
                             success:function(){
                                 alert('分享成功');
                             },
