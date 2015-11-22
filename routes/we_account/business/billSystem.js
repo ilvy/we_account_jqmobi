@@ -128,10 +128,11 @@ function updateCustomerInfo(req,res){
         value = req.query.value?Number(req.query.value):0,
         type = req.query.type,
         exchange_rate = req.query.exchange_rate,
-        exchange_type = req.query.exchange_type;//
-    var args = [objid,value||0,nickname||'',type,exchange_rate || '',openid,exchange_type || ''];
+        exchange_type = req.query.exchange_type,
+        price = req.query.price == '' ? null:req.query.price;//
+    var args = [objid,value||0,nickname||'',type,exchange_rate || '',openid,exchange_type || '',price];
 
-    dbOperator.query('call pro_set_customer_info(?,?,?,?,?,?,?)',args,function(err,rows){
+    dbOperator.query('call pro_set_customer_info_new(?,?,?,?,?,?,?,?)',args,function(err,rows){
         if(err){
             console.log(err);
             response.failed('',res,'');

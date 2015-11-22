@@ -135,16 +135,17 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
 //                        '<div class="t-col t-col-2 input-div input-div-cost unit_cost" data-type="2" data-value="'+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+'" data-exrate="'+record.exchange_rate+'">'+((!record.unit_cost && record.unit_cost != 0)?"":this.exchangeMoney(record.unit_cost,record.exchange_rate))+'</div>' +
 //                        '<div class="t-col t-col-1 buy-status"><i class="fa fa-square-o"></i></div>' +
 //                        '<div class="t-col t-col-1 extra">删除</div></div>';
-                    tableStr += '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'><div class="t-col t-col-4 nickname" data-type="1" data-value="'+record.nickname+'" contenteditable="true">'+record.nickname+'</div>' +
+                    tableStr += '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'><div class="t-col t-col-4 nickname cnickname" data-type="1" data-value="'+record.nickname+'" >'+record.nickname+'</div>' +
                         '<div class="t-col t-col-2 quantity" data-value="'+record.quantity+'">' +
                         this.generateNumSelect(100,record.quantity)+'</div>' +
-                        '<div class="t-col t-col-2 input-div input-div-cost unit_cost" data-type="2" data-value="'+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+'" data-exrate="'+record.exchange_rate+'">'+((!record.unit_cost && record.unit_cost != 0)?"":this.exchangeMoney(record.unit_cost,record.exchange_rate))+'</div>' +
+                        '<div class="t-col t-col-2 input-div input-div-cost unit_cost" data-type="2" data-price="'+((!record.unit_price && record.unit_price != 0)?"":record.unit_price)+'" ' +
+                        'data-value="'+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+'" data-exrate="'+record.exchange_rate+'">'+((!record.unit_cost && record.unit_cost != 0)?"":this.exchangeMoney(record.unit_cost,record.exchange_rate))+'</div>' +
                         '<div class="t-col t-col-1 buy-status"><i class="fa fa-square-o"></i></div>' +
                         '<div class="t-col t-col-1 extra">删除</div></div>';
                 }
                 tableStr += '</div>';
                 var cardStr = '<div class="card"><div class="card-title">' +
-                    '<i class="fa fa-caret-right"></i><div class="product"><span>商品：</span><span class="name">'+procductName+'</span> ×<span class="total-quantity"> '+quantity+'</span> </div>' +
+                    '<div class="caret-wrapper"><i class="fa fa-caret-right card-btn"></i></div><div class="product"><span>商品：</span><span class="name">'+procductName+'</span> ×<span class="total-quantity"> '+quantity+'</span> </div>' +
                     '<div class="all-status ignore"><span>买到:</span><i class="fa fa-square-o"></i></div></div>';
                 var lastRow = '<div class="extra-row"><div class="t-col-5 product-detail" data-pid="'+key.split('_')[1]+'">【商品详情】</span></div>' +
                     '<div class="t-col-5 order-add"><input class="order-add-btn" type="button" value="加单"/></div></div>';
@@ -195,7 +196,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     '<input type="text" class="mailpay" placeholder="0" value="'+(record.mail_pay?record.mail_pay:"")+'">' +
                     '<span class="unit">元</span></div></div>';
                 tableStr += '</div>';
-                var cardStr = '<div class="card"><div class="card-title"><i class="fa fa-caret-right"></i>' +
+                var cardStr = '<div class="card"><div class="card-title"><i class="fa fa-caret-right card-btn"></i>' +
                     '<div class="product"><span class="name-span">买家:</span><span class="name">'+nickname+'</span></div>' +
                     '</div>';
                 var lastRow = '<div class="extra-row">' +
@@ -223,7 +224,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             var name = type == 'c'?orderInfo.nickname:orderInfo.product_name;
             if(this.$objOrderTable || (this.$objOrderTable = this.findOrderAddedObjTable(type,name))){
                 var newOrderRow = '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'>' +
-                    '<div class="t-col t-col-4 nickname" data-type="1" data-value="'+record.nickname+'" contenteditable="true">'+record.nickname+'</div>' +
+                    '<div class="t-col t-col-4 nickname cnickname" data-type="1" data-value="'+record.nickname+'">'+record.nickname+'</div>' +
                     '<div class="t-col t-col-2 quantity" data-value="'+record.quantity+'">' +
                     this.generateNumSelect(100,record.quantity)+'</div>' +
                     '<div class="t-col t-col-2 input-div input-div-cost unit_cost" data-type="2" data-value="'+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+'" data-exrate="'+record.exchange_rate+'">'+((!record.unit_cost && record.unit_cost != 0)?"":this.exchangeMoney(record.unit_cost,record.exchange_rate))+'</div>' +
@@ -276,7 +277,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     var record = cates[j];
                     var addMailPay = 0;
                     totalMoney += record.quantity * (record.unit_price ? record.unit_price:0);
-                    tableStr += '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'><div class="t-col t-col-3 product_name" data-type="1" data-value="'+record.product_name+'">'+record.product_name+'</div>' +
+                    tableStr += '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+' data-pid='+record.product_id+'><div class="t-col t-col-3 product_name" data-type="1" data-value="'+record.product_name+'">'+record.product_name+'</div>' +
                         '<div class="t-col t-col-2 quantity" data-value="'+record.quantity+'">' +
                         this.generateNumSelect(100,record.quantity)+'</div>' +
                         '<div class="t-col t-col-2 input-div input-div-cost unit_cost" data-value="'+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+'" data-type="2" data-exrate="'+record.exchange_rate+'">'+((!record.unit_cost && record.unit_cost != 0)?"":this.exchangeMoney(record.unit_cost,record.exchange_rate))+'</div>' +
@@ -292,7 +293,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     '<input type="text" class="mailpay" placeholder="0" value="'+(record.mail_pay?record.mail_pay:"")+'">' +
                     '<span class="unit">元</span></div></div>';
                 tableStr += mailStr+'</div>';
-                var cardStr = '<div class="card"><div class="card-title"><i class="fa fa-caret-right"></i>' +
+                var cardStr = '<div class="card"><div class="card-title"><div class="caret-wrapper"><i class="fa fa-caret-right card-btn"></i></div>' +
                     '<div class="product"><span class="name-span">买家:</span><span class="name">'+nickname+'</span> <span class="tq-span">合计: </span><span class="total-quantity" data-addmailpay='+addMailPay+'>'+totalMoney+'</span> </div>' +
                     '<div class="all-status"><span>已付：</span><i class="fa fa-square-o"></i></div></div>';
                 var lastRow = '<div class="extra-row">' +
@@ -493,10 +494,11 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             $("#addOrderPanel").touch("click",function(){
                 $("#search-user-panel,#search-products-panel").removeClass("visible");
             },true);
-            $(".card .card-title").touch("click",function(e){
+            $(".card .card-title .card-btn,.card .product .name").touch("click",function(e){
                 var event = e;
                 var $this = event.$this,
                     $caret;
+                $this = $this.parents(".card-title");
                 setTimeout(function(){
                     $this.siblings('.table').toggle(500);
                     if(($caret = $this.find(".fa-caret-right")).length > 0){
@@ -554,7 +556,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     }
                 }
 
-            });
+            },true);
             $(".quantity .sub,.quantity .add").touch("click",function(event){
                 var $this = event.$this;
                 var $quantity = $this.siblings(".num"),
@@ -645,7 +647,15 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     _this.updateMailPay(0,'',orders);
                 }
             });
-
+            //购买列表修改昵称
+            $('div.nickname.cnickname').touch("click",function(event){
+                var $this = event.$this;
+                var cnickname = $this.text();
+                $(".order-cnickname-update-obj").removeClass("order-cnickname-update-obj");
+                $this.addClass("order-cnickname-update-obj");//标记当前更改备注的目标
+                $("#pep_cnickname").addClass('visible-inline').val(cnickname).siblings('.pep_ele').removeClass('visible-inline');
+                $("#order-edit-panel").pop();
+            },true);
             $(document).on("blur",'div.nickname[contenteditable="true"],input.unit_price',function(){
                 var $this = $(this);
                 var value = '',
@@ -818,6 +828,8 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     objId = $this.parents('.t-row').data('oid'),
                     originValue = $this.data('value');
                 $('#money-input').val(originValue);
+                $('#price-result').val(Number($this.data("price")));
+                $('#price-ratio').val(originValue ? ((Number($this.data("price"))) / Number(originValue)):1);
                 $("#light-popup").pop({callback:function(){
                     $('.current').removeClass('current');
                 }}).find('#recharge-rate').val(exchange_rate);
@@ -830,7 +842,8 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     type = $inputDiv.data("type"),
                     originValue = $inputDiv.data("value"),
                     exchange_rate = $('#recharge-rate').val(),
-                    exchange_type = $('#exchange-type').val();
+                    exchange_type = $('#exchange-type').val(),
+                    price = $("#price-result").val();
                 if(type == 2){//进价
                     var objId = $inputDiv.parents('.t-row').data('oid');
                     value = $('#money-input').val();
@@ -841,7 +854,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                         }});
                         return;
                     }
-                    var url = '/we_account/updateCustomerInfo?value='+value+'&objId='+objId+'&type='+type+'&exchange_rate='+exchange_rate+'&exchange_type='+exchange_type;
+                    var url = '/we_account/updateCustomerInfo?value='+value+'&objId='+objId+'&type='+type+'&exchange_rate='+exchange_rate+'&exchange_type='+exchange_type+'&price='+price;
                     $.ajax({
                         url:url,
                         type:'get',
@@ -1008,7 +1021,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                             unit_price: price == -1? "":price,
                             remark:remark
                         });
-                        $(".page.billSystem").addClass("visible");
+                        $(".page.billSystem").removeClass("billSystem-short");
                         $("#addOrderPanel").pop({hidden:true});
                     }else{
                         alert("加单失败");
@@ -1019,8 +1032,9 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 })
             },true);
             $("#aop_seller_cancel").touch("click",function(event){
-                $(".page.billSystem").addClass("visible");
+                $(".page.billSystem").removeClass("billSystem-short");
                 $("#addOrderPanel").pop({hidden:true});
+                $("title").html("panel hide");
             });
             $("#search_user").touch("click",function(event){
                 var $nameInput = $("#aopc_name");
@@ -1128,7 +1142,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 var remark = $this.text();
                 $(".order-remark-update-obj").removeClass("order-remark-update-obj");
                 $this.addClass("order-remark-update-obj");//标记当前更改备注的目标
-                $("#pep_remark").val(remark);
+                $("#pep_remark").addClass('visible-inline').val(remark).siblings('.pep_ele').removeClass('visible-inline');
                 $("#order-edit-panel").pop();
             },true);
             $("#pep_cancel,#pep_submit").touch("click",function(event){
@@ -1139,41 +1153,82 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     _this.updateOrderInfo();
                 }
             },true);
-
+            $("#calc-price-btn").touch("click",function(event){
+                var cost_hk = $("#money-input").val();
+                if(cost_hk == ''){
+                    return;
+                }
+                var ratio = $("#price-ratio").val();
+                var price = Math.ceil(cost_hk * ratio);
+                $("#price-result").val(price);
+            },true);
+            $("#pay-list .product_name").touch("click",function(event){
+                var $this = event.$this;
+                var product_id = $this.parents(".t-row").data("pid");
+                globalVar.product_id = product_id;
+                $('#take_order').remove();
+                router.changeHash("product_display-"+product_id,1);
+            });
         },
         /**
          * 修改订单信息（remark）
          */
         updateOrderInfo:function(){
-            var $remarkObj = $(".order-remark-update-obj");
-            var newRemark = $("#pep_remark").val();
-            if(!util.validateForm("#order-edit-panel") || newRemark == $remarkObj.text()){
-                return;
-            }
-            var data = {
-                order_id:$remarkObj.parents(".t-row").data("oid"),
-                remark:newRemark
-            };
-            var url = "/we_account/update_order_info";
-            $.ajax({
-                url:url,
-                type:"post",
-                data:data,
-                success:function(results){
-                    if(results.flag == 1){
-                        $(".order-remark-update-obj").text(newRemark);
-                    }else{
-                        alert("修改备注失败！");
-                    }
-                    //$remarkObj.removeClass("order-remark-update-obj");
-                    $("#order-edit-panel").pop({hidden:true});
-                },
-                error:function(err){
-                    alert("修改备注失败！！");
-                    $("#order-edit-panel").pop({hidden:true});
-                    //$remarkObj.removeClass("order-remark-update-obj");
+            if($('#order-edit-panel .visible-inline').hasClass('pep_remark')){
+                var $remarkObj = $(".order-remark-update-obj");
+                var newRemark = $("#pep_remark").val();
+                if(!util.validateForm("#order-edit-panel") || newRemark == $remarkObj.text()){
+                    return;
                 }
-            });
+                var data = {
+                    order_id:$remarkObj.parents(".t-row").data("oid"),
+                    remark:newRemark
+                };
+                var url = "/we_account/update_order_info";
+                $.ajax({
+                    url:url,
+                    type:"post",
+                    data:data,
+                    success:function(results){
+                        if(results.flag == 1){
+                            $(".order-remark-update-obj").text(newRemark);
+                        }else{
+                            alert("修改备注失败！");
+                        }
+                        //$remarkObj.removeClass("order-remark-update-obj");
+                        $("#order-edit-panel").pop({hidden:true});
+                    },
+                    error:function(err){
+                        alert("修改备注失败！！");
+                        $("#order-edit-panel").pop({hidden:true});
+                        //$remarkObj.removeClass("order-remark-update-obj");
+                    }
+                });
+            }else{
+                if(!confirm('确认修改该客户昵称？')){
+                    return;
+                }
+                var objId = $('.order-cnickname-update-obj').parent().data('cid');
+                var value = $("#pep_cnickname").val();
+                var url = '/we_account/updateCustomerInfo?nickname='+value+'&objId='+objId+'&type=1';
+                $.ajax({
+                    url:url,
+                    type:'get',
+                    success:function(results){
+                        if(results.flag == 1){
+//                                $this.parents('.t-row').data("value",value);
+                            $(".t-row[data-cid = "+objId+"] .nickname").text(value).data("value",value);
+                        }else{
+                            alert('昵称修改失败，请重试！');
+                        }
+                        $("#order-edit-panel").pop({hidden:true});
+                    },
+                    error:function(err){
+                        alert('昵称修改失败，请重试！');
+                        $("#order-edit-panel").pop({hidden:true});
+                    }
+                });
+            }
         },
         /**
          *
@@ -1223,10 +1278,9 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 $("#aopc_name").val(customer?customer:"");
                 $("#addOrderPanel").data("productid",-1);
             }
-            $(".page.billSystem").removeClass("visible");
-            $("#addOrderPanel").pop({callback:function(){
-
-            }});
+            $(".page.billSystem").addClass("billSystem-short");
+            $("#addOrderPanel").pop();
+            $("title").html("panel show");
         },
         /**
          * 加单完成后，清理加单panel

@@ -129,7 +129,8 @@ input.invalid{
 
 .all-status{
     float: right;
-    margin-right: 10px;
+    padding: 8px 10px 8px 0;
+    margin-top: -8px;
 }
 
 .all-status > span{
@@ -164,6 +165,13 @@ input.invalid{
     float: left;
     color: rgba(200,30,40,1);
     font-size: 2rem;
+    padding: 8px 0;
+    margin-top: -8px;
+}
+
+.card-title .product{
+    padding: 8px 0;
+    margin-top: -8px;
 }
 
 .product > span:first-child{
@@ -352,6 +360,10 @@ input.invalid{
 
 .billSystem{
     margin-top: 40px;
+}
+
+.billSystem-short{
+    height: 400px;
 }
 
 .cate_btn_group{
@@ -598,6 +610,13 @@ input.invalid{
     padding-top: 76px;
 }
 
+.aopp_name{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    -webkit-text-overflow: ellipsis;
+}
+
 #addOrderPanel > div{
     margin-top: 16px;
     line-height: 26px;
@@ -813,6 +832,10 @@ input.invalid{
     padding: 4px 13px;
 }
 
+#light-popup{
+    height: 200px;
+}
+
 #light-popup div:first-child{
     border-top: none;
 }
@@ -827,6 +850,9 @@ input.invalid{
 
 #money-input{
     width: 100px;
+}
+#price-result{
+    width: 60px;
 }
 
 #light-popup div:last-child{
@@ -870,10 +896,31 @@ input.invalid{
     width: 60%;
     height: 82px;
     margin: 25px 20%;
+    display: none;
+}
+
+#pep_cnickname {
+    width: 60%;
+    height: 32px;
+    margin: 25px 20%;
+    display: none;
 }
 
 #order-edit-panel .aop_btn_group{
     margin-top: 0;
+}
+.lp-ratio-span{
+    font-size: 1rem;
+}
+#price-ratio{
+    width: 45px;
+}
+
+#calc-price-btn{
+    background-color: white;
+    border: 1px solid #c9c9c9;
+    padding: 2px 3px;
+    margin: 0 3px;
 }
 
 /**************修改备注 style end*******************/

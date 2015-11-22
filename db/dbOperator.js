@@ -258,3 +258,15 @@ exports.query = query;
 //        console.log(rows);
 //    }
 //});
+
+//query("call pro_add_order_by_seller(?,?,?,?,?,?,?,?,?,?)",['杜立','123','','','oxfQVs6SQx04a_kN-zf9CZFXIyII','','-1','1','-1','-1'],function(err,rows){
+//    if(err){
+//        console.log("call pro_add_order_by_seller err:",err);
+//    }else{
+//        console.log(rows);
+//    }
+//});
+
+query("select distinct c_openid from t_customer where c_nickname = '杜立' and seller_room_id = '20034'",[],function(err,rows){
+    console.log(rows);
+})

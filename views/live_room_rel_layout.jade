@@ -240,10 +240,16 @@ html
                     span ：
                 input(type='text' value='0.82')#recharge-rate
             div
-                span 金额：
-                input(type='text')#money-input
+                span 进价：
+                input(type='number')#money-input
                 //span 折扣：
                 //input(type='text' value=10)#discount
+            div
+                span.lp-ratio-span 售价比例：
+                input(type='number')#price-ratio
+                input(type='button' value='计算')#calc-price-btn
+                span 售价：
+                input(type='number')#price-result
             .btn-group
                 input(type='button' value='取消')#input-cancel
                 input(type='button' value='确定')#input-sure
@@ -345,7 +351,8 @@ html
                 i.fa.fa-times
         //#mask
         #order-edit-panel.light-popup
-            textarea#pep_remark
+            textarea#pep_remark.pep_remark.pep_ele
+            input(type="text")#pep_cnickname.pep_cnickname.pep_ele
             .aop_btn_group.col-xxs-6.col-xxs-offset-3.no-horizontal-padding
                 input(type="button" value="取消")#pep_cancel.yellow-btn.col-xxs-5
                 input(type="button" value="确定")#pep_submit.green-btn.col-xxs-5.col-xxs-offset-2

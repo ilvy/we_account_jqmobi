@@ -119,7 +119,7 @@ set @pname = product_name;
 set @sell_room_id = (select room_id from user where open_id = sell_open_id);
 set @openId = (select distinct open_id from t_weix_account_info where nickname = cnickname);-- 第一步、1先根据昵称获取买家openId
 if @openId is null then
-set @openId = (select distinct c_openid from t_customer where c_nickname = cnickname);-- 第一步、2根据昵称从熟客获取买家openId
+set @openId = (select distinct c_openid from t_customer where c_nickname = cnickname and seller_room_id = @sell_room_id);-- 第一步、2根据昵称从熟客获取买家openId
 end if;
 if @openId is null then -- add customer hasn't follow daidai
 set @openId = (select concat('lopid_',unix_timestamp(@now),cast(rand() as char(10))));
@@ -532,5 +532,35 @@ else
 select 0 result;
 end if;
 
+end; $$
+delimiter ;
+
+delimiter $$
+drop procedure if exists pro_set_customer_info_new;
+CREATE PROCEDURE `pro_set_customer_info_new`(in objid int,in value int,in nickname varchar(50),in type tinyint,in exchangeRate decimal(4,2),in openId varchar(100),in exchangeType tinyint,in in_price int)
+BEGIN
+	#Routine body goes here...
+START TRANSACTION;
+
+if type = 1 THEN
+UPDATE t_customer c SET c.c_nickname = nickname
+  WHERE c.id = objid;
+ELSEIF type = 2 THEN
+  UPDATE t_order o SET o.cost = value,o.exchange_rate = exchangeRate ,o.exchange_type = exchangeType,o.price = in_price
+    WHERE o.id = objid;
+  UPDATE t_order o SET o.exchange_rate = exchangeRate ,o.exchange_type = exchangeType
+    WHERE o.cost IS NULL AND o.product_id in
+        (SELECT p.id FROM product p,`user` u where p.room_id = u.room_id AND u.open_id = openId and p.status = 1);
+  UPDATE t_exchange_rate er set er.exchange_rate = exchangeRate
+    WHERE er.exchange_type = exchangeType AND er.open_id = openId;
+  ELSEif type = 3 THEN
+    UPDATE t_order o SET o.price = value
+        WHERE o.id = objid;
+  ELSEIF type = 4 THEN
+    UPDATE t_order o SET o.quantity = value
+      WHERE o.id = objid;
+end if;
+
+commit;
 end; $$
 delimiter ;
