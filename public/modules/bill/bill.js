@@ -1021,7 +1021,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                             unit_price: price == -1? "":price,
                             remark:remark
                         });
-                        $(".page.billSystem").removeClass("billSystem-short");
+                        $("#order-list-content").removeClass("billSystem-short");
                         $("#addOrderPanel").pop({hidden:true});
                     }else{
                         alert("加单失败");
@@ -1032,9 +1032,8 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 })
             },true);
             $("#aop_seller_cancel").touch("click",function(event){
-                $(".page.billSystem").removeClass("billSystem-short");
+                $("#order-list-content").removeClass("billSystem-short");
                 $("#addOrderPanel").pop({hidden:true});
-                $("title").html("panel hide");
             });
             $("#search_user").touch("click",function(event){
                 var $nameInput = $("#aopc_name");
@@ -1278,9 +1277,8 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 $("#aopc_name").val(customer?customer:"");
                 $("#addOrderPanel").data("productid",-1);
             }
-            $(".page.billSystem").addClass("billSystem-short");
             $("#addOrderPanel").pop();
-            $("title").html("panel show");
+            $("#order-list-content").addClass("billSystem-short");
         },
         /**
          * 加单完成后，清理加单panel

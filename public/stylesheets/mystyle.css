@@ -363,7 +363,8 @@ input.invalid{
 }
 
 .billSystem-short{
-    height: 400px;
+    overflow: hidden;
+    height: 300px;
 }
 
 .cate_btn_group{

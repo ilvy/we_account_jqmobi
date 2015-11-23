@@ -535,16 +535,47 @@ end if;
 end; $$
 delimiter ;
 
+
+/********** pro_set_customer_info ************/
 delimiter $$
-drop procedure if exists pro_set_customer_info_new;
-CREATE PROCEDURE `pro_set_customer_info_new`(in objid int,in value int,in nickname varchar(50),in type tinyint,in exchangeRate decimal(4,2),in openId varchar(100),in exchangeType tinyint,in in_price int)
+drop procedure if exists pro_set_customer_info;
+CREATE PROCEDURE `pro_set_customer_info`(in objid int,in value int,in nickname varchar(50),in type tinyint,in exchangeRate decimal(4,2),in openId varchar(100),in exchangeType tinyint,in in_price int)
 BEGIN
 	#Routine body goes here...
 START TRANSACTION;
 
 if type = 1 THEN
-UPDATE t_customer c SET c.c_nickname = nickname
-  WHERE c.id = objid;
+-- UPDATE t_customer c SET c.c_nickname = nickname
+  -- WHERE c.id = objid;
+  set @objExistCid = (select c.id from t_customer c
+                       join user u
+                       where c.c_nickname = nickname and c.c_status = 1 and c.id != objid and c.seller_room_id = u.room_id and u.open_id = openId);
+
+  -- 1、当前用户昵称不存在
+  if @objExistCid is null then
+   UPDATE t_customer c SET c.c_nickname = nickname
+     WHERE c.id = objid and c.c_status = 1;
+  -- 2、当前客户昵称已存在
+  else
+  set @isBillChecked = (select count(1) from t_customer c
+                       join user u
+                       where c.id = @objExistCid and c.c_status = 1 and c.c_openid not like '%lopid_%');
+     -- 2.1当前客户昵称已经确认过账单
+     if @isBillChecked > 0 then
+          UPDATE t_customer c SET c.c_status = 0
+            WHERE c.id = objid and c.c_status = 1;
+          update t_order o set o.c_id = @objExistCid
+            where o.c_id = objid;
+     -- 2.2当前客户昵称未确认过账单
+     elseif @isBillChecked = 0 then
+          UPDATE t_customer c SET c.c_nickname = nickname
+            WHERE c.id = objid and c.c_status = 1;
+          update t_customer c,user u set c.c_status = 0
+            where c.id = @objExistCid and c.c_status = 1;
+          update t_order o set o.c_id = objid
+            where o.c_id = @objExistCid;
+     end if;
+   end if;
 ELSEIF type = 2 THEN
   UPDATE t_order o SET o.cost = value,o.exchange_rate = exchangeRate ,o.exchange_type = exchangeType,o.price = in_price
     WHERE o.id = objid;
@@ -560,6 +591,53 @@ ELSEIF type = 2 THEN
     UPDATE t_order o SET o.quantity = value
       WHERE o.id = objid;
 end if;
+
+commit;
+end; $$
+delimiter ;
+
+/****************pro_get_order_info******************/
+delimiter $$
+drop procedure if exists pro_get_order_info;
+CREATE PROCEDURE `pro_get_order_info`(in openid varchar(100),in order_status tinyint)
+BEGIN
+	#Routine body goes here...
+START TRANSACTION;
+
+SELECT c.id cid,o.id oid,p.id product_id,p.title product_name,c.c_nickname nickname,o.quantity,o.`status`,
+    o.remark,o.cost unit_cost,o.price unit_price,o.mail_free,o.mail_pay,c.seller_room_id room_id,o.exchange_rate
+from t_customer c
+    JOIN `user` u1
+  ON c.seller_room_id = u1.room_id and c.c_status = 1
+    JOIN t_order o
+  on c.id = o.c_id
+    JOIN product p
+  ON o.product_id = p.id
+  WHERE o.`status` = order_status AND u1.open_id = openid and c.c_status = 1
+  ORDER BY p.title,o.remark ASC;
+
+commit;
+end; $$
+delimiter ;
+
+
+/*************** pro_get_final_bill ***************/
+delimiter $$
+drop procedure if exists pro_get_final_bill;
+CREATE PROCEDURE `pro_get_final_bill`(in openid varchar(100),in nickname varchar(50),in date1 datetime,in date2 datetime)
+BEGIN
+	#Routine body goes here...
+START TRANSACTION;
+
+SELECT c.id cid,o.id oid,p.title product_name,c.c_nickname nickname,o.cost unit_cost,o.price unit_price,o.quantity,o.`status`,o.remark,o.mail_free,o.mail_pay,o.buy_time,o.exchange_rate
+	from t_customer c
+	  JOIN `user` u1
+	ON c.seller_room_id = u1.room_id AND c.c_status = 1 and (c.c_nickname = nickname OR nickname = '')
+	  JOIN t_order o
+	on c.id = o.c_id AND DATE_FORMAT(o.pay_time,'%Y-%m-%d') >= date1 and DATE_FORMAT(o.pay_time,'%Y-%m-%d') <= date2
+	  JOIN product p
+	ON o.product_id = p.id
+	WHERE o.`status` = 3 AND u1.open_id = openid AND c.c_status = 1;
 
 commit;
 end; $$

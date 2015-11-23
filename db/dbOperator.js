@@ -267,6 +267,6 @@ exports.query = query;
 //    }
 //});
 
-query("select distinct c_openid from t_customer where c_nickname = '杜立' and seller_room_id = '20034'",[],function(err,rows){
+query("select * from t_customer where c_nickname = '杜立' and seller_room_id = '20034'",[],function(err,rows){
     console.log(rows);
 })
