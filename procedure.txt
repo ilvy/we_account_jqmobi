@@ -605,7 +605,7 @@ BEGIN
 START TRANSACTION;
 
 SELECT c.id cid,o.id oid,p.id product_id,p.title product_name,c.c_nickname nickname,o.quantity,o.`status`,
-    o.remark,o.cost unit_cost,o.price unit_price,o.mail_free,o.mail_pay,c.seller_room_id room_id,o.exchange_rate
+    o.remark,o.cost unit_cost,o.price unit_price,o.mail_free,o.mail_pay,c.seller_room_id room_id,o.exchange_rate,o.discount
 from t_customer c
     JOIN `user` u1
   ON c.seller_room_id = u1.room_id and c.c_status = 1

@@ -281,7 +281,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                         '<div class="t-col t-col-2 quantity" data-value="'+record.quantity+'">' +
                         this.generateNumSelect(100,record.quantity)+'</div>' +
                         '<div class="t-col t-col-2 input-div input-div-cost unit_cost" data-value="'+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+'" data-type="2" data-exrate="'+record.exchange_rate+'">'+((!record.unit_cost && record.unit_cost != 0)?"":this.exchangeMoney(record.unit_cost,record.exchange_rate))+'</div>' +
-                        '<div class="t-col t-col-2 input-div unit_price" data-type="3"><input class="unit_price" data-type="3" type="text" data-value="'+((!record.unit_price && record.unit_price != 0)?"":record.unit_price)+'" placeholder="" value="'+((!record.unit_price && record.unit_price != 0)?"":record.unit_price)+'"/></div>' +
+                        '<div class="t-col t-col-2 input-div unit_price" data-type="3" data-discount="'+record.discount+'"><input class="unit_price" data-type="3" type="text" data-value="'+((!record.unit_price && record.unit_price != 0)?"":record.unit_price)+'" placeholder="" value="'+((!record.unit_price && record.unit_price != 0)?"":record.unit_price)+'"/></div>' +
                         '<div class="t-col t-col-1 extra">删除</div></div>';
                 }
                 if(!record.mail_free){
@@ -810,7 +810,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     return true;
                 }
             });
-            $('.input-div-cost').touch('click',function(event){
+            $('.input-div-cost,.input-div.unit_price').touch('click',function(event){
 //                wx.scanQRCode({
 //                    needResult:1,
 //                    scanType: ["barCode"],
@@ -825,14 +825,27 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 $this.siblings('.current').removeClass('current');
                 var type = $this.data('type'),
                     exchange_rate = $this.data('exrate'),
+                    discount = Number($this.data('discount')),
                     objId = $this.parents('.t-row').data('oid'),
                     originValue = $this.data('value');
-                $('#money-input').val(originValue);
-                $('#price-result').val(Number($this.data("price")));
-                $('#price-ratio').val(originValue ? ((Number($this.data("price"))) / Number(originValue)):1);
+                if($this.hasClass('unit_cost')){
+                    $('#money-input').val(originValue);
+                    $('.cost_comp').addClass("visible").siblings(".price_comp").removeClass('visible');
+                }else if($this.hasClass('unit_price')){
+                    var $costInput = $this.siblings('.unit_cost'),
+                        cost = $costInput.data('value');
+                    cost = cost == '' ? '' : Number(cost);
+                    var lastPrice = $this.find('input').val();
+                    $('#price-money-input').val(lastPrice ? Math.ceil(Number(lastPrice) / discount):cost);
+                    $("#price-ratio").val(discount);
+                    $("#price-result").val(lastPrice);
+                    $('.price_comp').addClass("visible").siblings(".cost_comp").removeClass('visible');
+                }
+                //$('#price-result').val(Number($this.data("price")));
+                //$('#price-ratio').val(originValue ? ((Number($this.data("price"))) / Number(originValue)):1);
                 $("#light-popup").pop({callback:function(){
                     $('.current').removeClass('current');
-                }}).find('#recharge-rate').val(exchange_rate);
+                }}).find('#recharge-rate').val(exchange_rate ? exchange_rate:'');
             },true);
 
             $('#input-sure').touch('click',function(event){
@@ -843,7 +856,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     originValue = $inputDiv.data("value"),
                     exchange_rate = $('#recharge-rate').val(),
                     exchange_type = $('#exchange-type').val(),
-                    price = $("#price-result").val();
+                    price = '';//$("#price-result").val();
                 if(type == 2){//进价
                     var objId = $inputDiv.parents('.t-row').data('oid');
                     value = $('#money-input').val();

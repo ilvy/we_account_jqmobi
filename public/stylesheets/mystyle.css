@@ -165,8 +165,10 @@ input.invalid{
     float: left;
     color: rgba(200,30,40,1);
     font-size: 2rem;
-    padding: 8px 0;
+    padding: 8px 8px;
     margin-top: -8px;
+    margin-right: -8px;
+    margin-left: 0px;
 }
 
 .card-title .product{
@@ -852,6 +854,9 @@ input.invalid{
 #money-input{
     width: 100px;
 }
+#price-money-input{
+    width: 100px;
+}
 #price-result{
     width: 60px;
 }
@@ -921,7 +926,9 @@ input.invalid{
     background-color: white;
     border: 1px solid #c9c9c9;
     padding: 2px 3px;
-    margin: 0 3px;
+    margin: 0 10px;
 }
-
+.cost_comp,.price_comp{
+    display: none;
+}
 /**************修改备注 style end*******************/

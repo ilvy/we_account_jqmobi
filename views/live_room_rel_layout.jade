@@ -229,7 +229,7 @@ html
         div#loading
         div(data-orderstatus='#{orderStatus}')#forTakeOrder
         #light-popup.light-popup
-            div
+            div.cost_comp
                 span 币种：
                 select#exchange-type
                     option(value='2' selected) 港币
@@ -239,17 +239,21 @@ html
                     span.rate-desc (兑人民币)
                     span ：
                 input(type='text' value='0.82')#recharge-rate
-            div
+            div.cost_comp
                 span 进价：
                 input(type='number')#money-input
                 //span 折扣：
                 //input(type='text' value=10)#discount
-            div
+            div.price_comp
+                span 初定价：
+                input(type='number')#price-money-input
                 span.lp-ratio-span 售价比例：
                 input(type='number')#price-ratio
-                input(type='button' value='计算')#calc-price-btn
-                span 售价：
+            //div.price_comp
+            div.price_comp
+                span 实际售价：
                 input(type='number')#price-result
+                input(type='button' value='计算')#calc-price-btn
             .btn-group
                 input(type='button' value='取消')#input-cancel
                 input(type='button' value='确定')#input-sure
