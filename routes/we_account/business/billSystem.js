@@ -125,12 +125,13 @@ function updateCustomerInfo(req,res){
     var openid = req.session.openId || 'oxfQVswUSy2KXBPOjNi_BqdNI3aA',
         objid = req.query.objId,
         nickname = req.query.nickname,
-        value = req.query.value?Number(req.query.value):0,
+        value = req.query.value,
         type = req.query.type,
         exchange_rate = req.query.exchange_rate,
         exchange_type = req.query.exchange_type,
-        price = req.query.price == '' ? null:req.query.price;//
-    var args = [objid,value||0,nickname||'',type,exchange_rate || '',openid,exchange_type || '',price];
+        discount = req.query.discount;//
+    value = value == '' ? null:value;
+    var args = [objid,value || 0,nickname||'',type,exchange_rate || '',openid,exchange_type || '',discount||''];
 
     dbOperator.query('call pro_set_customer_info(?,?,?,?,?,?,?,?)',args,function(err,rows){
         if(err){

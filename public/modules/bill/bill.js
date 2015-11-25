@@ -281,8 +281,8 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                         '<div class="t-col t-col-2 quantity" data-value="'+record.quantity+'">' +
                         this.generateNumSelect(100,record.quantity)+'</div>' +
                         '<div class="t-col t-col-2 input-div input-div-cost unit_cost" data-value="'+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+'" data-type="2" data-exrate="'+record.exchange_rate+'">'+((!record.unit_cost && record.unit_cost != 0)?"":this.exchangeMoney(record.unit_cost,record.exchange_rate))+'</div>' +
-                        '<div class="t-col t-col-2 input-div unit_price" data-type="3" data-discount="'+record.discount+'"><input class="unit_price" data-type="3" type="text" data-value="'+((!record.unit_price && record.unit_price != 0)?"":record.unit_price)+'" placeholder="" value="'+((!record.unit_price && record.unit_price != 0)?"":record.unit_price)+'"/></div>' +
-                        '<div class="t-col t-col-1 extra">删除</div></div>';
+                        '<div class="t-col t-col-2 input-div unit_price" data-type="3" data-discount="'+record.discount+'" data-value="'+((!record.unit_price && record.unit_price != 0)?"":record.unit_price)+'">'+((!record.unit_price && record.unit_price != 0)?"":record.unit_price)+'</div>' +
+                        '<div class="t-col t-col-1 extra">删除</div></div>';//<input class="unit_price" data-type="3" type="text" data-value="'+((!record.unit_price && record.unit_price != 0)?"":record.unit_price)+'" placeholder="" value="'+((!record.unit_price && record.unit_price != 0)?"":record.unit_price)+'"/>
                 }
                 if(!record.mail_free){
                     addMailPay = record.mail_pay;
@@ -824,7 +824,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 $this.addClass('current').parents('.t-row').siblings('.t-row').find('.current').removeClass('current');
                 $this.siblings('.current').removeClass('current');
                 var type = $this.data('type'),
-                    exchange_rate = $this.data('exrate'),
+                    exchange_rate = $this.attr('data-exrate'),
                     discount = Number($this.data('discount')),
                     objId = $this.parents('.t-row').data('oid'),
                     originValue = $this.data('value');
@@ -835,7 +835,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     var $costInput = $this.siblings('.unit_cost'),
                         cost = $costInput.data('value');
                     cost = cost == '' ? '' : Number(cost);
-                    var lastPrice = $this.find('input').val();
+                    var lastPrice = $this.text();
                     $('#price-money-input').val(lastPrice ? Math.ceil(Number(lastPrice) / discount):cost);
                     $("#price-ratio").val(discount);
                     $("#price-result").val(lastPrice);
@@ -867,7 +867,8 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                         }});
                         return;
                     }
-                    var url = '/we_account/updateCustomerInfo?value='+value+'&objId='+objId+'&type='+type+'&exchange_rate='+exchange_rate+'&exchange_type='+exchange_type+'&price='+price;
+                    globalVar.showLoading();
+                    var url = '/we_account/updateCustomerInfo?value='+value+'&objId='+objId+'&type='+type+'&exchange_rate='+exchange_rate+'&exchange_type='+exchange_type;
                     $.ajax({
                         url:url,
                         type:'get',
@@ -879,16 +880,51 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                                     $('.current').removeClass('current');
                                     _this.cleanPopPanel();
                                 }});
+                                globalVar.hideLoading();
                             }else{
                                 alert('进价保存失败，请重试');
                             }
                         },
                         error:function(err){
-
+                            alert('进价保存失败，请重试');
+                            globalVar.hideLoading();
                         }
                     });
                 }
-//                else if(type == 3){//售价
+                else if(type == 3){//售价
+                    var objId = $inputDiv.parents('.t-row').data('oid');
+                    value = $("#price-result").val();
+                    var discount = $("#price-ratio").val();
+                    if((!value && value !== 0)){
+                        $("#light-popup").pop({hidden:'true',callback:function(){
+                            $('.current').removeClass('current');
+                            _this.cleanPopPanel();
+                        }});
+                        return;
+                    }
+                    //if(value == originValue|| (!value && value !== 0)){
+                    //    return;
+                    //}
+                    globalVar.showLoading();
+                    var url = '/we_account/updateCustomerInfo?value='+value+'&objId='+objId+'&type='+type+'&discount='+discount;
+                    $.ajax({
+                        url:url,
+                        type:'get',
+                        success:function(results){
+                            if(results.flag == 1){
+                                $inputDiv.data("value",value).data('discount',discount).text(value);
+                                $("#light-popup").pop({hidden:'true',callback:function(){
+                                    $('.current').removeClass('current');
+                                    _this.cleanPopPanel();
+                                }});
+                            }
+                            globalVar.hideLoading();
+                        },
+                        error:function(err){
+                            alert('售价保存失败，请重试');
+                            globalVar.hideLoading();
+                        }
+                    });
 //                    var objId = $inputDiv.parents('.t-row').data('oid');
 //                    value = $('#money-input').val();
 //                    if(value == originValue || (!value && value !== 0)){
@@ -917,7 +953,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
 //
 //                        }
 //                    });
-//                }
+                }
             });
             $('#input-cancel').on('click',function(){
                 $("#light-popup").pop({hidden:'true',callback:function(){
@@ -1166,7 +1202,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 }
             },true);
             $("#calc-price-btn").touch("click",function(event){
-                var cost_hk = $("#money-input").val();
+                var cost_hk = $("#price-money-input").val();//初始价
                 if(cost_hk == ''){
                     return;
                 }
@@ -1196,6 +1232,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     order_id:$remarkObj.parents(".t-row").data("oid"),
                     remark:newRemark
                 };
+                globalVar.showLoading();
                 var url = "/we_account/update_order_info";
                 $.ajax({
                     url:url,
@@ -1209,10 +1246,12 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                         }
                         //$remarkObj.removeClass("order-remark-update-obj");
                         $("#order-edit-panel").pop({hidden:true});
+                        globalVar.hideLoading();
                     },
                     error:function(err){
                         alert("修改备注失败！！");
                         $("#order-edit-panel").pop({hidden:true});
+                        globalVar.hideLoading();
                         //$remarkObj.removeClass("order-remark-update-obj");
                     }
                 });
@@ -1222,6 +1261,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 }
                 var objId = $('.order-cnickname-update-obj').parent().data('cid');
                 var value = $("#pep_cnickname").val();
+                globalVar.showLoading();
                 var url = '/we_account/updateCustomerInfo?nickname='+value+'&objId='+objId+'&type=1';
                 $.ajax({
                     url:url,
@@ -1234,10 +1274,12 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                             alert('昵称修改失败，请重试！');
                         }
                         $("#order-edit-panel").pop({hidden:true});
+                        globalVar.hideLoading();
                     },
                     error:function(err){
                         alert('昵称修改失败，请重试！');
                         $("#order-edit-panel").pop({hidden:true});
+                        globalVar.hideLoading();
                     }
                 });
             }

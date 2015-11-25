@@ -98,6 +98,9 @@ input.invalid{
 .hide{
     display: none;
 }
+.no-boder-top{
+    border-top: none !important;
+}
 /********************end common style**********************/
 
 .optional-tip{
@@ -594,7 +597,7 @@ input.invalid{
     top: 20%;
 }
 
-    /************start add order panel**************/
+/************start add order panel**************/
 
 #search_product_btn{
     text-align: center;
@@ -714,20 +717,20 @@ input.invalid{
 }
 
 /*#exists_customers{*/
-    /*position: absolute;*/
-    /*right: -10px;*/
-    /*bottom: 0;*/
-    /*text-decoration: underline;*/
+/*position: absolute;*/
+/*right: -10px;*/
+/*bottom: 0;*/
+/*text-decoration: underline;*/
 /*}*/
 
 /*#search_user{*/
-    /*position: absolute;*/
-    /*right: -10px;*/
-    /*bottom: 0;*/
-    /*text-decoration: underline;*/
+/*position: absolute;*/
+/*right: -10px;*/
+/*bottom: 0;*/
+/*text-decoration: underline;*/
 /*}*/
 
-    /************end add order panel**************/
+/************end add order panel**************/
 
 /***********add order end***********/
 
@@ -788,6 +791,7 @@ input.invalid{
 
 .unit_price{
     text-align: center;
+    padding: 6px;
 }
 
 .mail-detail{
@@ -855,7 +859,7 @@ input.invalid{
     width: 100px;
 }
 #price-money-input{
-    width: 100px;
+    width: 80px;
 }
 #price-result{
     width: 60px;
@@ -919,7 +923,7 @@ input.invalid{
     font-size: 1rem;
 }
 #price-ratio{
-    width: 45px;
+    width: 50px;
 }
 
 #calc-price-btn{
@@ -930,5 +934,9 @@ input.invalid{
 }
 .cost_comp,.price_comp{
     display: none;
+}
+
+#light-popup div.price_comp:first-child{
+    border-top: none;
 }
 /**************修改备注 style end*******************/

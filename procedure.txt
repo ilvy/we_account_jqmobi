@@ -539,7 +539,7 @@ delimiter ;
 /********** pro_set_customer_info ************/
 delimiter $$
 drop procedure if exists pro_set_customer_info;
-CREATE PROCEDURE `pro_set_customer_info`(in objid int,in value int,in nickname varchar(50),in type tinyint,in exchangeRate decimal(4,2),in openId varchar(100),in exchangeType tinyint,in in_price int)
+CREATE PROCEDURE `pro_set_customer_info`(in objid int,in value int,in nickname varchar(50),in type tinyint,in exchangeRate decimal(4,2),in openId varchar(100),in exchangeType tinyint,in _discount decimal(4,2))
 BEGIN
 	#Routine body goes here...
 START TRANSACTION;
@@ -577,7 +577,7 @@ if type = 1 THEN
      end if;
    end if;
 ELSEIF type = 2 THEN
-  UPDATE t_order o SET o.cost = value,o.exchange_rate = exchangeRate ,o.exchange_type = exchangeType,o.price = in_price
+  UPDATE t_order o SET o.cost = value,o.exchange_rate = exchangeRate ,o.exchange_type = exchangeType
     WHERE o.id = objid;
   UPDATE t_order o SET o.exchange_rate = exchangeRate ,o.exchange_type = exchangeType
     WHERE o.cost IS NULL AND o.product_id in
@@ -585,7 +585,7 @@ ELSEIF type = 2 THEN
   UPDATE t_exchange_rate er set er.exchange_rate = exchangeRate
     WHERE er.exchange_type = exchangeType AND er.open_id = openId;
   ELSEif type = 3 THEN
-    UPDATE t_order o SET o.price = value
+    UPDATE t_order o SET o.price = value,o.discount = _discount
         WHERE o.id = objid;
   ELSEIF type = 4 THEN
     UPDATE t_order o SET o.quantity = value
