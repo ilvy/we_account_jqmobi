@@ -529,7 +529,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                         continue;
                     }
                     var unitCost = $row.find(".unit_cost").text(),
-                        unitPrice = $row.find("input.unit_price").val();
+                        unitPrice = $row.find(".unit_price").text();
                     if(!$this.hasClass('ignore') && (!unitCost && unitCost !== 0 || (!unitPrice && unitPrice !== 0))){
                         alert("请编辑进价和售价!");
                         return;
@@ -787,7 +787,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 function canGetPay($getpayBtn){
                     var $card = $getpayBtn.parents('.card');
                     var $unitCosts = $card.find('.unit_cost'),
-                        $unitPrices = $card.find('input.unit_price');
+                        $unitPrices = $card.find('.unit_price');
                     var isLegal = true;
                     $unitCosts.each(function(){
                         if(!$(this).text().trim() && $(this).text() !== '0'){
@@ -799,7 +799,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                         return false;
                     }
                     $unitPrices.each(function(){
-                        if(!$(this).val().trim() && $(this).val() !== '0'){
+                        if(!$(this).text().trim() && $(this).text() !== '0'){
                             isLegal = false;
                             return false;
                         }
@@ -1440,7 +1440,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             $card.find(" .table .t-row:not(.t-row-header)").each(function(){
                 var $row = $(this);
                 var num = Number($row.find('.quantity select').val()),
-                    unitPrice = Number($row.find('input.unit_price').val());
+                    unitPrice = Number($row.find('.unit_price').text());
                 num = isNaN(num)?0:num;
                 unitPrice = isNaN(unitPrice)?0:unitPrice;
                 total += num * unitPrice;
