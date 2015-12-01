@@ -4,6 +4,8 @@
 var mysql = require("mysql"),
     dbPoolConfig = require("../config/config").dbPoolConfig,
     urlencode = require("urlencode");
+var logger = require("log4js").getLogger("dbOperator");
+logger.setLevel("INFO");
 
 var pool = mysql.createPool(dbPoolConfig);
 
@@ -24,7 +26,7 @@ var pool = mysql.createPool(dbPoolConfig);
 
 var query = function(sql,posts,callback){
     sql = mysql.format(sql,posts);
-    console.log("sql:\n"+sql);
+    logger.info("sql:\n",sql);
     pool.query(sql,function(err,rows,fields){
         callback(err,rows);
     });
@@ -267,6 +269,6 @@ exports.query = query;
 //    }
 //});
 
-query("select * from t_customer where c_nickname = '杜立' and seller_room_id = '20034'",[],function(err,rows){
-    console.log(rows);
-})
+//query("select * from t_customer where c_nickname = '杜立' and seller_room_id = '20034'",[],function(err,rows){
+//    console.log(rows);
+//})

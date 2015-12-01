@@ -225,7 +225,6 @@ var startX,endX,startY,endY;
 
     }
 
-
     function setClickStatus(status){
         clickEnable = status;
     }

@@ -9,6 +9,7 @@ var dbOperator = require("../../../db/dbOperator"),
     util = require("../util/util"),
     async = require('async'),
     we_auth = require('../we_auth');
+var logger =  require("log4js").getLogger("billSystem");
 
 /**
  * 买家下订单
@@ -50,7 +51,7 @@ function takeOrder(req,res,callback){
         var paras = [openId,roomId,remark,productId,quantity,create_time];
         dbOperator.query('call pro_take_order(?,?,?,?,?,?)',paras,function(err,rows){
             if(err){
-                console.log(err);
+                logger.error(err);
                 if(callback){
                     callback(err,null,res);
                     return;
@@ -61,18 +62,19 @@ function takeOrder(req,res,callback){
                     callback(null,rows,res);
                     return;
                 }
-                console.log(rows);
+                logger.debug(rows);
                 if(rows[0] && rows[0][0] && rows[0][0].isExistCustomer){
 //                    getNicknameFromWeix(openId,roomId);
                 }
                 response.success('',res,'');
+                logger.info("call pro_take_order results:"+rows[0] && rows[0].length);
             }
             cb(err,results);
         });
     };
     async.waterfall([checkSubscribe,takeOrderFun],function(err,results){
         if(err){
-            console.log(err);
+            logger.error(err);
         }
     });
 //    else if(!openId && isWeChat){//若是微信客户端打开，获取openid
@@ -91,7 +93,7 @@ function takeOrder(req,res,callback){
 function checkCustomerSubscribe(openId,callback){
     dbOperator.query('call pro_check_customer_subscribe(?)',[openId],function(err,rows){
         if(err){
-            console.log('call pro_check_customer_subscribe err',err);
+            logger.error('call pro_check_customer_subscribe err',err);
         }else{
             callback(rows);
         }
@@ -100,7 +102,7 @@ function checkCustomerSubscribe(openId,callback){
 
 function getNicknameFromWeix(openid,roomid,callback){
     accountInfo.getAccountInfo(tokenManager.access_token,openid,function(accountInfo){
-        console.log(accountInfo);
+        logger.debug(accountInfo);
         accountInfo = JSON.parse(accountInfo);
         if(!(accountInfo && accountInfo.nickname)){
             return;
@@ -108,9 +110,9 @@ function getNicknameFromWeix(openid,roomid,callback){
         var args = [openid,roomid,accountInfo.nickname];
         dbOperator.query('call pro_set_customer_nickname(?,?,?)',args,function(err,rows){
             if(err){
-                console.log(err);
+                logger.error(err);
             }else{
-                console.log(rows);
+                logger.debug(rows);
             }
         });
     });
@@ -135,10 +137,10 @@ function updateCustomerInfo(req,res){
 
     dbOperator.query('call pro_set_customer_info(?,?,?,?,?,?,?,?)',args,function(err,rows){
         if(err){
-            console.log(err);
+            logger.error(err);
             response.failed('',res,'');
         }else{
-            console.log('updateCustomerInfo type:'+type +',id:'+objid+' success');
+            logger.info('updateCustomerInfo type:'+type +',id:'+objid+' success');
 //            if(rows.affectedRows != 0){
                 response.success('',res,'');
 //            if(value == ''){
@@ -160,10 +162,10 @@ function filter_takeOrder(req,res,next){
     var paras = [openId,roomId,productId];
     dbOperator.query('call pro_filter_order(?,?,?,?,?,?)',paras,function(err,rows){
         if(err){
-            console.log(err);
+            logger.error(err);
             response.failed(-1,res,'');
         }else{
-            console.log(rows);
+            logger.debug(rows);
             next();
         }
     });
@@ -180,10 +182,10 @@ function getBillList(req,res){
     var paras = [openId,status];
     dbOperator.query('call pro_get_order_info(?,?)',paras,function(err,rows){
         if(err){
-            console.log(err);
+            logger.error(err);
             response.failed(-2,res,'');
         }else{
-//            console.log(rows);
+            //console.log(rows);
             response.success(rows[0],res,'');
         }
     });
@@ -213,7 +215,7 @@ function updateOrderStatus(req,res){
 
     dbOperator.query(sql,[],function(err,results){
         if(err){
-            console.log(err);
+            logger.error(err);
             response.failed(-1,res,'');
         }else{
             response.success('',res,'');
@@ -237,7 +239,7 @@ function updateMailPay(req,res){
     }
     dbOperator.query(sql,[],function(err,results){
         if(err){
-            console.log(err);
+            logger.error(err);
             response.failed(-1,res,'');
         }else{
             response.success('',res,'');
@@ -270,10 +272,10 @@ function getFinalBill(req,res){
     var paras = [openId,nickname,date1,date2];
     dbOperator.query('call pro_get_final_bill(?,?,?,?)',paras,function(err,rows){
         if(err){
-            console.log(err);
+            logger.error(err);
             response.failed(-2,res,'');
         }else{
-            console.log(rows);
+            logger.info(rows);
             response.success(rows[0],res,'');
         }
     });
@@ -299,14 +301,14 @@ function getPayment(req,res,isRequestBySeller){//需要验证openid
     }
     dbOperator.query('call pro_getpayment(?,?)',paras,function(err,rows){
         if(err){
-            console.log(err);
+            logger.error(err);
             if(!isRequestBySeller){
                 res.render('error',{reason:"gpm:101"})
             }else{
                 response.failed(-1,res,'')
             }
         }else{
-            console.log(rows);
+            logger.debug(rows);
             var data = rows[0] || [];
             var total = 0;
             for(var i = 0; i < data.length; i++){
@@ -369,9 +371,9 @@ function addOrderBySeller(req,res){
     var openId = req.session.openId || "oxfQVswUSy2KXBPOjNi_BqdNI3aA";
     dbOperator.query("call pro_add_order_by_seller(?,?,?,?,?,?,?,?,?,?)",[nickname,title,desc,image_urls,openId,remark,productid,in_quantity,cost,price],function(err,rows){
         if(err){
-            console.log("call pro_add_order_by_seller err:",err);
+            logger.error("call pro_add_order_by_seller err:",err);
         }else{
-            console.log("pro_add_order_by_seller results:",rows);
+            logger.info("pro_add_order_by_seller results:",rows);
             if(rows && rows[0] && rows[0][0]){
                 response.success(rows[0][0],res,"");
             }else{
@@ -387,9 +389,9 @@ function vagueSearchUser(req,res){
     var openId = req.session.openId || 'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
     dbOperator.query("call pro_vague_search_user(?,?,?)",['%'+customer+'%',openId,type],function(err,rows){
         if(err){
-            console.log("call pro_vague_search_user err:",err);
+            logger.error("call pro_vague_search_user err:",err);
         }else{
-//            console.log("pro_add_order_by_seller results:",rows);
+            logger.debug("call pro_vague_search_user results:",rows);
             response.success(rows[0],res,"");
         }
     });
@@ -415,7 +417,7 @@ function wxauth_pay(req,res,next){
     }else{
         we_auth.redirectToUrl(req,res,function(err,results,requ,resp,nocode){
             if(err){
-                console.log('getAuth snsapi_userinfo failed in payit:',err);
+                logger.error('getAuth snsapi_userinfo failed in payit:',err);
             }else if(nocode){
                 delete req.session.authority;
                 return;
@@ -426,14 +428,14 @@ function wxauth_pay(req,res,next){
                 }
                 var openId = req.session.openId = results.openid;
                 var accessToken = results.access_token;
-                console.log("get openId:"+results.openid);
+                logger.info("get openId:"+results.openid);
                 we_auth.getSnsapi_userinfo(req,res,accessToken,openId,function(err,userInfo){
                     //in cnickname varchar(50),in roomid varchar(40),in c_openid varchar(200),
                     //in headimgurl varchar(150),in sex bit,in city varchar(30),in country varchar(30),in unionid varchar(200),in subscribe_time datetime
                     dbOperator.query("call pro_integrate_customer_info(?,?,?,?,?,?,?,?,?,?)",[nickname,room_id,openId,userInfo.headimgurl,userInfo.sex,userInfo.nickname,
                                     userInfo.city,userInfo.country,userInfo.unionid,userInfo.subscribe_time],function(err,rows){
                         if(err){
-                            console.log("call pro_integrate_customer_info err",err);
+                            logger.error("call pro_integrate_customer_info err",err);
                         }
                         next();
                     })
@@ -456,7 +458,7 @@ function updateOrderInfo(req,res){
         remark = body.remark;
     dbOperator.query("call pro_update_order_info(?,?,?)",[openId,remark,order_id],function(err,rows){
         if(err){
-            console.log("call pro_update_order_info err:",err);
+            logger.error("call pro_update_order_info err:",err);
             response.failed(-1,res,"");
         }else{
             if(rows && rows[0] && rows[0][0] && rows[0][0].result){

@@ -11,6 +11,14 @@ var http = require('http');
 //var numCPUs = require('os').cpus().length;
 
 /**
+ * Initialise log4js first, so we don't miss any log messages
+ */
+var log4js = require('log4js');
+log4js.configure('./config/log4js_configure.json');
+
+var log = log4js.getLogger("startup");
+
+/**
  * Get port from environment and store in Express.
  */
 

@@ -1,0 +1,18 @@
+{
+  "appenders": [
+    {
+      "type": "dateFile",
+      "filename": "logs/access.log",
+      "pattern": "-yyyy-MM-dd",
+      "category": "http"
+    },
+    {
+      "category": ["dbOperator","console","billSystem","publish_account"],
+      "type": "dateFile",
+      "filename": "logs/date-file.log",
+      "pattern": "-yyyy-MM-dd",
+      "level":"INFO"
+    }
+  ],
+  "replaceConsole":true
+}

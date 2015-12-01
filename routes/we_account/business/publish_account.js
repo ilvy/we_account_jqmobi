@@ -10,6 +10,7 @@ var dbOperator = require("../../../db/dbOperator"),
     access_token = require('../access_token'),
     wxsign = require('../sign'),
     util = require("../util/util");
+var logger = require("log4js").getLogger("publish_account");
 
 function applyAccount(data,res){
 
@@ -31,7 +32,7 @@ function checkUser(open_id,cb){
     var openId = open_id;
     dbOperator.query("call pro_check_register_by_weAccount(?)",[openId],function(err,rows){
         if(err){
-            console.log(err);
+            logger.error("call pro_check_register_by_weAccount err:",err);
         }
         cb(err,rows[0]);
     });
@@ -53,10 +54,10 @@ function register(req,res){
 //    res.send("**************"+session.name+"*********openId:"+openId);
     dbOperator.query('call pro_register(?,?,?,?,?)',[openId,username,username,pwd,weixin],function(err,rows){
         if(err){
-            console.log(err);
+            logger.error(err);
             res.redirect("/err.html");
         }else{
-            console.log(rows);
+            logger.info("call pro_register results:",rows);
             res.redirect('/we_account/live-room#live_room-'+rows[0][0].room_id);
 //            asyncAccountInfoFromWeix(openId);
         }
@@ -68,7 +69,7 @@ function register(req,res){
  */
 function asyncAccountInfoFromWeix(openid,res){
     accountInfo.getAccountInfo(tokenManager.access_token,openid,function(accountInfo){
-        console.log(accountInfo);
+        logger.debug(accountInfo);
         accountInfo = JSON.parse(accountInfo);
         if(res){
             response.success(accountInfo,res);
@@ -79,9 +80,9 @@ function asyncAccountInfoFromWeix(openid,res){
         var args = [openid,accountInfo.nickname,accountInfo.headimgurl,accountInfo.sex,accountInfo.province+accountInfo.city,accountInfo.country,accountInfo.unionid,accountInfo.subscribe_time];
         dbOperator.query('call pro_weix_account_info(?,?,?,?,?,?,?,?)',args,function(err,rows){
             if(err){
-                console.log(err);
+                logger.debug(err);
             }else{
-                console.log(rows);
+                logger.info(rows);
             }
         });
     });
@@ -102,10 +103,10 @@ function updatePersonality(req,res){
 //    console.log(sql+" "+key+" "+value);
     dbOperator.query(sql,[key,value,open_id],function(err,rows){
         if(err){
-            console.log("personality err:"+err);
+            logger.error("personality err:"+err);
             response.failed("0",res,"");
         }else{
-            console.log(rows);
+            logger.debug(rows);
             response.success("1",res,"");
         }
     });
@@ -129,10 +130,10 @@ function updatePersonality_all(req,res){
     dbOperator.query('call pro_update_weix_account_info(?,?,?,?,?,?,?)',
         [open_id,weixAccount,nickname,sex,city,country,introduce],function(err,rows){
         if(err){
-            console.log("personality err:"+err);
+            logger.error("personality err:"+err);
             response.failed("0",res,"");
         }else{
-            console.log(rows);
+            logger.info(rows);
             response.success("1",res,"");
         }
     });
@@ -154,14 +155,14 @@ function getPersonalInfo(req,res,isHost){
     }
     dbOperator.query("call pro_weix_account_info_get_new(?,?)",args,function(err,row){
         if(err){
-            console.log("pro_weix_account_info_get:"+err);
+            logger.error("pro_weix_account_info_get:"+err);
         }else{
             var user = row[0][0] || {};
-            console.log(user);
+            logger.debug(user);
             if(user.sex){
                 user.sex = user.sex[0];
             }
-            console.log(user);
+            logger.debug(user);
             if(!isHost){
                 response.success({user:user?user:null},res,'');
                 return;
@@ -180,12 +181,12 @@ function publishProduct(req,res){
         params = [products,desc,open_id,title];
     dbOperator.query("call pro_publish(?,?,?,?)",params,function(err,row){
         if(err){
-            console.log(err);
+            logger.error(err);
             response.failed("",res,err);
         }else{
-            console.log(row);
+            logger.debug(row);
             if(row[0][0] && row[0][0]['publish_res'] != 0){
-                console.log(row[0]['publish_res']);
+                logger.info("call pro_publish results:",row[0]['publish_res']);
                 var product_id = row[0][0]["curr_id"];
                 response.success({id:product_id},res);
             }else{
