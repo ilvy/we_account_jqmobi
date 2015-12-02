@@ -284,13 +284,14 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                         '<div class="t-col t-col-2 input-div unit_price" data-type="3" data-discount="'+record.discount+'" data-value="'+((!record.unit_price && record.unit_price != 0)?"":record.unit_price)+'">'+((!record.unit_price && record.unit_price != 0)?"":record.unit_price)+'</div>' +
                         '<div class="t-col t-col-1 extra">删除</div></div>';//<input class="unit_price" data-type="3" type="text" data-value="'+((!record.unit_price && record.unit_price != 0)?"":record.unit_price)+'" placeholder="" value="'+((!record.unit_price && record.unit_price != 0)?"":record.unit_price)+'"/>
                 }
+                record = this.getRecordHasMail(cates);
                 if(!record.mail_free){
                     addMailPay = record.mail_pay;
                     //totalMoney += record.mail_pay;
                 }
                 var mailStr = '<div class="t-row t-row-over-1 mail-row"><div class="t-col t-col-9">' +
                     '<i class="fa '+(record.mail_free?'fa-check-square':'fa-square-o')+' mailFree"></i><span>包邮</span> <span>邮费：</span>' +
-                    '<input type="text" class="mailpay" placeholder="0" value="'+(record.mail_pay?record.mail_pay:"")+'">' +
+                    '<input type="text" class="mailpay" placeholder="0" orgvalue="'+(record.mail_pay?record.mail_pay:"")+'" value="'+(record.mail_pay?record.mail_pay:"")+'">' +
                     '<span class="unit">元</span></div></div>';
                 tableStr += mailStr+'</div>';
                 var cardStr = '<div class="card"><div class="card-title"><div class="caret-wrapper"><i class="fa fa-caret-right card-btn"></i></div>' +
@@ -604,7 +605,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 var $this = $(this);
                 var $card = $(this).parents('.card');
                 if($this.parents("#pay-list").length > 0){
-                    _this.calcBillPay($card);
+                    //_this.calcBillPay($card);
                     var $mailFree;
                     if(($mailFree = $this.siblings('.mailFree')).length > 0){
                         var mail_pay = $mailFree.siblings(".mailpay").val();
@@ -614,7 +615,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                             orders += $row.data("oid") + ',';
                         });
                         orders = orders.substring(0,orders.length - 1);
-                        if(mail_pay == 0 || mail_pay == $(".mailpay").data("value")){
+                        if(mail_pay == $(".mailpay").attr("orgvalue")){
                             return;
                         }
                         if($mailFree.hasClass("fa-check-square")){
@@ -913,6 +914,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                         success:function(results){
                             if(results.flag == 1){
                                 $inputDiv.data("value",value).data('discount',discount).text(value);
+                                _this.calcBillPay($inputDiv.parents(".card"));
                                 $("#light-popup").pop({hidden:'true',callback:function(){
                                     $('.current').removeClass('current');
                                     _this.cleanPopPanel();
@@ -1421,6 +1423,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                         if(isMailFree){
 
                         }
+                        $(".mailpay").attr("orgvalue",mailPay);
                     }else{
 
                     }
@@ -1444,9 +1447,9 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 num = isNaN(num)?0:num;
                 unitPrice = isNaN(unitPrice)?0:unitPrice;
                 total += num * unitPrice;
-                if(($mailpay = $row.find(".mailpay")).length > 0 && $mailpay.siblings('.fa-square-o').length == 0){
-                    total += Number($mailpay.val());
-                }
+                //if(($mailpay = $row.find(".mailpay")).length > 0 && $mailpay.siblings('.fa-square-o').length == 0){
+                //    total += Number($mailpay.val());
+                //}
             });
             $card.find(" .total-quantity").text(total);
         },
@@ -1532,6 +1535,16 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             }
             selectStr += '</select>';
             return selectStr;
+        },
+        getRecordHasMail:function(cates){
+            for(var j = 0; j < cates.length; j++){
+                var record = cates[j];
+                var addMailPay = 0;
+                if(record.mail_free || record.mail_pay){
+                    return record;
+                }
+            }
+            return record;
         },
         showLoading:function(){
             $("#loading").css('display','block');

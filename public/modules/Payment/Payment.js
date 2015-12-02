@@ -11,6 +11,7 @@ define(['router','util'],function(router,util){
             this.addListener();
         },
         do:function(){
+            var _this = this;
             $("#getpay .table .bill-record").remove();
             var url = '/we_account/getpay?room_id='+globalVar.room_id+'&nickname='+globalVar.nickname;
             $.ajax({
@@ -30,17 +31,19 @@ define(['router','util'],function(router,util){
                                 '<div class="t-col t-col-2">'+record.single_total+'</div></div>';
                         }
                         var mailStr = '';
+                        var mail_free = results.data.isMailFree,
+                            mail_pay = results.data.mailPay;
                         if(oidstr){
                             oidstr = oidstr.substring(0,oidstr.length - 1);
                             mailStr = '<div class="t-col-10">' +
-                                '<i class="fa '+(record.mail_free?'fa-check-square':'fa-square-o')+' mailFree_getpay"></i><span>包邮</span> <span>邮费：</span>' +
-                                '<input type="number" class="mailpay_getpay" placeholder="0" data-value="'+(record.mail_pay?record.mail_pay:"")+'" value="'+(record.mail_pay?record.mail_pay:"")+'">' +
+                                '<i class="fa '+(mail_free?'fa-check-square':'fa-square-o')+' mailFree_getpay"></i><span>包邮</span> <span>邮费：</span>' +
+                                '<input type="number" class="mailpay_getpay" placeholder="0" data-value="'+(mail_pay?mail_pay:"")+'" value="'+(mail_pay?mail_pay:"")+'">' +
                                 '<span class="unit">元</span></div>';
                         }
                         $('.collection_object').html(results.data.nickname);
                         $('.mail-detail').data('oid',oidstr).html(mailStr);
                         var total = results.data.total;
-                        $(".total-price").data('total_except_mail',record.mail_free?total:total - record.mail_pay).html('<span>总计：</span>'+'<span class="money" data-addmailpay="'+record.mail_pay+'">'+results.data.total+'</span><span class="money-type">rmb</span>');
+                        $(".total-price").data('total_except_mail',!mail_free?total:total - mail_pay).html('<span>总计：</span>'+'<span class="money" data-addmailpay="'+mail_pay+'">'+results.data.total+'</span><span class="money-type">rmb</span>');
                         $("#getpay .table").append(rowStr);
                     }else if(results.flag == 0){
                         if(results.data == -1){

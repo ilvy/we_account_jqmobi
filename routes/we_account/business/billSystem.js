@@ -310,21 +310,26 @@ function getPayment(req,res,isRequestBySeller){//需要验证openid
         }else{
             logger.debug(rows);
             var data = rows[0] || [];
-            var total = 0;
+            var total = 0,
+                mailRecord;
             for(var i = 0; i < data.length; i++){
                 var quantity = data[i].quantity?Number(data[i].quantity):0,
                     price = data[i].price?Number(data[i].price):0;
                 data[i].single_total = quantity * price;
                 total += data[i].single_total;
+                if(data[i].mail_free || data[i].mail_pay && !mailRecord){
+                    mailRecord = data[i];
+                }
             }
-            if(!data[0].mail_free){
-                total += data[0].mail_pay;
+            !mailRecord ? (mailRecord = data[0]) : "";
+            if(!mailRecord.mail_free){
+                total += mailRecord.mail_pay;
             }
 
             if(!isRequestBySeller){
-                res.render('payment',{dataList:data,roomId:room_id,total:total,isMailFree:data[0].mail_free,mailPay:data[0].mail_pay,nickname:data[0].nickname})
+                res.render('payment',{dataList:data,roomId:room_id,total:total,isMailFree:mailRecord.mail_free,mailPay:mailRecord.mail_pay,nickname:data[0].nickname})
             }else{
-                response.success({dataList:data,roomId:room_id,total:total,isMailFree:data[0].mail_free,mailPay:data[0].mail_pay,nickname:nickname},res,'')
+                response.success({dataList:data,roomId:room_id,total:total,isMailFree:mailRecord.mail_free,mailPay:mailRecord.mail_pay,nickname:nickname},res,'')
             }
         }
     });
