@@ -642,3 +642,29 @@ SELECT c.id cid,o.id oid,p.title product_name,c.c_nickname nickname,o.cost unit_
 commit;
 end; $$
 delimiter ;
+
+
+/************* pro_register **************/
+delimiter $$
+drop procedure if exists pro_register;
+CREATE PROCEDURE `pro_register`(in openId varchar(200),in user_name varchar(200),in email varchar(50),in pwd varchar(100),in weixin varchar(30))
+BEGIN
+	#Routine body goes here...
+START TRANSACTION;
+
+set @isExist = (select count(1) from user where open_id = openId);
+if @isExist > 0 then
+select @isExist isExist;
+else
+set @roomid = (select room_id from room where status = 0 and special_type = 0 limit 1);
+set @now = now();
+insert into user(open_id,user_name,email,pwd,room_id,nickname,weixin,create_time) values(openId,user_name,email,pwd,@roomid,nickname,weixin,@now);
+UPDATE room set status = 1 where room_id = @roomid;
+CALL pro_create_seller_exchange(openId);
+select 0 isExist,@roomid room_id;
+end if;
+
+commit;
+end; $$
+delimiter ;
+

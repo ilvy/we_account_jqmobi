@@ -810,7 +810,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     }
                     return true;
                 }
-            });
+            },true);
             $('.input-div-cost,.input-div.unit_price').touch('click',function(event){
 //                wx.scanQRCode({
 //                    needResult:1,

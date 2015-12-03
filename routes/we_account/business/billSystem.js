@@ -10,6 +10,7 @@ var dbOperator = require("../../../db/dbOperator"),
     async = require('async'),
     we_auth = require('../we_auth');
 var logger =  require("log4js").getLogger("billSystem");
+logger.setLevel("INFO");
 
 /**
  * 买家下订单
