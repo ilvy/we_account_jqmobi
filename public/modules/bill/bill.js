@@ -227,7 +227,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     '<div class="t-col t-col-4 nickname cnickname" data-type="1" data-value="'+record.nickname+'">'+record.nickname+'</div>' +
                     '<div class="t-col t-col-2 quantity" data-value="'+record.quantity+'">' +
                     this.generateNumSelect(100,record.quantity)+'</div>' +
-                    '<div class="t-col t-col-2 input-div input-div-cost unit_cost" data-type="2" data-value="'+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+'" data-exrate="'+record.exchange_rate+'">'+((!record.unit_cost && record.unit_cost != 0)?"":this.exchangeMoney(record.unit_cost,record.exchange_rate))+'</div>' +
+                    '<div class="t-col t-col-2 input-div input-div-cost unit_cost" data-type="2" data-value="'+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+'" data-exrate="'+record.exchange_rate+'">'+((!record.unit_cost && record.unit_cost !== 0)?"":this.exchangeMoney(record.unit_cost,record.exchange_rate))+'</div>' +
                     '<div class="t-col t-col-1 buy-status"><i class="fa fa-square-o"></i></div>' +
                     '<div class="t-col t-col-1 extra">删除</div></div>';
                 if(type == 'c'){
@@ -1068,8 +1068,8 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                             product_name: title,
                             quantity: quantity,
                             status: 1,
-                            unit_cost: cost == -1?'':cost,
-                            unit_price: price == -1? "":price,
+                            unit_cost: cost == -1?null:cost,
+                            unit_price: price == -1? null:price,
                             remark:remark
                         });
                         $("#order-list-content").removeClass("billSystem-short");

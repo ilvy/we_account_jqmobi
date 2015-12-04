@@ -6,6 +6,7 @@ define(['router','util'],function(router,util){
         this.init();
     };
     Payment.prototype = {
+        orgPrice:0,//除去邮费的总价
         init:function(){
             this.do();
             this.addListener();
@@ -37,13 +38,14 @@ define(['router','util'],function(router,util){
                             oidstr = oidstr.substring(0,oidstr.length - 1);
                             mailStr = '<div class="t-col-10">' +
                                 '<i class="fa '+(mail_free?'fa-check-square':'fa-square-o')+' mailFree_getpay"></i><span>包邮</span> <span>邮费：</span>' +
-                                '<input type="number" class="mailpay_getpay" placeholder="0" data-value="'+(mail_pay?mail_pay:"")+'" value="'+(mail_pay?mail_pay:"")+'">' +
+                                '<input type="number" class="mailpay_getpay" placeholder="0"  data-value="'+(mail_pay?mail_pay:"")+'" value="'+(mail_pay?mail_pay:"")+'">' +
                                 '<span class="unit">元</span></div>';
                         }
                         $('.collection_object').html(results.data.nickname);
                         $('.mail-detail').data('oid',oidstr).html(mailStr);
                         var total = results.data.total;
-                        $(".total-price").data('total_except_mail',!mail_free?total:total - mail_pay).html('<span>总计：</span>'+'<span class="money" data-addmailpay="'+mail_pay+'">'+results.data.total+'</span><span class="money-type">rmb</span>');
+                        _this.orgPrice = !mail_free?total - mail_pay:total;
+                        $(".total-price").data('total_except_mail',!mail_free?total - mail_pay:total).html('<span>总计：</span>'+'<span class="money" data-addmailpay="'+mail_pay+'">'+results.data.total+'</span><span class="money-type">rmb</span>');
                         $("#getpay .table").append(rowStr);
                     }else if(results.flag == 0){
                         if(results.data == -1){
@@ -118,7 +120,7 @@ define(['router','util'],function(router,util){
                 success:function(results){
                     if(results.flag == 1){
                         $(".mailpay_getpay").data("value",mailPay);
-                        var total = Number($('.total-price').data('total_except_mail'));
+                        var total = _this.orgPrice;//Number($('.total-price').data('total_except_mail'));
                         if(!isMailFree){
                             total += Number(mailPay||0);
                         }

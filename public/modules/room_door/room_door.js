@@ -1,7 +1,7 @@
 /**
  * Created by man on 15-4-16.
  */
-define(['router','jqmobiTouch'],function(router){
+define(['router','touchEvent'],function(router){
     function RoomDoor(){
         this.init = function(){
             this.do();
@@ -12,7 +12,7 @@ define(['router','jqmobiTouch'],function(router){
             $("#room").val("");//清空
         }
         this.addListener = function(){
-            $(document).on("vclick",".submit-div",function(){
+            $(".submit-div").touch("click",function(){
                 var room = encodeURI($("#room").val().trim());
                 if(room.length > 20){
                     alert("输入不合法");
@@ -37,7 +37,7 @@ define(['router','jqmobiTouch'],function(router){
                         }
                     })
                 }
-            });
+            },true);
         }
     }
     globalVar.modules['room_door'] = new RoomDoor().init();

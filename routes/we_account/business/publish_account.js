@@ -11,6 +11,7 @@ var dbOperator = require("../../../db/dbOperator"),
     wxsign = require('../sign'),
     util = require("../util/util");
 var logger = require("log4js").getLogger("publish_account");
+logger.setLevel("INFO");
 
 function applyAccount(data,res){
 
