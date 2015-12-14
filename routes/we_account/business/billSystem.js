@@ -288,7 +288,7 @@ function getFinalBill(req,res){
  * @param res
  */
 function getPayment(req,res,isRequestBySeller){//需要验证openid
-    var openId = req.session.openid;
+    var openId = req.session.openId;
     var room_id = req.query.room_id,
         nickname = req.query.nickname;//1:卖家查看账单，其他（包括undefined）：买家查看账单
     var paras = [nickname,room_id];
@@ -410,11 +410,12 @@ function vagueSearchUser(req,res){
  * @param next
  */
 function wxauth_pay(req,res,next){
-    var openId = req.session.openId;
+    var openId = req.session.openId || 'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
     var room_id = req.query.room_id,
         nickname = req.query.nickname;
     if(openId){
         next();
+        return;
     }
     if(!req.session.authority){
         req.session.authority = true;

@@ -7,7 +7,7 @@ html
         title 亲，清单到了，请查收
         meta(charset='utf-8')
         meta(name="viewport",content="width=device-width,initial-scale=1.0,user-scalable=no")
-        link(rel='stylesheet', href='/css/mystyle.css')
+        link(rel='stylesheet', href='/stylesheets/mystyle.css')
         //link(rel='stylesheet', href='/build/css/af.ui.base.min.css')
         link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css')
     body
@@ -17,16 +17,16 @@ html
                 span 的账单
             .table
                 .t-row.t-row-header
-                    .t-col.t-col-2 品名
+                    .t-col.t-col-4 品名
                     .t-col.t-col-2 数量
-                    .t-col.t-col-2 备注
+                    //.t-col.t-col-2 备注
                     .t-col.t-col-2 价格
                     .t-col.t-col-2 总计
                 each record,i in dataList
                     .t-row
-                        .t-col.t-col-2 #{record.title}
+                        .t-col.t-col-4 #{record.title}
                         .t-col.t-col-2 #{record.quantity}
-                        .t-col.t-col-2 #{record.remark}
+                        //.t-col.t-col-2 #{record.remark}
                         .t-col.t-col-2 #{record.price}
                         .t-col.t-col-2 #{record.single_total}
             .mail-detail

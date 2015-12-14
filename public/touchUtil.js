@@ -149,7 +149,7 @@ var startX,endX,startY,endY;
                     endX = event.clientX;
                     event.$this = $(this);
 //                    alert("swipeLeft "+$this.attr("touchstart"))
-                    if(startX - endX < 60){
+                    if(startX - endX < 10){
 //                        alert('short')
                         return;
                     }
@@ -169,7 +169,7 @@ var startX,endX,startY,endY;
                     endX = event.clientX;
                     var $this = event.$this = $(this);
                     $this.parents('.t-row').attr("touchstart",0);
-                    if(startX - endX < 60){
+                    if(startX - endX < 10){
 //                        alert('short 2')
                         return;
                     }
