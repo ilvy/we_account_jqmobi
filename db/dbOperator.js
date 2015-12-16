@@ -269,6 +269,43 @@ exports.query = query;
 //    }
 //});
 
-//query("select * from t_customer where c_nickname = '杜立' and seller_room_id = '20034'",[],function(err,rows){
+//query("select * from t_customer where c_nickname = '张姐' and seller_room_id = '20003'",[],function(err,rows){
 //    console.log(rows);
 //})
+
+
+//query("select distinct open_id from t_weix_account_info where nickname = '张姐'",[],function(err,rows){
+//    console.log(rows);
+//})
+
+
+
+//query("call pro_add_order_by_seller_new('张姐','koji包包小号318','','','oxfQVs6ds6dBEan1paynrNM80UYo','','1192','1','269','318')",[],function(err,rows){
+//    if(err){
+//        console.log(err);
+//    }else{
+//        console.log(rows);
+//    }
+//})
+
+
+
+//query("select o.id from t_order o , t_customer c" +
+//    " where o.c_id = c.id AND o.product_id = 1192 AND c.c_openid = 'oxfQVs8Um5S4Fx87reqxLV3kqkvw'  AND c.seller_room_id = '20003' AND STATUS = 3 ",[],function(err,rows){
+//    if(err){
+//        console.log(err);
+//    }else{
+//        console.log(rows);
+//    }
+//})
+
+
+query("SELECT * from t_customer c JOIN user u" +
+    " ON c.seller_room_id = u.room_id " +
+    " WHERE c.seller_room_id = '20003' AND c.c_openid = 'oxfQVs8Um5S4Fx87reqxLV3kqkvw'and c.c_status = 1",[],function(err,rows){
+    if(err){
+        console.log(err);
+    }else{
+        console.log(rows);
+    }
+})

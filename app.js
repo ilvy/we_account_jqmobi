@@ -5,6 +5,7 @@ var favicon = require('serve-favicon');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+//var compression = require('compression');
 var log4js = require('log4js');
 var log = log4js.getLogger("app");
 
@@ -31,6 +32,7 @@ app.use(log4js.connectLogger(log4js.getLogger("http"), { level: 'auto' }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+//app.use(compression());
 app.use(express.static(path.join(__dirname, 'public'),{
     etag:true,
     maxAge:'86400',
