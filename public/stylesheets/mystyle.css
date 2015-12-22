@@ -646,7 +646,7 @@ input.invalid{
     bottom: 0;
 }
 
-#search-user-panel,#search-products-panel{
+#search-user-panel,#search-products-panel,ul#search-cates-panel{
     position: absolute;
     display: none;
     background: white;
@@ -656,9 +656,12 @@ input.invalid{
     /*border: 1px solid #cdcdcd;*/
     padding-left: 0px;
     z-index: 10000;
+    max-height: 200px;
+    overflow-y: auto;
+    border-bottom: 1px solid #cdcdcd;
 }
 
-#search-user-panel > li,#search-products-panel > li{
+#search-user-panel > li,#search-products-panel > li,ul#search-cates-panel > li{
     font-size: 1rem;
     padding: 0.6rem;
     border: 1px solid #cecece;

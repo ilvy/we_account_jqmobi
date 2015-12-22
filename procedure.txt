@@ -155,14 +155,13 @@ delimiter ;
 delimiter $$
 drop procedure if exists pro_add_order_by_seller_new;
 create procedure pro_add_order_by_seller_new(in cnickname varchar(50),in product_name varchar(40),in text varchar(600),in image_urls varchar(200),in sell_open_id varchar(200),in remark varchar(60),in productid int
-,in in_quantity int,in cost int,in price int,in discount decimal(4,2),in cate_id int,in cate_name varchar(50))
+,in in_quantity int,in cost int,in price int,in discount decimal(4,2),in cate_name varchar(50))
 begin
 
 start transaction;
 
 set @now = now();
 set @pname = product_name;
-set @cateId = cate_id;
 set @sell_room_id = (select room_id from user where open_id = sell_open_id);
 set @openId = (select distinct open_id from t_weix_account_info where nickname = cnickname);-- 第一步、1先根据昵称获取买家openId
 if @openId is null then
@@ -184,31 +183,14 @@ end if;
 if @productId is null then
 insert into product(image_url,text,room_id,create_time,status,title) values(image_urls,text,@sell_room_id,@now,1,@pname);-- 第二步、发布商品
 set @productId = (select last_insert_id());
-call pro_take_order_by_seller(@openId,@sell_room_id,remark,@productId,in_quantity,@now,cost,price,discount,@oid,cate_id,cate_name);-- 第三步、下单
+call pro_take_order_by_seller_new(@openId,@sell_room_id,remark,@productId,in_quantity,@now,cost,price,discount,cate_name,@oid);-- 第三步、下单
 else
-call pro_take_order_by_seller(@openId,@sell_room_id,remark,@productId,in_quantity,@now,cost,price,discount,@oid,cate_id,cate_name);-- 第三步、下单
+call pro_take_order_by_seller_new(@openId,@sell_room_id,remark,@productId,in_quantity,@now,cost,price,discount,cate_name,@oid);-- 第三步、下单
 end if;
 
 select @productId product_id,@oid order_id,c.id c_id
 from t_customer c
 where c.c_nickname = cnickname and c.seller_room_id = @sell_room_id;
-
-commit;
-
-end; $$
-delimiter ;
-
-/****************** 添加分类 ******************/
-delimiter $$
-drop procedure if exists pro_add_category;
-create procedure pro_add_category(in cate_type tinyint,in cate_name varchar(50),out cate_id int)
-begin
-
-start transaction;
-
-insert into t_category(cate_type,cate_name)
-  select case when cate_type is null then 1 else cate_type end,cate_name;
-set cate_id = (select last_insert_id());
 
 commit;
 
@@ -295,10 +277,10 @@ set @update_count = (SELECT ROW_COUNT());
 
 -- 下单 pro_take_order_by_seller
 delimiter $$
-drop procedure if exists pro_take_order_by_seller;
+drop procedure if exists pro_take_order_by_seller_new;
 -- CREATE  PROCEDURE pro_take_order_by_seller(in c_open_id varchar(200),in sell_room_id varchar(16),in order_remark varchar(60),in productid int,in in_quantity int,in create_time datetime,in in_cost int,in in_price int,out o_id int)
-CREATE  PROCEDURE pro_take_order_by_seller(in c_open_id varchar(200),in sell_room_id varchar(16),in order_remark varchar(60),in productid int,in in_quantity int,in create_time datetime,
-                                           in in_cost int,in in_price int,in _discount decimal(4,2),out o_id int,in cate_id int,in cate_name varchar(50))
+CREATE  PROCEDURE pro_take_order_by_seller_new(in c_open_id varchar(200),in sell_room_id varchar(16),in order_remark varchar(60),in productid int,in in_quantity int,in create_time datetime,
+                                           in in_cost int,in in_price int,in _discount decimal(4,2),in cate_name varchar(50),out o_id int)
 BEGIN
 
 START TRANSACTION;
@@ -326,14 +308,9 @@ set @update_count = (SELECT ROW_COUNT());
         end if;
 
       -- 添加分类
-        set @cateId;
-        if cate_id is null then
-        call pro_add_category(1,cate_name,@cateId);
-        else
-        @cateId = cate_id;
-        end if;
+       call pro_add_category(1,cate_name,@cateId);
 
-            INSERT INTO t_order(product_id,c_id,status,quantity,create_time,exchange_rate,exchange_type,cost,price,remark,_discount,cate_id)
+            INSERT INTO t_order(product_id,c_id,status,quantity,create_time,exchange_rate,exchange_type,cost,price,remark,discount,cate_id)
                 SELECT productid ,c.id,1,in_quantity,create_time,r.exchange_rate,r.exchange_type,case when in_cost = -1 then null else in_cost end,case when in_price = -1 then null else in_price end,order_remark,_discount,@cateId
                     FROM t_customer c JOIN user u
                     ON c.seller_room_id = u.room_id
@@ -672,14 +649,14 @@ delimiter ;
 
 /****************pro_get_order_info******************/
 delimiter $$
-drop procedure if exists pro_get_order_info;
-CREATE PROCEDURE `pro_get_order_info`(in openid varchar(100),in order_status tinyint)
+drop procedure if exists pro_get_order_info_new;
+CREATE PROCEDURE `pro_get_order_info_new`(in openid varchar(100),in order_status tinyint)
 BEGIN
 	#Routine body goes here...
 START TRANSACTION;
 
 SELECT c.id cid,o.id oid,p.id product_id,p.title product_name,c.c_nickname nickname,o.quantity,o.`status`,
-    o.remark,o.cost unit_cost,o.price unit_price,o.mail_free,o.mail_pay,c.seller_room_id room_id,o.exchange_rate,o.discount
+    o.remark,o.cost unit_cost,o.price unit_price,o.mail_free,o.mail_pay,c.seller_room_id room_id,o.exchange_rate,o.discount,o.cate_id,ca.cate_name
 from t_customer c
     JOIN `user` u1
   ON c.seller_room_id = u1.room_id and c.c_status = 1
@@ -687,6 +664,8 @@ from t_customer c
   on c.id = o.c_id
     JOIN product p
   ON o.product_id = p.id
+    JOIN t_category ca
+  on o.cate_id = ca.id
   WHERE o.`status` = order_status AND u1.open_id = openid and c.c_status = 1
   ORDER BY p.title,o.remark ASC;
 
@@ -764,6 +743,41 @@ commit;
 end; $$
 delimiter ;
 
+/************* 模糊匹配分类信息 **************/
+delimiter $$
+drop procedure if exists pro_vague_search_category;
+CREATE PROCEDURE `pro_vague_search_category`(in cate varchar(100))
+BEGIN
+	#Routine body goes here...
+START TRANSACTION;
+
+select id,cate_name from t_category where cate_name like cate;
+
+commit;
+end; $$
+delimiter ;
+
+/****************** 添加分类 ******************/
+delimiter $$
+drop procedure if exists pro_add_category;
+create procedure pro_add_category(in cateType tinyint,in cateName varchar(50),out cate_id int)
+begin
+
+start transaction;
+
+set @cateId = (select cate_id from t_category where cate_name = cateName);
+if @cateId is null then
+    insert into t_category(cate_type,cate_name)
+      select cateType,cateName;
+    set cate_id = @cateId;
+else
+    set cate_id = @cateId;
+end if;
+
+commit;
+
+end; $$
+delimiter ;
 
 /************** category table **************/
 create table t_category(id int primary key auto_increment,cate_type tinyint default 1,cate_name varchar(50));

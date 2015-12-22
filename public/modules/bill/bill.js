@@ -732,7 +732,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     top = offset.top,
                     inputHeight = $this.height(),
                     inputWidth = $this.width();
-                 var nickname = $this.val();
+                var nickname = $this.val();
                 if(nickname == '' || nickname.length == 0){
 
                 }
@@ -743,6 +743,33 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 });
                 _this.vagueMatchNames(nickname);
             });
+
+            $(document).on("input","#aopc_cate",function(event){
+                var $this = $(this);
+                var vagueStr = $this.val();
+                var url = "/we_account/vague_cate?cate="+vagueStr;
+                var offset = $this.offset();
+                $.ajax({
+                    url:url,
+                    success:function(results){
+                        if(results.flag == 1){
+                            _this.renderVagueSearch("#search-cates-panel",results.data,"cate_name");
+                            $("#search-cates-panel").css({
+                                width:$this.width() + 30,
+                                top:offset.top + $this.height() + 1,
+                                left:offset.left
+                            }).addClass('visible');
+                        }
+                    }
+                })
+            });
+
+            $("#search-cates-panel li").touch("click",function(event){
+                var $this = event.$this;
+                var cate = $this.text();
+                $("#search-cates-panel").removeClass('visible');
+                $("#aopc_cate").val(cate);
+            },true);
 
             $('#vagueBox > li').touch('click',function(event){
                 var $this = event.$this;
@@ -1046,9 +1073,11 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     cost = ($("#aoppurchase_money").val() == ''?-1:$("#aoppurchase_money").val()),
                     price = ($("#aopprice_money").val() == ''?-1:$("#aopprice_money").val()),
                     productId = $("#addOrderPanel").data("productid"),
-                    remark = $("#aopo_remark").val();
+                    remark = $("#aopo_remark").val(),
+                    cate = $("#aopc_cate").val();
                 var title = $titleWrapper[0].tagName.toLowerCase() == 'span'?$titleWrapper.text() : $titleWrapper.val();
-                var url = "/we_account/add_order?title="+title+"&desc="+desc+"&quantity="+quantity+"&cost="+cost+"&price="+price+"&nickname="+nickname+"&productid="+productId+"&remark="+remark;
+                var url = "/we_account/add_order?title="+title+"&desc="+desc+"&quantity="+quantity+"&cost="+cost+"&price="+price+
+                    "&nickname="+nickname+"&productid="+productId+"&remark="+remark+"&cate="+cate;
                 $.ajax({
                     url:url,
                     type:'post'
@@ -1070,7 +1099,8 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                             status: 1,
                             unit_cost: cost == -1?null:cost,
                             unit_price: price == -1? null:price,
-                            remark:remark
+                            remark:remark,
+                            cate:cate
                         });
                         $("#order-list-content").removeClass("billSystem-short");
                         $("#addOrderPanel").pop({hidden:true});
@@ -1156,7 +1186,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     type:"get"
                 }).success(function(results){
                     if(results.flag == 1){
-                        _this.renderSearchProductPanel("#search-products-panel",results.data);
+                        _this.renderVagueSearch("#search-products-panel",results.data,"product_name");
                         $("#search-products-panel").css({
                             width:$productInput.width() + 30,
                             top:offset.top + $productInput.height() + 1,
@@ -1310,11 +1340,11 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             }
             $(wrapperSelector).html(listr);
         },
-        renderSearchProductPanel:function(wrapperSelector,products){
-            var len = products.length,
+        renderVagueSearch:function(wrapperSelector,datas,colname){
+            var len = datas.length,
                 listr = "";
             for(var i = 0; i < len; i++){
-                listr += '<li data-id="'+products[i].id+'">'+products[i].product_name+'</li>';
+                listr += '<li data-id="'+datas[i].id+'">'+datas[i][colname]+'</li>';
             }
             $(wrapperSelector).html(listr);
         },

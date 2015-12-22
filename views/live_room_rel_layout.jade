@@ -306,6 +306,9 @@ html
             .long-tap-tip 长按扫码添加代手微信
         #addOrderPanel.light-popup
             //(style="display:block;background-color: white;z-index: 100000;opacity:1")
+            .aop_category.col-xxs-11.col-xxs-offset-1.no-horizontal-padding
+                span.col-xxs-3.no-horizontal-padding 分类：
+                input(type="text" placeholder="建议按地址分类，例：铜锣湾")#aopc_cate.aopc_cate.col-xxs-7.no-horizontal-padding
             .aop_product.col-xxs-11.col-xxs-offset-1.no-horizontal-padding
                 span.col-xxs-3.no-horizontal-padding 品名：
                 .ap_box.col-xxs-7.no-horizontal-padding
@@ -347,6 +350,7 @@ html
             .aop_btn_group.col-xxs-6.col-xxs-offset-3.no-horizontal-padding
                 input(type="button" value="取消")#aop_seller_cancel.aop_cancel.yellow-btn.col-xxs-5
                 input(type="button" value="确定")#aop_seller_submit.aop_submit.green-btn.col-xxs-5.col-xxs-offset-2
+        ul#search-cates-panel
         ul#search-products-panel
         ul#search-user-panel
         #search-customers-panel

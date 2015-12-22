@@ -300,9 +300,16 @@ exports.query = query;
 //})
 
 
-query("SELECT * from t_customer c JOIN user u" +
-    " ON c.seller_room_id = u.room_id " +
-    " WHERE c.seller_room_id = '20003' AND c.c_openid = 'oxfQVs8Um5S4Fx87reqxLV3kqkvw'and c.c_status = 1",[],function(err,rows){
+//query("SELECT * from t_customer c JOIN user u" +
+//    " ON c.seller_room_id = u.room_id " +
+//    " WHERE c.seller_room_id = '20003' AND c.c_openid = 'oxfQVs8Um5S4Fx87reqxLV3kqkvw'and c.c_status = 1",[],function(err,rows){
+//    if(err){
+//        console.log(err);
+//    }else{
+//        console.log(rows);
+//    }
+//})
+query("call pro_vague_search_category('%defa%')",[],function(err,rows){
     if(err){
         console.log(err);
     }else{

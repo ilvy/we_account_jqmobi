@@ -373,9 +373,11 @@ function addOrderBySeller(req,res){
         productid = req.query.productid || -1,
         in_quantity = req.query.quantity,
         cost = req.query.cost,
-        price = req.query.price;
+        price = req.query.price,
+        discount = 1,
+        cate = req.query.cate;
     var openId = req.session.openId || "oxfQVswUSy2KXBPOjNi_BqdNI3aA";
-    dbOperator.query("call pro_add_order_by_seller(?,?,?,?,?,?,?,?,?,?)",[nickname,title,desc,image_urls,openId,remark,productid,in_quantity,cost,price],function(err,rows){
+    dbOperator.query("call pro_add_order_by_seller_new(?,?,?,?,?,?,?,?,?,?,?,?)",[nickname,title,desc,image_urls,openId,remark,productid,in_quantity,cost,price,discount,cate],function(err,rows){
         if(err){
             logger.error("call pro_add_order_by_seller err:",err);
         }else{
@@ -477,6 +479,31 @@ function updateOrderInfo(req,res){
     })
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ */
+function vagueCate(req,res){
+    var cate = req.query.cate;
+    dbOperator.query("call pro_vague_search_category(?)",['%'+cate+'%'],function(err,rows){
+        if(err){
+            logger.error("call pro_vague_search_category err:",err);
+            response.failed(-1,res,"");
+        }else{
+            if(rows && rows[0]){
+                if(rows[0].length){
+                    response.success(rows[0],res,"");
+                }else{
+                    response.success(0,res,"");
+                }
+            }else{
+                response.failed(0,res,"");
+            }
+        }
+    })
+}
+
 exports.takeOrder = takeOrder;
 exports.filter_takeOrder = filter_takeOrder;
 exports.getBillList = getBillList;
@@ -493,3 +520,4 @@ exports.addOrderBySeller = addOrderBySeller;
 exports.vagueSearchUser = vagueSearchUser;
 exports.wxauth_pay = wxauth_pay;
 exports.updateOrderInfo = updateOrderInfo;
+exports.vagueCate = vagueCate;
