@@ -699,7 +699,7 @@ input.invalid{
 }
 
 #search-customers-panel > ul > li:last-child,#search-user-panel > li:last-child{
-    border-bottom: 1px solid #cecece;
+    /* border-bottom: 1px solid #cecece; */
 }
 
 #scp-cancel-btn{

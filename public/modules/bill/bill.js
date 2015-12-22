@@ -1371,7 +1371,8 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
          * 加单完成后，清理加单panel
          */
         cleanOrderPanel:function(){
-            $("input.required").val("");
+            $("input.required,#aopc_cate").val("");
+            $(".cpanel").removeClass("visible");
             $("#aopq_quantity option").eq(1).attr('checked',true);
         },
         /**

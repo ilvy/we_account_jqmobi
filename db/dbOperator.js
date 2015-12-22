@@ -309,10 +309,19 @@ exports.query = query;
 //        console.log(rows);
 //    }
 //})
-query("call pro_vague_search_category('%defa%')",[],function(err,rows){
+query("call pro_add_category(1,'钵兰街',@test)",[],function(err,rows){
     if(err){
         console.log(err);
     }else{
         console.log(rows);
     }
 })
+//query("select c.* from t_customer c join t_weix_account_info w " +
+//    "on c.c_openid = w.open_id " +
+//    "where (c.c_nickname = '鷠皇Niklaus' or w.nickname = '鷠皇Niklaus') and c.seller_room_id = '888888';",[],function(err,rows){
+//    if(err){
+//        console.log(err);
+//    }else{
+//        console.log(rows);
+//    }
+//})

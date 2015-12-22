@@ -190,13 +190,19 @@ end if;
 
 select @productId product_id,@oid order_id,c.id c_id
 from t_customer c
-where c.c_nickname = cnickname and c.seller_room_id = @sell_room_id;
+join t_weix_account_info w
+on c.c_openid = w.open_id
+where (c.c_nickname = cnickname or w.nickname = cnickname) and c.seller_room_id = @sell_room_id;
 
 commit;
 
 end; $$
 delimiter ;
 
+select c.* from t_customer c
+join t_weix_account_info w
+on c.c_openid = w.open_id
+where (c.c_nickname = '鷠皇Niklaus' or w.nickname = '鷠皇Niklaus') and c.seller_room_id = '888888';
 
 /***************通过账单确认补全未关注的买家信息***************/
 
@@ -765,7 +771,7 @@ begin
 
 start transaction;
 
-set @cateId = (select cate_id from t_category where cate_name = cateName);
+set @cateId = (select min(id) from t_category where cate_name = cateName);
 if @cateId is null then
     insert into t_category(cate_type,cate_name)
       select cateType,cateName;
