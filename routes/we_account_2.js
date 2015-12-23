@@ -147,6 +147,7 @@ router.get("/goto_publish",function(req,resp){
         appId = appConfig.appId,
         appSecret = appConfig.appSecret,
         type = query.type;
+    session.isPublisher = type==1 ? 1:0;
     var url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid='+appId+'&secret='+appSecret+'' +
         '&code='+code+'&grant_type=authorization_code';
     https.get(url,function(res){

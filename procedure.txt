@@ -190,7 +190,7 @@ end if;
 
 select @productId product_id,@oid order_id,c.id c_id
 from t_customer c
-join t_weix_account_info w
+left join t_weix_account_info w
 on c.c_openid = w.open_id
 where (c.c_nickname = cnickname or w.nickname = cnickname) and c.seller_room_id = @sell_room_id;
 
@@ -331,6 +331,8 @@ set @update_count = (SELECT ROW_COUNT());
   end; $$
   delimiter ;
 
+
+ call pro_add_order_by_seller_new('cassie','quchengshiyagao','','','oxfQVswUSy2KXBPOjNi_BqdNI3aA','','-1','1','-1','-1',1,'hkwalmart')
 ------------bought tobuylist to getpaylist-------------start
 
 delimiter $$
@@ -775,7 +777,7 @@ set @cateId = (select min(id) from t_category where cate_name = cateName);
 if @cateId is null then
     insert into t_category(cate_type,cate_name)
       select cateType,cateName;
-    set cate_id = @cateId;
+    set cate_id = (select last_insert_id());
 else
     set cate_id = @cateId;
 end if;

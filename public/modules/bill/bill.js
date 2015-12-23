@@ -103,9 +103,60 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 }
             });
         },
+//        dealOrderList:function(data,isAppend){
+//            if(!isAppend){
+//                $("#order-list-content").html("");
+//            }
+//            if(!(data && data.length > 0)){
+//                return;
+//            }
+//            var quantity = 0,cards = {};
+//            for(var i = 0; i < data.length; i++){
+//                var record = data[i];
+//                if(!cards[record.product_name+"_"+record.product_id]){
+//                    cards[record.product_name+"_"+record.product_id] = [];
+//                }
+//                cards[record.product_name+"_"+record.product_id].push(record);
+//            }
+//            for(var key in cards){
+//                var cates = cards[key];
+//                var quantity = 0;
+//                var procductName = cates[0].product_name;
+//                var tableStr = '<div class="table"><div class="t-row t-row-over-1 t-row-header">' +
+//                    '<div class="t-col t-col-4">买家</div><div class="t-col t-col-2">数量</div>' +
+//                    '<div class="t-col t-col-2">进价</div>' +
+//                    '<div class="t-col t-col-1">状态</div><div class="t-col t-col-1 extra">操作</div></div>';
+//                for(var j = 0; j < cates.length; j++){
+//                    var record = cates[j];
+//                    quantity += record.quantity;
+////                    tableStr += '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'><div class="t-col t-col-4 nickname" data-type="1" data-value="'+record.nickname+'" contenteditable="true">'+record.nickname+'</div>' +
+////                        '<div class="t-col t-col-2 quantity" data-value="'+record.quantity+'"><div class="sub"><i class="fa fa-caret-left"></i></div>' +
+////                        '<div class="num" contenteditable="true">'+record.quantity+'</div><div class="add"><i class="fa fa-caret-right"></i></div></div>' +
+////                        '<div class="t-col t-col-2 input-div input-div-cost unit_cost" data-type="2" data-value="'+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+'" data-exrate="'+record.exchange_rate+'">'+((!record.unit_cost && record.unit_cost != 0)?"":this.exchangeMoney(record.unit_cost,record.exchange_rate))+'</div>' +
+////                        '<div class="t-col t-col-1 buy-status"><i class="fa fa-square-o"></i></div>' +
+////                        '<div class="t-col t-col-1 extra">删除</div></div>';
+//                    tableStr += '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'><div class="t-col t-col-4 nickname cnickname" data-type="1" data-value="'+record.nickname+'" >'+record.nickname+'</div>' +
+//                        '<div class="t-col t-col-2 quantity" data-value="'+record.quantity+'">' +
+//                        this.generateNumSelect(100,record.quantity)+'</div>' +
+//                        '<div class="t-col t-col-2 input-div input-div-cost unit_cost" data-type="2" data-price="'+((!record.unit_price && record.unit_price != 0)?"":record.unit_price)+'" ' +
+//                        'data-value="'+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+'" data-exrate="'+record.exchange_rate+'">'+((!record.unit_cost && record.unit_cost != 0)?"":this.exchangeMoney(record.unit_cost,record.exchange_rate))+'</div>' +
+//                        '<div class="t-col t-col-1 buy-status"><i class="fa fa-square-o"></i></div>' +
+//                        '<div class="t-col t-col-1 extra">删除</div></div>';
+//                }
+//                tableStr += '</div>';
+//                var cardStr = '<div class="card"><div class="card-title">' +
+//                    '<div class="caret-wrapper"><i class="fa fa-caret-right card-btn"></i></div><div class="product"><span>商品：</span><span class="name">'+procductName+'</span> ×<span class="total-quantity"> '+quantity+'</span> </div>' +
+//                    '<div class="all-status ignore"><span>买到:</span><i class="fa fa-square-o"></i></div></div>';
+//                var lastRow = '<div class="extra-row"><div class="t-col-5 product-detail" data-pid="'+key.split('_')[1]+'">【商品详情】</span></div>' +
+//                    '<div class="t-col-5 order-add"><input class="order-add-btn" type="button" value="加单"/></div></div>';
+//                cardStr += tableStr + lastRow +'</div>';
+//                $("#order-list-content").append(cardStr);
+//            }
+//        },
         dealOrderList:function(data,isAppend){
             if(!isAppend){
                 $("#order-list-content").html("");
+                var $existCate = false;
             }
             if(!(data && data.length > 0)){
                 return;
@@ -113,45 +164,70 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             var quantity = 0,cards = {};
             for(var i = 0; i < data.length; i++){
                 var record = data[i];
-                if(!cards[record.product_name+"_"+record.product_id]){
-                    cards[record.product_name+"_"+record.product_id] = [];
+                if(!cards[record.cate_name]){
+                    cards[record.cate_name] = {};
                 }
-                cards[record.product_name+"_"+record.product_id].push(record);
+                if(!cards[record.cate_name][record.product_name+"_"+record.product_id]){
+                    cards[record.cate_name][record.product_name+"_"+record.product_id] = [];
+                }
+                cards[record.cate_name][record.product_name+"_"+record.product_id].push(record);
             }
-            for(var key in cards){
-                var cates = cards[key];
-                var quantity = 0;
-                var procductName = cates[0].product_name;
-                var tableStr = '<div class="table"><div class="t-row t-row-over-1 t-row-header">' +
-                    '<div class="t-col t-col-4">买家</div><div class="t-col t-col-2">数量</div>' +
-                    '<div class="t-col t-col-2">进价</div>' +
-                    '<div class="t-col t-col-1">状态</div><div class="t-col t-col-1 extra">操作</div></div>';
-                for(var j = 0; j < cates.length; j++){
-                    var record = cates[j];
-                    quantity += record.quantity;
+            var orderlistStr = '';
+            for(var cateName in cards){
+                var categoryCards = cards[cateName];
+                var categoryStr = (isAppend && ($existCate = this.checkExistCate(cateName))) ? "" : '<div class="'+cateName+'"><div class="category title">'+cateName+'</div>';
+                for(var key in categoryCards){
+                    var cates = categoryCards[key];
+                    var quantity = 0;
+                    var procductName = cates[0].product_name;
+                    var tableStr = '<div class="table"><div class="t-row t-row-over-1 t-row-header">' +
+                        '<div class="t-col t-col-4">买家</div><div class="t-col t-col-2">数量</div>' +
+                        '<div class="t-col t-col-2">进价</div>' +
+                        '<div class="t-col t-col-1">状态</div><div class="t-col t-col-1 extra">操作</div></div>';
+                    for(var j = 0; j < cates.length; j++){
+                        var record = cates[j];
+                        quantity += Number(record.quantity);
 //                    tableStr += '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'><div class="t-col t-col-4 nickname" data-type="1" data-value="'+record.nickname+'" contenteditable="true">'+record.nickname+'</div>' +
 //                        '<div class="t-col t-col-2 quantity" data-value="'+record.quantity+'"><div class="sub"><i class="fa fa-caret-left"></i></div>' +
 //                        '<div class="num" contenteditable="true">'+record.quantity+'</div><div class="add"><i class="fa fa-caret-right"></i></div></div>' +
 //                        '<div class="t-col t-col-2 input-div input-div-cost unit_cost" data-type="2" data-value="'+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+'" data-exrate="'+record.exchange_rate+'">'+((!record.unit_cost && record.unit_cost != 0)?"":this.exchangeMoney(record.unit_cost,record.exchange_rate))+'</div>' +
 //                        '<div class="t-col t-col-1 buy-status"><i class="fa fa-square-o"></i></div>' +
 //                        '<div class="t-col t-col-1 extra">删除</div></div>';
-                    tableStr += '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'><div class="t-col t-col-4 nickname cnickname" data-type="1" data-value="'+record.nickname+'" >'+record.nickname+'</div>' +
-                        '<div class="t-col t-col-2 quantity" data-value="'+record.quantity+'">' +
-                        this.generateNumSelect(100,record.quantity)+'</div>' +
-                        '<div class="t-col t-col-2 input-div input-div-cost unit_cost" data-type="2" data-price="'+((!record.unit_price && record.unit_price != 0)?"":record.unit_price)+'" ' +
-                        'data-value="'+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+'" data-exrate="'+record.exchange_rate+'">'+((!record.unit_cost && record.unit_cost != 0)?"":this.exchangeMoney(record.unit_cost,record.exchange_rate))+'</div>' +
-                        '<div class="t-col t-col-1 buy-status"><i class="fa fa-square-o"></i></div>' +
-                        '<div class="t-col t-col-1 extra">删除</div></div>';
+                        tableStr += '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'><div class="t-col t-col-4 nickname cnickname" data-type="1" data-value="'+record.nickname+'" >'+record.nickname+'</div>' +
+                            '<div class="t-col t-col-2 quantity" data-value="'+record.quantity+'">' +
+                            this.generateNumSelect(100,record.quantity)+'</div>' +
+                            '<div class="t-col t-col-2 input-div input-div-cost unit_cost" data-type="2" data-price="'+((!record.unit_price && record.unit_price != 0)?"":record.unit_price)+'" ' +
+                            'data-value="'+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+'" data-exrate="'+record.exchange_rate+'">'+((!record.unit_cost && record.unit_cost != 0)?"":this.exchangeMoney(record.unit_cost,record.exchange_rate))+'</div>' +
+                            '<div class="t-col t-col-1 buy-status"><i class="fa fa-square-o"></i></div>' +
+                            '<div class="t-col t-col-1 extra">删除</div></div>';
+                    }
+                    tableStr += '</div>';
+                    var cardStr = '<div class="card"><div class="card-title">' +
+                        '<div class="caret-wrapper"><i class="fa fa-caret-right card-btn"></i></div><div class="product"><span>商品：</span><span class="name">'+procductName+'</span> ×<span class="total-quantity"> '+quantity+'</span> </div>' +
+                        '<div class="all-status ignore"><span>买到:</span><i class="fa fa-square-o"></i></div></div>';
+                    var lastRow = '<div class="extra-row"><div class="t-col-5 product-detail" data-pid="'+key.split('_')[1]+'">【商品详情】</span></div>' +
+                        '<div class="t-col-5 order-add"><input class="order-add-btn" data-cate="'+cateName+'" type="button" value="加单" /></div></div>';
+                    cardStr += tableStr + lastRow +'</div>';
+                    categoryStr += cardStr;
+                    //$("#order-list-content").append(cardStr);
                 }
-                tableStr += '</div>';
-                var cardStr = '<div class="card"><div class="card-title">' +
-                    '<div class="caret-wrapper"><i class="fa fa-caret-right card-btn"></i></div><div class="product"><span>商品：</span><span class="name">'+procductName+'</span> ×<span class="total-quantity"> '+quantity+'</span> </div>' +
-                    '<div class="all-status ignore"><span>买到:</span><i class="fa fa-square-o"></i></div></div>';
-                var lastRow = '<div class="extra-row"><div class="t-col-5 product-detail" data-pid="'+key.split('_')[1]+'">【商品详情】</span></div>' +
-                    '<div class="t-col-5 order-add"><input class="order-add-btn" type="button" value="加单"/></div></div>';
-                cardStr += tableStr + lastRow +'</div>';
-                $("#order-list-content").append(cardStr);
+                categoryStr += ((isAppend && $existCate) ? "" : '</div>');
+                orderlistStr += categoryStr;
             }
+            if(isAppend && $existCate){
+                $existCate.append(orderlistStr);
+            }else{
+                $("#order-list-content").append(orderlistStr);
+            }
+        },
+        checkExistCate:function(cateName){
+            var $res = false;
+            $(".category.title").each(function(){
+                if($(this).text() == cateName){
+                    $res = $(this).parent();
+                }
+            });
+            return $res;
         },
         dealOrderListOrderByCustomer:function(data,isAppend){
             if(!isAppend){
@@ -725,6 +801,9 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
 //                    })
 //                }
 //            });
+            $("#addOrderPanel").touch("click",function(){
+                $(".cpanel").removeClass("visible");
+            },true);
             $(document).on("input","#nickname-position",function(){
                 var $this = $(this);
                 var offset = $this.offset(),
@@ -749,6 +828,10 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 var vagueStr = $this.val();
                 var url = "/we_account/vague_cate?cate="+vagueStr;
                 var offset = $this.offset();
+                if(vagueStr == ''){
+                    $("#search-cates-panel").removeClass('visible');
+                    return;
+                }
                 $.ajax({
                     url:url,
                     success:function(results){
@@ -1054,6 +1137,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 var $this = event.$this;
                 var productId = $this.parents(".extra-row").find(".product-detail").data("pid"),
                     title = $this.parents(".card").find(".name").text();
+                $("#aopc_cate").val($this.data("cate"));
                 _this.showAddOrderPanel(productId,title);
                 _this.$objOrderTable = $this.parents('.card').find(".table");
             },true);
@@ -1100,7 +1184,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                             unit_cost: cost == -1?null:cost,
                             unit_price: price == -1? null:price,
                             remark:remark,
-                            cate:cate
+                            cate_name:cate
                         });
                         $("#order-list-content").removeClass("billSystem-short");
                         $("#addOrderPanel").pop({hidden:true});

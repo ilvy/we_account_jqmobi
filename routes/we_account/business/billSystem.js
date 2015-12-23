@@ -181,7 +181,7 @@ function getBillList(req,res){
     var openId = req.session.openId||'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
     var status = req.query.billType;
     var paras = [openId,status];
-    dbOperator.query('call pro_get_order_info(?,?)',paras,function(err,rows){
+    dbOperator.query('call pro_get_order_info_new(?,?)',paras,function(err,rows){
         if(err){
             logger.error(err);
             response.failed(-2,res,'');

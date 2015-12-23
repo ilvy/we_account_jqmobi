@@ -6,7 +6,9 @@ var menusObj = {
         {
             type:"view",
             name:"我的代袋",
-            url:"http://www.daidai2u.com/we_account/publish?type=1"
+            //url:"http://www.daidai2u.com/we_account/publish?type=1"
+            url:"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx2f81c72f4e91b732&redirect_uri=http://www.daidai2u.com/we_account/goto_publish?type=1" +
+            "&response_type=code&scope=snsapi_base&state=123#wechat_redirect"
         },
         {
             name:"我要代带",
@@ -19,12 +21,16 @@ var menusObj = {
                 {
                     type:"view",
                     name:"我的收藏",
-                    url:"http://www.daidai2u.com/we_account/publish?type=3"
+                    //url:"http://www.daidai2u.com/we_account/publish?type=3"
+                    url:"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx2f81c72f4e91b732&redirect_uri=http://www.daidai2u.com/we_account/goto_publish?type=3" +
+                    "&response_type=code&scope=snsapi_base&state=123#wechat_redirect"
                 },
                 {
                     type:"view",
                     name:"寻找代手",
-                    url:"http://www.daidai2u.com/we_account/publish?type=2"
+                    //url:"http://www.daidai2u.com/we_account/publish?type=2"
+                    url:"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx2f81c72f4e91b732&redirect_uri=http://www.daidai2u.com/we_account/goto_publish?type=2" +
+                    "&response_type=code&scope=snsapi_base&state=123#wechat_redirect"
                 }
             ]
         },
@@ -39,7 +45,9 @@ var menusObj = {
 //                {
                     type:"view",
                     name:"账单系统",
-                    url:"http://www.daidai2u.com/we_account/publish?type=5"
+                    //url:"http://www.daidai2u.com/we_account/publish?type=5"
+                    url:"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx2f81c72f4e91b732&redirect_uri=http://www.daidai2u.com/we_account/goto_publish?type=5" +
+                    "&response_type=code&scope=snsapi_base&state=123#wechat_redirect"
 //                }
 //            ]
 

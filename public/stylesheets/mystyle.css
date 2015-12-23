@@ -111,6 +111,16 @@ input.invalid{
     display: none;
 }
 
+.category.title{
+    background-color: #9E9D9D;
+    padding: 2px 0;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    font-size: 1.8rem;
+}
+
 .card{
     width: 100%;
     float: left;
@@ -119,7 +129,7 @@ input.invalid{
     overflow-x: hidden;
 }
 
-#order-list .card:last-child{margin-bottom: 75px;  }
+#order-list-content > div:last-child .card:last-child{margin-bottom: 75px;  }
 
 .card-title{
     text-align: center;
