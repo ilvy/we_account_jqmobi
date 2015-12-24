@@ -10,10 +10,12 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
         room_id:'',
         orderListData:{},
         $objOrderTable:null,
+        categories:{},
         init:function(){
             this.do();
             this.addListener();
             this.initDates();
+            this.categories = {};
             console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
         },
         do:function(){
@@ -174,6 +176,9 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             }
             var orderlistStr = '';
             for(var cateName in cards){
+                if(!this.categories[cateName]){
+                    this.categories[cateName] = cateName;
+                }
                 var categoryCards = cards[cateName];
                 var categoryStr = (isAppend && ($existCate = this.checkExistCate(cateName))) ? "" : '<div class="'+cateName+'"><div class="category title">'+cateName+'</div>';
                 for(var key in categoryCards){
@@ -571,7 +576,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             $("#addOrderPanel").touch("click",function(){
                 $("#search-user-panel,#search-products-panel").removeClass("visible");
             },true);
-            $(".card .card-title .card-btn,.card .product .name").touch("click",function(e){
+            $(".card .card-title .card-btn").touch("click",function(e){
                 var event = e;
                 var $this = event.$this,
                     $caret;
@@ -595,6 +600,27 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     }
                 },100);
             },true);
+            $(".card .product .name").touch("click",function(e){
+                var event = e;
+                var $this = event.$this,
+                    $caret;
+                $this.parents(".card").addClass("move-card-obj");
+                var categories = _this.categories,
+                    cateOptionsStr = '';
+                for(var cardName in categories){
+                    cateOptionsStr += '<option value="'+categories[cardName]+'">'+categories[cardName]+'</option>';
+                }
+                cateOptionsStr += '<option value="-100">'+其他+'</option>';
+                $("#cc_cate_select").html(cateOptionsStr);
+                $("#changeCategory").pop();
+            },true);
+            $("#cc_cate_select").on("change",function(){
+                if($(this).val() == -100){
+                    $("#cc_cate_custom").addClass("visible");
+                }else{
+                    
+                }
+            });
             $(".all-status").touch("click",function(event){
                 var $this = event.$this;
                 var $card = $this.parents(".card");

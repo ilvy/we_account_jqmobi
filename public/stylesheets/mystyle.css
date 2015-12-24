@@ -953,3 +953,33 @@ input.invalid{
     border-top: none;
 }
 /**************修改备注 style end*******************/
+
+.cc_title {
+    text-align: center;
+    padding: 10px;
+    background-color: #00B487;
+    font-size: 2rem;
+    color: #fff;
+}
+
+.cc_cate_select_wrap {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+}
+
+.cc_cate_custom {
+    margin-bottom: 16px;
+    display: none;
+}
+
+.cc_cate_custom input[type="text"] {
+    border: 0;
+    border-bottom: 1px solid #B5B3B3;
+    font-size: 1.4rem;
+}
+
+.cc_btn_group {
+    position: absolute;
+    bottom: 18px;
+}
