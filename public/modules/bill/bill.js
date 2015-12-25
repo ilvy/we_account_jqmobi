@@ -603,14 +603,15 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             $(".card .product .name").touch("click",function(e){
                 var event = e;
                 var $this = event.$this,
-                    $caret;
-                $this.parents(".card").addClass("move-card-obj");
+                    $caret,
+                    $objCard;
+                ($objCard = $this.parents(".card")).addClass("move-card-obj");
                 var categories = _this.categories,
                     cateOptionsStr = '';
                 for(var cardName in categories){
-                    cateOptionsStr += '<option value="'+categories[cardName]+'">'+categories[cardName]+'</option>';
+                    cateOptionsStr += '<option value="'+categories[cardName]+'" '+($objCard.siblings(".category").text() == cardName ? "selected" : "")+'>'+categories[cardName]+'</option>';
                 }
-                cateOptionsStr += '<option value="-100">'+其他+'</option>';
+                cateOptionsStr += '<option value="-100">其他</option>';
                 $("#cc_cate_select").html(cateOptionsStr);
                 $("#changeCategory").pop();
             },true);
@@ -618,9 +619,43 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 if($(this).val() == -100){
                     $("#cc_cate_custom").addClass("visible");
                 }else{
-                    
+                    $("#cc_cate_custom").removeClass("visible");
                 }
             });
+            $("#cc_seller_cancel,#cc_seller_submit").touch("click",function(event){
+                var $this = event.$this;
+                if($this.hasClass("yellow-btn")){
+                    $("#changeCategory").pop({hidden:true});
+                    $("#cc_cate_custom").removeClass("visible");
+                }else{
+                    var getOrderIds = function($card){
+                        var orderIds = '';
+                        $card.find('[data-oid]').each(function(){
+                            orderIds += $(this).data("oid");
+                        });
+                    };
+                    var orderId = $(".move-card-obj").data("");
+                    var url = "/we_account/change_cate?order_id=";
+                    $.ajax({
+                        url:url,
+                        type:"post"
+                    }).success(function(results){
+
+                    }).error(function(){
+
+                    });
+                    var $objCard,$cateSelect;
+                    ($objCard = $(".move-card-obj")).removeClass('move-card-obj').remove();
+                    if(($cateSelect = $("#cc_cate_select")).val() == -100){//新建立一个分类
+                        var newCateName = $(".cc_cate_custom input").val();
+                        var newCateStr = '<div class="'+newCateName+'"><div class="category title">'+newCateName+'</div>'+$objCard[0].outerHTML+'</div>';
+                        $("#order-list-content").append(newCateStr);
+                    }else{
+                        $("."+$cateSelect.val()).append($objCard);
+                    }
+                }
+
+            },true);
             $(".all-status").touch("click",function(event){
                 var $this = event.$this;
                 var $card = $this.parents(".card");

@@ -504,6 +504,24 @@ function vagueCate(req,res){
     })
 }
 
+/**
+ * 订单更改分类
+ * @param req
+ * @param res
+ */
+function changeCategory(req,res){
+    var cateName = req.query.cate_name,
+        oid = req.query.order_id;
+    dbOperator.query("call pro_change_category(?,?)",[oid,cateName],function(err,rows){
+        if(err){
+            logger.error("call pro_change_category err:",err);
+            response.failed(-1,res,"");
+        }else{
+            response.success(1,res,"");
+        }
+    })
+}
+
 exports.takeOrder = takeOrder;
 exports.filter_takeOrder = filter_takeOrder;
 exports.getBillList = getBillList;
@@ -521,3 +539,4 @@ exports.vagueSearchUser = vagueSearchUser;
 exports.wxauth_pay = wxauth_pay;
 exports.updateOrderInfo = updateOrderInfo;
 exports.vagueCate = vagueCate;
+exports.changeCategory = changeCategory;

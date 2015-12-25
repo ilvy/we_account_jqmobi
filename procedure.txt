@@ -787,5 +787,22 @@ commit;
 end; $$
 delimiter ;
 
+/************** pro_change_category 订单更改分类**************/
+delimiter $$
+drop procedure if exists pro_change_category;
+create procedure pro_change_category(in oid int,in cateName varchar(50))
+begin
+
+start transaction;
+
+call pro_add_category(1,cateName,@newCateId);
+update t_order o set o.cate_id = @newCateId
+  where o.id = oid;
+
+commit;
+
+end; $$
+delimiter ;
+
 /************** category table **************/
 create table t_category(id int primary key auto_increment,cate_type tinyint default 1,cate_name varchar(50));
