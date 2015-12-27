@@ -155,7 +155,7 @@ delimiter ;
 delimiter $$
 drop procedure if exists pro_add_order_by_seller_new;
 create procedure pro_add_order_by_seller_new(in cnickname varchar(50),in product_name varchar(40),in text varchar(600),in image_urls varchar(200),in sell_open_id varchar(200),in remark varchar(60),in productid int
-,in in_quantity int,in cost int,in price int,in discount decimal(4,2),in cate_name varchar(50))
+,in in_quantity int,in cost decimal(10,2),in price decimal(10,2),in discount decimal(4,2),in cate_name varchar(50))
 begin
 
 start transaction;
@@ -286,7 +286,7 @@ delimiter $$
 drop procedure if exists pro_take_order_by_seller_new;
 -- CREATE  PROCEDURE pro_take_order_by_seller(in c_open_id varchar(200),in sell_room_id varchar(16),in order_remark varchar(60),in productid int,in in_quantity int,in create_time datetime,in in_cost int,in in_price int,out o_id int)
 CREATE  PROCEDURE pro_take_order_by_seller_new(in c_open_id varchar(200),in sell_room_id varchar(16),in order_remark varchar(60),in productid int,in in_quantity int,in create_time datetime,
-                                           in in_cost int,in in_price int,in _discount decimal(4,2),in cate_name varchar(50),out o_id int)
+                                           in in_cost decimal(10,2),in in_price decimal(10,2),in _discount decimal(4,2),in cate_name varchar(50),out o_id int)
 BEGIN
 
 START TRANSACTION;
@@ -310,7 +310,7 @@ set @update_count = (SELECT ROW_COUNT());
         INSERT INTO t_customer(c_nickname,c_openid,seller_room_id,create_time)
           select nickname,c_open_id ,sell_room_id,create_time from t_weix_account_info
               where open_id = c_open_id;
-        SELECT 1 isExistCustomer;
+      --  SELECT 1 isExistCustomer;
         end if;
 
       -- 添加分类
@@ -598,7 +598,7 @@ delimiter ;
 /********** pro_set_customer_info ************/
 delimiter $$
 drop procedure if exists pro_set_customer_info;
-CREATE PROCEDURE `pro_set_customer_info`(in objid int,in value int,in nickname varchar(50),in type tinyint,in exchangeRate decimal(4,2),in openId varchar(100),in exchangeType tinyint,in _discount decimal(4,2))
+CREATE PROCEDURE `pro_set_customer_info`(in objid int,in value decimal(10,2),in nickname varchar(50),in type tinyint,in exchangeRate decimal(4,2),in openId varchar(100),in exchangeType tinyint,in _discount decimal(4,2))
 BEGIN
 	#Routine body goes here...
 START TRANSACTION;
@@ -773,13 +773,17 @@ begin
 
 start transaction;
 
-set @cateId = (select min(id) from t_category where cate_name = cateName);
-if @cateId is null then
-    insert into t_category(cate_type,cate_name)
-      select cateType,cateName;
-    set cate_id = (select last_insert_id());
+if cateName is null then
+set @cateId = 1;
 else
-    set cate_id = @cateId;
+    set @cateId = (select min(id) from t_category where cate_name = cateName);
+    if @cateId is null then
+        insert into t_category(cate_type,cate_name)
+          select cateType,cateName;
+        set cate_id = (select last_insert_id());
+    else
+        set cate_id = @cateId;
+    end if;
 end if;
 
 commit;
@@ -790,14 +794,15 @@ delimiter ;
 /************** pro_change_category 订单更改分类**************/
 delimiter $$
 drop procedure if exists pro_change_category;
-create procedure pro_change_category(in oid int,in cateName varchar(50))
+create procedure pro_change_category(in oids varchar(500),in cateName varchar(50))
 begin
 
 start transaction;
 
+call sp_print_result(oids,cateName);
 call pro_add_category(1,cateName,@newCateId);
 update t_order o set o.cate_id = @newCateId
-  where o.id = oid;
+  where o.id in (select num from tmp_print);
 
 commit;
 

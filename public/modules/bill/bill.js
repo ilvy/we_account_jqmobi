@@ -180,7 +180,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     this.categories[cateName] = cateName;
                 }
                 var categoryCards = cards[cateName];
-                var categoryStr = (isAppend && ($existCate = this.checkExistCate(cateName))) ? "" : '<div class="'+cateName+'"><div class="category title">'+cateName+'</div>';
+                var categoryStr = (isAppend && ($existCate = this.checkExistCate(cateName))) ? "" : '<div class="cate_wrap '+cateName+'"><div class="category title">'+cateName+'</div>';
                 for(var key in categoryCards){
                     var cates = categoryCards[key];
                     var quantity = 0;
@@ -208,7 +208,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     }
                     tableStr += '</div>';
                     var cardStr = '<div class="card"><div class="card-title">' +
-                        '<div class="caret-wrapper"><i class="fa fa-caret-right card-btn"></i></div><div class="product"><span>商品：</span><span class="name">'+procductName+'</span> ×<span class="total-quantity"> '+quantity+'</span> </div>' +
+                        '<div class="caret-wrapper"><i class="fa fa-caret-right card-btn"></i></div><div class="product"><span>商品：</span><span class="name product_name">'+procductName+'</span> ×<span class="total-quantity"> '+quantity+'</span> </div>' +
                         '<div class="all-status ignore"><span>买到:</span><i class="fa fa-square-o"></i></div></div>';
                     var lastRow = '<div class="extra-row"><div class="t-col-5 product-detail" data-pid="'+key.split('_')[1]+'">【商品详情】</span></div>' +
                         '<div class="t-col-5 order-add"><input class="order-add-btn" data-cate="'+cateName+'" type="button" value="加单" /></div></div>';
@@ -600,7 +600,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     }
                 },100);
             },true);
-            $(".card .product .name").touch("click",function(e){
+            $(".card .product .product_name").touch("click",function(e){
                 var event = e;
                 var $this = event.$this,
                     $caret,
@@ -617,9 +617,13 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             },true);
             $("#cc_cate_select").on("change",function(){
                 if($(this).val() == -100){
-                    $("#cc_cate_custom").addClass("visible");
+                    //if($("#cc_cate_custom").is(":hidden")){
+                        $("#cc_cate_custom").slideDown(500);
+                    //}
                 }else{
-                    $("#cc_cate_custom").removeClass("visible");
+                    //if($("#cc_cate_custom").is(":visible")){
+                        $("#cc_cate_custom").slideUp(500);
+                    //}
                 }
             });
             $("#cc_seller_cancel,#cc_seller_submit").touch("click",function(event){
@@ -628,31 +632,48 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     $("#changeCategory").pop({hidden:true});
                     $("#cc_cate_custom").removeClass("visible");
                 }else{
+                    globalVar.showLoading();
                     var getOrderIds = function($card){
                         var orderIds = '';
                         $card.find('[data-oid]').each(function(){
-                            orderIds += $(this).data("oid");
+                            orderIds += $(this).data("oid") + ',';
                         });
+                        return orderIds.substring(0,orderIds.length - 1);
                     };
-                    var orderId = $(".move-card-obj").data("");
-                    var url = "/we_account/change_cate?order_id=";
+                    var addCategory = function(cateName){
+                        _this.categories[cateName] ? "" : (_this.categories[cateName] = cateName);
+                    };
+                    var $objCard,$cateSelect;
+                    ($objCard = $(".move-card-obj")).remove();
+                    var orderId = getOrderIds($objCard);
+                    var url = "/we_account/change_cate?order_id="+orderId+"&cate_name="+(($cateSelect = $("#cc_cate_select")).val() == -100 ? $(".cc_cate_custom input").val() : $cateSelect.val());
                     $.ajax({
                         url:url,
                         type:"post"
                     }).success(function(results){
+                        if(results.flag == 1){
+                            $objCard.removeClass('move-card-obj');
+                            if(($cateSelect = $("#cc_cate_select")).val() == -100){//新建立一个分类
+                                var newCateName = $(".cc_cate_custom input").val();
+                                if($("."+newCateName).length == 0){
+                                    var newCateStr = '<div class="cate_wrap '+newCateName+'"><div class="category title">'+newCateName+'</div>'+$objCard[0].outerHTML+'</div>';
+                                    $("#order-list-content").append(newCateStr);
+                                    addCategory(newCateName);
+                                }else{
+                                    $("."+newCateName).append($objCard);
+                                }
 
+                            }else{
+                                $("."+$cateSelect.val()).append($objCard);
+                            }
+                            $("#changeCategory").pop({hidden:true});
+                            $("#cc_cate_custom").css('display','none').find('input').val('');
+                        }
+                        globalVar.hideLoading();
                     }).error(function(){
 
                     });
-                    var $objCard,$cateSelect;
-                    ($objCard = $(".move-card-obj")).removeClass('move-card-obj').remove();
-                    if(($cateSelect = $("#cc_cate_select")).val() == -100){//新建立一个分类
-                        var newCateName = $(".cc_cate_custom input").val();
-                        var newCateStr = '<div class="'+newCateName+'"><div class="category title">'+newCateName+'</div>'+$objCard[0].outerHTML+'</div>';
-                        $("#order-list-content").append(newCateStr);
-                    }else{
-                        $("."+$cateSelect.val()).append($objCard);
-                    }
+
                 }
 
             },true);
@@ -884,7 +905,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 _this.vagueMatchNames(nickname);
             });
 
-            $(document).on("input","#aopc_cate",function(event){
+            $(document).on("input","#aopc_cate,#cc_cate_custom input",function(event){
                 var $this = $(this);
                 var vagueStr = $this.val();
                 var url = "/we_account/vague_cate?cate="+vagueStr;
@@ -902,7 +923,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                                 width:$this.width() + 30,
                                 top:offset.top + $this.height() + 1,
                                 left:offset.left
-                            }).addClass('visible');
+                            }).addClass('visible').data("objinput",$this.data("type"));
                         }
                     }
                 })
@@ -912,7 +933,12 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 var $this = event.$this;
                 var cate = $this.text();
                 $("#search-cates-panel").removeClass('visible');
-                $("#aopc_cate").val(cate);
+                if($("#search-cates-panel").data('objinput') == '+'){
+                    $("#aopc_cate").val(cate);
+                }else{
+                    $("#cc_cate_custom input").val(cate);
+                }
+
             },true);
 
             $('#vagueBox > li').touch('click',function(event){
@@ -1245,7 +1271,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                             unit_cost: cost == -1?null:cost,
                             unit_price: price == -1? null:price,
                             remark:remark,
-                            cate_name:cate
+                            cate_name:cate == '' ? 'default' : cate
                         });
                         $("#order-list-content").removeClass("billSystem-short");
                         $("#addOrderPanel").pop({hidden:true});
@@ -1627,7 +1653,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 //    total += Number($mailpay.val());
                 //}
             });
-            $card.find(" .total-quantity").text(total);
+            $card.find(" .total-quantity").text(total.toFixed(1));
         },
         /**
          * 更改订单状态
@@ -1641,9 +1667,18 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 type:'post',
                 success:function(results){
                     if(results.flag == 1){
+                        var removeEmptyCate = function($card){
+                            if($card.siblings('.card').length == 0){
+                                $card.parents('.cate_wrap').remove();
+                                return true;
+                            }
+                            return false;
+                        };
                         if($obj.hasClass('t-row')){
                             if($obj.siblings('.t-row:not(.t-row-header,.mail-row)').length == 0){
-                                $obj.parents('.card').remove();
+                                if(!removeEmptyCate($obj.parents('.card'))){
+                                    $obj.parents('.card').remove();
+                                }
                                 return;
                             }
                             if($obj.parents("#pay-list").length > 0){
@@ -1658,6 +1693,11 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                                 var subQuantity = Number($obj.find('.num').text());
                                 $tq.text(total - subQuantity);
                             }
+                        }else if($obj.parents("#order-list").length > 0){
+                            if(!removeEmptyCate($obj)){
+                                $obj.remove();
+                            }
+                            return;
                         }
                         $obj.remove();
                     }else{

@@ -328,9 +328,9 @@ function getPayment(req,res,isRequestBySeller){//需要验证openid
             }
 
             if(!isRequestBySeller){
-                res.render('payment',{dataList:data,roomId:room_id,total:total,isMailFree:mailRecord.mail_free,mailPay:mailRecord.mail_pay,nickname:data[0].nickname})
+                res.render('payment',{dataList:data,roomId:room_id,total:total.toFixed(1),isMailFree:mailRecord.mail_free,mailPay:mailRecord.mail_pay,nickname:data[0].nickname})
             }else{
-                response.success({dataList:data,roomId:room_id,total:total,isMailFree:mailRecord.mail_free,mailPay:mailRecord.mail_pay,nickname:nickname},res,'')
+                response.success({dataList:data,roomId:room_id,total:total.toFixed(1),isMailFree:mailRecord.mail_free,mailPay:mailRecord.mail_pay,nickname:nickname},res,'')
             }
         }
     });
@@ -376,6 +376,7 @@ function addOrderBySeller(req,res){
         price = req.query.price,
         discount = 1,
         cate = req.query.cate;
+    cate = cate == '' ? null : cate;
     var openId = req.session.openId || "oxfQVswUSy2KXBPOjNi_BqdNI3aA";
     dbOperator.query("call pro_add_order_by_seller_new(?,?,?,?,?,?,?,?,?,?,?,?)",[nickname,title,desc,image_urls,openId,remark,productid,in_quantity,cost,price,discount,cate],function(err,rows){
         if(err){
@@ -512,6 +513,7 @@ function vagueCate(req,res){
 function changeCategory(req,res){
     var cateName = req.query.cate_name,
         oid = req.query.order_id;
+    cateName = cateName == '' ? null : cateName;
     dbOperator.query("call pro_change_category(?,?)",[oid,cateName],function(err,rows){
         if(err){
             logger.error("call pro_change_category err:",err);
