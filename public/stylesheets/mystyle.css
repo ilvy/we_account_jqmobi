@@ -128,7 +128,12 @@ input.invalid{
     background-color: rgba(234, 244, 241, 0.4);
     overflow-x: hidden;
 }
-
+.cate_wrap .card {
+    border-top: none;
+}
+#pay-list > .card {
+    border-top: none;
+}
 #order-list-content > div:last-child .card:last-child{margin-bottom: 75px;  }
 
 .card-title{

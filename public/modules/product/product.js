@@ -63,7 +63,7 @@ define(['router','util','wxAPI','ajaxupload','touchEvent'],function(router,util,
                             }
                         });
                         var isPublisher = window.sessionStorage.getItem('moment_publisher');
-                        if(isPublisher == 1 || !globalVar.room_id){//!=
+                        if((isPublisher == 1 || !globalVar.room_id)){//!=
                             $("#take_order").remove();
                             $("#edit_product").addClass('visible');
                             $('.text-box').removeClass('visible');

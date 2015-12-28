@@ -22,7 +22,7 @@ define(['router','util','touchEvent'],function(router,util){
                 cleanPosition();
                 if($(".page.publish").hasClass("from-product")){
                     $(".page.publish").removeClass("from-product");
-                    router.changeHash('product_display-'+globalVar.product_id,0);
+                    router.changeHash('product_display-'+globalVar.product_id+(globalVar.room_id ? ("-"+globalVar.room_id):""),0);
                 }else{
                     router.changeHash('live_room-'+globalVar.room_id,0);//不重新加载
                 }
