@@ -131,8 +131,12 @@ input.invalid{
 .cate_wrap .card {
     border-top: none;
 }
-#pay-list > .card {
+#pay-list > .card,
+#order-list-content > .card {
     border-top: none;
+}
+#order-list-content > .card:last-child{
+    margin-bottom: 75px;
 }
 #order-list-content > div:last-child .card:last-child{margin-bottom: 75px;  }
 

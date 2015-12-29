@@ -180,7 +180,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     this.categories[cateName] = cateName;
                 }
                 var categoryCards = cards[cateName];
-                var categoryStr = (isAppend && ($existCate = this.checkExistCate(cateName))) ? "" : '<div class="cate_wrap '+cateName+'"><div class="category title">'+cateName+'</div>';
+                var categoryStr = (isAppend && ($existCate = this.checkExistCate(cateName))) ? ("") : (this.billScrollTop = 0,'<div class="cate_wrap '+cateName+'"><div class="category title">'+cateName+'</div>');
                 for(var key in categoryCards){
                     var cates = categoryCards[key];
                     var quantity = 0;
@@ -216,13 +216,14 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     categoryStr += cardStr;
                     //$("#order-list-content").append(cardStr);
                 }
-                categoryStr += ((isAppend && $existCate) ? "" : '</div>');
+                categoryStr += ((isAppend && $existCate) ? ("") : ('</div>'));
                 orderlistStr += categoryStr;
             }
             if(isAppend && $existCate){
                 $existCate.append(orderlistStr);
             }else{
                 $("#order-list-content").append(orderlistStr);
+                this.billScrollTop = 'toBottom';
             }
         },
         checkExistCate:function(cateName){
@@ -376,7 +377,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     '<span class="unit">元</span></div></div>';
                 tableStr += mailStr+'</div>';
                 var cardStr = '<div class="card"><div class="card-title"><div class="caret-wrapper"><i class="fa fa-caret-right card-btn"></i></div>' +
-                    '<div class="product"><span class="name-span">买家:</span><span class="name">'+nickname+'</span> <span class="tq-span">合计: </span><span class="total-quantity" data-addmailpay='+addMailPay+'>'+totalMoney+'</span> </div>' +
+                    '<div class="product"><span class="name-span">买家:</span><span class="name">'+nickname+'</span> <span class="tq-span">合计: </span><span class="total-quantity" data-addmailpay='+addMailPay+'>'+totalMoney.toFixed(1)+'</span> </div>' +
                     '<div class="all-status"><span>已付：</span><i class="fa fa-square-o"></i></div></div>';
                 var lastRow = '<div class="extra-row">' +
                     '<div class="t-col-5 getpay-btn"><input type="button" value="收款"/></div></div>';
@@ -1274,6 +1275,11 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                             cate_name:cate == '' ? 'default' : cate
                         });
                         $("#order-list-content").removeClass("billSystem-short");
+                        if(_this.billScrollTop){
+                            $('body,html').animate({
+                                scrollTop:_this.billScrollTop == 'toBottom' ? $('body').height() : _this.billScrollTop
+                            },10);
+                        }
                         $("#addOrderPanel").pop({hidden:true});
                     }else{
                         alert("加单失败");
@@ -1285,6 +1291,9 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             },true);
             $("#aop_seller_cancel").touch("click",function(event){
                 $("#order-list-content").removeClass("billSystem-short");
+                $('body,html').animate({
+                    scrollTop:_this.billScrollTop
+                },10);
                 $("#addOrderPanel").pop({hidden:true});
             });
             $("#search_user").touch("click",function(event){
@@ -1536,6 +1545,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 $("#addOrderPanel").data("productid",-1);
             }
             $("#addOrderPanel").pop();
+            this.billScrollTop = $('body').scrollTop();
             $("#order-list-content").addClass("billSystem-short");
         },
         /**
