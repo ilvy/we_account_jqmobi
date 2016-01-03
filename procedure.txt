@@ -199,6 +199,43 @@ commit;
 end; $$
 delimiter ;
 
+
+
+
+
+delimiter $$
+drop procedure if exists pro_add_order_by_seller_new_test;
+create procedure pro_add_order_by_seller_new_test(in cnickname varchar(50),in product_name varchar(40),in text varchar(600),in image_urls varchar(200),in sell_open_id varchar(200),in remark varchar(60),in productid int
+,in in_quantity int,in cost decimal(10,2),in price decimal(10,2),in discount decimal(4,2),in cate_name varchar(50))
+begin
+
+start transaction;
+
+set @now = now();
+set @pname = product_name;
+set @sell_room_id = (select room_id from user where open_id = sell_open_id);
+set @openId = (select distinct open_id from t_weix_account_info where nickname = cnickname);-- 第一步、1先根据昵称获取买家openId
+if @openId is null then
+set @openId = (select distinct c_openid from t_customer where c_nickname = cnickname and seller_room_id = @sell_room_id);-- 第一步、2根据昵称从熟客获取买家openId
+end if;
+
+if productid = -1 then
+set @productId = (select max(id) from product where title = @pname and room_id = @sell_room_id and status = 1);
+-- SELECT @roomid;
+else
+set @productId = productid;
+end if;
+
+
+commit;
+
+end; $$
+delimiter ;
+
+
+
+
+
 select c.* from t_customer c
 join t_weix_account_info w
 on c.c_openid = w.open_id

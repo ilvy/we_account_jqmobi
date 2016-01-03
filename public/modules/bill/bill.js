@@ -612,7 +612,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 for(var cardName in categories){
                     cateOptionsStr += '<option value="'+categories[cardName]+'" '+($objCard.siblings(".category").text() == cardName ? "selected" : "")+'>'+categories[cardName]+'</option>';
                 }
-                cateOptionsStr += '<option value="-100">其他</option>';
+                cateOptionsStr += '<option value="-100">添加新地址</option>';
                 $("#cc_cate_select").html(cateOptionsStr);
                 $("#changeCategory").pop();
             },true);
@@ -645,7 +645,12 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                         _this.categories[cateName] ? "" : (_this.categories[cateName] = cateName);
                     };
                     var $objCard,$cateSelect;
-                    ($objCard = $(".move-card-obj")).remove();
+                    $objCard = $(".move-card-obj");
+                    if($objCard.siblings(".card").length == 0){
+                        $objCard.parents('.cate_wrap').remove();
+                    }else{
+                        $objCard.remove();
+                    }
                     var orderId = getOrderIds($objCard);
                     var url = "/we_account/change_cate?order_id="+orderId+"&cate_name="+(($cateSelect = $("#cc_cate_select")).val() == -100 ? $(".cc_cate_custom input").val() : $cateSelect.val());
                     $.ajax({

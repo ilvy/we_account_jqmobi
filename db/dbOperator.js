@@ -309,7 +309,14 @@ exports.query = query;
 //        console.log(rows);
 //    }
 //})
-query("call pro_add_category(1,'钵兰街',@test)",[],function(err,rows){
+//query("call pro_add_category(1,'钵兰街',@test)",[],function(err,rows){
+//    if(err){
+//        console.log(err);
+//    }else{
+//        console.log(rows);
+//    }
+//})
+query("call pro_add_order_by_seller_new_test('山鸡','天地5号','','','oxfQVswUSy2KXBPOjNi_BqdNI3aA','','-1','1','-1','-1',1,'1号街道')",[],function(err,rows){
     if(err){
         console.log(err);
     }else{
@@ -318,7 +325,7 @@ query("call pro_add_category(1,'钵兰街',@test)",[],function(err,rows){
 })
 //query("select c.* from t_customer c join t_weix_account_info w " +
 //    "on c.c_openid = w.open_id " +
-//    "where (c.c_nickname = '鷠皇Niklaus' or w.nickname = '鷠皇Niklaus') and c.seller_room_id = '888888';",[],function(err,rows){
+//    "where (c.c_nickname = '山鸡' or w.nickname = '山鸡') and c.seller_room_id = '888888';",[],function(err,rows){
 //    if(err){
 //        console.log(err);
 //    }else{
