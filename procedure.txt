@@ -183,9 +183,9 @@ end if;
 if @productId is null then
 insert into product(image_url,text,room_id,create_time,status,title) values(image_urls,text,@sell_room_id,@now,1,@pname);-- 第二步、发布商品
 set @productId = (select last_insert_id());
-call pro_take_order_by_seller_new(@openId,@sell_room_id,remark,@productId,in_quantity,@now,cost,price,discount,cate_name,@oid);-- 第三步、下单
+call pro_take_order_by_seller_new(@openId,cnickname,@sell_room_id,remark,@productId,in_quantity,@now,cost,price,discount,cate_name,@oid);-- 第三步、下单
 else
-call pro_take_order_by_seller_new(@openId,@sell_room_id,remark,@productId,in_quantity,@now,cost,price,discount,cate_name,@oid);-- 第三步、下单
+call pro_take_order_by_seller_new(@openId,cnickname,@sell_room_id,remark,@productId,in_quantity,@now,cost,price,discount,cate_name,@oid);-- 第三步、下单
 end if;
 
 select @productId product_id,@oid order_id,c.id c_id
@@ -322,7 +322,7 @@ set @update_count = (SELECT ROW_COUNT());
 delimiter $$
 drop procedure if exists pro_take_order_by_seller_new;
 -- CREATE  PROCEDURE pro_take_order_by_seller(in c_open_id varchar(200),in sell_room_id varchar(16),in order_remark varchar(60),in productid int,in in_quantity int,in create_time datetime,in in_cost int,in in_price int,out o_id int)
-CREATE  PROCEDURE pro_take_order_by_seller_new(in c_open_id varchar(200),in sell_room_id varchar(16),in order_remark varchar(60),in productid int,in in_quantity int,in create_time datetime,
+CREATE  PROCEDURE pro_take_order_by_seller_new(in c_open_id varchar(200),in customer_name varchar(50),in sell_room_id varchar(16),in order_remark varchar(60),in productid int,in in_quantity int,in create_time datetime,
                                            in in_cost decimal(10,2),in in_price decimal(10,2),in _discount decimal(4,2),in cate_name varchar(50),out o_id int)
 BEGIN
 
@@ -341,7 +341,7 @@ set @update_count = (SELECT ROW_COUNT());
   if @update_count = 0 THEN
         SET @Cid = (SELECT c.id from t_customer c JOIN user u -- t_customer 重复容易报错，根据openid和nickname分别排查
                                             ON c.seller_room_id = u.room_id
-                                            WHERE c.seller_room_id = sell_room_id AND c.c_openid = c_open_id and c.c_status = 1);
+                                            WHERE c.seller_room_id = sell_room_id AND c.c_openid = c_open_id and c.c_nickname = customer_name and c.c_status = 1);
       -- SELECT @Cid;
         if @Cid is NULL THEN
         INSERT INTO t_customer(c_nickname,c_openid,seller_room_id,create_time)

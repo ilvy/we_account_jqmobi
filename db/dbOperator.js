@@ -300,32 +300,32 @@ exports.query = query;
 //})
 
 
-query("SELECT * from t_customer c JOIN user u" +
-    " ON c.seller_room_id = u.room_id " +
-    " WHERE c.seller_room_id = '888888' AND c.c_openid = 'oxfQVsx0Fx-ZH2XsKdgQ5ZkrGIY8'and c.c_status = 1",[],function(err,rows){
+//query("SELECT * from t_customer c JOIN user u" +
+//    " ON c.seller_room_id = u.room_id " +
+//    " WHERE c.seller_room_id = '20003' AND c.c_openid = 'oxfQVs_ThS4tmpmshQqV9ftAB2eo' and c_nickname = '王莹' and c.c_status = 1",[],function(err,rows){
+//    if(err){
+//        console.log(err);
+//    }else{
+//        console.log(rows);
+//    }
+//})
+//query("select * from t_customer where c_nickname = '王莹'",[],function(err,rows){
+//    if(err){
+//        console.log(err);
+//    }else{
+//        console.log(rows);
+//    }
+//})
+query("call pro_add_order_by_seller_new_test('山鸡','天地5号','','','oxfQVswUSy2KXBPOjNi_BqdNI3aA','','-1','1','-1','-1',1,'1号街道')",[],function(err,rows){
     if(err){
         console.log(err);
     }else{
         console.log(rows);
     }
 })
-//query("select * from t_customer where c_nickname = '山鸡'",[],function(err,rows){
-//    if(err){
-//        console.log(err);
-//    }else{
-//        console.log(rows);
-//    }
-//})
-//query("call pro_add_order_by_seller_new_test('山鸡','天地5号','','','oxfQVswUSy2KXBPOjNi_BqdNI3aA','','-1','1','-1','-1',1,'1号街道')",[],function(err,rows){
-//    if(err){
-//        console.log(err);
-//    }else{
-//        console.log(rows);
-//    }
-//})
 //query("select c.* from t_customer c join t_weix_account_info w " +
 //    "on c.c_openid = w.open_id " +
-//    "where (c.c_nickname = '山鸡' or w.nickname = '山鸡') and c.seller_room_id = '888888';",[],function(err,rows){
+//    "where (c.c_nickname = '王莹' or w.nickname = '王莹') and c.seller_room_id = '20003';",[],function(err,rows){
 //    if(err){
 //        console.log(err);
 //    }else{
