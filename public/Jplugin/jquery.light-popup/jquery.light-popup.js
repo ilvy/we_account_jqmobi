@@ -67,6 +67,7 @@
         hide: function (callback) {
             var _this = this;
             this.jqueryele.removeClass('light-popup-show');
+            this.setMask(false);
             setTimeout(function(){
                 _this.jqueryele.removeClass('visible');
             },1000)
@@ -74,12 +75,28 @@
                 callback();
             }
         },
-        open: function () {
+        open: function (options) {
             var _this = this;
             this.jqueryele.addClass('visible');
             setTimeout(function(){
                 _this.jqueryele.addClass('light-popup-show');
-            },50)
+            },50);
+            if(options.mask){
+                this.setMask(true);
+            }else{
+                this.setMask(false);
+            }
+        },
+        setMask:function(needMask){
+            if(needMask){
+                if(jquery(".light-popup-mask").length){
+                    jquery(".light-popup-mask").addClass("visible");
+                }else{
+                    jquery("body").append('<div class="light-popup-mask visible"></div>');
+                }
+            }else{
+                jquery(".light-popup-mask").removeClass("visible");
+            }
         },
         addCloseBtn: function (src) {
             var _this = this;
