@@ -186,8 +186,8 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     var quantity = 0;
                     var procductName = cates[0].product_name;
                     var tableStr = '<div class="table"><div class="t-row t-row-over-1 t-row-header">' +
-                        '<div class="t-col t-col-4">买家</div><div class="t-col t-col-2">数量</div>' +
-                        '<div class="t-col t-col-2">进价</div>' +
+                        '<div class="t-col t-col-2">买家</div><div class="t-col t-col-2">数量</div>' +
+                        '<div class="t-col t-col-4">备注</div>' +
                         '<div class="t-col t-col-1">状态</div><div class="t-col t-col-1 extra">操作</div></div>';
                     for(var j = 0; j < cates.length; j++){
                         var record = cates[j];
@@ -198,11 +198,13 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
 //                        '<div class="t-col t-col-2 input-div input-div-cost unit_cost" data-type="2" data-value="'+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+'" data-exrate="'+record.exchange_rate+'">'+((!record.unit_cost && record.unit_cost != 0)?"":this.exchangeMoney(record.unit_cost,record.exchange_rate))+'</div>' +
 //                        '<div class="t-col t-col-1 buy-status"><i class="fa fa-square-o"></i></div>' +
 //                        '<div class="t-col t-col-1 extra">删除</div></div>';
-                        tableStr += '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'><div class="t-col t-col-4 nickname cnickname" data-type="1" data-value="'+record.nickname+'" >'+record.nickname+'</div>' +
+                        tableStr += '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'><div class="t-col t-col-2 nickname cnickname" data-type="1" data-value="'+record.nickname+'" >'+record.nickname+'</div>' +
                             '<div class="t-col t-col-2 quantity" data-value="'+record.quantity+'">' +
                             this.generateNumSelect(100,record.quantity)+'</div>' +
-                            '<div class="t-col t-col-2 input-div input-div-cost unit_cost" data-type="2" data-price="'+((!record.unit_price && record.unit_price != 0)?"":record.unit_price)+'" ' +
-                            'data-value="'+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+'" data-exrate="'+record.exchange_rate+'">'+((!record.unit_cost && record.unit_cost != 0)?"":this.exchangeMoney(record.unit_cost,record.exchange_rate))+'</div>' +
+                            //'<div class="t-col t-col-2 input-div input-div-cost unit_cost" data-type="2" data-price="'+((!record.unit_price && record.unit_price != 0)?"":record.unit_price)+'" ' +
+                            //'data-value="'+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+'" data-exrate="'+record.exchange_rate+'">'+((!record.unit_cost && record.unit_cost != 0)?"":this.exchangeMoney(record.unit_cost,record.exchange_rate))+'</div>' +
+                            '<div class="t-col t-col-4 input-div order-remark" data-type="2" data-price="'+((!record.unit_price && record.unit_price != 0)?"":record.unit_price)+'" ' +
+                            'data-value="'+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+'" >'+(record.remark?record.remark:"")+'</div>' +
                             '<div class="t-col t-col-1 buy-status"><i class="fa fa-square-o"></i></div>' +
                             '<div class="t-col t-col-1 extra">删除</div></div>';
                     }
@@ -306,10 +308,11 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             var name = type == 'c'?orderInfo.nickname:orderInfo.product_name;
             if(this.$objOrderTable || (this.$objOrderTable = this.findOrderAddedObjTable(type,name))){
                 var newOrderRow = '<div class="t-row t-row-over-1" data-oid='+record.oid+' data-cid='+record.cid+'>' +
-                    '<div class="t-col t-col-4 nickname cnickname" data-type="1" data-value="'+record.nickname+'">'+record.nickname+'</div>' +
+                    '<div class="t-col t-col-2 nickname cnickname" data-type="1" data-value="'+record.nickname+'">'+record.nickname+'</div>' +
                     '<div class="t-col t-col-2 quantity" data-value="'+record.quantity+'">' +
                     this.generateNumSelect(100,record.quantity)+'</div>' +
-                    '<div class="t-col t-col-2 input-div input-div-cost unit_cost" data-type="2" data-value="'+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+'" data-exrate="'+record.exchange_rate+'">'+((!record.unit_cost && record.unit_cost !== 0)?"":this.exchangeMoney(record.unit_cost,record.exchange_rate))+'</div>' +
+                    //'<div class="t-col t-col-2 input-div input-div-cost unit_cost" data-type="2" data-value="'+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+'" data-exrate="'+record.exchange_rate+'">'+((!record.unit_cost && record.unit_cost !== 0)?"":this.exchangeMoney(record.unit_cost,record.exchange_rate))+'</div>' +
+                    '<div class="t-col t-col-4 input-div order-remark" data-type="2" data-value="'+((!record.unit_cost && record.unit_cost != 0)?"":record.unit_cost)+'">'+(record.remark?record.remark:"")+'</div>' +
                     '<div class="t-col t-col-1 buy-status"><i class="fa fa-square-o"></i></div>' +
                     '<div class="t-col t-col-1 extra">删除</div></div>';
                 if(type == 'c'){
@@ -1439,6 +1442,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
          * 修改订单信息（remark）
          */
         updateOrderInfo:function(){
+            var _this = this;
             if($('#order-edit-panel .visible-inline').hasClass('pep_remark')){
                 var $remarkObj = $(".order-remark-update-obj");
                 var newRemark = $("#pep_remark").val();
@@ -1458,6 +1462,15 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     success:function(results){
                         if(results.flag == 1){
                             $(".order-remark-update-obj").text(newRemark);
+                            var updateDataSource = function(){//修改本地数据源
+                                for(var i = 0; i < _this.orderListData.length; i++){
+                                    if(_this.orderListData[i].oid == data.order_id){
+                                        _this.orderListData[i].remark = newRemark;
+                                        return;
+                                    }
+                                }
+                            }
+                            updateDataSource();
                         }else{
                             alert("修改备注失败！");
                         }

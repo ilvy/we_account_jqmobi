@@ -316,7 +316,22 @@ exports.query = query;
 //        console.log(rows);
 //    }
 //})
-query("call pro_add_order_by_seller_new_test('山鸡','天地5号','','','oxfQVswUSy2KXBPOjNi_BqdNI3aA','','-1','1','-1','-1',1,'1号街道')",[],function(err,rows){
+//query("call pro_add_order_by_seller_new_test('山鸡','天地5号','','','oxfQVswUSy2KXBPOjNi_BqdNI3aA','','-1','1','-1','-1',1,'1号街道')",[],function(err,rows){
+//    if(err){
+//        console.log(err);
+//    }else{
+//        console.log(rows);
+//    }
+//})
+//query("select count(1) from (select id,product_id from t_order o where o.id = 714)o,product p,user u" +
+//    " where o.product_id = p.id and p.room_id = u.room_id and u.open_id = 'oxfQVswUSy2KXBPOjNi_BqdNI3aA'",[],function(err,rows){
+//    if(err){
+//        console.log(err);
+//    }else{
+//        console.log(rows);
+//    }
+//})
+query("call pro_get_order_info_new('oxfQVswUSy2KXBPOjNi_BqdNI3aA',1)",[],function(err,rows){
     if(err){
         console.log(err);
     }else{

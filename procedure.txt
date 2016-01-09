@@ -712,7 +712,7 @@ from t_customer c
     JOIN t_category ca
   on o.cate_id = ca.id
   WHERE o.`status` = order_status AND u1.open_id = openid and c.c_status = 1
-  ORDER BY p.title,o.remark ASC;
+  ORDER BY ca.cate_name,p.title ASC;
 
 commit;
 end; $$

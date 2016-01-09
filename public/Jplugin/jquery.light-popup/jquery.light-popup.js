@@ -1,5 +1,8 @@
 ﻿(function (jquery) {
     var popups = [];
+    jquery('body').on("click",'.light-popup-mask',function(event){
+        event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
+    });
     jquery.fn.pop = function (options) {
         options = jquery.extend({},jquery.fn.pop.defaults, options);
         return this.each(function () {
@@ -81,7 +84,7 @@
             setTimeout(function(){
                 _this.jqueryele.addClass('light-popup-show');
             },50);
-            if(options.mask){
+            if(typeof options.mask == 'undefined' || options.mask){
                 this.setMask(true);
             }else{
                 this.setMask(false);
