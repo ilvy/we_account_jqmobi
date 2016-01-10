@@ -185,6 +185,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     var cates = categoryCards[key];
                     var quantity = 0;
                     var procductName = cates[0].product_name;
+                    var productId = key.split("_")[1];
                     var tableStr = '<div class="table"><div class="t-row t-row-over-1 t-row-header">' +
                         '<div class="t-col t-col-2">买家</div><div class="t-col t-col-2">数量</div>' +
                         '<div class="t-col t-col-4">备注</div>' +
@@ -209,7 +210,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                             '<div class="t-col t-col-1 extra">删除</div></div>';
                     }
                     tableStr += '</div>';
-                    var cardStr = '<div class="card"><div class="card-title">' +
+                    var cardStr = '<div data-pid="'+productId+'" class="card"><div class="card-title">' +
                         '<div class="caret-wrapper"><i class="fa fa-caret-right card-btn"></i></div><div class="product"><span>商品：</span><span class="name product_name">'+procductName+'</span> ×<span class="total-quantity"> '+quantity+'</span> </div>' +
                         '<div class="all-status ignore"><span>买到:</span><i class="fa fa-square-o"></i></div></div>';
                     var lastRow = '<div class="extra-row"><div class="t-col-5 product-detail" data-pid="'+key.split('_')[1]+'">【商品详情】</span></div>' +
@@ -536,6 +537,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 if(($checkbox = $this.find(".fa-square-o")).length > 0){
                     if(confirm("确认"+$($this.parents('.t-row').find('div.num')).text()+"个"+$this.parents('.card').find('span.name').text()+"已经购买")){
 //                        $this.parents('.t-row').remove();
+                        _this.logBuyProductLocation($card.data("pid"));
                         if($card.find(".t-row").length == 2){//说明只有一个订单
 //                            $card.remove();
                             _this.updateOrderStatus($card,orderId);
@@ -715,6 +717,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 if($this.parents("#order-list").length > 0){
                     if(confirm("确认"+$($this.parents('.card').find('span.total-quantity')).text()+"个"+$this.parents('.card').find('span.name').text()+"已经购买?")){
 //                        $this.parents(".card").remove();
+                        _this.logBuyProductLocation($card.data("pid"));
                         _this.updateOrderStatus($this.parents('.card'),oids);
                     }
                 }else if($this.parents("#pay-list").length > 0){
@@ -1789,6 +1792,41 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 }
             }
             return record;
+        },
+        logBuyProductLocation:function(product_id){
+            wx.getLocation({
+                type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+                success: function (res) {
+                    var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+                    var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+                    var accuracy = res.accuracy; // 位置精度
+                    wx.getLocation({
+                        type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+                        success: function (res) {
+                            var latitude_gcj = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+                            var longitude_gcj = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+                            var accuracy_gcj = res.accuracy; // 位置精度
+                            var logData = {
+                                pid:product_id,
+                                latitude:latitude,
+                                longitude:longitude,
+                                accuracy:accuracy,
+                                latitude_gcj:latitude_gcj,
+                                longitude_gcj:longitude_gcj,
+                                accuracy_gcj:accuracy_gcj
+                            }
+                            $.ajax({
+                                url:"/we_account/hit_point_buylocation",
+                                type:"post",
+                                data:logData,
+                                success:function(results){
+                                    console.log(results.flag);
+                                }
+                            });
+                        }
+                    });
+                }
+            });
         },
         showLoading:function(){
             $("#loading").css('display','block');

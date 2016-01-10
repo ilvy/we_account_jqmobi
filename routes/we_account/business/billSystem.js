@@ -10,7 +10,9 @@ var dbOperator = require("../../../db/dbOperator"),
     async = require('async'),
     we_auth = require('../we_auth');
 var logger =  require("log4js").getLogger("billSystem");
+var hitPointLogger = require("log4js").getLogger("hit_point");
 logger.setLevel("INFO");
+hitPointLogger.setLevel("INFO");
 
 /**
  * 买家下订单
@@ -524,6 +526,12 @@ function changeCategory(req,res){
     })
 }
 
+function hitPointBuyLocation(req,res){
+    var body = req.body;
+    hitPointLogger.info(body.pid,req.session.openId,"gprs:",body.latitude,body.longitude,body.accuracy,"gcj02:",body.latitude_gcj,body.longitude_gcj,body.accuracy_gcj);
+    response.success(1,res,1);
+}
+
 exports.takeOrder = takeOrder;
 exports.filter_takeOrder = filter_takeOrder;
 exports.getBillList = getBillList;
@@ -542,3 +550,4 @@ exports.wxauth_pay = wxauth_pay;
 exports.updateOrderInfo = updateOrderInfo;
 exports.vagueCate = vagueCate;
 exports.changeCategory = changeCategory;
+exports.hitPointBuyLocation = hitPointBuyLocation;

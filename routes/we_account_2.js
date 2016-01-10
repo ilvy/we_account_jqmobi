@@ -408,6 +408,8 @@ router.get('/vague_cate',billSystem.vagueCate);
 
 router.post('/change_cate',billSystem.changeCategory);
 
+router.post('/hit_point_buylocation',billSystem.hitPointBuyLocation);
+
 router.get("/xml",function(req,res){
     xmlParser.parseXml("<xml><ToUserName><![CDATA[gh_d28b25ec1197]]></ToUserName>" +
         "<FromUserName><![CDATA[oHbq1t0enasGWD7eQoJuslZY6R-4]]></FromUserName>" +

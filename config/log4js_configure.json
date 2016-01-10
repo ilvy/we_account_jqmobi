@@ -13,6 +13,12 @@
       "filename": "logs/date-file.log",
       "pattern": "-yyyy-MM-dd",
       "level":"INFO"
+    },
+    {
+      "category": ["hit_point"],
+      "type":"file",
+      "filename": "logs/point.log",
+      "level":"INFO"
     }
   ],
   "replaceConsole":true
