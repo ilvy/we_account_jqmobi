@@ -331,7 +331,7 @@ exports.query = query;
 //        console.log(rows);
 //    }
 //})
-query("call pro_get_order_info_new('oxfQVswUSy2KXBPOjNi_BqdNI3aA',1)",[],function(err,rows){
+query("select * from product where title = '雪球蛋糕'",[],function(err,rows){
     if(err){
         console.log(err);
     }else{

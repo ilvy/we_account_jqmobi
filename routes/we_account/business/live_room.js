@@ -652,20 +652,20 @@ function vagueSearchProduct(req,res){
  * @param res
  */
 function editProduct(req,res){
-    var openId = req.session.openId,//||'oxfQVswUSy2KXBPOjNi_BqdNI3aA',
+    var openId = req.session.openId||'oxfQVswUSy2KXBPOjNi_BqdNI3aA',
         body = req.body,
         roomId = body.room_id,
         product_id = body.product_id,
         title = body.title,
         text = body.desc,
         image_url = body.products;
-    dbOperator.query('call pro_edit_product(?,?,?,?,?,?)',[roomId,openId,product_id,title,text,image_url],function(err,rows){
+    dbOperator.query('call pro_edit_product_test(?,?,?,?,?,?)',[roomId,openId,product_id,title,text,image_url],function(err,rows){
         if(err){
             response.failed(-1,res,0);
         }else{
-            console.log(rows);
+            console.log("call pro_edit_product:",rows[0][0]);
             //if(rows && rows.affectedRows > 0){
-                response.success(1,res,0);
+                response.success(rows[0][0]["existpid"],res,0);
             //}else{
             //    response.failed(0,res,0);
             //}
