@@ -296,7 +296,7 @@ set @update_count = (SELECT ROW_COUNT());
   if @update_count = 0 THEN
         SET @Cid = (SELECT c.id from t_customer c JOIN user u
                                             ON c.seller_room_id = u.room_id
-                                            WHERE c.seller_room_id = sell_room_id AND c.c_openid = c_open_id);
+                                            WHERE c.seller_room_id = sell_room_id AND c.c_openid = c_open_id and c.c_status = 1);
   -- SELECT @Cid;
   if @Cid is NULL THEN
       INSERT INTO t_customer(c_nickname,c_openid,seller_room_id,create_time)
