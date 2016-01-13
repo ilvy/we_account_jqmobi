@@ -218,8 +218,18 @@ define(['wxAPI'],function(wx){
          * 兼容分享处理
          */
         dealForCompactShare:function(nickname){
-            $('title').text(nickname + '的代袋');
+            $('title').text(nickname ? nickname + '的代袋' : "主人的代袋");
             $('#for-share').attr('src',"http://www.daidai2u.com/images/logo.jpg");
+        },
+        /**
+         * 获取url参数
+         * @param {type} name
+         * @returns {unresolved}
+         */
+        getUrlParam:function(queryName){
+            var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r!=null) return decodeURI(r[2]); return null;
         }
     }
 

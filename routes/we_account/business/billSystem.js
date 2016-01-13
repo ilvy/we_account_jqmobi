@@ -415,7 +415,7 @@ function vagueSearchUser(req,res){
  * @param next
  */
 function wxauth_pay(req,res,next){
-    var openId = req.session.openId || 'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
+    var openId = req.session.openId;// || 'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
     var room_id = req.query.room_id,
         nickname = req.query.nickname;
     if(openId){

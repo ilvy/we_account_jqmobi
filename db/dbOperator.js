@@ -331,7 +331,7 @@ exports.query = query;
 //        console.log(rows);
 //    }
 //})
-query("select * from product where title = '雪球蛋糕'",[],function(err,rows){
+query("call pro_getpayment_test('大宝-李国萍','20049')",[],function(err,rows){
     if(err){
         console.log(err);
     }else{
