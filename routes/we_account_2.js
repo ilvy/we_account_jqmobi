@@ -206,6 +206,7 @@ router.get('/live_room_test',function(req,res){
 });
 router.post('/wxjssdkinit',publish_account.wxJssdkInit);
 router.get("/fav",live_room.myFavorite);
+router.get("/live-room",billSystem.getAuth_enterLiveRoom);
 router.get("/live-room",function(req,res){
     var openId = req.session.openId;// || 'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
     var query = req.query,
