@@ -230,6 +230,14 @@ define(['wxAPI'],function(wx){
             var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
             var r = window.location.search.substr(1).match(reg);
             if (r!=null) return decodeURI(r[2]); return null;
+        },
+        ss:function(isJson,key,value){
+            if(arguments.length == 2){
+                var results = window.sessionStorage.getItem(["daidai_",key].join(""));
+                return (isJson ? JSON.parse(results) : results);
+            }else if(arguments.length == 3){
+                window.sessionStorage.setItem(["daidai_",key].join(""),isJson ? JSON.stringify(value) : value);
+            }
         }
     }
 

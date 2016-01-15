@@ -95,6 +95,8 @@ define(['util'],function(util){
             }else{
                 if(globalVar.modules[hash].do && globalVar.reload[hash]){
                     globalVar.modules[hash].do();
+                }else if(globalVar.modules[hash].doWithoutFlush && !globalVar.reload[hash]){
+                    globalVar.modules[hash].doWithoutFlush();
                 }
             }
 

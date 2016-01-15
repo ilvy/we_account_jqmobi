@@ -21,6 +21,15 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
         do:function(){
             this.flushOrderList();
         },
+        doWithoutFlush:function(){
+            $('body,html').animate({
+                scrollTop:this.billScrollTop == 'toBottom' ? $('body').height() : this.billScrollTop
+            },10);
+            var orderListDataSS = util.ss(1,"buylist");
+            if(orderListDataSS){
+                this.orderListData = orderListDataSS;
+            }
+        },
         getHostInfo:function(){
             var _this = this;
             var url = '/we_account/personalInfo';
@@ -499,6 +508,8 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 var product_id = $this.data('pid');
                 globalVar.product_id = product_id;
                 $('#take_order').remove();
+                util.ss(1,"buylist",_this.orderListData);
+                _this.billScrollTop = $('body').scrollTop();
                 router.changeHash("product_display-"+product_id,1);
             },true);
             $(".t-row:not(.t-row-header)").touch("swipeleft",function(event){

@@ -17,11 +17,20 @@ hitPointLogger.setLevel("INFO");
 function getAuth_enterLiveRoom(req,res,next){
     var openId = req.session.openId;
     var search = req.query.search;
-    if(!openId){//未关注公众号，跳到公众号关注界面
-        get_weix_auth("enter_authority",search);
-        return;
-    }else{
+    if(!search){
         next();
+    }else if(openId){
+        next();
+    }else{//未关注公众号，跳到公众号关注界面
+        get_weix_auth(req,res,"enter_authority",["http://www.daidai2u.com/we_account/live-room#",search].join(""),function(openId,userInfo){
+            dbOperator.query("call pro_weix_account_info(?,?,?,?,?,?,?,?)",[openId,userInfo.nickname,userInfo.headimgurl,userInfo.sex,
+                [accountInfo.province,accountInfo.city].join(""),userInfo.country,userInfo.unionid,userInfo.subscribe_time],function(err,rows){
+                if(err){
+                    logger.error("call pro_weix_account_info err",err);
+                }
+                next();
+            })
+        });
     }
 }
 
@@ -99,15 +108,15 @@ function takeOrder(req,res,callback){
 
 }
 
-function get_weix_auth(authority,search){
+function get_weix_auth(req,res,authority,redirectUri,cb){
     if(!req.session[authority]){
         req.session[authority] = true;
-        var redirect_uri = "http://www.daidai2u.com/we_account/live-room#"+search;
+        var redirect_uri = redirectUri;
         we_auth.getWeAuth(redirect_uri,res,"snsapi_userinfo");
     }else{
         we_auth.redirectToUrl(req,res,function(err,results,requ,resp,nocode){
             if(err){
-                logger.error('getAuth snsapi_userinfo failed in payit:',err);
+                logger.error('getAuth snsapi_userinfo failed in '+authority+':',err);
             }else if(nocode){
                 delete req.session[authority];
                 return;
@@ -120,15 +129,9 @@ function get_weix_auth(authority,search){
                 var accessToken = results.access_token;
                 logger.info("get openId:"+results.openid);
                 we_auth.getSnsapi_userinfo(req,res,accessToken,openId,function(err,userInfo){
-                    //in cnickname varchar(50),in roomid varchar(40),in c_openid varchar(200),
-                    //in headimgurl varchar(150),in sex bit,in city varchar(30),in country varchar(30),in unionid varchar(200),in subscribe_time datetime
-                    dbOperator.query("call pro_integrate_customer_info(?,?,?,?,?,?,?,?,?,?)",[nickname,room_id,openId,userInfo.headimgurl,userInfo.sex,userInfo.nickname,
-                        userInfo.city,userInfo.country,userInfo.unionid,userInfo.subscribe_time],function(err,rows){
-                        if(err){
-                            logger.error("call pro_integrate_customer_info err",err);
-                        }
-                        next();
-                    })
+                    if(userInfo){
+                        cb(openId,userInfo);
+                    }
                 });
 
             }
