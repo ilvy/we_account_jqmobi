@@ -652,14 +652,14 @@ function vagueSearchProduct(req,res){
  * @param res
  */
 function editProduct(req,res){
-    var openId = req.session.openId||'oxfQVswUSy2KXBPOjNi_BqdNI3aA',
+    var openId = req.session.openId;//||'oxfQVswUSy2KXBPOjNi_BqdNI3aA',
         body = req.body,
         roomId = body.room_id,
         product_id = body.product_id,
         title = body.title,
         text = body.desc,
         image_url = body.products;
-    dbOperator.query('call pro_edit_product_test(?,?,?,?,?,?)',[roomId,openId,product_id,title,text,image_url],function(err,rows){
+    dbOperator.query('call pro_edit_product(?,?,?,?,?,?)',[roomId,openId,product_id,title,text,image_url],function(err,rows){
         if(err){
             response.failed(-1,res,0);
         }else{

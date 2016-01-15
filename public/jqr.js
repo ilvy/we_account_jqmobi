@@ -23,12 +23,12 @@ requirejs.config({
     },
     //paths:{
     //    //jquery:'javascripts/jquery',
-    //    router:'http://static.daidai2u.com/javascripts/router',
+    //    router:'http://static.daidai2u.com/javascripts/router.js?v=1.0',
     //    routerConfig:'http://static.daidai2u.com/javascripts/routerConfig',
     //    'room-door':'http://static.daidai2u.com/javascripts/room-door',
     //    touchEvent:'http://static.daidai2u.com/touchUtil',
     //    laydate:'http://static.daidai2u.com/Jplugin/laydate/laydate',
-    //    util:'http://static.daidai2u.com/util/util',
+    //    util:'http://static.daidai2u.com/util/util.js?v=1.0',
     //    jqmobiTouch:"http://static.daidai2u.com/javascripts/libs/jquery.mobile.custom",
     //    preloadImg:"http://static.daidai2u.com/javascripts/preloadImg",
     //    waterfall:"http://static.daidai2u.com/javascripts/waterfall_relative.js?v=1.0",
@@ -101,12 +101,12 @@ var routerConfig = {
 //var routerConfig = {
 //    live_room:'http://static.daidai2u.com/modules/live_room/live_room.js',
 //    register:'http://static.daidai2u.com/modules/register/register.js',
-//    publish:'http://static.daidai2u.com/modules/publish/publish.js?v=1.0',
+//    publish:'http://static.daidai2u.com/modules/publish/publish.js?v=1.1',
 //    product_display:'http://static.daidai2u.com/modules/product/product.js?v=1.1',
 //    myFavorite:'http://static.daidai2u.com/modules/myFavorite/myFavorite.js',//收藏夹
 //    room_door:'http://static.daidai2u.com/modules/room_door/room_door.js?v=1.1',
 //    personality:'http://static.daidai2u.com/modules/personality/personality.js',
-//    billSystem:'http://static.daidai2u.com/modules/bill/bill.js?v=2.2',
+//    billSystem:'http://static.daidai2u.com/modules/bill/bill.js?v=1.8',
 //    add_order:'http://static.daidai2u.com/modules/add_order/add_order.js',
 //    getpay:'http://static.daidai2u.com/modules/Payment/Payment.js?v=1.1'
 //};

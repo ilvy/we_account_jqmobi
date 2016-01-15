@@ -506,8 +506,8 @@ delimiter ;
 
 ---------------------商品编辑 更新同名商品合并------------------------start
 delimiter $$
-drop procedure if exists pro_edit_product_test;
-create procedure pro_edit_product_test(in roomid varchar(16),in openid varchar(100),in productid int,in _title varchar(40),in text varchar(600),in image_url varchar(200))
+drop procedure if exists pro_edit_product;
+create procedure pro_edit_product(in roomid varchar(16),in openid varchar(100),in productid int,in _title varchar(40),in text varchar(600),in image_url varchar(200))
 begin
 
 start transaction;
