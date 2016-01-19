@@ -1342,6 +1342,31 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 });
 
             },true);
+            //输入自动匹配熟客
+            $("#aopc_name").on("input",function(event){
+                var $nameInput = $(this);
+                var customer = $nameInput.val();
+                if(!customer.trim()){
+                    $("#search-user-panel").removeClass('visible');
+                    return;
+                }
+                var offset = $nameInput.offset();
+                $.ajax({
+                    url:"/we_account/vague_search_user?customer="+customer+"&type=3",
+                    type:"get"
+                }).success(function(results){
+                    if(results.flag == 1){
+                        _this.renderSearchUserPanel("#search-user-panel",results.data);
+                        $("#search-user-panel").css({
+                            width:$nameInput.width() + 30,
+                            top:offset.top + $nameInput.height() + 1,
+                            left:offset.left
+                        }).addClass('visible');
+                    }
+                }).error(function(err){
+
+                });
+            });
             $("#search_exists_customers").touch("click",function(event){
                 var $nameInput = $("#aopc_name");
                 var customer = $nameInput.val();
@@ -1376,6 +1401,29 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                     }
                 }).error(function(err){
 
+                });
+            });
+            //模糊匹配商品名
+            $("#aopp_name").on("input",function(){
+                var $productInput = $(this);
+                var productName = $productInput.val(),
+                    offset = $productInput.offset();
+                if(!productName.trim()){
+                    $("#search-products-panel").removeClass('visible');
+                    return;
+                }
+                $.ajax({
+                    url:"/we_account/vagueSearchProduct?product_name="+productName,
+                    type:"get"
+                }).success(function(results){
+                    if(results.flag == 1){
+                        _this.renderVagueSearch("#search-products-panel",results.data,"product_name");
+                        $("#search-products-panel").css({
+                            width:$productInput.width() + 30,
+                            top:offset.top + $productInput.height() + 1,
+                            left:offset.left
+                        }).addClass('visible');
+                    }
                 });
             });
             //搜商品名
