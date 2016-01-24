@@ -296,7 +296,7 @@ set @update_count = (SELECT ROW_COUNT());
   if @update_count = 0 THEN
         SET @Cid = (SELECT c.id from t_customer c JOIN user u
                                             ON c.seller_room_id = u.room_id
-                                            WHERE c.seller_room_id = sell_room_id AND c.c_openid = c_open_id);
+                                            WHERE c.seller_room_id = sell_room_id AND c.c_openid = c_open_id and c.c_status = 1);
   -- SELECT @Cid;
   if @Cid is NULL THEN
       INSERT INTO t_customer(c_nickname,c_openid,seller_room_id,create_time)
@@ -504,10 +504,10 @@ delimiter ;
 ---------------------全站模糊匹配user------------------------end
 
 
----------------------商品编辑------------------------start
+---------------------商品编辑 更新同名商品合并------------------------start
 delimiter $$
 drop procedure if exists pro_edit_product;
-create procedure pro_edit_product(in roomid varchar(16),in openid varchar(100),in productid int,in title varchar(40),in text varchar(600),in image_url varchar(200))
+create procedure pro_edit_product(in roomid varchar(16),in openid varchar(100),in productid int,in _title varchar(40),in text varchar(600),in image_url varchar(200))
 begin
 
 start transaction;
@@ -516,8 +516,16 @@ if roomid is null then
 set @roomid = (select room_id from user where open_id = openid);
 end if;
 
-update product p , user u set p.text = text,p.image_url = image_url,p.title = title
+set @existProductId = (select p.id from product p where p.title = _title and p.room_id = @roomid and p.status = 1 and p.id != productid limit 1);
+if @existProductId is null then
+update product p , user u set p.text = text,p.image_url = image_url,p.title = _title
 where p.room_id = u.room_id and p.room_id = @roomid and u.open_id = openid and p.id = productid;
+select -1 existpid;
+else
+update product p set p.status = 0 where p.id = productid; -- disable repeat product
+update t_order o set o.product_id = @existProductId where o.product_id = productid; -- update order's product_id to existed one
+select @existProductId existpid;
+end if;
 
 commit;
 
@@ -562,18 +570,18 @@ delimiter ;
 /****************收账，账单详情***************/
 delimiter $$
 drop procedure if exists pro_getpayment;
-CREATE  PROCEDURE pro_getpayment(in nickname varchar(50),in roomid varchar(16))
+CREATE  PROCEDURE pro_getpayment(in _nickname varchar(50),in roomid varchar(16))
 begin
 
 SELECT c.id c_id,o.id oid,p.title,o.price,o.quantity,o.remark,c.seller_room_id room_id,o.mail_free,o.mail_pay,w.nickname,c.c_openid
 	from t_order o
 	left JOIN t_customer c
-	ON o.c_id = c.id AND o.`status` = 2 AND c.c_nickname = nickname AND c.seller_room_id = roomid
+	ON o.c_id = c.id AND o.`status` = 2 AND c.c_nickname = _nickname AND c.seller_room_id = roomid
 	left JOIN product p
 	ON p.id = o.product_id
 	left join t_weix_account_info w
 	on c.c_openid = w.open_id
-	where c.c_nickname = nickname AND c.seller_room_id = roomid;
+	where c.c_nickname = _nickname AND c.seller_room_id = roomid;
 
 end; $$
 delimiter ;

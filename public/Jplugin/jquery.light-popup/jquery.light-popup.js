@@ -70,10 +70,10 @@
         hide: function (callback) {
             var _this = this;
             this.jqueryele.removeClass('light-popup-show');
-            this.setMask(false);
             setTimeout(function(){
                 _this.jqueryele.removeClass('visible');
-            },1000)
+                _this.setMask(false);
+            },500)
             if(callback){
                 callback();
             }
@@ -113,6 +113,9 @@
         },
         stopPropagation:function(){
             jquery('.light-popup').touch("click",function(event){
+
+            },true);
+            jquery(".light-popup-mask").touch("click",function(event){
 
             },true);
         }

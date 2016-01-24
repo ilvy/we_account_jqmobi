@@ -13,7 +13,10 @@ html
     body
         #getpay
             .getpay-title
-                span.collection_object #{nickname}
+                - if(nickname)
+                    span.collection_object #{nickname}
+                - else
+                    span.collection_object 您
                 span 的账单
             .table
                 .t-row.t-row-header

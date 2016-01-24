@@ -14,6 +14,26 @@ var hitPointLogger = require("log4js").getLogger("hit_point");
 logger.setLevel("INFO");
 hitPointLogger.setLevel("INFO");
 
+function getAuth_enterLiveRoom(req,res,next){
+    var openId = req.session.openId;
+    var search = req.query.search;
+    if(!search){
+        next();
+    }else if(openId){
+        next();
+    }else{//未关注公众号，跳到公众号关注界面
+        get_weix_auth(req,res,"enter_authority",["http://www.daidai2u.com/we_account/live-room#",search].join(""),function(openId,userInfo){
+            dbOperator.query("call pro_weix_account_info(?,?,?,?,?,?,?,?)",[openId,userInfo.nickname,userInfo.headimgurl,userInfo.sex,
+                [accountInfo.province,accountInfo.city].join(""),userInfo.country,userInfo.unionid,userInfo.subscribe_time],function(err,rows){
+                if(err){
+                    logger.error("call pro_weix_account_info err",err);
+                }
+                next();
+            })
+        });
+    }
+}
+
 /**
  * 买家下订单
  * @param req
@@ -86,6 +106,37 @@ function takeOrder(req,res,callback){
 //        return;
 //    }
 
+}
+
+function get_weix_auth(req,res,authority,redirectUri,cb){
+    if(!req.session[authority]){
+        req.session[authority] = true;
+        var redirect_uri = redirectUri;
+        we_auth.getWeAuth(redirect_uri,res,"snsapi_userinfo");
+    }else{
+        we_auth.redirectToUrl(req,res,function(err,results,requ,resp,nocode){
+            if(err){
+                logger.error('getAuth snsapi_userinfo failed in '+authority+':',err);
+            }else if(nocode){
+                delete req.session[authority];
+                return;
+            }else if(results){
+                if(!(results && results.openid)){
+                    res.render("error",{reason:'no permit:103'});
+                    return;
+                }
+                var openId = req.session.openId = results.openid;
+                var accessToken = results.access_token;
+                logger.info("get openId:"+results.openid);
+                we_auth.getSnsapi_userinfo(req,res,accessToken,openId,function(err,userInfo){
+                    if(userInfo){
+                        cb(openId,userInfo);
+                    }
+                });
+
+            }
+        });
+    }
 }
 
 /**
@@ -415,7 +466,7 @@ function vagueSearchUser(req,res){
  * @param next
  */
 function wxauth_pay(req,res,next){
-    var openId = req.session.openId || 'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
+    var openId = req.session.openId;// || 'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
     var room_id = req.query.room_id,
         nickname = req.query.nickname;
     if(openId){
@@ -532,6 +583,7 @@ function hitPointBuyLocation(req,res){
     response.success(1,res,1);
 }
 
+exports.getAuth_enterLiveRoom = getAuth_enterLiveRoom;
 exports.takeOrder = takeOrder;
 exports.filter_takeOrder = filter_takeOrder;
 exports.getBillList = getBillList;

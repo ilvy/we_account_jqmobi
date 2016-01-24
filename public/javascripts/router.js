@@ -95,6 +95,8 @@ define(['util'],function(util){
             }else{
                 if(globalVar.modules[hash].do && globalVar.reload[hash]){
                     globalVar.modules[hash].do();
+                }else if(globalVar.modules[hash].doWithoutFlush && !globalVar.reload[hash]){
+                    globalVar.modules[hash].doWithoutFlush();
                 }
             }
 
@@ -128,7 +130,7 @@ define(['util'],function(util){
         var orderStatus = $("#forTakeOrder").data("orderstatus");
         if(orderStatus && orderStatus == 1){
             alert("下单成功");
-            changeHash('live_room-'+globalVar.room_id,1);
+            changeHash('live_room-'+util.getUrlParam("room_id"),1);
         }else if(orderStatus && orderStatus == -1){
             alert("下单失败，请重试");
         }
@@ -141,7 +143,7 @@ define(['util'],function(util){
                 globalVar.lv_scroll_top = 0;
             }else if(objHash == 'live_room' && !reload){
 //                globalVar.modules['live_room'].dealForCompactShare();//从产品页面返回直播页面时，恢复对应title和第一张图片，兼容朋友圈分享
-                util.dealForCompactShare(globalVar.userInfo.nickname);
+                util.dealForCompactShare(globalVar.userInfo ? globalVar.userInfo.nickname : "");
             }
             window.location.hash = '#'+hash;
         }

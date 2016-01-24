@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>react learn 1</title>
+		<script src="build/react.js"></script>
+		<!--<script src="build/react-dom.js"></script>-->
+		<script src="build/browser.js"></script>
+	</head>
+	<body>
+		<div id="example"></div>
+		<div id="example2"></div>
+		<script type="text/babel">
+			var TestEl = React.createClass({
+				render:function(){
+					return (<p className="pp">this is a p,called {this.props.name}
+				{	
+					this.props.children.map(function(child){
+						return <p>{child}</p>;
+					})
+				}
+					</p>)
+				}
+			});
+			React.render(
+				<TestEl name="pp" >
+				    <h name="h1">wo shi h1</h>
+				    <h name="h2">wo shi h2</h>
+				</TestEl>
+				,
+				document.getElementById("example")
+			);
+		</script>
+		<script src="jsx-build/test-jsx1.js"></script>
+	</body>
+</html>
