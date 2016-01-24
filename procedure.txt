@@ -811,7 +811,7 @@ begin
 start transaction;
 
 if cateName is null then
-set @cateId = 1;
+set cate_id = 1;
 else
     set @cateId = (select min(id) from t_category where cate_name = cateName);
     if @cateId is null then

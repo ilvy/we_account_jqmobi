@@ -331,7 +331,8 @@ exports.query = query;
 //        console.log(rows);
 //    }
 //})
-query("call pro_get_order_info_new('oxfQVswUSy2KXBPOjNi_BqdNI3aA',1)",[],function(err,rows){
+query("call pro_get_order_info_new('oxfQVs6SQx04a_kN-zf9CZFXIyII',1)",[],function(err,rows){
+//query("select * from t_customer where c_nickname like '%老爸%'",[],function(err,rows){
     if(err){
         console.log(err);
     }else{

@@ -1833,7 +1833,7 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
         },
         hideLoading:function(){
             $("#loading").css('display','none');
-        }
+    }
     };
     globalVar.modules['billSystem'] = new Bill();
 });
