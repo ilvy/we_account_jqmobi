@@ -8,9 +8,7 @@ var ButtonGroup = React.createClass({displayName: "ButtonGroup",
 	render:function(){
 		var bgColor = this.state.clicked ? "blue-bg" : "";
 		return (
-                React.createElement("button", {onClick: this.handleClick, className: bgColor}, 
-                    this.props.name
-                )
+                React.createElement("input", {onClick: this.handleClick, className: bgColor, value: this.props.name})
 			)
 	}
 });
@@ -31,8 +29,8 @@ var Toolbar = React.createClass({displayName: "Toolbar",
 React.render(
 	React.createElement(Toolbar, {name: "toolbar"}, 
 	    React.createElement(ButtonGroup, {name: "购买列表"}), 
-	    React.createElement("a", null, "收款列表"), 
-	    React.createElement("a", null, "历史账单")
+	    React.createElement(ButtonGroup, {name: "收款列表"}), 
+	    React.createElement(ButtonGroup, {name: "历史账单"})
 	)
 	,
 	document.getElementById("toolbar-wrap")

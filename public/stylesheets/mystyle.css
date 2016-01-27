@@ -176,6 +176,10 @@ input.invalid{
     display: inline;
 }
 
+#order-list {
+    border-top: 1px solid transparent;
+}
+
 #pay-list .table,#order-list .table{
     /*border: 1px solid #cdcdcd;*/
     float: left;
@@ -393,7 +397,7 @@ input.invalid{
 
 .cate_btn_group{
     margin-bottom: 5px;
-    margin-top: 44px;
+    margin-top: 2px;
 }
 
 .cate_btn_group > input{
