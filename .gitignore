@@ -48,5 +48,8 @@ node_modules/
 # output
 public/output/
 
+# jsx module-cache
+public/react/jsx-build/.module-cache/
+
 #logs
 logs/
