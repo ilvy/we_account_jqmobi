@@ -28,3 +28,4 @@ React.render(
 	,
 	document.getElementById("example")
 );
+React.render(<h3>hello,world</h3>,document.getElementById("example2"));
