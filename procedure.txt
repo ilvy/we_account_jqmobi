@@ -165,7 +165,7 @@ set @pname = product_name;
 set @sell_room_id = (select room_id from user where open_id = sell_open_id);
 set @openId = (select distinct open_id from t_weix_account_info where nickname = cnickname);-- 第一步、1先根据昵称获取买家openId
 if @openId is null then
-set @openId = (select distinct c_openid from t_customer where c_nickname = cnickname and seller_room_id = @sell_room_id);-- 第一步、2根据昵称从熟客获取买家openId
+set @openId = (select distinct c_openid from t_customer where c_nickname = cnickname and seller_room_id = @sell_room_id and c_status = 1);-- 第一步、2根据昵称从熟客获取买家openId
 end if;
 if @openId is null then -- add customer hasn't follow daidai
 set @openId = (select concat('lopid_',unix_timestamp(@now),cast(rand() as char(10))));
@@ -241,7 +241,7 @@ join t_weix_account_info w
 on c.c_openid = w.open_id
 where (c.c_nickname = '鷠皇Niklaus' or w.nickname = '鷠皇Niklaus') and c.seller_room_id = '888888';
 
-/***************通过账单确认补全未关注的买家信息***************/
+/***************通过账单确认补全未关注的买家信息***************/ TODO:更新
 
 delimiter $$
 drop procedure if exists pro_integrate_customer_info;
@@ -261,10 +261,15 @@ if c_open_id is not null then -- is permit
                                  where w.open_id = c_open_id);
         set @isBind = (select count(1) from t_customer c
             join user u
-            on u.room_id = c.seller_room_id and c.c_nickname = cnickname and c.seller_room_id = roomid
+            on u.room_id = c.seller_room_id and c.c_nickname = cnickname and c.seller_room_id = roomid and c.c_status = 1
             join t_weix_account_info w
             on w.open_id = c.c_openid);
-
+        -- start fix the bug take one order but two --
+        set @existCid = (select id from t_customer where c_openid = c_open_id and seller_room_id = roomid and c_status = 1);
+        if @existCid is not null and @isBind = 0 then
+            update t_customer set c_status = 0 where id =  @existCid;
+        end if;
+        -- end fix the bug take one order but two --
         if @isBind = 0 and @isSubscribed >= 1 then
             update t_customer set c_openid =  c_open_id where c_nickname = cnickname and seller_room_id = roomid;
         elseif @isBind = 0 and @isSubscribed = 0 then
@@ -277,6 +282,7 @@ commit;
 
 end; $$
 delimiter ;
+
 
 -- 下单 pro_take_order
 delimiter $$
@@ -359,7 +365,7 @@ set @update_count = (SELECT ROW_COUNT());
                     ON c.seller_room_id = u.room_id
                     JOIN t_exchange_rate r
                     ON r.exchange_type = 2
-                    WHERE c.seller_room_id = sell_room_id AND c.c_openid = c_open_id
+                    WHERE c.seller_room_id = sell_room_id AND c.c_openid = c_open_id and c.c_status = 1
                         AND r.open_id = (SELECT open_id from user WHERE room_id = seller_room_id);
 
             set o_id = (select LAST_INSERT_ID());
@@ -484,16 +490,16 @@ if type = 1 then
      where nickname like username
      union all
      select c_nickname nickname from t_customer
-     where c_nickname like username
+     where c_nickname like username and c_status = 1
  ) t;
 elseif type = 3 then
     select distinct c.c_nickname nickname from t_customer c
         join user u
-        where u.room_id = c.seller_room_id and u.open_id = openId and c.c_nickname like username;
+        where u.room_id = c.seller_room_id and u.open_id = openId and c.c_nickname like username and c.c_status = 1;
 else
 select distinct c.c_nickname nickname from t_customer c
     join user u
-    where u.room_id = c.seller_room_id and u.open_id = openId;
+    where u.room_id = c.seller_room_id and u.open_id = openId and c.c_status = 1;
 
 end if;
 
@@ -679,6 +685,58 @@ if type = 1 THEN
           update t_order o set o.c_id = objid
             where o.c_id = @objExistCid;
      end if;
+   end if;
+ELSEIF type = 2 THEN
+  UPDATE t_order o SET o.cost = value,o.exchange_rate = exchangeRate ,o.exchange_type = exchangeType
+    WHERE o.id = objid;
+  UPDATE t_order o SET o.exchange_rate = exchangeRate ,o.exchange_type = exchangeType
+    WHERE o.cost IS NULL AND o.product_id in
+        (SELECT p.id FROM product p,`user` u where p.room_id = u.room_id AND u.open_id = openId and p.status = 1);
+  UPDATE t_exchange_rate er set er.exchange_rate = exchangeRate
+    WHERE er.exchange_type = exchangeType AND er.open_id = openId;
+  ELSEif type = 3 THEN
+    UPDATE t_order o SET o.price = value,o.discount = _discount
+        WHERE o.id = objid;
+  ELSEIF type = 4 THEN
+    UPDATE t_order o SET o.quantity = value
+      WHERE o.id = objid;
+end if;
+
+commit;
+end; $$
+delimiter ;
+
+/********** pro_set_customer_info_new ************/ 修复修改昵称时修改所有订单的逻辑错误，加上oid一起判断 TODO:更新
+delimiter $$
+drop procedure if exists pro_set_customer_info_new;
+CREATE PROCEDURE `pro_set_customer_info_new`(in objid int,in value decimal(10,2),in nickname varchar(50),in type tinyint,in exchangeRate decimal(4,2),in openId varchar(100),in exchangeType tinyint,in _discount decimal(4,2),in order_id int)
+BEGIN
+	#Routine body goes here...
+START TRANSACTION;
+
+set @now = now();
+
+if type = 1 THEN
+-- UPDATE t_customer c SET c.c_nickname = nickname
+  -- WHERE c.id = objid;
+  set @objExistCid = (select c.id from t_customer c
+                       join user u
+                       where c.c_nickname = nickname and c.c_status = 1 and c.id != objid and c.seller_room_id = u.room_id and u.open_id = openId);
+  set @sell_room_id = (select room_id from user u where u.open_id = openId);
+
+  -- 1、当前用户昵称不存在
+  if @objExistCid is null and @sell_room_id is not null then
+   -- UPDATE t_customer c SET c.c_nickname = nickname
+    -- WHERE c.id = objid and c.c_status = 1;
+     set @lopenId = (select concat('lopid_',unix_timestamp(@now),cast(rand() as char(10))));
+     insert into t_customer(c_openid,seller_room_id,c_nickname,create_time)
+         select @lopenId,@sell_room_id,nickname,@now;
+      update t_order o set o.c_id = (select last_insert_id())
+        where o.c_id = objid and o.id = order_id;
+  -- 2、当前客户昵称已存在
+  elseif @objExistCid is not null then
+      update t_order o set o.c_id = @objExistCid
+        where o.c_id = objid and o.id = order_id;
    end if;
 ELSEIF type = 2 THEN
   UPDATE t_order o SET o.cost = value,o.exchange_rate = exchangeRate ,o.exchange_type = exchangeType

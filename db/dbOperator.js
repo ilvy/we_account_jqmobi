@@ -333,7 +333,22 @@ exports.query = query;
 //})
 //query("call pro_get_order_info_new('oxfQVs6SQx04a_kN-zf9CZFXIyII',1)",[],function(err,rows){
 //query("select * from t_customer where c_nickname like '%老爸%'",[],function(err,rows){
-query("call pro_getpayment_test('大宝-李国萍','20049')",[],function(err,rows){
+//query(" SELECT c.id c_id,o.id oid,p.title,o.price,o.quantity,o.remark,c.seller_room_id room_id,o.mail_free,o.mail_pay,w.nickname,c.c_openid " +
+//    "from t_order o " +
+//    "left JOIN t_customer c " +
+//    "ON o.c_id = c.id AND o.`status` = 3 AND c.c_nickname = '小孟' AND c.seller_room_id = 20003 " +
+//    "left JOIN product p " +
+//    "ON p.id = o.product_id " +
+//    "left join t_weix_account_info w " +
+//    "on c.c_openid = w.open_id " +
+//    "where c.c_nickname = '小孟' AND c.seller_room_id = 20003;",[],function(err,rows){
+//    if(err){
+//        console.log(err);
+//    }else{
+//        console.log(rows);
+//    }
+//})
+query("select * from t_customer where c_nickname like '%小孟%'",[],function(err,rows){
     if(err){
         console.log(err);
     }else{

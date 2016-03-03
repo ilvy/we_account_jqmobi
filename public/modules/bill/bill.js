@@ -1551,17 +1551,19 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
                 if(!confirm('确认修改该客户昵称？')){
                     return;
                 }
-                var objId = $('.order-cnickname-update-obj').parent().data('cid');
+                var $objRow = $('.order-cnickname-update-obj').parent();
+                var objId = $objRow.data('cid'),
+                    orderId = $objRow.data("oid");
                 var value = $("#pep_cnickname").val();
                 globalVar.showLoading();
-                var url = '/we_account/updateCustomerInfo?nickname='+value+'&objId='+objId+'&type=1';
+                var url = '/we_account/updateCustomerInfo?nickname='+value+'&objId='+objId+'&type=1'+"&order_id="+orderId;
                 $.ajax({
                     url:url,
                     type:'get',
                     success:function(results){
                         if(results.flag == 1){
 //                                $this.parents('.t-row').data("value",value);
-                            $(".t-row[data-cid = "+objId+"] .nickname").text(value).data("value",value);
+                            $(".t-row[data-oid = "+orderId+"] .nickname").text(value).data("value",value);
                         }else{
                             alert('昵称修改失败，请重试！');
                         }

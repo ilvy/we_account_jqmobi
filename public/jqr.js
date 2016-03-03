@@ -106,7 +106,7 @@ var routerConfig = {
     myFavorite:'http://static.daidai2u.com/modules/myFavorite/myFavorite.js',//收藏夹
     room_door:'http://static.daidai2u.com/modules/room_door/room_door.js?v=1.1',
     personality:'http://static.daidai2u.com/modules/personality/personality.js',
-    billSystem:'http://static.daidai2u.com/modules/bill/bill.js?v=1.9',
+    billSystem:'http://static.daidai2u.com/modules/bill/bill.js?v=2.0',
     add_order:'http://static.daidai2u.com/modules/add_order/add_order.js',
     getpay:'http://static.daidai2u.com/modules/Payment/Payment.js?v=1.1'
 };
