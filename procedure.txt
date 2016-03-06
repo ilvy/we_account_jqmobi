@@ -267,7 +267,9 @@ if c_open_id is not null then -- is permit
         -- start fix the bug take one order but two --
         set @existCid = (select id from t_customer where c_openid = c_open_id and seller_room_id = roomid and c_status = 1);
         if @existCid is not null and @isBind = 0 then
-            update t_customer set c_status = 0 where id =  @existCid;
+            -- update t_customer set c_status = 0 where id =  @existCid;
+            update t_order o,t_customer c set o.c_id = (select a.id from (select id from t_customer where c_nickname = cnickname and seller_room_id = roomid and c_status = 1 and id != @existCid) a),c.c_status = 0
+            where o.c_id = c.id and c.id = @existCid;
         end if;
         -- end fix the bug take one order but two --
         if @isBind = 0 and @isSubscribed >= 1 then
@@ -933,3 +935,20 @@ delimiter ;
 
 /************** category table **************/
 create table t_category(id int primary key auto_increment,cate_type tinyint default 1,cate_name varchar(50));
+
+
+update t_customer t1,(select c.id from t_customer c left join (select c_openid,seller_room_id,count(1) num from t_customer where c_status = 1 group by c_openid,seller_room_id) c2
+ on c.c_openid = c2.c_openid and c.seller_room_id = c2.seller_room_id and c2.num > 1 and c_status = 1 and c.seller_room_id != '888888'
+left join (select max(id) id from t_customer c,(select c_openid,seller_room_id,count(1) num from t_customer where c_status = 1 group by c_openid,seller_room_id) c2
+ where c.c_openid = c2.c_openid and c.seller_room_id = c2.seller_room_id and c2.num > 1 and c_status = 1 and c.seller_room_id != '888888'
+ group by c.c_openid,c.seller_room_id) c3
+ on c3.id = c.id
+ where c3.id is null and c2.num > 1) t2
+ set t1.c_status = 0
+where t1.id = t2.id
+
+select * from t_customer c,(select c_openid,seller_room_id,count(1) num from t_customer group by c_openid,seller_room_id) c2
+ where c.c_openid = c2.c_openid and c.seller_room_id = c2.seller_room_id and c2.num > 1 and c.seller_room_id != '888888'
+ order by c_openid,seller_room_id
+
+ c_status = 1

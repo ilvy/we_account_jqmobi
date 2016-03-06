@@ -1343,9 +1343,10 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
 
             },true);
             //输入自动匹配熟客
-            $("#aopc_name").on("input",function(event){
+            $("#aopc_name,#pep_cnickname").on("input",function(event){
                 var $nameInput = $(this);
                 var customer = $nameInput.val();
+                $nameInput.addClass("match-obj-input");
                 if(!customer.trim()){
                     $("#search-user-panel").removeClass('visible');
                     return;
@@ -1458,7 +1459,8 @@ define(['router','util','wxAPI','jpopup','touchEvent','laydate'],function(router
             },true);
             $("#search-user-panel li").touch("click",function(event){
                 var name = event.$this.text();
-                $("#aopc_name").val(name);
+                //var $matchobjInput = $(".match-obj-input");
+                $(".match-obj-input").val(name).removeClass("match-obj-input");
                 $("#search-user-panel").removeClass('visible');
             },true);
             $("#search-products-panel li").touch("click",function(event){

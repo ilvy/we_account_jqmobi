@@ -348,7 +348,7 @@ exports.query = query;
 //        console.log(rows);
 //    }
 //})
-query("select * from t_customer where c_nickname like '%小孟%'",[],function(err,rows){
+query("select id from t_customer where c_nickname like '%疯子%' and seller_room_id = 888888 and c_status = 1",[],function(err,rows){
     if(err){
         console.log(err);
     }else{
