@@ -22,7 +22,7 @@ var log = log4js.getLogger("startup");
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '880');
+var port = normalizePort(process.env.PORT || '870');
 app.set('port', port);
 
 /**

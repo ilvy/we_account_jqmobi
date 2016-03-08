@@ -16,6 +16,7 @@
     "formidable-upload": "0.0.3",
     "gulp": "~3.8.11",
     "jade": "1.9.2",
+    "log4js": "^0.6.32",
     "morgan": "~1.5.1",
     "mysql": "2.6.1",
     "node-xml": "1.0.2",
