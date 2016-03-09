@@ -576,10 +576,12 @@ input.invalid{
     background-color: rgba(200,30,40,1);
     padding: 5px;
     bottom: 5%;
-    left: calc(50% - 25px);
+    /*left: calc(50% - 25px);
     left: -webkit-calc(50% - 25px);
-    left: -moz-calc(50% - 25px);
+    left: -moz-calc(50% - 25px);*/
     border-radius: 32px;
+    left: 50%;
+    margin-left: -25px;
 }
 
 #create-order-div{
