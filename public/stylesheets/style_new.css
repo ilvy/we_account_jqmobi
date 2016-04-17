@@ -18,7 +18,7 @@ img#for-share{
     /*display: none;*/
 }
 
-/*************start register.html****************/
+/*************start register.html,login.html****************/
 #form{
     width: 60%;
     margin: 0 auto;
@@ -42,7 +42,22 @@ img#for-share{
     background-color: #ffffff;
     border-radius: 10px;
 }
-/*************end register.html****************/
+.eform-control{
+    width: 100%;
+    height: 30px;
+    margin-top: 20px;
+}
+.eform-control.login-fail{
+    color: red;
+    margin-top: 6px;
+}
+.eform-control > label:first-child{
+    float: left;
+}
+.eform-control > label:last-child{
+    float: right;
+}
+/*************end register.html,login.html****************/
 
 /*************start product********************/
 .product_display{

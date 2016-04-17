@@ -197,7 +197,7 @@ function updateCustomerInfo(req,res){
         }else{
             logger.info('updateCustomerInfo type:'+type +',id:'+objid+' success');
 //            if(rows.affectedRows != 0){
-                response.success('',res,'');
+                response.success(rows[0]?rows[0][0]:1,res,'');
 //            if(value == ''){
 //
 //            }

@@ -1512,6 +1512,7 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
             }, true);
             $("#pep_cancel,#pep_submit").touch("click", function(event) {
                 var $this = event.$this;
+                $("#search-user-panel").removeClass("visible");
                 if ($this.hasClass("yellow-btn")) {
                     $("#order-edit-panel").pop({
                         hidden: true
@@ -1561,15 +1562,15 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                     success: function(results) {
                         if (results.flag == 1) {
                             $(".order-remark-update-obj").text(newRemark);
-                            var updateDataSource = function() { //修改本地数据源
-                                for (var i = 0; i < _this.orderListData.length; i++) {
-                                    if (_this.orderListData[i].oid == data.order_id) {
-                                        _this.orderListData[i].remark = newRemark;
-                                        return;
-                                    }
-                                }
-                            }
-                            updateDataSource();
+                            //var updateDataSource = function() { //修改本地数据源
+                            //    for (var i = 0; i < _this.orderListData.length; i++) {
+                            //        if (_this.orderListData[i].oid == data.order_id) {
+                            //            _this.orderListData[i].remark = newRemark;
+                            //            return;
+                            //        }
+                            //    }
+                            //}
+                            updateDataSource('remark',newRemark,data.order_id);
                         } else {
                             alert("修改备注失败！");
                         }
@@ -1603,8 +1604,10 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                     type: 'get',
                     success: function(results) {
                         if (results.flag == 1) {
+                            var newCid = results.data.newCid;
                             //                                $this.parents('.t-row').data("value",value);
                             $(".t-row[data-oid = " + orderId + "] .nickname").text(value).data("value", value);
+                            _this.updateDataSource(["nickname","cid"],[value,newCid],orderId);
                         } else {
                             alert('昵称修改失败，请重试！');
                         }
@@ -1933,6 +1936,20 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                     });
                 }
             });
+        },
+        updateDataSource:function(objKeys,objValues,objOrderId) { //修改本地数据源
+            for (var i = 0; i < this.orderListData.length; i++) {
+                if (this.orderListData[i].oid == objOrderId) {
+                    if(objKeys instanceof Array){
+                        for(var j = 0; j < objKeys.length; j++){
+                            this.orderListData[i][objKeys[j]] = objValues[j];
+                        }
+                    }else{
+                        this.orderListData[i][objKeys] = objValues;
+                    }
+                    return;
+                }
+            }
         },
         showLoading: function() {
             $("#loading").css('display', 'block');

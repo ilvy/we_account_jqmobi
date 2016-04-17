@@ -733,12 +733,15 @@ if type = 1 THEN
      set @lopenId = (select concat('lopid_',unix_timestamp(@now),cast(rand() as char(10))));
      insert into t_customer(c_openid,seller_room_id,c_nickname,create_time)
          select @lopenId,@sell_room_id,nickname,@now;
-      update t_order o set o.c_id = (select last_insert_id())
+         set @objExistCid = (select last_insert_id());
+      update t_order o set o.c_id = @objExistCid
         where o.c_id = objid and o.id = order_id;
+        select @objExistCid newCid;
   -- 2、当前客户昵称已存在
   elseif @objExistCid is not null then
       update t_order o set o.c_id = @objExistCid
         where o.c_id = objid and o.id = order_id;
+      select @objExistCid newCid;
    end if;
 ELSEIF type = 2 THEN
   UPDATE t_order o SET o.cost = value,o.exchange_rate = exchangeRate ,o.exchange_type = exchangeType
