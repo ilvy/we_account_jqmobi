@@ -80,6 +80,11 @@ var serverConfig =  {
     port:'80'
 };
 
+var redisConfig = {
+    ip:"120.24.224.144",
+    port:'6379'
+};
+
 var appConfig = {
     appId:"wxaef4aefd905a4662",
     appSecret:"ca038c00a3764885a2d18b53d47f8282"
@@ -95,6 +100,7 @@ exports.dbPoolConfig = dbPoolConfig;
 exports.serverConfig = serverConfig;
 exports.appConfig = appConfigForm;
 exports.dataviewConfig = dataviewConfig;
+exports.redisConfig = redisConfig;
 if(process.argv[2] == 'test'){
     exports.appConfig = appConfig;
 }

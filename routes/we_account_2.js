@@ -29,6 +29,7 @@ var publish_account = require("./we_account/business/publish_account"),
     billSystem = require("./we_account/business/billSystem"),
     we_auth = require('./we_account/we_auth');
 var login = require('./we_account/business/login').login;
+var checkToken = require('./we_account/business/login').checkToken;
 
 var TOKEN = 'jxfgx_20140526';
 router.get("/",function(req,res){
@@ -125,6 +126,7 @@ router.post("/register",function(req,res){
 });
 
 router.post("/login",login);
+router.get("/login",checkToken);
 
 //AUTH2.0 网页获取用户权限
 router.get("/publish",function(req,res){
