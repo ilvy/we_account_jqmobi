@@ -67,9 +67,19 @@ function filterLoginAjax(req,res,next){
     }
 }
 
+/**
+ * 去字符串两边的空格
+ * @param  {[type]} str [description]
+ * @return {[type]}     [description]
+ */
+var trim = (str)=>{
+    return str.replace(/^\s+|\s+$/g,'');
+}
+
 exports.getImageExt = function getImageExt(imageName){
 
 }
 
 exports.formatDate = formatDate;
 exports.filterLoginAjax = filterLoginAjax;
+exports.trim = trim;

@@ -13,8 +13,6 @@ select ci.res_u_name customer_name,ci.product_name,max(ci.price) price,ifnull(cl
 end; $$
 delimiter ;
 
-
-
 delimiter $$
 drop procedure if exists pro_ready_help_cut;
 create procedure pro_ready_help_cut(in cutId int,in openId varchar(100),in cutMoney int,in nickname varchar(60),in sex tinyint,in headimgurl varchar(100))
@@ -930,6 +928,21 @@ set @sql = concat('update t_order o set o.cate_id = ',@newCateId,' where o.id in
 -- select @sql;
 prepare stmt from @sql;
 execute stmt;
+
+commit;
+
+end; $$
+delimiter ;
+
+/************** pro_login 账号密码登录 **************/
+delimiter $$
+drop procedure if exists pro_login;
+create procedure pro_login(in accountName varchar(50),in _pwd varchar(50))
+begin
+
+start transaction;
+
+select u.open_id from user u where u.pwd = _pwd and u.email = accountName or u.user_name = accountName or u.room_id = accountName;
 
 commit;
 
