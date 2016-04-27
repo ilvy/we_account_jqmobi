@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>忘记密码</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no" />
+    <link rel="stylesheet" href="stylesheets/style_new.css">
+</head>
+<body>
+    <form id="form" action="/we_account/findPwd" method="post" onsubmit="return login();">
+        <div class="form-control">
+            <input type="text" name="username" id="username" placeholder="    代go号" /><span id="email-tip" style="color: red;display: none;">代go号是一串数字哦</span></div>
+        <div class="form-control">
+            <input type="text" name="email" id="email" placeholder="    邮箱" />
+        </div>
+        <input type="submit" id="loginBtn" class="" value="提交" />
+
+    </form>
+</body>
+<script src="/javascripts/jquery.js"></script>
+<script>
+    function login(){
+        return true;
+    }
+</script>
+</html>

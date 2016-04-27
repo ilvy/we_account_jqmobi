@@ -33,7 +33,7 @@ var defaultOptions = {
 
 var sendMail = (options,cb)=>{
     options = extend(defaultOptions,options);
-    sendMail(options,function(error,response){
+    transport.sendMail(options,function(error,response){
         cb(error,response);
         transport.close();
     });
