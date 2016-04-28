@@ -33,7 +33,7 @@ html
                         a(href="/we_account/forgetpwd") 忘记密码
                 input#loginBtn(type="submit" class="" value="登录")
         - else if(error)
-            #{error}
+            H3 #{error}
     script(src="/javascripts/jquery.js")
     script.
         function login(){

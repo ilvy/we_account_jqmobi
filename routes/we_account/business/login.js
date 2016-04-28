@@ -8,6 +8,7 @@ var dbOperator = require("../../../db/dbOperator"),
 var redis = require("../../../db/redisOperator").client;
 var mailServer = require('./emailCenter');
 
+var cookieDomain = '10.22.0.36';
 var tokenManager = {};
 var login = (req,res,type)=>{
 	// setCookie(res,'10.22.0.36',req.query.username,3600 * 1000);
@@ -22,7 +23,7 @@ var login = (req,res,type)=>{
         if(!err){
             if(results[0] && results[0][0] && results[0][0].open_id){
             	req.session.open_id = results[0][0].open_id;
-            	setCookie(res,'10.22.0.36',req.query.username,3600 * 1000);
+            	setCookie(res,cookieDomain,req.query.username,3600 * 1000);
             	res.render('loginRedirect',{redirectLink:'/we_account/live-room#billSystem'});
             }else{
             	res.redirect('login?lerr=1');//用户名密码不匹配
@@ -120,7 +121,7 @@ var findPwd = (req,res)=>{
 				    to : email,
 				    subject: "找回密码",
 				    generateTextFromHTML : true,
-				    html : "<a href='http://10.22.0.36:870/we_account/verify?acd="+actcode+"'>激活链接</a>"
+				    html : "<a href='http://"+cookieDomain+":870/we_account/verify?acd="+actcode+"'>激活链接</a>"
 				},function(err,results){
 					if(err){
 						res.render("sendMailResult",{result:"找回密码邮件发送失败，请重试！！！"});
@@ -161,7 +162,7 @@ var verifyEmailActive = (req,res)=>{
         var now = new Date().getTime();
         console.log(result.limitAge,now);
         if(now <= acd_limitAge){//激活码未过期
-            res.cookie("actcode",actcode,{domain:"10.22.0.36",maxAge:acd_limitAge - now})
+            res.cookie("actcode",actcode,{domain:cookieDomain,maxAge:acd_limitAge - now})
         	res.render('loginRedirect',{redirectLink:"/resetpwd.html?u="+acd_account});
         }else{//验证码已过期
         	res.render('acdVerifyResult',{error:"验证码已过期"});
