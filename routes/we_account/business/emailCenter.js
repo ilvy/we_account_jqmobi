@@ -6,7 +6,7 @@ var transport = nodemailer.createTransport("SMTP", {
     port: 465, // port for secure SMTP
     auth: {
         user: "478283225@qq.com",
-        pass: "6545959J2cs"
+        pass: "86545959J2cs"
     }
 });
  
