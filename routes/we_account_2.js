@@ -28,8 +28,13 @@ var publish_account = require("./we_account/business/publish_account"),
     loadMoreProducts = live_room.loadMoreProducts_new,
     billSystem = require("./we_account/business/billSystem"),
     we_auth = require('./we_account/we_auth');
-var login = require('./we_account/business/login').login;
-var checkToken = require('./we_account/business/login').checkToken;
+var loginRef = require('./we_account/business/login'),
+    login = loginRef.login,
+    checkToken = loginRef.checkToken,
+    findPwd = loginRef.findPwd,
+    verify = loginRef.verify,
+    resetPwd = loginRef.resetPwd,
+    beforeResetPwd = loginRef.beforeResetPwd;
 
 var TOKEN = 'jxfgx_20140526';
 router.get("/",function(req,res){
@@ -125,8 +130,13 @@ router.post("/register",function(req,res){
     register(req,res);
 });
 
-router.post("/login",login);
-router.get("/login",checkToken);
+router.post("/loginService",login);
+router.get("/login",function(req,res){
+    login(req,res,'get');
+});
+router.post("/findPwd",findPwd);
+router.get("/verify",verify);
+router.post("/resetPwd",beforeResetPwd,resetPwd);
 
 //AUTH2.0 网页获取用户权限
 router.get("/publish",function(req,res){
