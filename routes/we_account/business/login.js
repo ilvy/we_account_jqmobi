@@ -124,18 +124,18 @@ var findPwd = (req,res)=>{
 				    html : "<a href='http://"+cookieDomain+":870/we_account/verify?acd="+actcode+"'>激活链接</a>"
 				},function(err,results){
 					if(err){
-						res.render("sendMailResult",{result:"找回密码邮件发送失败，请重试！！！"});
+						res.render("sendMailResult",{code:0,result:"找回密码邮件发送失败，请重试！！！"});
 						return;
 					}
-					res.render("sendMailResult",{result:"找回密码邮件发送成功，请在一个小时内前往验证并修改密码"});
+					res.render("sendMailResult",{code:200,result:"找回密码邮件发送成功，请在一个小时内前往验证并修改密码"});
 				});
 	    	}
 	    });
     },function(error){
     	if(error.code == 1){
-    		res.render('sendMailResult',{result:"对不起，您输入的邮箱有误"});
+    		res.render('sendMailResult',{code:1,result:"对不起，您输入的邮箱有误"});
     	}else if(error.code == -1){
-			res.render('sendMailResult',{result:"对不起，系统有误，请重试！！！"});
+			res.render('sendMailResult',{code:-1,result:"对不起，系统有误，请重试！！！"});
     	}
     })
     
@@ -152,7 +152,7 @@ var verifyEmailActive = (req,res)=>{
     var actcode = req.query.acd;
     if(!actcode){
     	//TODO 验证失败
-    	res.render('acdVerifyResult',{error:"您的验证码有误或不存在"});
+    	res.render('acdVerifyResult',{code:0,error:"您的验证码有误或不存在"});
     	return;
     }
     //根据激活码从redis读取缓存信息
@@ -165,7 +165,7 @@ var verifyEmailActive = (req,res)=>{
             res.cookie("actcode",actcode,{domain:cookieDomain,maxAge:acd_limitAge - now})
         	res.render('loginRedirect',{redirectLink:"/resetpwd.html?u="+acd_account});
         }else{//验证码已过期
-        	res.render('acdVerifyResult',{error:"验证码已过期"});
+        	res.render('acdVerifyResult',{code:-1,error:"验证码已过期"});
         }
     });
 }
@@ -187,11 +187,11 @@ var beforeResetPwd = (req,res,next)=>{
             if(now <= acd_limitAge){
                 next();
             }else{
-                res.render('acdVerifyResult',{error:"对不起，您的验证时间已过期，请重新申请！！！"});
+                res.render('acdVerifyResult',{code:-1,error:"对不起，您的验证时间已过期，请重新申请！！！"});
             }
         })
     }else{
-        res.render('acdVerifyResult',{error:"对不起，您没有修改密码的权限！！！"});
+        res.render('acdVerifyResult',{code:-2,error:"对不起，您没有修改密码的权限！！！"});
     }
 }
 
