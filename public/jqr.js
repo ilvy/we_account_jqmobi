@@ -112,6 +112,7 @@ var routerConfig = {
 //};
 
 define(['router','wxAPI'],function(router,wx){
+    deviceReady();
     wxjssdkInit(function(err,results){
         var config;
         if(results.flag == 1){
@@ -169,3 +170,14 @@ function wxjssdkInit(callback){
     });
 }
 
+function deviceReady(argument) {
+    // alert("deviceready")
+    document.addEventListener('deviceready',onDeviceReady,false);
+}
+
+function onDeviceReady(){
+     // navigator.app.overrideBackbutton(true);
+    document.addEventListener('backbutton',function(){
+        // alert("backbutton");
+    },false);
+}

@@ -178,6 +178,7 @@ input.invalid{
 
 #order-list {
     border-top: 1px solid transparent;
+    display: none;
 }
 
 #pay-list .table,#order-list .table{
@@ -422,6 +423,7 @@ input.invalid{
     width: 100%;
     z-index: 10;
     height: 40px;
+    display: none;
 }
 
 #switchList > input{
@@ -620,6 +622,70 @@ input.invalid{
     position: absolute;
     left: 42%;
     top: 20%;
+}
+
+#bbg-create-order-box{
+    /* position: fixed; */
+    background-color: rgba(200,30,40,1);
+    padding: 5px;
+    /* bottom: 5%; */
+    /*left: calc(50% - 25px);
+    left: -webkit-calc(50% - 25px);
+    left: -moz-calc(50% - 25px);*/
+    border-radius: 32px;
+    left: 50%;
+    margin-left: -25px;
+    position: absolute;
+    top: -26px;
+}
+
+#bbg-create-order-div{
+    width: 40px;
+    height: 40px;
+    margin: 0 auto;
+    border: 4px solid white;
+    padding: 3px;
+    border-radius: 20px;
+}
+#bbg-create{
+    border: none;
+    background-color: transparent;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    padding-top: 15%;
+}
+#bbg-create i{
+    color: white;
+    font-size: 20px;
+}
+#bbg-create .horizon{
+    width: 60%;
+    height: 16%;
+    background-color: white;
+    position: absolute;
+    top: 42%;
+    left: 20%;
+}
+#bbg-create .vertical{
+    width: 16%;
+    height: 60%;
+    background-color: white;
+    position: absolute;
+    left: 42%;
+    top: 20%;
+}
+
+div#bottom-btn-group {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.cate_btn_group_new > .btn {
+    width: 50%;
+    color: rgba(200,30,40,1);
 }
 
 /************start add order panel**************/
