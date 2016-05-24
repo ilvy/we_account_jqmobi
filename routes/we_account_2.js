@@ -226,6 +226,7 @@ router.get("/live-room",function(req,res){
     var openId = req.session.openId;// || 'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
     var query = req.query,
         roomId = query.room_id;
+    var isFromApp = query.fromapp;
     if(typeof roomId != 'undefined' && !openId){
         var remark = query.remark,
             productId = query.product_id,
@@ -248,7 +249,7 @@ router.get("/live-room",function(req,res){
         return;
     }
 //    res.redirect('/live_room');
-    res.render("live_room_rel_layout",{});
+    res.render("live_room_rel_layout",{fromapp:isFromApp});
 });//带上参数room_id
 router.post("/live_room",gotoLiveRoom);//带上参数room_id
 

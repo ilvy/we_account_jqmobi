@@ -112,7 +112,11 @@ var routerConfig = {
 };
 
 define(['router','wxAPI'],function(router,wx){
+<<<<<<< HEAD
     webappInit();
+=======
+    deviceReady();
+>>>>>>> caf006bcc3ed316bca45136761171734d7e57ec9
     wxjssdkInit(function(err,results){
         var config;
         if(results.flag == 1){
@@ -170,6 +174,7 @@ function wxjssdkInit(callback){
     });
 }
 
+<<<<<<< HEAD
 function webappInit(){
     document.addEventListener('deviceready', onDeviceReady, false);
 }
@@ -190,4 +195,16 @@ function onBackKeyDown(event){
             backStart = 0;
         }
     }
+=======
+function deviceReady(argument) {
+    // alert("deviceready")
+    document.addEventListener('deviceready',onDeviceReady,false);
+}
+
+function onDeviceReady(){
+     // navigator.app.overrideBackbutton(true);
+    document.addEventListener('backbutton',function(){
+        // alert("backbutton");
+    },false);
+>>>>>>> caf006bcc3ed316bca45136761171734d7e57ec9
 }
