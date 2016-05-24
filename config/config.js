@@ -81,7 +81,7 @@ var serverConfig =  {
 };
 
 var redisConfig = {
-    ip:"120.24.224.144",
+    ip:"127.0.0.1",
     port:'6379'
 };
 

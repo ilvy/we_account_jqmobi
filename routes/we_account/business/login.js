@@ -8,7 +8,7 @@ var dbOperator = require("../../../db/dbOperator"),
 var redis = require("../../../db/redisOperator").client;
 var mailServer = require('./emailCenter');
 
-var cookieDomain = '10.22.0.36';
+var cookieDomain = 'localhost';
 var tokenManager = {};
 var login = (req,res,type)=>{
 	// setCookie(res,'10.22.0.36',req.query.username,3600 * 1000);
@@ -22,7 +22,7 @@ var login = (req,res,type)=>{
 	validateLogin(req,function(err,results){
         if(!err){
             if(results[0] && results[0][0] && results[0][0].open_id){
-            	req.session.open_id = results[0][0].open_id;
+            	req.session.openId = results[0][0].open_id;
             	setCookie(res,cookieDomain,req.query.username,3600 * 1000);
             	res.render('loginRedirect',{redirectLink:'/we_account/live-room#billSystem'});
             }else{
