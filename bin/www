@@ -119,4 +119,5 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
     console.log('Express server listening on port ' + server.address().port);
+    console.log('Express server listening on port ' + server.address().ip);
 }

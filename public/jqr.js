@@ -4,40 +4,40 @@
 
 requirejs.config({
     baseUrl:'/',
+    // paths:{
+    //     //jquery:'javascripts/jquery',
+    //     router:'javascripts/router',
+    //     //routerConfig:'javascripts/routerConfig',
+    //     'room-door':'javascripts/room-door',
+    //     touchEvent:'touchUtil',
+    //     laydate:'Jplugin/laydate/laydate',
+    //     util:'util/util',
+    //     jqmobiTouch:"javascripts/libs/jquery.mobile.custom",
+    //     preloadImg:"javascripts/preloadImg",
+    //     waterfall:"javascripts/waterfall_relative",
+    //     ajaxupload:"javascripts/ajaxupload",
+    //     jpopup:'Jplugin/jquery.light-popup/jquery.light-popup',
+    //     //wxAPI:'http://res.wx.qq.com/open/js/jweixin-1.0.0'
+    //     wxAPI:'javascripts/jweixin-1.0.0'
+    //     //bill:'modules/bill/bill'
+    // },
     paths:{
-        //jquery:'javascripts/jquery',
-        router:'javascripts/router',
-        //routerConfig:'javascripts/routerConfig',
-        'room-door':'javascripts/room-door',
-        touchEvent:'touchUtil',
-        laydate:'Jplugin/laydate/laydate',
-        util:'util/util',
-        jqmobiTouch:"javascripts/libs/jquery.mobile.custom",
-        preloadImg:"javascripts/preloadImg",
-        waterfall:"javascripts/waterfall_relative",
-        ajaxupload:"javascripts/ajaxupload",
-        jpopup:'Jplugin/jquery.light-popup/jquery.light-popup',
-        //wxAPI:'http://res.wx.qq.com/open/js/jweixin-1.0.0'
-        wxAPI:'javascripts/jweixin-1.0.0'
-        //bill:'modules/bill/bill'
+       //jquery:'javascripts/jquery',
+       router:'http://static.daidai2u.com/javascripts/router.js?v=1.0',
+       routerConfig:'http://static.daidai2u.com/javascripts/routerConfig',
+       'room-door':'http://static.daidai2u.com/javascripts/room-door',
+       touchEvent:'http://static.daidai2u.com/touchUtil',
+       laydate:'http://static.daidai2u.com/Jplugin/laydate/laydate',
+       util:'http://static.daidai2u.com/util/util.js?v=1.0',
+       jqmobiTouch:"http://static.daidai2u.com/javascripts/libs/jquery.mobile.custom",
+       preloadImg:"http://static.daidai2u.com/javascripts/preloadImg",
+       waterfall:"http://static.daidai2u.com/javascripts/waterfall_relative.js?v=1.0",
+       ajaxupload:"http://static.daidai2u.com/javascripts/ajaxupload",
+       jpopup:'http://static.daidai2u.com/Jplugin/jquery.light-popup/jquery.light-popup.js?v=2.1',
+       //wxAPI:'http://res.wx.qq.com/open/js/jweixin-1.0.0'
+       wxAPI:'http://static.daidai2u.com/javascripts/jweixin-1.0.0'
+       //bill:'modules/bill/bill'
     },
-    //paths:{
-    //    //jquery:'javascripts/jquery',
-    //    router:'http://static.daidai2u.com/javascripts/router.js?v=1.0',
-    //    routerConfig:'http://static.daidai2u.com/javascripts/routerConfig',
-    //    'room-door':'http://static.daidai2u.com/javascripts/room-door',
-    //    touchEvent:'http://static.daidai2u.com/touchUtil',
-    //    laydate:'http://static.daidai2u.com/Jplugin/laydate/laydate',
-    //    util:'http://static.daidai2u.com/util/util.js?v=1.0',
-    //    jqmobiTouch:"http://static.daidai2u.com/javascripts/libs/jquery.mobile.custom",
-    //    preloadImg:"http://static.daidai2u.com/javascripts/preloadImg",
-    //    waterfall:"http://static.daidai2u.com/javascripts/waterfall_relative.js?v=1.0",
-    //    ajaxupload:"http://static.daidai2u.com/javascripts/ajaxupload",
-    //    jpopup:'http://static.daidai2u.com/Jplugin/jquery.light-popup/jquery.light-popup.js?v=2.1',
-    //    //wxAPI:'http://res.wx.qq.com/open/js/jweixin-1.0.0'
-    //    wxAPI:'http://static.daidai2u.com/javascripts/jweixin-1.0.0'
-    //    //bill:'modules/bill/bill'
-    //},
     shim:{
         jquery:{
             exports:'jquery'
@@ -86,32 +86,33 @@ var globalVar = {
     }
 };
 
+// var routerConfig = {
+//     live_room:'modules/live_room/live_room',
+//     register:'modules/register/register',
+//     publish:'modules/publish/publish',
+//     product_display:'modules/product/product',
+//     myFavorite:'modules/myFavorite/myFavorite',//收藏夹
+//     room_door:'modules/room_door/room_door',
+//     personality:'modules/personality/personality',
+//     billSystem:'modules/bill/bill',
+//     add_order:'modules/add_order/add_order',
+//     getpay:'modules/Payment/Payment'
+// };
 var routerConfig = {
-    live_room:'modules/live_room/live_room',
-    register:'modules/register/register',
-    publish:'modules/publish/publish',
-    product_display:'modules/product/product',
-    myFavorite:'modules/myFavorite/myFavorite',//收藏夹
-    room_door:'modules/room_door/room_door',
-    personality:'modules/personality/personality',
-    billSystem:'modules/bill/bill',
-    add_order:'modules/add_order/add_order',
-    getpay:'modules/Payment/Payment'
+   live_room:'http://static.daidai2u.com/modules/live_room/live_room.js',
+   register:'http://static.daidai2u.com/modules/register/register.js',
+   publish:'http://static.daidai2u.com/modules/publish/publish.js?v=1.1',
+   product_display:'http://static.daidai2u.com/modules/product/product.js?v=1.1',
+   myFavorite:'http://static.daidai2u.com/modules/myFavorite/myFavorite.js',//收藏夹
+   room_door:'http://static.daidai2u.com/modules/room_door/room_door.js?v=1.1',
+   personality:'http://static.daidai2u.com/modules/personality/personality.js',
+   billSystem:'http://static.daidai2u.com/modules/bill/bill.js?v=3.0',
+   add_order:'http://static.daidai2u.com/modules/add_order/add_order.js',
+   getpay:'http://static.daidai2u.com/modules/Payment/Payment.js?v=1.1'
 };
-//var routerConfig = {
-//    live_room:'http://static.daidai2u.com/modules/live_room/live_room.js',
-//    register:'http://static.daidai2u.com/modules/register/register.js',
-//    publish:'http://static.daidai2u.com/modules/publish/publish.js?v=1.1',
-//    product_display:'http://static.daidai2u.com/modules/product/product.js?v=1.1',
-//    myFavorite:'http://static.daidai2u.com/modules/myFavorite/myFavorite.js',//收藏夹
-//    room_door:'http://static.daidai2u.com/modules/room_door/room_door.js?v=1.1',
-//    personality:'http://static.daidai2u.com/modules/personality/personality.js',
-//    billSystem:'http://static.daidai2u.com/modules/bill/bill.js?v=2.0',
-//    add_order:'http://static.daidai2u.com/modules/add_order/add_order.js',
-//    getpay:'http://static.daidai2u.com/modules/Payment/Payment.js?v=1.1'
-//};
 
 define(['router','wxAPI'],function(router,wx){
+    webappInit();
     wxjssdkInit(function(err,results){
         var config;
         if(results.flag == 1){
@@ -169,3 +170,24 @@ function wxjssdkInit(callback){
     });
 }
 
+function webappInit(){
+    document.addEventListener('deviceready', onDeviceReady, false);
+}
+
+var backStart = 0;
+function onDeviceReady(){
+    alert("navigator.notification");
+    document.addEventListener("backbutton",onBackKeyDown,false);
+    alert(navigator.notification);
+}
+function onBackKeyDown(event){
+    if(!backStart){
+        navigator.notification.alert("快速点击退出");
+        backStart = new Date().getTime();
+    }else{
+        if(new Date().getTime() - backStart <= 1000) {
+            navigator.notification.alert("退出应用");
+            backStart = 0;
+        }
+    }
+}

@@ -237,6 +237,9 @@ router.get("/live-room",function(req,res){
         }
     }else if(typeof roomId != 'undefined' && openId){
 
+    }else if(typeof roomId == 'undefined' && !openId){
+        res.redirect("/we_account/login");
+        return;
     }
     var orderStatus = req.session.orderStatus;
     if(orderStatus){
