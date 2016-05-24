@@ -49,8 +49,8 @@ body{
     border-color: #ccc;
 }
 
-input.btn-check{
-    background-color: #cdcdcd;
+.cate_btn_group_new input.btn-check.btn{
+    background-color: #E4DCDC;
 }
 
 ul{
@@ -178,7 +178,7 @@ input.invalid{
 
 #order-list {
     border-top: 1px solid transparent;
-    display: none;
+    // display: none;
 }
 
 #pay-list .table,#order-list .table{
@@ -423,7 +423,7 @@ input.invalid{
     width: 100%;
     z-index: 10;
     height: 40px;
-    display: none;
+    // display: none;
 }
 
 #switchList > input{
@@ -607,7 +607,7 @@ input.invalid{
     color: white;
     font-size: 20px;
 }
-#create .horizon{
+#bbg-create .horizon{
     width: 60%;
     height: 16%;
     background-color: white;
@@ -615,7 +615,7 @@ input.invalid{
     top: 42%;
     left: 20%;
 }
-#create .vertical{
+#bbg-create .vertical{
     width: 16%;
     height: 60%;
     background-color: white;
@@ -634,17 +634,17 @@ input.invalid{
     left: -moz-calc(50% - 25px);*/
     border-radius: 32px;
     left: 50%;
-    margin-left: -25px;
+    margin-left: -21px;
     position: absolute;
-    top: -26px;
+    top: -19px;
 }
 
 #bbg-create-order-div{
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
     margin: 0 auto;
-    border: 4px solid white;
-    padding: 3px;
+    /* border: 4px solid white; */
+    /* padding: 3px; */
     border-radius: 20px;
 }
 #bbg-create{
@@ -654,27 +654,27 @@ input.invalid{
     width: 100%;
     height: 100%;
     text-align: center;
-    padding-top: 15%;
+    padding-top: 20%;
 }
 #bbg-create i{
     color: white;
     font-size: 20px;
 }
 #bbg-create .horizon{
-    width: 60%;
-    height: 16%;
+    width: 26px;
+    height: 2px;
     background-color: white;
     position: absolute;
-    top: 42%;
-    left: 20%;
+    top: 15px;
+    left: 3px;
 }
 #bbg-create .vertical{
-    width: 16%;
-    height: 60%;
+    width: 2px;
+    height: 26px;
     background-color: white;
     position: absolute;
-    left: 42%;
-    top: 20%;
+    left: 15px;
+    top: 3px;
 }
 
 div#bottom-btn-group {
@@ -686,6 +686,12 @@ div#bottom-btn-group {
 .cate_btn_group_new > .btn {
     width: 50%;
     color: rgba(200,30,40,1);
+    background-color: #fff;
+    outline: none;
+}
+
+.cate_btn_group_new > .btn:first-child {
+    border-right: 1px solid #cecece;
 }
 
 /************start add order panel**************/
