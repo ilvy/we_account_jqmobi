@@ -1570,7 +1570,7 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                             //        }
                             //    }
                             //}
-                            updateDataSource('remark',newRemark,data.order_id);
+                            _this.updateDataSource('remark',newRemark,data.order_id);
                         } else {
                             alert("修改备注失败！");
                         }
