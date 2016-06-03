@@ -71,7 +71,8 @@ var dbPoolConfig = {
     user     : 'root',
     password : 'root@123',
     database:'moment',
-    connectionLimit:10
+    connectionLimit:10,
+    multipleStatements:true
 //    ,queueLimit:5
 };
 

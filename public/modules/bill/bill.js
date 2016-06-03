@@ -490,6 +490,7 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
             $(".cate_product_btn,.cate_customer_btn").touch("click", function(event) {
                 var $this = event.$this;
                 var type = $this.data("type");
+                alert("1");
                 $this.addClass("btn-check").siblings(".btn").removeClass("btn-check");
                 if (type == 'c') {
                     _this.dealOrderListOrderByCustomer(_this.orderListData);

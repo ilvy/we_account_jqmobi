@@ -34,6 +34,10 @@ var query = function(sql,posts,callback){
 
 exports.query = query;
 
+
+// query("select 1",[],function(err,rows){
+//     console.log(rows);
+// });
 //console.log(urlencode("http://120.24.224.144/we_account"));
 //query("select * from ?? where id = ?",['user',1],function(err,rows){
 //    if(err){
