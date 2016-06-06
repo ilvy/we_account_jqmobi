@@ -472,25 +472,24 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                     $("#pay-list").css("display", 'none');
                     $("#order-list").css("display", 'block');
                     _this.flushOrderList();
-                    $("#create-order-box").removeClass('hide');
+                    $("#bbg-create-order-box").removeClass('hide');
                 } else if ($this.attr("id") == 'to_pay') {
                     $("#pay-list").css("display", 'block');
                     $("#order-list").css("display", 'none');
                     $("#bill-list").css("display", 'none');
                     _this.flushPayList();
-                    $("#create-order-box").addClass('hide');
+                    $("#bbg-create-order-box").addClass('hide');
                 } else {
                     $("#bill-list").css("display", 'block');
                     $("#order-list").css("display", 'none');
                     $("#pay-list").css("display", 'none');
                     _this.flushBillList();
-                    $("#create-order-box").addClass('hide');
+                    $("#bbg-create-order-box").addClass('hide');
                 }
             });
             $(".cate_product_btn,.cate_customer_btn").touch("click", function(event) {
                 var $this = event.$this;
                 var type = $this.data("type");
-                alert("1");
                 $this.addClass("btn-check").siblings(".btn").removeClass("btn-check");
                 if (type == 'c') {
                     _this.dealOrderListOrderByCustomer(_this.orderListData);
@@ -1268,10 +1267,14 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                     }
                 });
             }, true)
-            $("#create-order-box").touch("click", function(event) {
+            $("#bbg-create-order-box").touch("click", function(event) {
                 //                router.changeHash("add_order",1);
                 _this.showAddOrderPanel();
                 _this.$objOrderTable = null;
+            }, true);
+            $("#bbg-create-order-box").touch("longtouch", function(event) {
+                //                router.changeHash("add_order",1);
+                alert(111);
             }, true);
             $(".order-add-btn").touch("click", function(event) {
                 var $this = event.$this;

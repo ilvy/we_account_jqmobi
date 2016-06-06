@@ -52,6 +52,7 @@ var longTouchtimeout;
 var touchStartTime,touchEndTime;
 var startX,endX,startY,endY;
 (function($){
+    var events = {};
     $.fn.touch = function(type,selector,cb,cancelBubble){
 //    if(isPC()){
 //        $(this).each(function(){
@@ -59,6 +60,7 @@ var startX,endX,startY,endY;
 //        });
 //        return;
 //    }
+        var longTouchtimeout;
         if(arguments.length == 2){
             cb = selector;
         }else if(arguments.length == 3){
@@ -68,7 +70,7 @@ var startX,endX,startY,endY;
         selector = $(this).selector;
         //移动设备触摸事件
 //    $(this).each(function(){
-//        $(this).off(touchEvent.touchstart);
+       $(selector).off(touchEvent.touchstart);
         $(document).on(touchEvent.touchstart,selector,function(event){
             if(cancelBubble){
                 event.stopPropagation();
@@ -85,9 +87,12 @@ var startX,endX,startY,endY;
             _$this.parents('.t-row').attr("touchstart",1);
             event.$this = _$this;
             //长按0.5s后进入longTouch事件
-//            _$this.longTouchtimeout = setTimeout(function(){
-//                cb(event);
-//            },500);
+            if(type == touchEvent.longtouch){
+                longTouchtimeout = setTimeout(function(){
+                   cb(event);
+               },500);
+            }
+           
         });
 //    });
 
@@ -98,7 +103,7 @@ var startX,endX,startY,endY;
                     touchEndTime = new Date().getTime();
                     event.$this = event.originalEvent.currentTarget;
                     if((touchEndTime - touchStartTime) < 500){//若非长按，移除长按的定时器，消除事件触发
-                        clearTimeout($(this).longTouchtimeout);
+                        clearTimeout(longTouchtimeout);
                     }
                 })
 //            });
@@ -107,6 +112,9 @@ var startX,endX,startY,endY;
 //            $(this).each(function(){
                 $(document).on(touchEvent.touchend,selector,function(event){
                     touchEndTime = new Date().getTime();
+                    if((touchEndTime - touchStartTime) >= 500){//若长按
+                        return;
+                    }
                     var _$this = $(this);
                     var longTouchtimeout = '';
                     if((longTouchtimeout = $(this).longTouchtimeout)){

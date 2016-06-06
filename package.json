@@ -34,6 +34,7 @@
     "extend": "^3.0.0",
     "jsx-loader": "^0.13.2",
     "nodemailer": "^0.7.1",
+    "pinyin": "^2.7.3",
     "redis": "^2.5.3",
     "webpack": "^1.12.12"
   }

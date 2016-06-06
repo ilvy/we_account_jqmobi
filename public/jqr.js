@@ -9,7 +9,7 @@ requirejs.config({
         router:'javascripts/router',
         //routerConfig:'javascripts/routerConfig',
         'room-door':'javascripts/room-door',
-        touchEvent:'touchUtil',
+        touchEvent:'http://192.168.1.106:870/touchUtil.js?v=1.1',
         laydate:'Jplugin/laydate/laydate',
         util:'util/util',
         jqmobiTouch:"javascripts/libs/jquery.mobile.custom",
@@ -94,7 +94,7 @@ var routerConfig = {
     myFavorite:'modules/myFavorite/myFavorite',//收藏夹
     room_door:'modules/room_door/room_door',
     personality:'modules/personality/personality',
-    billSystem:'modules/bill/bill.js?v=2.1.1',
+    billSystem:'http://192.168.1.106:870/modules/bill/bill.js?v=1.6',
     add_order:'modules/add_order/add_order',
     getpay:'modules/Payment/Payment'
 };
@@ -169,6 +169,7 @@ function wxjssdkInit(callback){
         }
     });
 }
+
 
 function deviceReady(argument) {
     // alert("deviceready")
