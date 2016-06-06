@@ -1,14 +1,14 @@
-var redis = require("../../../db/redisOperator").client;
+// var redis = require("../../../db/redisOperator").client;
 
-redis.set('key1',JSON.stringify({
-	param1 : 1,
-	param2 : 2 
-}),function(err,res){
-	console.log(res);
-});
-redis.get('acd97d31165c799e1db044558291bd9b654710f2f13',function(err,res){
-	console.log(res);
-});
+// redis.set('key1',JSON.stringify({
+// 	param1 : 1,
+// 	param2 : 2 
+// }),function(err,res){
+// 	console.log(res);
+// });
+// redis.get('acd97d31165c799e1db044558291bd9b654710f2f13',function(err,res){
+// 	console.log(res);
+// });
 
 // 
 // console.log(redis);
@@ -58,3 +58,7 @@ redis.get('acd97d31165c799e1db044558291bd9b654710f2f13',function(err,res){
 // })
 // 
 
+var pinyin = require('pinyin');
+console.log(pinyin('重点我来也,im comming,@#$%',{
+	style: pinyin.STYLE_NORMAL
+}));
