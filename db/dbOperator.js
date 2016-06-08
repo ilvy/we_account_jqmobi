@@ -159,14 +159,14 @@ exports.query = query;
 //    }
 //});
 
-//var paras = ['oHbq1t0enasGWD7eQoJuslZY6R-4','666666','没啥事',135,3,'2014-04-24 18:04:36'];
-//query('call pro_take_order(?,?,?,?,?,?)',paras,function(err,rows){
+// var paras = ['oHbq1ty6M1x1NgUVM8wQukbhmTZU','888888','没啥事',135,3,'2016-06-07 18:04:36'];
+// query('call pro_take_order_test(?,?,?,?,?,?)',paras,function(err,rows){
 //    if(err){
 //        console.log(err);
 //    }else{
 //        console.log(rows);
 //    }
-//});
+// });
 
 //query('call pro_get_order_info(?,?)',['oHbq1ty6M1x1NgUVM8wQukbhmTZU',1],function(err,rows) {
 //    if (err) {
@@ -320,13 +320,13 @@ exports.query = query;
 //        console.log(rows);
 //    }
 //})
-//query("call pro_add_order_by_seller_new_test('山鸡','天地5号','','','oxfQVswUSy2KXBPOjNi_BqdNI3aA','','-1','1','-1','-1',1,'1号街道')",[],function(err,rows){
+// query("call pro_add_order_by_seller_new_test('山鸡2222','天地5号2222','','','oxfQVswUSy2KXBPOjNi_BqdNI3aA','','-1','1','-1','-1',1,'1号街道','shangji2222')",[],function(err,rows){
 //    if(err){
 //        console.log(err);
 //    }else{
 //        console.log(rows);
 //    }
-//})
+// })
 //query("select count(1) from (select id,product_id from t_order o where o.id = 714)o,product p,user u" +
 //    " where o.product_id = p.id and p.room_id = u.room_id and u.open_id = 'oxfQVswUSy2KXBPOjNi_BqdNI3aA'",[],function(err,rows){
 //    if(err){
@@ -352,13 +352,13 @@ exports.query = query;
 //        console.log(rows);
 //    }
 //})
-query("select id from t_customer where c_nickname like '%疯子%' and seller_room_id = 888888 and c_status = 1",[],function(err,rows){
-    if(err){
-        console.log(err);
-    }else{
-        console.log(rows);
-    }
-})
+// query("select id from t_customer where c_nickname like '%疯子%' and seller_room_id = 888888 and c_status = 1",[],function(err,rows){
+//     if(err){
+//         console.log(err);
+//     }else{
+//         console.log(rows);
+//     }
+// })
 //query("select c.* from t_customer c join t_weix_account_info w " +
 //    "on c.c_openid = w.open_id " +
 //    "where (c.c_nickname = '王莹' or w.nickname = '王莹') and c.seller_room_id = '20003';",[],function(err,rows){
@@ -368,3 +368,22 @@ query("select id from t_customer where c_nickname like '%疯子%' and seller_roo
 //        console.log(rows);
 //    }
 //})
+
+
+// var args = ['openid_test','accountnickname.test','accountInfo.headimgurl',1,'fffffffff','ddddddddd','ddddddddd','2015-12-12','hahahah.test'];
+// query('call pro_weix_account_info_test(?,?,?,?,?,?,?,?,?)',args,function(err,rows){
+//     if(err){
+//         console.log(err)
+//     }else{
+//         console.log(rows)
+//     }
+// });
+// 
+
+query("call pro_vague_search_user_test(?,?,?)",['%kun%','oxfQVswUSy2KXBPOjNi_BqdNI3aA',1],function(err,rows){
+    if(err){
+        console.log("call pro_vague_search_user err:",err);
+    }else{
+        console.log("call pro_vague_search_user results:",rows);
+    }
+});

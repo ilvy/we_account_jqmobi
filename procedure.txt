@@ -1,4 +1,29 @@
 delimiter $$
+drop procedure if exists pro_weix_account_info_test;
+CREATE PROCEDURE `pro_weix_account_info_test`(in openid varchar(200),in nickname varchar(50),in headimgurl varchar(150),in sex bit,in city varchar(30),in country varchar(30),in unionid varchar(200),in subscribe_time datetime,in _nickname_pinyin varchar(50))
+BEGIN
+  #Routine body goes here...
+
+  start TRANSACTION;
+  
+  SET @hasWxAccount = (SELECT count(1) from t_weix_account_info where open_id = openid);
+  if @hasWxAccount = 0 then
+    INSERT INTO t_weix_account_info(open_id,nickname,headimgurl,sex,city,country,unionid,subscribe_time,nickname_pinyin)
+      VALUES(openid,nickname,headimgurl,sex,city,country,unionid,subscribe_time,_nickname_pinyin);
+  SELECT 1 res;
+  ELSE
+    UPDATE t_weix_account_info w SET w.nickname = nickname,w.headimgurl = headimgurl,w.sex = sex,
+          w.city = city,w.country = country,w.unionid = unionid,w.subscribe_time=subscribe_time,w.nickname_pinyin = _nickname_pinyin
+    WHERE w.open_id = openid;
+  SELECT 2 res;
+  END IF;
+
+  COMMIT;
+end; $$
+delimiter ;
+/****************end pro_weix_account_info*****************/TODO:nickname_pinyin
+
+delimiter $$
 drop procedure if exists pro_get_cut_info;
 create procedure pro_get_cut_info(in id int)
 begin 
@@ -149,11 +174,11 @@ commit;
 end; $$
 delimiter ;
 
-/**ԭ��Ʒ�ӵ�**/
+/**ԭ��Ʒ�ӵ�**/ TODO:nickname_pinyin
 delimiter $$
-drop procedure if exists pro_add_order_by_seller_new;
-create procedure pro_add_order_by_seller_new(in cnickname varchar(50),in product_name varchar(40),in text varchar(600),in image_urls varchar(200),in sell_open_id varchar(200),in remark varchar(60),in productid int
-,in in_quantity int,in cost decimal(10,2),in price decimal(10,2),in discount decimal(4,2),in cate_name varchar(50))
+drop procedure if exists pro_add_order_by_seller_new_test;
+create procedure pro_add_order_by_seller_new_test(in cnickname varchar(50),in product_name varchar(40),in text varchar(600),in image_urls varchar(200),in sell_open_id varchar(200),in remark varchar(60),in productid int
+,in in_quantity int,in cost decimal(10,2),in price decimal(10,2),in discount decimal(4,2),in cate_name varchar(50),in cnickname_pinyin varchar(50))
 begin
 
 start transaction;
@@ -167,8 +192,8 @@ set @openId = (select distinct c_openid from t_customer where c_nickname = cnick
 end if;
 if @openId is null then -- add customer hasn't follow daidai
 set @openId = (select concat('lopid_',unix_timestamp(@now),cast(rand() as char(10))));
-insert into t_customer(c_openid,seller_room_id,c_nickname,create_time)
-    select @openId,@sell_room_id,cnickname,@now;
+insert into t_customer(c_openid,seller_room_id,c_nickname,create_time,nickname_pinyin)
+    select @openId,@sell_room_id,cnickname,@now,cnickname_pinyin;
 end if;
 
 if productid = -1 then
@@ -181,9 +206,9 @@ end if;
 if @productId is null then
 insert into product(image_url,text,room_id,create_time,status,title) values(image_urls,text,@sell_room_id,@now,1,@pname);-- 第二步、发布商品
 set @productId = (select last_insert_id());
-call pro_take_order_by_seller_new(@openId,cnickname,@sell_room_id,remark,@productId,in_quantity,@now,cost,price,discount,cate_name,@oid);-- 第三步、下单
+call pro_take_order_by_seller_new_test(@openId,cnickname,@sell_room_id,remark,@productId,in_quantity,@now,cost,price,discount,cate_name,@oid);-- 第三步、下单
 else
-call pro_take_order_by_seller_new(@openId,cnickname,@sell_room_id,remark,@productId,in_quantity,@now,cost,price,discount,cate_name,@oid);-- 第三步、下单
+call pro_take_order_by_seller_new_test(@openId,cnickname,@sell_room_id,remark,@productId,in_quantity,@now,cost,price,discount,cate_name,@oid);-- 第三步、下单
 end if;
 
 select @productId product_id,@oid order_id,c.id c_id
@@ -200,46 +225,12 @@ delimiter ;
 
 
 
-
-delimiter $$
-drop procedure if exists pro_add_order_by_seller_new_test;
-create procedure pro_add_order_by_seller_new_test(in cnickname varchar(50),in product_name varchar(40),in text varchar(600),in image_urls varchar(200),in sell_open_id varchar(200),in remark varchar(60),in productid int
-,in in_quantity int,in cost decimal(10,2),in price decimal(10,2),in discount decimal(4,2),in cate_name varchar(50))
-begin
-
-start transaction;
-
-set @now = now();
-set @pname = product_name;
-set @sell_room_id = (select room_id from user where open_id = sell_open_id);
-set @openId = (select distinct open_id from t_weix_account_info where nickname = cnickname);-- 第一步、1先根据昵称获取买家openId
-if @openId is null then
-set @openId = (select distinct c_openid from t_customer where c_nickname = cnickname and seller_room_id = @sell_room_id);-- 第一步、2根据昵称从熟客获取买家openId
-end if;
-
-if productid = -1 then
-set @productId = (select max(id) from product where title = @pname and room_id = @sell_room_id and status = 1);
--- SELECT @roomid;
-else
-set @productId = productid;
-end if;
-
-
-commit;
-
-end; $$
-delimiter ;
-
-
-
-
-
 select c.* from t_customer c
 join t_weix_account_info w
 on c.c_openid = w.open_id
 where (c.c_nickname = '鷠皇Niklaus' or w.nickname = '鷠皇Niklaus') and c.seller_room_id = '888888';
 
-/***************通过账单确认补全未关注的买家信息***************/ TODO:更新
+/***************通过账单确认补全未关注的买家信息***************/ TODO:nickname_pinyin
 
 delimiter $$
 drop procedure if exists pro_integrate_customer_info;
@@ -286,8 +277,8 @@ delimiter ;
 
 -- 下单 pro_take_order
 delimiter $$
-drop procedure if exists pro_take_order;
-CREATE  PROCEDURE pro_take_order(in c_open_id varchar(200),in sell_room_id varchar(16),in remark varchar(60),in productid int,in in_quantity int,in create_time datetime)
+drop procedure if exists pro_take_order_test;
+CREATE  PROCEDURE pro_take_order_test(in c_open_id varchar(200),in sell_room_id varchar(16),in remark varchar(60),in productid int,in in_quantity int,in create_time datetime)
 BEGIN
 
 START TRANSACTION;
@@ -305,8 +296,8 @@ set @update_count = (SELECT ROW_COUNT());
                                             WHERE c.seller_room_id = sell_room_id AND c.c_openid = c_open_id and c.c_status = 1);
   -- SELECT @Cid;
   if @Cid is NULL THEN
-      INSERT INTO t_customer(c_nickname,c_openid,seller_room_id,create_time)
-          select nickname,c_open_id ,sell_room_id,create_time from t_weix_account_info
+      INSERT INTO t_customer(c_nickname,c_openid,seller_room_id,create_time,nickname_pinyin)
+          select nickname,c_open_id ,sell_room_id,create_time,nickname_pinyin from t_weix_account_info
               where open_id = c_open_id;
       SELECT 1 isExistCustomer;
       end if;
@@ -326,9 +317,9 @@ set @update_count = (SELECT ROW_COUNT());
 
 -- 下单 pro_take_order_by_seller
 delimiter $$
-drop procedure if exists pro_take_order_by_seller_new;
+drop procedure if exists pro_take_order_by_seller_new_test;
 -- CREATE  PROCEDURE pro_take_order_by_seller(in c_open_id varchar(200),in sell_room_id varchar(16),in order_remark varchar(60),in productid int,in in_quantity int,in create_time datetime,in in_cost int,in in_price int,out o_id int)
-CREATE  PROCEDURE pro_take_order_by_seller_new(in c_open_id varchar(200),in customer_name varchar(50),in sell_room_id varchar(16),in order_remark varchar(60),in productid int,in in_quantity int,in create_time datetime,
+CREATE  PROCEDURE pro_take_order_by_seller_new_test(in c_open_id varchar(200),in customer_name varchar(50),in sell_room_id varchar(16),in order_remark varchar(60),in productid int,in in_quantity int,in create_time datetime,
                                            in in_cost decimal(10,2),in in_price decimal(10,2),in _discount decimal(4,2),in cate_name varchar(50),out o_id int)
 BEGIN
 
@@ -350,8 +341,8 @@ set @update_count = (SELECT ROW_COUNT());
                                             WHERE c.seller_room_id = sell_room_id AND c.c_openid = c_open_id and c.c_nickname = customer_name and c.c_status = 1);
       -- SELECT @Cid;
         if @Cid is NULL THEN
-        INSERT INTO t_customer(c_nickname,c_openid,seller_room_id,create_time)
-          select nickname,c_open_id ,sell_room_id,create_time from t_weix_account_info
+        INSERT INTO t_customer(c_nickname,c_openid,seller_room_id,create_time,nickname_pinyin)
+          select nickname,c_open_id ,sell_room_id,create_time,nickname_pinyin from t_weix_account_info
               where open_id = c_open_id;
       --  SELECT 1 isExistCustomer;
         end if;
@@ -477,8 +468,8 @@ DELIMITER ;
 
 ---------------------全站模糊匹配user------------------------start
 delimiter $$
-drop procedure if exists pro_vague_search_user;
-create procedure pro_vague_search_user(in username varchar(50),in openId varchar(200),in type tinyint)
+drop procedure if exists pro_vague_search_user_test;
+create procedure pro_vague_search_user_test(in username varchar(50),in openId varchar(200),in type tinyint)
 begin
 
 start transaction;
@@ -487,15 +478,15 @@ if type = 1 then
  select distinct nickname from
  (
      select nickname from t_weix_account_info
-     where nickname like username
+     where nickname_pinyin like username
      union all
      select c_nickname nickname from t_customer
-     where c_nickname like username and c_status = 1
+     where nickname_pinyin like username and c_status = 1
  ) t;
 elseif type = 3 then
     select distinct c.c_nickname nickname from t_customer c
         join user u
-        where u.room_id = c.seller_room_id and u.open_id = openId and c.c_nickname like username and c.c_status = 1;
+        where u.room_id = c.seller_room_id and u.open_id = openId and c.nickname_pinyin like username and c.c_status = 1;
 else
 select distinct c.c_nickname nickname from t_customer c
     join user u
@@ -706,10 +697,10 @@ commit;
 end; $$
 delimiter ;
 
-/********** pro_set_customer_info_new ************/ 修复修改昵称时修改所有订单的逻辑错误，加上oid一起判断 TODO:更新
+/********** pro_set_customer_info_new_test ************/ 修复修改昵称时修改所有订单的逻辑错误，加上oid一起判断 TODO:更新
 delimiter $$
-drop procedure if exists pro_set_customer_info_new;
-CREATE PROCEDURE `pro_set_customer_info_new`(in objid int,in value decimal(10,2),in nickname varchar(50),in type tinyint,in exchangeRate decimal(4,2),in openId varchar(100),in exchangeType tinyint,in _discount decimal(4,2),in order_id int)
+drop procedure if exists pro_set_customer_info_new_test;
+CREATE PROCEDURE `pro_set_customer_info_new_test`(in objid int,in value decimal(10,2),in nickname varchar(50),in type tinyint,in exchangeRate decimal(4,2),in openId varchar(100),in exchangeType tinyint,in _discount decimal(4,2),in order_id int,in _nickname_pinyin varchar(50))
 BEGIN
 	#Routine body goes here...
 START TRANSACTION;
@@ -729,8 +720,8 @@ if type = 1 THEN
    -- UPDATE t_customer c SET c.c_nickname = nickname
     -- WHERE c.id = objid and c.c_status = 1;
      set @lopenId = (select concat('lopid_',unix_timestamp(@now),cast(rand() as char(10))));
-     insert into t_customer(c_openid,seller_room_id,c_nickname,create_time)
-         select @lopenId,@sell_room_id,nickname,@now;
+     insert into t_customer(c_openid,seller_room_id,c_nickname,create_time,nickname_pinyin)
+         select @lopenId,@sell_room_id,nickname,@now,_nickname_pinyin;
          set @objExistCid = (select last_insert_id());
       update t_order o set o.c_id = @objExistCid
         where o.c_id = objid and o.id = order_id;

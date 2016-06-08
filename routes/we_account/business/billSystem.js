@@ -8,7 +8,8 @@ var dbOperator = require("../../../db/dbOperator"),
     tokenManager = require("../access_token"),
     util = require("../util/util"),
     async = require('async'),
-    we_auth = require('../we_auth');
+    we_auth = require('../we_auth'),
+    pinyinTransfer = require('../util/pinyinTransfer');
 var logger =  require("log4js").getLogger("billSystem");
 var hitPointLogger = require("log4js").getLogger("hit_point");
 logger.setLevel("INFO");
@@ -188,9 +189,9 @@ function updateCustomerInfo(req,res){
         discount = req.query.discount,
         order_id = req.query.order_id;//
     value = value == '' ? null:value;
-    var args = [objid,value || 0,nickname||'',type,exchange_rate || '',openid,exchange_type || '',discount||'',order_id];
+    var args = [objid,value || 0,nickname||'',type,exchange_rate || '',openid,exchange_type || '',discount||'',order_id,pinyinTransfer.toPinyin(nickname)];
 
-    dbOperator.query('call pro_set_customer_info_new(?,?,?,?,?,?,?,?,?)',args,function(err,rows){
+    dbOperator.query('call pro_set_customer_info_new_test(?,?,?,?,?,?,?,?,?,?)',args,function(err,rows){
         if(err){
             logger.error(err);
             response.failed('',res,'');
@@ -429,10 +430,11 @@ function addOrderBySeller(req,res){
         cost = req.query.cost,
         price = req.query.price,
         discount = 1,
-        cate = req.query.cate;
+        cate = req.query.cate,
+        nickname_pinyin = pinyinTransfer.toPinyin(nickname);
     cate = cate == '' ? null : cate;
     var openId = req.session.openId || "oxfQVswUSy2KXBPOjNi_BqdNI3aA";
-    dbOperator.query("call pro_add_order_by_seller_new(?,?,?,?,?,?,?,?,?,?,?,?)",[nickname,title,desc,image_urls,openId,remark,productid,in_quantity,cost,price,discount,cate],function(err,rows){
+    dbOperator.query("call pro_add_order_by_seller_new_test(?,?,?,?,?,?,?,?,?,?,?,?,?)",[nickname,title,desc,image_urls,openId,remark,productid,in_quantity,cost,price,discount,cate,nickname_pinyin],function(err,rows){
         if(err){
             logger.error("call pro_add_order_by_seller err:",err);
         }else{
@@ -448,9 +450,10 @@ function addOrderBySeller(req,res){
 
 function vagueSearchUser(req,res){
     var customer = req.query.customer,
-        type = req.query.type;
+        type = req.query.type,
+        customer_pinyin = pinyinTransfer.toPinyin(customer);
     var openId = req.session.openId || 'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
-    dbOperator.query("call pro_vague_search_user(?,?,?)",['%'+customer+'%',openId,type],function(err,rows){
+    dbOperator.query("call pro_vague_search_user_test(?,?,?)",['%'+customer_pinyin+'%',openId,type],function(err,rows){
         if(err){
             logger.error("call pro_vague_search_user err:",err);
         }else{

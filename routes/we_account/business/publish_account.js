@@ -9,7 +9,8 @@ var dbOperator = require("../../../db/dbOperator"),
     dataviewConfig = require("../../../config/config").dataviewConfig,
     access_token = require('../access_token'),
     wxsign = require('../sign'),
-    util = require("../util/util");
+    util = require("../util/util"),
+    pinyinTransfer = require('../util/pinyinTransfer');
 var logger = require("log4js").getLogger("publish_account");
 logger.setLevel("INFO");
 
@@ -78,8 +79,8 @@ function asyncAccountInfoFromWeix(openid,res){
         if(!(accountInfo && accountInfo.nickname)){
             return;
         }
-        var args = [openid,accountInfo.nickname,accountInfo.headimgurl,accountInfo.sex,accountInfo.province+accountInfo.city,accountInfo.country,accountInfo.unionid,accountInfo.subscribe_time];
-        dbOperator.query('call pro_weix_account_info(?,?,?,?,?,?,?,?)',args,function(err,rows){
+        var args = [openid,accountInfo.nickname,accountInfo.headimgurl,accountInfo.sex,accountInfo.province+accountInfo.city,accountInfo.country,accountInfo.unionid,accountInfo.subscribe_time,pinyinTransfer.toPinyin(accountInfo.nickname)];
+        dbOperator.query('call pro_weix_account_info_test(?,?,?,?,?,?,?,?,?)',args,function(err,rows){
             if(err){
                 logger.debug(err);
             }else{
