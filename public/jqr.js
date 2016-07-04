@@ -9,7 +9,7 @@ requirejs.config({
         router:'javascripts/router',
         //routerConfig:'javascripts/routerConfig',
         'room-door':'javascripts/room-door',
-        touchEvent:'http://10.22.0.27:870/touchUtil.js?v=1.1',
+        touchEvent:'http://10.22.0.51:870/touchUtil.js?v=1.1',
         laydate:'Jplugin/laydate/laydate',
         util:'util/util',
         jqmobiTouch:"javascripts/libs/jquery.mobile.custom",
@@ -94,7 +94,7 @@ var routerConfig = {
     myFavorite:'modules/myFavorite/myFavorite',//收藏夹
     room_door:'modules/room_door/room_door',
     personality:'modules/personality/personality',
-    billSystem:'http://10.22.0.27:870/modules/bill/bill.js?v=1.6',
+    billSystem:'http://10.22.0.51:870/modules/bill/bill.js?v=1.6',
     add_order:'modules/add_order/add_order',
     getpay:'modules/Payment/Payment'
 };

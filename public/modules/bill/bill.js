@@ -472,19 +472,19 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                     $("#pay-list").css("display", 'none');
                     $("#order-list").css("display", 'block');
                     _this.flushOrderList();
-                    $("#bbg-create-order-box").removeClass('hide');
+                    $("#bottom-btn-group").removeClass('hide');
                 } else if ($this.attr("id") == 'to_pay') {
                     $("#pay-list").css("display", 'block');
                     $("#order-list").css("display", 'none');
                     $("#bill-list").css("display", 'none');
                     _this.flushPayList();
-                    $("#bbg-create-order-box").addClass('hide');
+                    $("#bottom-btn-group").addClass('hide');
                 } else {
                     $("#bill-list").css("display", 'block');
                     $("#order-list").css("display", 'none');
                     $("#pay-list").css("display", 'none');
                     _this.flushBillList();
-                    $("#bbg-create-order-box").addClass('hide');
+                    $("#bottom-btn-group").addClass('hide');
                 }
             });
             $(".cate_product_btn,.cate_customer_btn").touch("click", function(event) {
