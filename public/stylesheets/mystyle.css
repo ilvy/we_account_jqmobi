@@ -813,9 +813,18 @@ div#bottom-btn-group {
 }
 
 #addOrderPanel > div.aop_btn_group {
-    margin-top: 60px;
+    margin-top: 33px;
 }
 
+#addOrderPanel .more{
+    display: none;
+}
+
+#addOrderPanel .options_toggle{
+    text-align: center;
+    color: #a9a9a9;
+    cursor: pointer;
+}
 /*#exists_customers{*/
 /*position: absolute;*/
 /*right: -10px;*/

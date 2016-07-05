@@ -80,7 +80,7 @@ function asyncAccountInfoFromWeix(openid,res){
             return;
         }
         var args = [openid,accountInfo.nickname,accountInfo.headimgurl,accountInfo.sex,accountInfo.province+accountInfo.city,accountInfo.country,accountInfo.unionid,accountInfo.subscribe_time,pinyinTransfer.toPinyin(accountInfo.nickname)];
-        dbOperator.query('call pro_weix_account_info_test(?,?,?,?,?,?,?,?,?)',args,function(err,rows){
+        dbOperator.query('call pro_weix_account_info(?,?,?,?,?,?,?,?,?)',args,function(err,rows){
             if(err){
                 logger.debug(err);
             }else{

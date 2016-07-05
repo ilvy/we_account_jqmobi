@@ -14,7 +14,7 @@ html
                 top:0;
             }
     body
-        form#form(action="/we_account/loginService" method="post" onsubmit="return login();")
+        form#form(action="/we_account/loginService#{fromapp}" method="post" onsubmit="return login();")
             .form-control
                 input#username(type="text" name="username" placeholder="    代go号")
                 span#email-tip(style="color: red;display: none;")

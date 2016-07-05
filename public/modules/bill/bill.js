@@ -712,6 +712,16 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                 }
 
             }, true);
+            $(".options_toggle a.toggle_btn").touch("click",function(event){
+                var $this = event.$this;
+                if($this.hasClass('more_btn')){
+                    $("#addOrderPanel .more").fadeIn(100);
+                    $this.addClass('hide_more').removeClass('more_btn').text('收起');
+                }else{
+                    $("#addOrderPanel .more").fadeOut(100);
+                    $this.removeClass('hide_more').addClass('more_btn').text('更多');
+                }
+            });
             $(".all-status").touch("click", function(event) {
                 var $this = event.$this;
                 var $card = $this.parents(".card");
