@@ -95,6 +95,10 @@ var appConfigForm = { //正式公众号配置
     appSecret:'a5b090f83fc6ef595084fe3f8a789ce3'
 };
 
+var verifyServerConfig = {
+    cookieDomain : 'www.daidai2u.com',
+    port : 80
+};
 
 exports.menusObj = menusObj;
 exports.dbPoolConfig = dbPoolConfig;

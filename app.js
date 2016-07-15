@@ -33,7 +33,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 //app.use(compression());
-app.use(express.static(path.join(__dirname, '../../mywork/seajsProjs/todoListProj/todolist'),{
+app.use(express.static(path.join(__dirname, 'public'),{//../../mywork/seajsProjs/todoListProj/todolist
     etag:true,
     maxAge:'86400',
     //expires:new Date().getTime() + 30000,//无效

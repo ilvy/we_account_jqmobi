@@ -4,8 +4,16 @@ var redis = require("redis"),
     port = redisConfig.port,
     extend = require("extend");
 
-var client = redis.createClient(port,ip);
-
+var client = {};//redis.createClient(port,ip);
+client.data = {};
+client.set = function(key,value,cb){
+	this.data[key] = value;
+	cb();
+}
+client.set = function(key,cb){
+	
+	cb(null,this.data[key]);
+}
 //错误监听？  
 client.on("error", function (err) {  
     console.log("Error " + err);  

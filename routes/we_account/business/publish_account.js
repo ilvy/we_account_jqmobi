@@ -12,6 +12,10 @@ var dbOperator = require("../../../db/dbOperator"),
     util = require("../util/util"),
     pinyinTransfer = require('../util/pinyinTransfer');
 var logger = require("log4js").getLogger("publish_account");
+var crypto = require('crypto'),
+    mailServer = require('./emailCenter');
+var redis = require("../../../db/redisOperator").client;
+var verifyServerConfig = require("../../../config/config").verifyServerConfig;
 logger.setLevel("INFO");
 
 function applyAccount(data,res){
@@ -40,31 +44,82 @@ function checkUser(open_id,cb){
     });
 }
 
-function register(req,res){
-    var session = req.session;
+/**
+ * 注册邮箱验证 
+*/
+function registerMailVerify(req,res,next){
     var body = req.body;
-    var openId = session.openId,
-        username = body.username,
+    var session = req.session;
+    var openId = session.openId;
+    if(!openId){
+        openId = ['lopid_',now,Math.random().toString()].join("");
+    }
+    var email = body.username,
         weixin = body.weixin,
         pwd = body.pwd;
-    if(!openId){
-        res.redirect("/err.html");
-        return;
-    }
-//    console.log(session);
-//    console.log("**************"+session.name+"*********openId:"+openId);
-//    res.send("**************"+session.name+"*********openId:"+openId);
-    dbOperator.query('call pro_register(?,?,?,?,?)',[openId,username,username,pwd,weixin],function(err,rows){
-        if(err){
-            logger.error(err);
-            res.redirect("/err.html");
-        }else{
-            logger.info("call pro_register results:",rows);
-            res.redirect('/we_account/live-room#live_room-'+rows[0][0].room_id);
-//            asyncAccountInfoFromWeix(openId);
-        }
+    var md5Args = [email,weixin,pwd];
+    //生成邮箱验证激活码,入库redis
+    var timestamp = new Date().getTime();
+    var shaStr = md5Args.push(timestamp).join("");//TODO 加密
+    var actcode = crypto.createHash("sha1").update(shaStr).digest('hex');
+    redis.exp_setJson(actcode,{
+        email:email,
+        weixin:weixin,
+        pwd:pwd,
+        openId:openId,
+        limitAge:timestamp + 900000
+    },function(err,rdsres){
+        mailServer.sendMail({
+            to : email,
+            subject: "代go账号注册",
+            generateTextFromHTML : true,
+            html : "<a href='http://"+verifyServerConfig.cookieDomain+":"+verifyServerConfig.port+"/register?acd="+actcode+"'>注册用户激活链接</a>"
+        },function(err,results){
+            if(err){
+                res.render("sendMailResult",{code:0,result:"代go账号注册失败，请重试！！！"});
+                return;
+            }
+            res.render("sendMailResult",{code:200,result:"感谢您的注册，验证邮件发送成功，请在一个小时内前往验证并修改密码!"});
+        });
     });
+    
 }
+
+/**
+ * 
+ */
+function register(req,res){
+    var now = new Date().getTime();
+    var query = req.query,
+        actcode = query.acd;
+    redis.exp_getJson(actcode,function(err,rdsres){
+        if(!err){
+            var username = rdsres.username,
+            pwd = rdsres.pwd,
+            weixin = rdsres.weixin,
+            openId = rdsres.openId;
+            if(now < rdsres.limitAge){
+                dbOperator.query('call pro_register(?,?,?,?,?)',[openId,username,username,pwd,weixin],function(err,rows){
+                    if(err){
+                        logger.error(err);
+                        res.redirect("/err.html");
+                    }else{
+                        logger.info("call pro_register results:",rows);
+                        res.redirect('/we_account/live-room#live_room-'+rows[0][0].room_id);
+            //            asyncAccountInfoFromWeix(openId);
+                    }
+                });
+            }else{
+                // 注册邮件超时
+                res.render('registerResult',{result:"您的认证邮件已过时，请重新注册"});
+            }
+            return;
+        }
+        res.render('registerResult',{result:"系统错误，请重试！(或微信联系478283225，我们技术支持哥哥)"});
+    });
+    
+}
+
 /**
  * 同步微信账户信息
  * @param openid

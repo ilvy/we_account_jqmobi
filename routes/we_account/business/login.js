@@ -7,9 +7,9 @@ var dbOperator = require("../../../db/dbOperator"),
     util = require('../util/util');
 var redis = require("../../../db/redisOperator").client;
 var mailServer = require('./emailCenter');
-
-var cookieDomain = 'www.daidai2u.com',
-    port = 80;
+var verifyServerConfig = require("../../../config/config").verifyServerConfig;
+var cookieDomain = verifyServerConfig.cookieDomain,
+    port = verifyServerConfig.port;
 var tokenManager = {};
 var login = (req,res,type)=>{
 	// setCookie(res,'10.22.0.36',req.query.username,3600 * 1000);
@@ -118,7 +118,6 @@ var findPwd = (req,res)=>{
     promise.then(function(value){
 		redis.exp_setJson(['acd',actcode].join(""),{accountName:roomId,limitAge:now+3600*1000},function(err,result){
 	    	if(!err){
-	    		//TODO 发送邮件
 			    mailServer.sendMail({
 				    to : email,
 				    subject: "找回密码",
