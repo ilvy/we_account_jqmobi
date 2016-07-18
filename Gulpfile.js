@@ -70,16 +70,16 @@ var through2 = require('through2');
  * 静态页面部分js文件内联写入
  */
 gulp.task('inlinejs',function(){
-	return gulp.src([srcPath+'register.html',srcPath+'login.html'])
+	return gulp.src([srcPath+'register.html'])
 			   .pipe(through2.obj(function(chunk,enc,cb){
 			   	// console.log(chunk.contents.toString());
 			   	var fileContents = chunk.contents.toString();
-			   	var reg = /<script src=".*?[^\/]\/(.*)\?__inline.*"><\/script>/g;
-			   	console.log((fileContents.match(reg)))
-			   	// var jsFileSrc = srcPath + fileContents.match(reg)[1];
+			   	var reg = /<script src=".*?[^\/]\/(.*)\?__inline.*"><\/script>/;
+			   	// console.log((fileContents.match(reg))[1])
+			   	var jsFileSrc = srcPath + fileContents.match(reg)[1];
 			   	// fileContents.replace(reg,)
 			   	// console.log(jsFileSrc)
-			   	// console.log(fs.readFileSync(jsFileSrc));
+			   	console.log(fs.readFileSync(jsFileSrc,'utf-8').toString());
 			   	cb(null,chunk);
 			   }));
 });
