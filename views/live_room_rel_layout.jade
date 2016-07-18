@@ -5,17 +5,18 @@
 
 
 doctype html
-html(manifest="/cache.manifest")
+html
     head
         title 代代
         meta(name="viewport",content="width=device-width,initial-scale=1.0,user-scalable=no")
-        link(rel='stylesheet', href='/Jplugin/jquery.light-popup/jquery.light-popup.css')
-        link(rel='stylesheet', href='/stylesheets/bootstrap.css')
-        link(rel='stylesheet', href='/stylesheets/bootstrap-grid.css')
-        link(rel='stylesheet', href='/stylesheets/mystyle.css')
-        link(rel='stylesheet', href='/stylesheets/style_new.css')
+        //link(rel='stylesheet', href='/Jplugin/jquery.light-popup/jquery.light-popup.css')
+        //link(rel='stylesheet', href='/stylesheets/bootstrap.css')
+        //link(rel='stylesheet', href='/stylesheets/bootstrap-grid.css')
+        //link(rel='stylesheet', href='/stylesheets/mystyle.css')
+        //link(rel='stylesheet', href='/stylesheets/style_new.css')
         //link(rel='stylesheet', href='/stylesheets/all.css')
         //link(rel='stylesheet', href='/build/css/af.ui.base.min.css')
+        link(rel='stylesheet', href='//static.daidai2u.com/stylesheets/all.css')
         link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css')
         style.
             .back_to_add{
@@ -389,11 +390,11 @@ html(manifest="/cache.manifest")
                 input(type="button" value="取消")#pep_cancel.yellow-btn.col-xxs-5
                 input(type="button" value="确定")#pep_submit.green-btn.col-xxs-5.col-xxs-offset-2
 
-script(src="/javascripts/jquery.js")
+script(src="//static.daidai2u.com/javascripts/jquery.js")
 - if (fromapp)
-    script(src="/javascripts/cordova.js?v=1.0")
+    script(src="//static.daidai2u.com/javascripts/cordova.js?v=1.0")
 //script(src="/javascripts/libs/jquery.mobile.custom.js")
 //script(src="/javascripts/preloadImg.js")
 //script(src="/javascripts/waterfall_relative.js")
 //script(src="/javascripts/ajaxupload.js")
-script(src="/javascripts/libs/require/require.js" data-main="/jqr.js?v=1.10.19")
+script(src="//static.daidai2u.com/javascripts/libs/require/require.js" data-main="//static.daidai2u.com/jqr.js")

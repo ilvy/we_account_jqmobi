@@ -4,23 +4,40 @@
     <title>忘记密码</title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no" />
-    <link rel="stylesheet" href="stylesheets/style_new.css">
+    <link rel="stylesheet" href="//static.daidai2u.com/stylesheets/style_new.css">
 </head>
 <body>
-    <form id="form" action="/we_account/findPwd" method="post" onsubmit="return login();">
+    <form id="form" action="/we_account/findPwd" method="post" onsubmit="return submitBefore();">
         <div class="form-control">
-            <input type="text" name="username" id="username" placeholder="    代go号" /><span id="email-tip" style="color: red;display: none;">代go号是一串数字哦</span></div>
+            <input type="text" name="username" id="username" placeholder="代go号" /><span class="error-tip" style="color: red;">代go号是那一串数字哦</span></div>
         <div class="form-control">
-            <input type="text" name="email" id="email" placeholder="    邮箱" />
+            <input type="text" name="email" id="email" placeholder="邮箱" />
+            <span class="error-tip" style="color: red;">邮件格式有误</span>
         </div>
-        <input type="submit" id="loginBtn" class="" value="提交" />
-
+        <input type="submit" id="loginBtn" class="btn" value="提交" />
+        <a class="loginBtn_r" href="/we_account/login">回到登录界面</a>
     </form>
 </body>
-<script src="/javascripts/jquery.js"></script>
+<script src="//static.daidai2u.com/javascripts/jquery.js"></script>
 <script>
-    function login(){
-        return true;
+    var emailReg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+    function submitBefore(){
+        var username = $("#username").val(),
+                email = $("#email").val();
+        var flag = true;
+        if(!username || username.trim().length == 0){
+            $("#username").addClass('invalid');
+            flag = false;
+        }else{
+            $("#username").removeClass('invalid');
+        }
+        if(!emailReg.test(username)){
+            $("#email").addClass('invalid');
+            flag = false;
+        }else{
+            $("#email").removeClass('invalid');
+        }
+        return flag;
     }
 </script>
 </html>

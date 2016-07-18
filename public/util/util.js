@@ -227,7 +227,7 @@ define(['wxAPI'],function(wx){
          * @returns {unresolved}
          */
         getUrlParam:function(queryName){
-            var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+            var reg = new RegExp("(^|&)"+ queryName +"=([^&]*)(&|$)");
             var r = window.location.search.substr(1).match(reg);
             if (r!=null) return decodeURI(r[2]); return null;
         },

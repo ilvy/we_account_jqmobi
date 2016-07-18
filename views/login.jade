@@ -6,7 +6,7 @@ html
     head
         title live-room-waterfall
         meta(name="viewport",content="width=device-width,initial-scale=1.0,user-scalable=no")
-        link(rel='stylesheet', href='/stylesheets/style_new.css')
+        link(rel='stylesheet', href='//static.daidai2u.com/stylesheets/all.css')
         style.
             .back_to_add{
                 position:fixed;
@@ -14,12 +14,13 @@ html
                 top:0;
             }
     body
-        form#form(action="/we_account/loginService#{fromapp}" method="post" onsubmit="return login();")
+        form#form(action="/we_account/loginService#{fromapp}" method="post" onsubmit="return loginSubmit();")
             .form-control
-                input#username(type="text" name="username" placeholder="    代go号")
-                span#email-tip(style="color: red;display: none;")
+                input#username.required(type="text" name="username" placeholder="代go号")
+                span.error-tip(style="color: red;")
             .form-control
-                input#pwd(type="password" name="pwd" placeholder="    密码")
+                input#pwd.required(type="password" name="pwd" placeholder="密码")
+                span.error-tip
             .eform-control.login-fail #{error}
             .eform-control
                 label
@@ -28,8 +29,7 @@ html
                 label
                     a(href="/forgetpwd.html") 忘记密码
             input#loginBtn(type="submit" class="" value="登录")
-    script(src="/javascripts/jquery.js")
-    script.
-        function login(){
-            return true;
-        }
+            a#registerBtn(href="/register.html") 注册
+    script(src="//static.daidai2u.com/javascripts/jquery.js")
+    script(src="//static.daidai2u.com/util/util.js?__inline")
+    script(src="//static.daidai2u.com/javascripts/login/login.js?__inline")

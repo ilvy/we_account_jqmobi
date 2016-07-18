@@ -9,55 +9,24 @@
 <body>
     <form id="form" action="/we_account/register" method="post" onsubmit="return register();">
         <div class="form-control"><input type="text" name="username" id="username" placeholder="    email账号"/><span id="email-tip" style="color: red;display: none;">邮箱格式有误</span></div>
-        <div class="form-control"><input type="text" name="weixin" id="weixin" placeholder="    微信账号(公开，方便买家联系)"/><span id="weixin-tip" style="color: red;display: none;">微信账号不能为空</span></div>
-        <div class="form-control"><input type="password" name="pwd" id="pwd" placeholder="    密码"/><span id="pwd-tip" style="color: red;display: none;">密码输入不一致</span></div>
-        <div class="form-control"><input type="password" id="confirmPwd" placeholder="    确认密码"/></div>
-        <input type="submit" id="loginBtn" class="" value="注册"/>
+        <div class="w-links hide">
+            <a class="login-link hide" href="/we_account/login">已有账号，登录</a><a class="bind-link hide">已有账号，绑定微信</a><a class="cancel-link hide">取消</a>
+        </div>
+        <div class="w-reg-info">
+            <div class="form-control"><input type="text" name="weixin" id="weixin" placeholder="    微信账号(公开，方便买家联系)"/><span id="weixin-tip" style="color: red;display: none;">微信账号不能为空</span></div>
+            <div class="form-control"><input type="password" name="pwd" id="pwd" placeholder="    密码"/><span id="pwd-tip" style="color: red;display: none;">密码输入不一致</span></div>
+            <div class="form-control"><input type="password" id="confirmPwd" placeholder="    确认密码"/></div>
+            <input type="submit" id="registerBtn_r" class="" value="注册" onclick="return register();" />
+            <a class="loginBtn_r" href="/we_account/login">已有账号，直接登录</a>
+        </div>
+        
     </form>
 </body>
 <script src="javascripts/jquery.js"></script>
+<script src="javascripts/service/service.js?__inline"></script>
+<script src="javascripts/register/register.js?__inline_4"></script>
 <script>
-    function register(){
-        var username = $("#username").val(),
-                nickname = $("#nickname").val(),
-                pwd = $("#pwd").val(),
-                confirmPwd = $("#confirmPwd").val(),
-                weixin = $('#weixin').val();
-        var emailReg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
-        if(!username || username.trim().length == 0){
-            $("#username").css({
-                borderBottomColor:"red"
-            })
-            return false;
-        }
-        if(!weixin || weixin.trim().length == 0){
-            $("#weixin").css({
-                borderBottomColor:"red"
-            });
-            return false;
-        }
-        if(!emailReg.test(username)){
-            $("#email-tip").css("display","block");
-            setTimeout(function(){
-                $("#email-tip").css("display","none");
-            },2000);
-            return false;
-        }
-        if(!pwd || pwd.trim().length == 0){
-            $("#pwd").css({
-                borderBottomColor:"red"
-            })
-            return false;
-        }
-        if(pwd != confirmPwd){
-            $("#pwd-tip").css("display","block");
-            setTimeout(function(){
-                $("#pwd-tip").css("display","none");
-            },2000);
-            return false;
-        }
-        return true;
-    }
+    
 //    $(document).on("click","#loginBtn",function(){
 //        var url = 'http://localhost:880/we_account/register';
 //        $.ajax({

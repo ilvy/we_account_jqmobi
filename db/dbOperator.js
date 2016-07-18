@@ -397,10 +397,19 @@ exports.query = query;
 // });
  
  
- query("select * from t_weix_account_info where nickname_pinyin like '%zhangxiaoran%';",[],function(err,rows){
-    if(err){
-        console.log("call pro_verify_email err:",err);
-    }else{
-        console.log("call pro_verify_email results:",rows);
-    }
-});
+//  query("select * from t_weix_account_info where nickname_pinyin like '%zhangxiaoran%';",[],function(err,rows){
+//     if(err){
+//         console.log("call pro_verify_email err:",err);
+//     }else{
+//         console.log("call pro_verify_email results:",rows);
+//     }
+// });
+
+
+//  query("call pro_bind_account(?,?)",['lopid_qwertyuiohdfg356784rfghthnd7y','478283225@qq.com'],function(err,rows){
+//     if(err){
+//         console.log("call pro_bind_account err:",err);
+//     }else{
+//         console.log("call pro_bind_account results:",rows);
+//     }
+// });

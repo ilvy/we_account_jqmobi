@@ -53,3 +53,6 @@ public/react/jsx-build/.module-cache/
 
 #logs
 logs/
+
+#dist
+*-dist/

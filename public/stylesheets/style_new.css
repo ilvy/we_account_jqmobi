@@ -34,13 +34,33 @@ img#for-share{
     border-left: none;
     border-top: none;
     border-right: none;
+    padding-left: 16px;
 }
+
+.form-control input:active{
+    outline: none;
+}
+
+.form-control input:focus{
+    outline: none;
+}
+
 #loginBtn{
     margin-top: 30px;
     padding: 12px 28px;
     border: 1px solid #cdcdcd;
     background-color: #ffffff;
     border-radius: 10px;
+}
+#registerBtn_r{
+    margin-top: 30px;
+    padding: 12px 28px;
+    border: 1px solid #cdcdcd;
+    background-color: #ffffff;
+    border-radius: 10px;
+}
+#registerBtn{
+    margin-left: 36px;
 }
 .eform-control{
     width: 100%;
@@ -49,13 +69,35 @@ img#for-share{
 }
 .eform-control.login-fail{
     color: red;
-    margin-top: 6px;
+    font-size: 12px;
+    text-align: center;
 }
 .eform-control > label:first-child{
     float: left;
 }
 .eform-control > label:last-child{
     float: right;
+}
+
+.w-links{
+    margin-top: 32px;
+    width: 100%;
+}
+.w-links > a.login-link,.w-links > a.bind-link{
+    float: left;
+}
+.w-links > .cancel-link{
+    float: right;
+}
+.error-tip{
+    display: none;
+    font-size: 12px;
+}
+input.invalid-style1{
+    border-bottom-color: red;
+}
+input.invalid-style1 ~ .error-tip{
+    display: initial;
 }
 /*************end register.html,login.html****************/
 

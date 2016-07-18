@@ -106,6 +106,7 @@ exports.serverConfig = serverConfig;
 exports.appConfig = appConfigForm;
 exports.dataviewConfig = dataviewConfig;
 exports.redisConfig = redisConfig;
+exports.verifyServerConfig = verifyServerConfig;
 if(process.argv[2] == 'test'){
     exports.appConfig = appConfig;
 }

@@ -331,7 +331,7 @@ function getFinalBill(req,res){
             logger.error(err);
             response.failed(-2,res,'');
         }else{
-            logger.info(rows);
+            logger.info("call pro_get_final_bill ok");
             response.success(rows[0],res,'');
         }
     });
@@ -364,7 +364,7 @@ function getPayment(req,res,isRequestBySeller){//需要验证openid
                 response.failed(-1,res,'')
             }
         }else{
-            logger.debug(rows);
+            logger.debug("call pro_getpayment ok");
             var data = rows[0] || [];
             var total = 0,
                 mailRecord;
@@ -457,7 +457,7 @@ function vagueSearchUser(req,res){
         if(err){
             logger.error("call pro_vague_search_user err:",err);
         }else{
-            logger.debug("call pro_vague_search_user results:",rows);
+            logger.debug("call pro_vague_search_user ok");
             response.success(rows[0],res,"");
         }
     });
