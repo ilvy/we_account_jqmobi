@@ -68,7 +68,7 @@ gulp.task('revReplace',function(){
 
 
  /***************** 生产环境 ********************/
- 
+
 
 gulp.task('build',['clean'],function(){
 	runSequence('uglifyjs','concatcss','minifycss','md5-cssjs','dealrevjson','revReplace');
