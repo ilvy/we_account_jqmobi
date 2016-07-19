@@ -70,18 +70,25 @@ var through2 = require('through2');
  * 静态页面部分js文件内联写入
  */
 gulp.task('inlinejs',function(){
-	return gulp.src([srcPath+'register.html'])
-			   .pipe(through2.obj(function(chunk,enc,cb){
-			   	// console.log(chunk.contents.toString());
-			   	var fileContents = chunk.contents.toString();
-			   	var reg = /<script src=".*?[^\/]\/(.*)\?__inline.*"><\/script>/;
+	return gulp.src([srcPath+'register.html',srcPath+'login.html'],{base:srcPath})
+			   .pipe(through2.obj(function(file,enc,cb){
+			   	// console.log(file.contents.toString());
+			   	var fileContents = file.contents.toString();
+			   	var reg = /<script src=".*?[^\/]\/(.*)\?__inline.*"><\/script>/gi;
 			   	// console.log((fileContents.match(reg))[1])
-			   	var jsFileSrc = srcPath + fileContents.match(reg)[1];
-			   	// fileContents.replace(reg,)
-			   	// console.log(jsFileSrc)
-			   	console.log(fs.readFileSync(jsFileSrc,'utf-8').toString());
-			   	cb(null,chunk);
-			   }));
+			   	// var jsFileSrc = srcPath + fileContents.match(reg)[1];
+			   	var resultFile = fileContents.replace(reg,function(match, src, index, input) {
+			   		console.log("************",src);
+                    return ['<script>',
+                        fs.readFileSync(srcPath+src).toString('utf8'),
+                        '<\/script>'
+                    ].join("");
+                });
+			   	console.log(resultFile)
+			   	file.contents = new Buffer(resultFile,"utf8");
+			   	cb(null,file);
+			   }))
+			   .pipe(gulp.dest(distPath));
 });
 
 
