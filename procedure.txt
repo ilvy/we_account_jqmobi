@@ -1,6 +1,6 @@
 delimiter $$
-drop procedure if exists pro_weix_account_info_test;
-CREATE PROCEDURE `pro_weix_account_info_test`(in openid varchar(200),in nickname varchar(50),in headimgurl varchar(150),in sex bit,in city varchar(30),in country varchar(30),in unionid varchar(200),in subscribe_time datetime,in _nickname_pinyin varchar(50))
+drop procedure if exists pro_weix_account_info;
+CREATE PROCEDURE `pro_weix_account_info`(in openid varchar(200),in nickname varchar(50),in headimgurl varchar(150),in sex bit,in city varchar(30),in country varchar(30),in unionid varchar(200),in subscribe_time datetime,in _nickname_pinyin varchar(50))
 BEGIN
   #Routine body goes here...
 
@@ -176,8 +176,8 @@ delimiter ;
 
 /**ԭ��Ʒ�ӵ�**/ TODO:nickname_pinyin
 delimiter $$
-drop procedure if exists pro_add_order_by_seller_new_test;
-create procedure pro_add_order_by_seller_new_test(in cnickname varchar(50),in product_name varchar(40),in text varchar(600),in image_urls varchar(200),in sell_open_id varchar(200),in remark varchar(60),in productid int
+drop procedure if exists pro_add_order_by_seller_new;
+create procedure pro_add_order_by_seller_new(in cnickname varchar(50),in product_name varchar(40),in text varchar(600),in image_urls varchar(200),in sell_open_id varchar(200),in remark varchar(60),in productid int
 ,in in_quantity int,in cost decimal(10,2),in price decimal(10,2),in discount decimal(4,2),in cate_name varchar(50),in cnickname_pinyin varchar(50))
 begin
 
@@ -206,9 +206,9 @@ end if;
 if @productId is null then
 insert into product(image_url,text,room_id,create_time,status,title) values(image_urls,text,@sell_room_id,@now,1,@pname);-- 第二步、发布商品
 set @productId = (select last_insert_id());
-call pro_take_order_by_seller_new_test(@openId,cnickname,@sell_room_id,remark,@productId,in_quantity,@now,cost,price,discount,cate_name,@oid);-- 第三步、下单
+call pro_take_order_by_seller_new(@openId,cnickname,@sell_room_id,remark,@productId,in_quantity,@now,cost,price,discount,cate_name,@oid);-- 第三步、下单
 else
-call pro_take_order_by_seller_new_test(@openId,cnickname,@sell_room_id,remark,@productId,in_quantity,@now,cost,price,discount,cate_name,@oid);-- 第三步、下单
+call pro_take_order_by_seller_new(@openId,cnickname,@sell_room_id,remark,@productId,in_quantity,@now,cost,price,discount,cate_name,@oid);-- 第三步、下单
 end if;
 
 select @productId product_id,@oid order_id,c.id c_id
@@ -277,8 +277,8 @@ delimiter ;
 
 -- 下单 pro_take_order
 delimiter $$
-drop procedure if exists pro_take_order_test;
-CREATE  PROCEDURE pro_take_order_test(in c_open_id varchar(200),in sell_room_id varchar(16),in remark varchar(60),in productid int,in in_quantity int,in create_time datetime)
+drop procedure if exists pro_take_order;
+CREATE  PROCEDURE pro_take_order(in c_open_id varchar(200),in sell_room_id varchar(16),in remark varchar(60),in productid int,in in_quantity int,in create_time datetime)
 BEGIN
 
 START TRANSACTION;
@@ -317,9 +317,9 @@ set @update_count = (SELECT ROW_COUNT());
 
 -- 下单 pro_take_order_by_seller
 delimiter $$
-drop procedure if exists pro_take_order_by_seller_new_test;
+drop procedure if exists pro_take_order_by_seller_new;
 -- CREATE  PROCEDURE pro_take_order_by_seller(in c_open_id varchar(200),in sell_room_id varchar(16),in order_remark varchar(60),in productid int,in in_quantity int,in create_time datetime,in in_cost int,in in_price int,out o_id int)
-CREATE  PROCEDURE pro_take_order_by_seller_new_test(in c_open_id varchar(200),in customer_name varchar(50),in sell_room_id varchar(16),in order_remark varchar(60),in productid int,in in_quantity int,in create_time datetime,
+CREATE  PROCEDURE pro_take_order_by_seller_new(in c_open_id varchar(200),in customer_name varchar(50),in sell_room_id varchar(16),in order_remark varchar(60),in productid int,in in_quantity int,in create_time datetime,
                                            in in_cost decimal(10,2),in in_price decimal(10,2),in _discount decimal(4,2),in cate_name varchar(50),out o_id int)
 BEGIN
 
@@ -468,8 +468,8 @@ DELIMITER ;
 
 ---------------------全站模糊匹配user------------------------start
 delimiter $$
-drop procedure if exists pro_vague_search_user_test;
-create procedure pro_vague_search_user_test(in username varchar(50),in openId varchar(200),in type tinyint)
+drop procedure if exists pro_vague_search_user;
+create procedure pro_vague_search_user(in username varchar(50),in openId varchar(200),in type tinyint)
 begin
 
 start transaction;
@@ -697,10 +697,10 @@ commit;
 end; $$
 delimiter ;
 
-/********** pro_set_customer_info_new_test ************/ 修复修改昵称时修改所有订单的逻辑错误，加上oid一起判断 TODO:更新
+/********** pro_set_customer_info_new ************/ 修复修改昵称时修改所有订单的逻辑错误，加上oid一起判断 TODO:更新
 delimiter $$
-drop procedure if exists pro_set_customer_info_new_test;
-CREATE PROCEDURE `pro_set_customer_info_new_test`(in objid int,in value decimal(10,2),in nickname varchar(50),in type tinyint,in exchangeRate decimal(4,2),in openId varchar(100),in exchangeType tinyint,in _discount decimal(4,2),in order_id int,in _nickname_pinyin varchar(50))
+drop procedure if exists pro_set_customer_info_new;
+CREATE PROCEDURE `pro_set_customer_info_new`(in objid int,in value decimal(10,2),in nickname varchar(50),in type tinyint,in exchangeRate decimal(4,2),in openId varchar(100),in exchangeType tinyint,in _discount decimal(4,2),in order_id int,in _nickname_pinyin varchar(50))
 BEGIN
 	#Routine body goes here...
 START TRANSACTION;
@@ -972,6 +972,53 @@ delimiter ;
 
 /************** category table **************/
 create table t_category(id int primary key auto_increment,cate_type tinyint default 1,cate_name varchar(50));
+
+
+/************** pro_check_user_email 验证注册邮箱是否已经注册过 **************/
+delimiter $$
+drop procedure if exists pro_check_user_email;
+create procedure pro_check_user_email(in _email varchar(50))
+begin
+
+start transaction;
+
+select u.open_id from user u where u.email = _email;
+
+commit;
+
+end; $$
+delimiter ;
+
+/************** pro_bind_account 绑定微信账号和普通账号 **************/
+delimiter $$
+drop procedure if exists pro_bind_account;
+create procedure pro_bind_account(in _openId varchar(100),in _email varchar(50))
+begin
+
+start transaction;
+
+update t_exchange_rate er,user u set er.open_id = _openId where u.open_id = er.open_id and u.email = _email and u.open_id like '%lopid_%';
+update user u set u.open_id = _openId where u.email = _email and u.open_id like '%lopid_%';
+
+commit;
+
+end; $$
+delimiter ;
+
+/************** pro_reset_pwd 修改密码 **************/
+delimiter $$
+drop procedure if exists pro_reset_pwd;
+create procedure pro_reset_pwd(in _room_id varchar(50),in _pwd varchar(50))
+begin
+
+start transaction;
+
+update user u set u.pwd = _pwd where room_id = _room_id;
+
+commit;
+
+end; $$
+delimiter ;
 
 
 update t_customer t1,(select c.id from t_customer c left join (select c_openid,seller_room_id,count(1) num from t_customer where c_status = 1 group by c_openid,seller_room_id) c2

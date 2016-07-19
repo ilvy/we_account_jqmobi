@@ -191,7 +191,7 @@ function updateCustomerInfo(req,res){
     value = value == '' ? null:value;
     var args = [objid,value || 0,nickname||'',type,exchange_rate || '',openid,exchange_type || '',discount||'',order_id,pinyinTransfer.toPinyin(nickname)];
 
-    dbOperator.query('call pro_set_customer_info_new_test(?,?,?,?,?,?,?,?,?,?)',args,function(err,rows){
+    dbOperator.query('call pro_set_customer_info_new(?,?,?,?,?,?,?,?,?,?)',args,function(err,rows){
         if(err){
             logger.error(err);
             response.failed('',res,'');
@@ -331,7 +331,7 @@ function getFinalBill(req,res){
             logger.error(err);
             response.failed(-2,res,'');
         }else{
-            logger.info(rows);
+            logger.info("call pro_get_final_bill ok");
             response.success(rows[0],res,'');
         }
     });
@@ -364,7 +364,7 @@ function getPayment(req,res,isRequestBySeller){//需要验证openid
                 response.failed(-1,res,'')
             }
         }else{
-            logger.debug(rows);
+            logger.debug("call pro_getpayment ok");
             var data = rows[0] || [];
             var total = 0,
                 mailRecord;
@@ -434,7 +434,7 @@ function addOrderBySeller(req,res){
         nickname_pinyin = pinyinTransfer.toPinyin(nickname);
     cate = cate == '' ? null : cate;
     var openId = req.session.openId || "oxfQVswUSy2KXBPOjNi_BqdNI3aA";
-    dbOperator.query("call pro_add_order_by_seller_new_test(?,?,?,?,?,?,?,?,?,?,?,?,?)",[nickname,title,desc,image_urls,openId,remark,productid,in_quantity,cost,price,discount,cate,nickname_pinyin],function(err,rows){
+    dbOperator.query("call pro_add_order_by_seller_new(?,?,?,?,?,?,?,?,?,?,?,?,?)",[nickname,title,desc,image_urls,openId,remark,productid,in_quantity,cost,price,discount,cate,nickname_pinyin],function(err,rows){
         if(err){
             logger.error("call pro_add_order_by_seller err:",err);
         }else{
@@ -453,11 +453,11 @@ function vagueSearchUser(req,res){
         type = req.query.type,
         customer_pinyin = pinyinTransfer.toPinyin(customer);
     var openId = req.session.openId || 'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
-    dbOperator.query("call pro_vague_search_user_test(?,?,?)",['%'+customer_pinyin+'%',openId,type],function(err,rows){
+    dbOperator.query("call pro_vague_search_user(?,?,?)",['%'+customer_pinyin+'%',openId,type],function(err,rows){
         if(err){
             logger.error("call pro_vague_search_user err:",err);
         }else{
-            logger.debug("call pro_vague_search_user results:",rows);
+            logger.debug("call pro_vague_search_user ok");
             response.success(rows[0],res,"");
         }
     });

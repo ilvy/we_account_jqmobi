@@ -12,6 +12,10 @@ var dbOperator = require("../../../db/dbOperator"),
     util = require("../util/util"),
     pinyinTransfer = require('../util/pinyinTransfer');
 var logger = require("log4js").getLogger("publish_account");
+var crypto = require('crypto'),
+    mailServer = require('./emailCenter');
+var redis = require("../../../db/redisOperator").client;
+var verifyServerConfig = require("../../../config/config").verifyServerConfig;
 logger.setLevel("INFO");
 
 function applyAccount(data,res){
@@ -40,31 +44,145 @@ function checkUser(open_id,cb){
     });
 }
 
-function register(req,res){
-    var session = req.session;
+/**
+ * 注册请求 
+*/
+function register(req,res,next){
     var body = req.body;
-    var openId = session.openId,
-        username = body.username,
+    var session = req.session;
+    var openId = session.openId;
+    var now = new Date().getTime();
+    if(!openId){
+        openId = ['lopid_',now,Math.random().toString()].join("");
+    }
+    var email = body.username,
         weixin = body.weixin,
         pwd = body.pwd;
-    if(!openId){
-        res.redirect("/err.html");
-        return;
-    }
-//    console.log(session);
-//    console.log("**************"+session.name+"*********openId:"+openId);
-//    res.send("**************"+session.name+"*********openId:"+openId);
-    dbOperator.query('call pro_register(?,?,?,?,?)',[openId,username,username,pwd,weixin],function(err,rows){
+    var md5Args = [email,weixin,pwd];
+    //生成邮箱验证激活码,入库redis
+    var shaStr = md5Args.concat(now).join("");//TODO 加密
+    var actcode = crypto.createHash("sha1").update(shaStr).digest('hex');
+    redis.exp_setJson(actcode,{
+        email:email,
+        weixin:weixin,
+        pwd:pwd,
+        openId:openId,
+        limitAge:now + 900000
+    },function(err,rdsres){
+        mailServer.sendMail({
+            to : email,
+            subject: "代go账号注册",
+            generateTextFromHTML : true,
+            html : "<a href='http://"+verifyServerConfig.cookieDomain+":"+verifyServerConfig.port+"/we_account/register_mail_verify?acd="+actcode+"'>注册用户激活链接</a>"
+        },function(err,results){
+            if(err){
+                console.log(err.name);
+                if(err.name == 'RecipientError'){
+                    res.render("sendMailResult",{code:0,result:"代go账号注册确认邮件发送失败，请确认您的邮箱<"+email+">是否正确！！！"});
+                }else{
+                    res.render("sendMailResult",{code:0,result:"账号注册失败，请重试！！！"});
+                }
+                return;
+            }
+            res.render("sendMailResult",{code:200,result:"感谢您的注册，验证邮件发送成功，请在一个小时内前往验证并修改密码!"});
+        });
+    });
+    
+}
+
+
+/**
+ * 注册邮箱验证
+ */
+function registerMailVerify(req,res){
+    var now = new Date().getTime();
+    var query = req.query,
+        actcode = query.acd;
+    redis.exp_getJson(actcode,function(err,rdsres){
+        if(!err){
+            var username = rdsres.email,
+            pwd = rdsres.pwd,
+            weixin = rdsres.weixin, 
+            openId = rdsres.openId;
+            if(now < rdsres.limitAge){
+                dbOperator.query('call pro_register(?,?,?,?,?)',[openId,username,username,pwd,weixin],function(err,rows){
+                    if(err){
+                        logger.error(err);
+                        res.redirect("/err.html");
+                    }else{
+                        logger.info("call pro_register results:",rows);
+                        res.redirect('/we_account/live-room#billSystem');
+            //            asyncAccountInfoFromWeix(openId);
+                    }
+                });
+            }else{
+                // 注册邮件超时
+                res.render('registerResult',{result:"您的认证邮件已过时，请重新注册"});
+            }
+            return;
+        }
+        res.render('registerResult',{result:"系统错误，请重试！(或微信联系478283225，我们技术支持哥哥)"});
+    });
+    
+}
+
+/*
+ * 检查目标邮箱是否已经注册过
+ */
+function checkEmail(req,res){
+    var session = req.session,
+        openId = session.openId;
+    var query = req.query,
+        email = query.email;
+    dbOperator.query('call pro_check_user_email(?)',[email],function(err,rows){
         if(err){
             logger.error(err);
-            res.redirect("/err.html");
+            response.failed("-1",res,"");
         }else{
-            logger.info("call pro_register results:",rows);
-            res.redirect('/we_account/live-room#live_room-'+rows[0][0].room_id);
-//            asyncAccountInfoFromWeix(openId);
+            logger.info("call pro_check_user_email results:",rows);
+            if(rows[0] && rows[0][0] && rows[0][0].open_id){
+                if(openId){
+                    response.success(1,res);//注册过且当前在登录状态
+                }else{
+                    response.success(2,res);//注册过，但是当前不在登录态
+                }
+                
+            }else{
+                response.success(0,res);//未注册过
+            }
+            
         }
     });
 }
+
+/*
+ * 绑定微信账号和邮箱账号
+ */
+function bindAccount(req,res){
+    var session = req.session,
+        openId = session.openId;
+    var query = req.query,
+        email = query.email;
+    if(!openId){
+        response.failed("0",res,"");
+        return;
+    }
+    dbOperator.query('call pro_bind_account(?,?)',[openId,email],function(err,rows){
+        if(err){
+            logger.error(err);
+            response.failed("-1",res,"");
+        }else{
+            logger.info("call pro_bind_account ok");
+            if(rows[0] && rows[0][0] && rows[0][0].open_id){
+                response.success(1,res);//注册过
+            }else{
+                response.success(0,res);//未注册过
+            }
+            
+        }
+    });
+}
+
 /**
  * 同步微信账户信息
  * @param openid
@@ -80,7 +198,7 @@ function asyncAccountInfoFromWeix(openid,res){
             return;
         }
         var args = [openid,accountInfo.nickname,accountInfo.headimgurl,accountInfo.sex,accountInfo.province+accountInfo.city,accountInfo.country,accountInfo.unionid,accountInfo.subscribe_time,pinyinTransfer.toPinyin(accountInfo.nickname)];
-        dbOperator.query('call pro_weix_account_info_test(?,?,?,?,?,?,?,?,?)',args,function(err,rows){
+        dbOperator.query('call pro_weix_account_info(?,?,?,?,?,?,?,?,?)',args,function(err,rows){
             if(err){
                 logger.debug(err);
             }else{
@@ -237,3 +355,6 @@ exports.updatePersonality_all = updatePersonality_all;
 exports.asyncAccountInfoFromWeix = asyncAccountInfoFromWeix;
 exports.wxJssdkInit = wxJssdkInit;
 exports.follow = follow;
+exports.registerMailVerify = registerMailVerify;
+exports.checkEmail = checkEmail;
+exports.bindAccount = bindAccount;

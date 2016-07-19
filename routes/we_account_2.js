@@ -130,6 +130,12 @@ router.post("/register",function(req,res){
     register(req,res);
 });
 
+router.get("/register_mail_verify",publish_account.registerMailVerify);
+
+router.post('/check_username',publish_account.checkEmail);
+
+router.post('/bind_account',publish_account.bindAccount);
+
 router.post("/loginService",login);
 router.get("/login",function(req,res){
     login(req,res,'get');
@@ -224,6 +230,7 @@ router.get("/fav",live_room.myFavorite);
 router.get("/live-room",billSystem.getAuth_enterLiveRoom);
 router.get("/live-room",function(req,res){
     var openId = req.session.openId;// || 'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
+    console.log(openId)
     var query = req.query,
         roomId = query.room_id;
     var isFromApp = query.fromapp;
@@ -239,7 +246,9 @@ router.get("/live-room",function(req,res){
     }else if(typeof roomId != 'undefined' && openId){
 
     }else if(typeof roomId == 'undefined' && !openId){
-        res.redirect("/we_account/login");
+        var loginUrl = "/we_account/login";
+        loginUrl = isFromApp ? [loginUrl,'?fromapp=1'].join("") : loginUrl;
+        res.redirect(loginUrl);
         return;
     }
     var orderStatus = req.session.orderStatus;

@@ -549,7 +549,7 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                     $card = $this.parents('.card');
                 var orderId = $this.parents('.t-row').data('oid');
                 if (($checkbox = $this.find(".fa-square-o")).length > 0) {
-                    if (confirm("确认" + $($this.parents('.t-row').find('div.num')).text() + "个" + $this.parents('.card').find('span.name').text() + "已经购买")) {
+                    if (confirm("确认" + $($this.siblings('div.quantity').find('select')).val() + "个" + $this.parents('.card').find('span.name').text() + "已经购买")) {
                         //                        $this.parents('.t-row').remove();
                         _this.logBuyProductLocation($card.data("pid"));
                         if ($card.find(".t-row").length == 2) { //说明只有一个订单
@@ -712,6 +712,16 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                 }
 
             }, true);
+            $(".options_toggle a.toggle_btn").touch("click",function(event){
+                var $this = event.$this;
+                if($this.hasClass('more_btn')){
+                    $("#addOrderPanel .more").fadeIn(100);
+                    $this.addClass('hide_more').removeClass('more_btn').text('收起');
+                }else{
+                    $("#addOrderPanel .more").fadeOut(100);
+                    $this.removeClass('hide_more').addClass('more_btn').text('更多');
+                }
+            });
             $(".all-status").touch("click", function(event) {
                 var $this = event.$this;
                 var $card = $this.parents(".card");
@@ -1380,7 +1390,8 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
 
             }, true);
             //输入自动匹配熟客
-            $("#aopc_name,#pep_cnickname").on("input", function(event) {
+            $("#aopc_name,#pep_cnickname").on("input", util.debounce(function(event) {
+                console.log("输入自动匹配熟客");
                 var $nameInput = $(this);
                 var customer = $nameInput.val();
                 $nameInput.addClass("match-obj-input");
@@ -1404,7 +1415,7 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                 }).error(function(err) {
 
                 });
-            });
+            },250));
             $("#search_exists_customers").touch("click", function(event) {
                 var $nameInput = $("#aopc_name");
                 var customer = $nameInput.val();
@@ -1442,7 +1453,8 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                 });
             });
             //模糊匹配商品名
-            $("#aopp_name").on("input", function() {
+            $("#aopp_name").on("input", util.debounce(function() {
+                console.log('模糊匹配商品名');
                 var $productInput = $(this);
                 var productName = $productInput.val(),
                     offset = $productInput.offset();
@@ -1463,7 +1475,7 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                         }).addClass('visible');
                     }
                 });
-            });
+            },250));
             //搜商品名
             $("#search_product_btn").touch("click", function(event) {
                 var $productInput = $("input.aopp_name");

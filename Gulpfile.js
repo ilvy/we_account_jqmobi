@@ -24,11 +24,10 @@ var srcAssetsPath = srcPath + 'stylesheets/';
 
 gulp.task('concatcss',function(){
 	var stylesPath = srcPath + 'stylesheets/';
-	var concatCssFiles = [];
-	['bootstrap.css','bootstrap-grid.css','style_new.css','mystyle.css'].forEach(function(item,i){
+	var concatCssFiles = [srcPath+'Jplugin/jquery.light-popup/jquery.light-popup.css'];
+	['bootstrap.css','bootstrap-grid.css','mystyle.css','style_new.css'].forEach(function(item,i){
 		concatCssFiles.push(stylesPath + item);
 	});
-	concatCssFiles.push(srcPath+'Jplugin/jquery.light-popup/jquery.light-popup.css');
 	return gulp.src(concatCssFiles,{base:srcPath})
 			   .pipe(plugins.concat('all.css'))
 			   .pipe(gulp.dest(srcAssetsPath));
@@ -64,6 +63,25 @@ gulp.task('revReplace',function(){
 			   .pipe(plugins["revReplace"]({manifest:manifest}))
 			   .pipe(plugins.rev())
 			   .pipe(gulp.dest(distPath));
+});
+
+var through2 = require('through2');
+/*
+ * 静态页面部分js文件内联写入
+ */
+gulp.task('inlinejs',function(){
+	return gulp.src([srcPath+'register.html'])
+			   .pipe(through2.obj(function(chunk,enc,cb){
+			   	// console.log(chunk.contents.toString());
+			   	var fileContents = chunk.contents.toString();
+			   	var reg = /<script src=".*?[^\/]\/(.*)\?__inline.*"><\/script>/;
+			   	// console.log((fileContents.match(reg))[1])
+			   	var jsFileSrc = srcPath + fileContents.match(reg)[1];
+			   	// fileContents.replace(reg,)
+			   	// console.log(jsFileSrc)
+			   	console.log(fs.readFileSync(jsFileSrc,'utf-8').toString());
+			   	cb(null,chunk);
+			   }));
 });
 
 

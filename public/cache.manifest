@@ -1,0 +1,26 @@
+CACHE MANIFEST  
+#v1.0.0
+
+CACHE:
+/javascripts/jquery.js
+/javascripts/libs/require/require.js
+/we_account/live-room
+http://netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css
+http://static.daidai2u.com/stylesheets/all.css
+http://www.daidai2u.com/Jplugin/laydate/need/laydate.css
+http://www.daidai2u.com/Jplugin/laydate/skins/default/laydate.css
+http://static.daidai2u.com/javascripts/jquery.js
+http://static.daidai2u.com/javascripts/libs/require/require.js
+http://static.daidai2u.com/Jplugin/jquery.light-popup/jquery.light-popup.js
+http://static.daidai2u.com/touchUtil.js
+http://static.daidai2u.com/Jplugin/laydate/laydate.js
+http://static.daidai2u.com/jqr.js
+http://static.daidai2u.com/javascripts/router.js
+http://static.daidai2u.com/javascripts/jweixin-1.0.0.js
+http://static.daidai2u.com/util/util.js
+http://static.daidai2u.com/modules/bill/bill.js
+
+NETWORK:
+*
+
+FALLBACK:

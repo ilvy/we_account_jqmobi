@@ -7,14 +7,16 @@ var dbOperator = require("../../../db/dbOperator"),
     util = require('../util/util');
 var redis = require("../../../db/redisOperator").client;
 var mailServer = require('./emailCenter');
-
-var cookieDomain = 'localhost';
+var verifyServerConfig = require("../../../config/config").verifyServerConfig;
+var cookieDomain = verifyServerConfig.cookieDomain,
+    port = verifyServerConfig.port;
 var tokenManager = {};
 var login = (req,res,type)=>{
 	// setCookie(res,'10.22.0.36',req.query.username,3600 * 1000);
  //    res.render('loginRedirect');return;
+    var isFromApp = req.query.fromapp;
     if(type == 'get'){
-    	res.render('login',{error:""});
+    	res.render('login',{error:"",fromapp:(isFromApp ? "?fromapp=1" : "")});
     	return;
     }
     console.log("testetestsettet");
@@ -24,7 +26,7 @@ var login = (req,res,type)=>{
             if(results[0] && results[0][0] && results[0][0].open_id){
             	req.session.openId = results[0][0].open_id;
             	setCookie(res,cookieDomain,req.query.username,3600 * 1000);
-            	res.render('loginRedirect',{redirectLink:'/we_account/live-room#billSystem'});
+            	res.render('loginRedirect',{redirectLink:'/we_account/live-room'+(isFromApp ? "?fromapp=1" : "")+'#billSystem'});
             }else{
             	res.redirect('login?lerr=1');//用户名密码不匹配
             }
@@ -116,12 +118,11 @@ var findPwd = (req,res)=>{
     promise.then(function(value){
 		redis.exp_setJson(['acd',actcode].join(""),{accountName:roomId,limitAge:now+3600*1000},function(err,result){
 	    	if(!err){
-	    		//TODO 发送邮件
 			    mailServer.sendMail({
 				    to : email,
 				    subject: "找回密码",
 				    generateTextFromHTML : true,
-				    html : "<a href='http://"+cookieDomain+":870/we_account/verify?acd="+actcode+"'>激活链接</a>"
+				    html : "<a href='http://"+cookieDomain+":'"+port+"'/we_account/verify?acd="+actcode+"'>激活链接</a>"
 				},function(err,results){
 					if(err){
 						res.render("sendMailResult",{code:0,result:"找回密码邮件发送失败，请重试！！！"});
