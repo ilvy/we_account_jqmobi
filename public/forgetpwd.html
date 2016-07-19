@@ -26,16 +26,16 @@
                 email = $("#email").val();
         var flag = true;
         if(!username || username.trim().length == 0){
-            $("#username").addClass('invalid');
+            $("#username").addClass('invalid-style1');
             flag = false;
         }else{
-            $("#username").removeClass('invalid');
+            $("#username").removeClass('invalid-style1');
         }
         if(!emailReg.test(username)){
-            $("#email").addClass('invalid');
+            $("#email").addClass('invalid-style1');
             flag = false;
         }else{
-            $("#email").removeClass('invalid');
+            $("#email").removeClass('invalid-style1');
         }
         return flag;
     }
