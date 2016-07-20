@@ -406,10 +406,10 @@ exports.query = query;
 // });
 
 
-//  query("call pro_bind_account(?,?)",['lopid_qwertyuiohdfg356784rfghthnd7y','478283225@qq.com'],function(err,rows){
-//     if(err){
-//         console.log("call pro_bind_account err:",err);
-//     }else{
-//         console.log("call pro_bind_account results:",rows);
-//     }
-// });
+ query("select * from t_customer where nickname_pinyin ='jiqiuping'",['lopid_qwertyuiohdfg356784rfghthnd7y','478283225@qq.com'],function(err,rows){
+    if(err){
+        console.log("call pro_bind_account err:",err);
+    }else{
+        console.log("call pro_bind_account results:",rows);
+    }
+});

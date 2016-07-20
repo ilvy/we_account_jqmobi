@@ -222,13 +222,66 @@ commit;
 end; $$
 delimiter ;
 
+/************ test ***********/
+delimiter $$
+drop procedure if exists pro_add_order_by_seller_new_test;
+create procedure pro_add_order_by_seller_new_test(in cnickname varchar(50),in product_name varchar(40),in text varchar(600),in image_urls varchar(200),in sell_open_id varchar(200),in remark varchar(60),in productid int
+,in in_quantity int,in cost decimal(10,2),in price decimal(10,2),in discount decimal(4,2),in cate_name varchar(50),in cnickname_pinyin varchar(50))
+begin
 
+start transaction;
 
+set @now = now();
+set @pname = product_name;
+set @sell_room_id = (select room_id from user where open_id = sell_open_id);
+set @openId = (select distinct open_id from t_weix_account_info where nickname = cnickname);-- 第一步、1先根据昵称获取买家openId
+if @openId is null then
+select distinct c_openid from t_customer where c_nickname = cnickname and seller_room_id = @sell_room_id and c_status = 1;
+
+end if;
+
+commit;
+
+end; $$
+delimiter ;
+-------------------------------
+delimiter $$
+drop procedure if exists pro_take_order_by_seller_new_test;
+-- CREATE  PROCEDURE pro_take_order_by_seller_test(in c_open_id varchar(200),in sell_room_id varchar(16),in order_remark varchar(60),in productid int,in in_quantity int,in create_time datetime,in in_cost int,in in_price int,out o_id int)
+CREATE  PROCEDURE pro_take_order_by_seller_new_test(in c_open_id varchar(200),in customer_name varchar(50),in sell_room_id varchar(16),in order_remark varchar(60),in productid int,in in_quantity int,in create_time datetime,
+                                           in in_cost decimal(10,2),in in_price decimal(10,2),in _discount decimal(4,2),in cate_name varchar(50),out o_id int)
+BEGIN
+
+START TRANSACTION;
+
+UPDATE t_order o , t_customer c
+SET o.quantity = o.quantity + in_quantity
+where o.c_id = c.id AND o.product_id = productid AND c.c_openid = c_open_id  AND c.seller_room_id = sell_room_id AND STATUS = 1
+AND o.create_time > '2015-05-11';
+
+set o_id = (select o.id from t_order o , t_customer c
+where o.c_id = c.id AND o.product_id = productid AND c.c_openid = c_open_id  AND c.seller_room_id = sell_room_id AND STATUS = 1);
+
+set @update_count = (SELECT ROW_COUNT());
+  -- SELECT @update_count;
+  if @update_count = 0 THEN
+        SELECT c.id from t_customer c JOIN user u -- t_customer 重复容易报错，根据openid和nickname分别排查
+                                            ON c.seller_room_id = u.room_id
+                                            WHERE c.seller_room_id = sell_room_id AND c.c_openid = c_open_id and c.c_nickname = customer_name and c.c_status = 1;
+      
+      end IF;
+  commit;
+  end; $$
+  delimiter ;
+
+select max(id) from product where title = 'crisella 手表黑色表带' and room_id = 20066 and status = 1
 
 select c.* from t_customer c
 join t_weix_account_info w
 on c.c_openid = w.open_id
 where (c.c_nickname = '鷠皇Niklaus' or w.nickname = '鷠皇Niklaus') and c.seller_room_id = '888888';
+
+/************* test end ***************/
 
 /***************通过账单确认补全未关注的买家信息***************/ TODO:nickname_pinyin
 
@@ -364,7 +417,6 @@ set @update_count = (SELECT ROW_COUNT());
   commit;
   end; $$
   delimiter ;
-
 
  call pro_add_order_by_seller_new('cassie','quchengshiyagao','','','oxfQVswUSy2KXBPOjNi_BqdNI3aA','','-1','1','-1','-1',1,'hkwalmart')
 ------------bought tobuylist to getpaylist-------------start

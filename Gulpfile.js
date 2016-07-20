@@ -70,7 +70,7 @@ var through2 = require('through2');
  * 静态页面部分js文件内联写入
  */
 gulp.task('inlinejs',function(){
-	return gulp.src([srcPath+'register.html',srcPath+'login.html'],{base:srcPath})
+	return gulp.src([srcPath+'*.html'],{base:srcPath})
 			   .pipe(through2.obj(function(file,enc,cb){
 			   	// console.log(file.contents.toString());
 			   	var fileContents = file.contents.toString();
@@ -88,6 +88,7 @@ gulp.task('inlinejs',function(){
 			   	file.contents = new Buffer(resultFile,"utf8");
 			   	cb(null,file);
 			   }))
+			   .pipe(plugins.htmlmin({collapseWhitespace: true}))
 			   .pipe(gulp.dest(distPath));
 });
 
