@@ -749,9 +749,10 @@ commit;
 end; $$
 delimiter ;
 
-/********** pro_set_customer_info_new ************/ 修复修改昵称时修改所有订单的逻辑错误，加上oid一起判断 TODO:更新
+/********** pro_set_customer_info_new ************/ 修复修改昵称时修改所有订单的逻辑错误，加上oid一起判断
 delimiter $$
 drop procedure if exists pro_set_customer_info_new;
+call pro_set_customer_info_new('1215',0,'冀秋萍','1','','oxfQVs-1vSNl4xe8NmM02GPr8Q2w','','','4604','jiqiuping')
 CREATE PROCEDURE `pro_set_customer_info_new`(in objid int,in value decimal(10,2),in nickname varchar(50),in type tinyint,in exchangeRate decimal(4,2),in openId varchar(100),in exchangeType tinyint,in _discount decimal(4,2),in order_id int,in _nickname_pinyin varchar(50))
 BEGIN
 	#Routine body goes here...
@@ -766,9 +767,10 @@ if type = 1 THEN
                        join user u
                        where c.c_nickname = nickname and c.c_status = 1 and c.id != objid and c.seller_room_id = u.room_id and u.open_id = openId);
   set @sell_room_id = (select room_id from user u where u.open_id = openId);
+  set @isTheSamePerson = (select c.id from t_customer c where c.id = objid and c.c_nickname = nickname);
 
   -- 1、当前用户昵称不存在
-  if @objExistCid is null and @sell_room_id is not null then
+  if @objExistCid is null and @sell_room_id is not null and @isTheSamePerson is null then
    -- UPDATE t_customer c SET c.c_nickname = nickname
     -- WHERE c.id = objid and c.c_status = 1;
      set @lopenId = (select concat('lopid_',unix_timestamp(@now),cast(rand() as char(10))));
@@ -779,7 +781,7 @@ if type = 1 THEN
         where o.c_id = objid and o.id = order_id;
         select @objExistCid newCid;
   -- 2、当前客户昵称已存在
-  elseif @objExistCid is not null then
+  elseif @objExistCid is not null and @isTheSamePerson is null then
       update t_order o set o.c_id = @objExistCid
         where o.c_id = objid and o.id = order_id;
       select @objExistCid newCid;
