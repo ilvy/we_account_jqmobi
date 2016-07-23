@@ -7,11 +7,11 @@
     <link rel="stylesheet" href="//static.daidai2u.com/stylesheets/style_new.css">
 </head>
 <body>
-    <form id="form" action="/we_account/resetPwd" method="post">
+    <form id="form" action="/we_account/resetPwd" method="post" onsubmit="return submitBefore();">
         <div class="form-control">
             <input type="text" name="account_name" id="username" placeholder="代go号" /><span id="email-tip" style="color: red;display: none;">代go号是一串数字哦</span></div>
         <div class="form-control">
-            <input type="text" name="pwd" id="pwd" placeholder="密码" />
+            <input type="text" name="pwd" id="pwd" placeholder="密码:6位(数字+字母)" />
         </div>
         <div class="form-control">
             <input type="text" name="confirm_pwd" id="confirmpwd" placeholder="确认密码" />
@@ -19,5 +19,28 @@
         <input type="submit" id="loginBtn" class="" value="提交" />
 
     </form>
+    <script>
+        var emailReg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+        var  roomReg = /^[\d]{5,8}$/;
+        var pwdReg = /^[\w]{6}$/;//数字密码组合
+        function submitBefore(){
+            var username = $("#username").val(),
+                    email = $("#email").val();
+            var flag = true;
+            if(!username || username.trim().length == 0 || !roomReg.test(username)){
+                $("#username").addClass('invalid-style1');
+                flag = false;
+            }else{
+                $("#username").removeClass('invalid-style1');
+            }
+            if(!emailReg.test(email)){
+                $("#email").addClass('invalid-style1');
+                flag = false;
+            }else{
+                $("#email").removeClass('invalid-style1');
+            }
+            return flag;
+        }
+    </script>
 </body>
 </html>

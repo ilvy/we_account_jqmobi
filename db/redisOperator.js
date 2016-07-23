@@ -4,7 +4,9 @@ var redis = require("redis"),
     port = redisConfig.port,
     extend = require("extend");
 
-var client = {};//redis.createClient(port,ip);
+var client = redis.createClient(port,ip);//{};//
+
+/******    本地环境模拟redis   *****
 client.data = {};
 client.set = function(key,value,cb){
 	this.data[key] = value;
@@ -15,6 +17,8 @@ client.get = function(key,cb){
 	cb(null,this.data[key]);
 }
 client.on = function(){}
+********* 本地环境模拟redis *********/
+
 //错误监听？  
 client.on("error", function (err) {  
     console.log("Error " + err);  

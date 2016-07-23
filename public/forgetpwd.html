@@ -21,17 +21,18 @@
 <script src="//static.daidai2u.com/javascripts/jquery.js"></script>
 <script>
     var emailReg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+    var  roomReg = /^[\d]{5,8}$/;
     function submitBefore(){
         var username = $("#username").val(),
                 email = $("#email").val();
         var flag = true;
-        if(!username || username.trim().length == 0){
+        if(!username || username.trim().length == 0 || !roomReg.test(username)){
             $("#username").addClass('invalid-style1');
             flag = false;
         }else{
             $("#username").removeClass('invalid-style1');
         }
-        if(!emailReg.test(username)){
+        if(!emailReg.test(email)){
             $("#email").addClass('invalid-style1');
             flag = false;
         }else{

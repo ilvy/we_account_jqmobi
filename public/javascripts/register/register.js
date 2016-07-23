@@ -1,6 +1,7 @@
 (function(global){
 
 var emailReg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+var pwdReg = /^[\w]{6}$/;//数字密码组合
 
 $(document).ready(function(){
     $("#username").on('input',debounce(function(){
@@ -84,7 +85,7 @@ function register(){
             borderBottomColor:"initial"
         });
     }
-    if(!pwd || pwd.trim().length == 0){
+    if(!pwd || pwd.trim().length == 0 || !pwdReg.test(pwd)){
         $("#pwd").css({
             borderBottomColor:"red"
         })
