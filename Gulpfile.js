@@ -92,6 +92,14 @@ gulp.task('inlinejs',function(){
 			   .pipe(gulp.dest(distPath));
 });
 
+gulp.task('revReplaceJade-test',function(){
+	del(['views-dist/']);
+	var manifest = gulp.src(distPath+"rev-manifest.json");
+	return gulp.src(["views/*.jade"],{base:"views",})
+			   .pipe(plugins['revReplace']({manifest:manifest,replaceInExtensions:['.js', '.css', '.html', '.hbs','.jade']}))
+			   .pipe(gulp.dest('views-dist'));
+});
+
 
  /***************** 生产环境 ********************/
 
