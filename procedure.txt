@@ -752,7 +752,7 @@ delimiter ;
 /********** pro_set_customer_info_new ************/ 修复修改昵称时修改所有订单的逻辑错误，加上oid一起判断
 delimiter $$
 drop procedure if exists pro_set_customer_info_new;
-call pro_set_customer_info_new('1215',0,'冀秋萍','1','','oxfQVs-1vSNl4xe8NmM02GPr8Q2w','','','4604','jiqiuping')
+-- call pro_set_customer_info_new('1215',0,'冀秋萍','1','','oxfQVs-1vSNl4xe8NmM02GPr8Q2w','','','4604','jiqiuping')
 CREATE PROCEDURE `pro_set_customer_info_new`(in objid int,in value decimal(10,2),in nickname varchar(50),in type tinyint,in exchangeRate decimal(4,2),in openId varchar(100),in exchangeType tinyint,in _discount decimal(4,2),in order_id int,in _nickname_pinyin varchar(50))
 BEGIN
 	#Routine body goes here...

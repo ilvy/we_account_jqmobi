@@ -28,7 +28,7 @@ var login = (req,res,type)=>{
             	setCookie(res,cookieDomain,req.query.username,3600 * 1000);
             	res.render('loginRedirect',{redirectLink:'/we_account/live-room'+(isFromApp ? "?fromapp=1" : "")+'#billSystem'});
             }else{
-            	res.redirect('login?lerr=1');//用户名密码不匹配
+            	res.redirect('login?lerr=1');//用户名密码不匹配fregt54re ccxaaasqw		
             }
         }else{
             if(err.errorCode == -1){
@@ -122,7 +122,7 @@ var findPwd = (req,res)=>{
 				    to : email,
 				    subject: "找回密码",
 				    generateTextFromHTML : true,
-				    html : "<a href='http://"+cookieDomain+":'"+port+"'/we_account/verify?acd="+actcode+"'>激活链接</a>"
+				    html : "<a href='http://"+cookieDomain+":"+port+"/we_account/verify?acd="+actcode+"'>激活链接</a>"
 				},function(err,results){
 					if(err){
 						res.render("sendMailResult",{code:0,result:"找回密码邮件发送失败，请重试！！！"});

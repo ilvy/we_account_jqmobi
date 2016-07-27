@@ -96,8 +96,8 @@ var appConfigForm = { //正式公众号配置
 };
 
 var verifyServerConfig = {
-    cookieDomain : 'www.daidai2u.com',
-    port : 80
+    cookieDomain : '172.18.195.1',//'www.daidai2u.com',
+    port : 870
 };
 
 exports.menusObj = menusObj;

@@ -81,7 +81,7 @@ gulp.task('revReplaceHtml',function(){
 });
 
 
-gulp.task('revReplaceJade',function(){
+gulp.task('revReplaceJade-own',function(){
 	var manifestJson = require('./rev/rev-manifest.json');
 	return gulp.src([viewsPath+"*.jade"],{base:viewsPath})
 			   .pipe(through2.obj(function(file,enc,cb){
@@ -127,12 +127,12 @@ gulp.task('inlinejs',function(){
 			   .pipe(gulp.dest(distPath));
 });
 
-gulp.task('revReplaceJade-test',function(){
+gulp.task('revReplaceJade',function(){
 	del(['views-dist/']);
-	var manifest = gulp.src(distPath+"rev-manifest.json");
-	return gulp.src(["views/*.jade"],{base:"views",})
+	var manifest = gulp.src("./rev/rev-manifest.json");
+	return gulp.src([viewsPath+"*.jade"],{base:viewsPath})
 			   .pipe(plugins['revReplace']({manifest:manifest,replaceInExtensions:['.js', '.css', '.html', '.hbs','.jade']}))
-			   .pipe(gulp.dest('views-dist'));
+			   .pipe(gulp.dest(viewsDistPath));
 });
 
 

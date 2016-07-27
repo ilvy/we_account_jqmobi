@@ -2099,7 +2099,7 @@ input.invalid{
 
 #order-list {
     border-top: 1px solid transparent;
-    // display: none;
+    /*display: none;*/
 }
 
 #pay-list .table,#order-list .table{
@@ -2113,10 +2113,11 @@ input.invalid{
     float: left;
     color: rgba(200,30,40,1);
     font-size: 2rem;
-    padding: 8px 8px;
+    padding: 8px 28px 8px 8px;
     margin-top: -8px;
     margin-right: -8px;
     margin-left: 0px;
+    /*background: #ccc;*/
 }
 
 .card-title .product{
@@ -3042,6 +3043,7 @@ img#for-share{
     border-top: none;
     border-right: none;
     padding-left: 16px;
+    border-color: transparent;
 }
 
 .form-control input:active{
