@@ -187,6 +187,7 @@ set @now = now();
 set @pname = product_name;
 set @sell_room_id = (select room_id from user where open_id = sell_open_id);
 set @openId = (select distinct open_id from t_weix_account_info where nickname = cnickname);-- 第一步、1先根据昵称获取买家openId
+update t_customer c set c.c_status = 0 where c.c_openid = @openId and c.c_nickname != cnickname;-- TODO  添加修改时间
 if @openId is null then
 set @openId = (select distinct c_openid from t_customer where c_nickname = cnickname and seller_room_id = @sell_room_id and c_status = 1);-- 第一步、2根据昵称从熟客获取买家openId
 end if;
@@ -215,7 +216,7 @@ select @productId product_id,@oid order_id,c.id c_id
 from t_customer c
 left join t_weix_account_info w
 on c.c_openid = w.open_id
-where (c.c_nickname = cnickname or w.nickname = cnickname) and c.seller_room_id = @sell_room_id;
+where (c.c_nickname = cnickname or w.nickname = cnickname) and c.seller_room_id = @sell_room_id and c.c_status = 1;
 
 commit;
 
@@ -235,10 +236,36 @@ set @now = now();
 set @pname = product_name;
 set @sell_room_id = (select room_id from user where open_id = sell_open_id);
 set @openId = (select distinct open_id from t_weix_account_info where nickname = cnickname);-- 第一步、1先根据昵称获取买家openId
+update t_customer c set c.c_status = 0 where c.c_openid = @openId and c.c_nickname != cnickname;
 if @openId is null then
-select distinct c_openid from t_customer where c_nickname = cnickname and seller_room_id = @sell_room_id and c_status = 1;
-
+set @openId = (select distinct c_openid from t_customer where c_nickname = cnickname and seller_room_id = @sell_room_id and c_status = 1);-- 第一步、2根据昵称从熟客获取买家openId
 end if;
+if @openId is null then -- add customer hasn't follow daidai
+set @openId = (select concat('lopid_',unix_timestamp(@now),cast(rand() as char(10))));
+insert into t_customer(c_openid,seller_room_id,c_nickname,create_time,nickname_pinyin)
+    select @openId,@sell_room_id,cnickname,@now,cnickname_pinyin;
+end if;
+
+if productid = -1 then
+set @productId = (select max(id) from product where title = @pname and room_id = @sell_room_id and status = 1);
+-- SELECT @roomid;
+else
+set @productId = productid;
+end if;
+
+if @productId is null then
+insert into product(image_url,text,room_id,create_time,status,title) values(image_urls,text,@sell_room_id,@now,1,@pname);-- 第二步、发布商品
+set @productId = (select last_insert_id());
+call pro_take_order_by_seller_new_test(@openId,cnickname,@sell_room_id,remark,@productId,in_quantity,@now,cost,price,discount,cate_name,@oid);-- 第三步、下单
+else
+call pro_take_order_by_seller_new_test(@openId,cnickname,@sell_room_id,remark,@productId,in_quantity,@now,cost,price,discount,cate_name,@oid);-- 第三步、下单
+end if;
+
+select @productId product_id,@oid order_id,c.id c_id
+from t_customer c
+left join t_weix_account_info w
+on c.c_openid = w.open_id
+where (c.c_nickname = cnickname or w.nickname = cnickname) and c.seller_room_id = @sell_room_id;
 
 commit;
 
@@ -260,15 +287,35 @@ where o.c_id = c.id AND o.product_id = productid AND c.c_openid = c_open_id  AND
 AND o.create_time > '2015-05-11';
 
 set o_id = (select o.id from t_order o , t_customer c
-where o.c_id = c.id AND o.product_id = productid AND c.c_openid = c_open_id  AND c.seller_room_id = sell_room_id AND STATUS = 1);
+where o.c_id = c.id AND o.product_id = productid AND c.c_openid = c_open_id  AND c.seller_room_id = sell_room_id and c.c_nickname = customer_name AND STATUS = 1);
 
 set @update_count = (SELECT ROW_COUNT());
   -- SELECT @update_count;
   if @update_count = 0 THEN
-        SELECT c.id from t_customer c JOIN user u -- t_customer 重复容易报错，根据openid和nickname分别排查
+        SET @Cid = (SELECT c.id from t_customer c JOIN user u -- t_customer 重复容易报错，根据openid和nickname分别排查
                                             ON c.seller_room_id = u.room_id
-                                            WHERE c.seller_room_id = sell_room_id AND c.c_openid = c_open_id and c.c_nickname = customer_name and c.c_status = 1;
-      
+                                            WHERE c.seller_room_id = sell_room_id AND c.c_openid = c_open_id and c.c_nickname = customer_name and c.c_status = 1);
+      -- SELECT @Cid;
+        if @Cid is NULL THEN
+        INSERT INTO t_customer(c_nickname,c_openid,seller_room_id,create_time,nickname_pinyin)
+          select nickname,c_open_id ,sell_room_id,create_time,nickname_pinyin from t_weix_account_info
+              where open_id = c_open_id;
+      --  SELECT 1 isExistCustomer;
+        end if;
+
+      -- 添加分类
+       call pro_add_category(1,cate_name,@cateId);
+
+            INSERT INTO t_order(product_id,c_id,status,quantity,create_time,exchange_rate,exchange_type,cost,price,remark,discount,cate_id)
+                SELECT productid ,c.id,1,in_quantity,create_time,r.exchange_rate,r.exchange_type,case when in_cost = -1 then null else in_cost end,case when in_price = -1 then null else in_price end,order_remark,_discount,@cateId
+                    FROM t_customer c JOIN user u
+                    ON c.seller_room_id = u.room_id
+                    JOIN t_exchange_rate r
+                    ON r.exchange_type = 2
+                    WHERE c.seller_room_id = sell_room_id AND c.c_openid = c_open_id and c.c_nickname = customer_name and c.c_status = 1
+                        AND r.open_id = (SELECT open_id from user WHERE room_id = seller_room_id);
+
+            set o_id = (select LAST_INSERT_ID());
       end IF;
   commit;
   end; $$
@@ -384,7 +431,7 @@ where o.c_id = c.id AND o.product_id = productid AND c.c_openid = c_open_id  AND
 AND o.create_time > '2015-05-11';
 
 set o_id = (select o.id from t_order o , t_customer c
-where o.c_id = c.id AND o.product_id = productid AND c.c_openid = c_open_id  AND c.seller_room_id = sell_room_id AND STATUS = 1);
+where o.c_id = c.id AND o.product_id = productid AND c.c_openid = c_open_id  AND c.seller_room_id = sell_room_id and c.c_nickname = customer_name AND STATUS = 1);
 
 set @update_count = (SELECT ROW_COUNT());
   -- SELECT @update_count;
@@ -409,7 +456,7 @@ set @update_count = (SELECT ROW_COUNT());
                     ON c.seller_room_id = u.room_id
                     JOIN t_exchange_rate r
                     ON r.exchange_type = 2
-                    WHERE c.seller_room_id = sell_room_id AND c.c_openid = c_open_id and c.c_status = 1
+                    WHERE c.seller_room_id = sell_room_id AND c.c_openid = c_open_id and c.c_nickname = customer_name and c.c_status = 1
                         AND r.open_id = (SELECT open_id from user WHERE room_id = seller_room_id);
 
             set o_id = (select LAST_INSERT_ID());

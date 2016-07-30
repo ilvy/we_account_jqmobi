@@ -15,7 +15,9 @@ var tmpAssetsPath = tmpPath + 'stylesheets/';
 
 /******************* 正式环境 ********************/
 gulp.task('clean',function(){
-	return del([distPath,tmpPath,viewsDistPath,"rev/"]);
+	return del([distPath,tmpPath,viewsDistPath,"rev/"],{
+		force:true
+	});
 });
 
 gulp.task('uglifyjs',function(){
@@ -48,6 +50,12 @@ gulp.task('md5-cssjs',function(){
 			   .pipe(gulp.dest(distPath))
 			   .pipe(plugins.rev.manifest('rev/rev-manifest.json',{merge:true,base: process.cwd()+'/rev'}))
 			   .pipe(gulp.dest("rev"));
+});
+
+gulp.task('copy',function(){
+	var start = srcPath+"Jplugin/laydate/**/*";
+	return gulp.src(start,{base:srcPath})
+			   .pipe(gulp.dest(distPath));
 });
 
 gulp.task('dealrevjson',function () {
@@ -128,7 +136,6 @@ gulp.task('inlinejs',function(){
 });
 
 gulp.task('revReplaceJade',function(){
-	del(['views-dist/']);
 	var manifest = gulp.src("./rev/rev-manifest.json");
 	return gulp.src([viewsPath+"*.jade"],{base:viewsPath})
 			   .pipe(plugins['revReplace']({manifest:manifest,replaceInExtensions:['.js', '.css', '.html', '.hbs','.jade']}))
@@ -140,7 +147,7 @@ gulp.task('revReplaceJade',function(){
 
 
 gulp.task('build',['clean'],function(){
-	runSequence('uglifyjs','concatcss','minifycss','md5-cssjs','dealrevjson','revReplace','revReplaceHtml','inlinejs','revReplaceJade');
+	runSequence('uglifyjs','concatcss','minifycss','md5-cssjs','copy','dealrevjson','revReplace','revReplaceHtml','inlinejs','revReplaceJade');
 });
 
 gulp.task('watch',function(){

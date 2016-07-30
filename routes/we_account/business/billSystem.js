@@ -179,7 +179,7 @@ function getNicknameFromWeix(openid,roomid,callback){
  * @param res
  */
 function updateCustomerInfo(req,res){
-    var openid = req.session.openId || 'oxfQVswUSy2KXBPOjNi_BqdNI3aA',
+    var openid = req.session.openId,// || 'oxfQVswUSy2KXBPOjNi_BqdNI3aA',
         objid = req.query.objId,
         nickname = req.query.nickname,
         value = req.query.value,
@@ -233,7 +233,7 @@ function filter_takeOrder(req,res,next){
  * @param res
  */
 function getBillList(req,res){
-    var openId = req.session.openId||'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
+    var openId = req.session.openId;//||'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
     var status = req.query.billType;
     var paras = [openId,status];
     dbOperator.query('call pro_get_order_info_new(?,?)',paras,function(err,rows){
@@ -253,7 +253,7 @@ function getBillList(req,res){
  * @param res
  */
 function updateOrderStatus(req,res){
-    var openId = req.session.openId ||'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
+    var openId = req.session.openId;// ||'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
     var status = req.query.status,
         order_id = req.query.oid,
         buy_time = util.formatDate(null,true);
@@ -285,7 +285,7 @@ function updateOrderStatus(req,res){
  * @param res
  */
 function updateMailPay(req,res){
-    var openId = req.session.openId||'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
+    var openId = req.session.openId;//||'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
     var isMailFree = req.query.mail_free,
         order_id = req.query.oid,
         mailPay = req.query.mail_pay;
@@ -305,7 +305,7 @@ function updateMailPay(req,res){
 
 
 function filter_bill(req,res,next){
-    var openId = req.session.openId || 'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
+    var openId = req.session.openId;// || 'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
     var status = req.query.billType;
     if(!openId){
         response.failed(0,res,'');//
@@ -320,7 +320,7 @@ function filter_bill(req,res,next){
  * @param res
  */
 function getFinalBill(req,res){
-    var openId = req.session.openId ||'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
+    var openId = req.session.openId;// ||'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
     var query = req.query,
         date1 = query.date1,
         date2 = query.date2,
@@ -397,7 +397,7 @@ function getPayment(req,res,isRequestBySeller){//需要验证openid
  * @param res
  */
 function vagueMatchNames(req,res){
-    var openId = req.session.openId || 'oxfQVswUSy2KXBPOjNi_BqdNI3aA',
+    var openId = req.session.openId;// || 'oxfQVswUSy2KXBPOjNi_BqdNI3aA',
         vagueName = req.query.nickname;
     dbOperator.query('call pro_vague_match_customer(?,?)',['%'+vagueName+'%',openId],function(err,rows){
         if(err){
@@ -433,7 +433,7 @@ function addOrderBySeller(req,res){
         cate = req.query.cate,
         nickname_pinyin = pinyinTransfer.toPinyin(nickname);
     cate = cate == '' ? null : cate;
-    var openId = req.session.openId || "oxfQVswUSy2KXBPOjNi_BqdNI3aA";
+    var openId = req.session.openId;// || "oxfQVswUSy2KXBPOjNi_BqdNI3aA";
     dbOperator.query("call pro_add_order_by_seller_new(?,?,?,?,?,?,?,?,?,?,?,?,?)",[nickname,title,desc,image_urls,openId,remark,productid,in_quantity,cost,price,discount,cate,nickname_pinyin],function(err,rows){
         if(err){
             logger.error("call pro_add_order_by_seller err:",err);
@@ -452,7 +452,7 @@ function vagueSearchUser(req,res){
     var customer = req.query.customer,
         type = req.query.type,
         customer_pinyin = pinyinTransfer.toPinyin(customer);
-    var openId = req.session.openId || 'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
+    var openId = req.session.openId;// || 'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
     dbOperator.query("call pro_vague_search_user(?,?,?)",['%'+customer_pinyin+'%',openId,type],function(err,rows){
         if(err){
             logger.error("call pro_vague_search_user err:",err);
@@ -519,7 +519,7 @@ function wxauth_pay(req,res,next){
  * @param res
  */
 function updateOrderInfo(req,res){
-    var openId = req.session.openId ||'oxfQVswUSy2KXBPOjNi_BqdNI3aA',
+    var openId = req.session.openId,// ||'oxfQVswUSy2KXBPOjNi_BqdNI3aA',
         body = req.body;
     var order_id = body.order_id,
         remark = body.remark;
