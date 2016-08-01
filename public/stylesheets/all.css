@@ -2113,10 +2113,10 @@ input.invalid{
     float: left;
     color: rgba(200,30,40,1);
     font-size: 2rem;
-    padding: 8px 28px 8px 8px;
+    padding: 12px 28px 12px 8px;
     margin-top: -8px;
     margin-right: -8px;
-    margin-left: 0px;
+    margin-left: -8px;
     /*background: #ccc;*/
 }
 
@@ -2678,13 +2678,14 @@ div#bottom-btn-group {
     max-height: 200px;
     overflow-y: auto;
     /*border-bottom: 1px solid #cdcdcd;*/
+    border: 1px solid #cecece;
 }
 
 #search-user-panel > li,#search-products-panel > li,ul#search-cates-panel > li{
     font-size: 1rem;
-    padding: 0.6rem;
-    border: 1px solid #cecece;
-    border-bottom: transparent;
+    padding: 1.2rem 0.6rem;
+    border-top: 1px solid #cecece;
+    /*border-bottom: transparent;*/
 }
 
 #search-customers-panel{
@@ -2717,8 +2718,12 @@ div#bottom-btn-group {
     text-align: center;
 }
 
+#search-customers-panel > ul > li:first-child,#search-user-panel > li:first-child, #search-products-panel > li:first-child, ul#search-cates-panel > li:first-child {
+    border-top: transparent;/*1px solid #cecece;*/
+}
+
 #search-customers-panel > ul > li:last-child,#search-user-panel > li:last-child, #search-products-panel > li:last-child, ul#search-cates-panel > li:last-child {
-    border-bottom: 1px solid #cecece;
+    border-bottom: transparent;/*1px solid #cecece;*/
 }
 
 #scp-cancel-btn{
