@@ -406,11 +406,11 @@ exports.query = query;
 // });
 
 
- query("call pro_add_order_by_seller_new('SHU','a2奶粉2','','','oxfQVswUSy2KXBPOjNi_BqdNI3aA','','-1','1','-1','-1',1,'上水','SHU')",['lopid_qwertyuiohdfg356784rfghthnd7y','478283225@qq.com'],function(err,rows){
-    if(err){
-        console.log("call pro_bind_account err:",err);
-    }else{
-        console.log("call pro_bind_account results:",rows);
-    }
-});
- 
+//  query("call pro_add_order_by_seller_new('SHU','a2奶粉2','','','oxfQVswUSy2KXBPOjNi_BqdNI3aA','','-1','1','-1','-1',1,'上水','SHU')",['lopid_qwertyuiohdfg356784rfghthnd7y','478283225@qq.com'],function(err,rows){
+//     if(err){
+//         console.log("call pro_bind_account err:",err);
+//     }else{
+//         console.log("call pro_bind_account results:",rows);
+//     }
+// });
+//  

@@ -346,6 +346,21 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
 
             }
         },
+        delOrderDataFromList:function(orderIds){
+            orderIds = orderIds.toString().split(',');
+            for(var i = 0; i < orderIds.length; i++){
+                this.delOrderDataFromListByOid(orderIds[i]);
+            }
+        },
+        delOrderDataFromListByOid:function(oid){
+            var orderListData = this.orderListData;
+            for(var i = 0; i < orderListData.length; i++){
+                if(orderListData[i].oid == oid){
+                    orderListData.splice(i,1);
+                    return;
+                }
+            }
+        },
         dealPayList: function(data) {
             $("#pay-list").html("");
             if (!(data && data.length > 0)) {
@@ -406,7 +421,7 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                 return;
             }
             var tableStr = '<div class="table"><div class="t-row t-row-over-1 t-row-header">' +
-                '<div class="t-col t-col-3">品名</div><div class="t-col t-col-2">数量</div>' +
+                '<div class="t-col t-col-1">客户</div><div class="t-col t-col-2">品名</div><div class="t-col t-col-2">数量</div>' +
                 '<div class="t-col t-col-2">进价</div>' +
                 '<div class="t-col t-col-2">售价</div><div class="t-col t-col-1 extra">操作</div></div>';
             var totalMoney = 0,
@@ -419,7 +434,7 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                 }
                 totalMoney += record.quantity * (record.unit_price ? record.unit_price : 0);
                 totalCost += record.quantity * (record.unit_cost ? record.unit_cost : 0) * record.exchange_rate;
-                tableStr += '<div class="t-row t-row-over-1" data-oid=' + record.oid + ' data-cid=' + record.cid + '><div class="t-col t-col-3 product_name">' + record.product_name + '</div>' +
+                tableStr += '<div class="t-row t-row-over-1" data-oid=' + record.oid + ' data-cid=' + record.cid + '><div class="t-col t-col-1 c_name">'+record.nickname+'</div><div class="t-col t-col-2 product_name">' + record.product_name + '</div>' +
                     '<div class="t-col t-col-2"><div class="num">' + record.quantity + '</div></div>' +
                     '<div class="t-col t-col-2">' + ((((!record.unit_cost && record.unit_cost != 0) ? "" : record.unit_cost) * record.exchange_rate).toFixed(1)) + '</div>' +
                     '<div class="t-col t-col-2">' + ((!record.unit_price && record.unit_price != 0) ? "" : record.unit_price) + '</div>' +
@@ -1818,11 +1833,13 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
          * @param status
          */
         updateOrderStatus: function($obj, orderIds, status) {
+            var _this = this;
             $.ajax({
                 url: '/we_account/updateOrderStatus?oid=' + orderIds + '&status=' + (typeof status != 'undefined' ? status : 2),
                 type: 'post',
                 success: function(results) {
                     if (results.flag == 1) {
+                        _this.delOrderDataFromList(orderIds);
                         var removeEmptyCate = function($card) {
                             if ($card.siblings('.card').length == 0) {
                                 $card.parents('.cate_wrap').remove();

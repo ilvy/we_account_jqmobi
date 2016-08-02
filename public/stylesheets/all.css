@@ -2082,7 +2082,7 @@ input.invalid{
 }
 
 .card-title .fa-caret-right,.card-title .fa-caret-down{
-    margin-left: 15px;
+    /*margin-left: 15px;*/
     color: rgb(25, 126, 122);
 }
 .card-title .fa-square-o{
@@ -2116,7 +2116,7 @@ input.invalid{
     padding: 12px 28px 12px 8px;
     margin-top: -8px;
     margin-right: -8px;
-    margin-left: -8px;
+    margin-bottom: -8px;
     /*background: #ccc;*/
 }
 
