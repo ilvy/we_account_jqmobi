@@ -1335,7 +1335,7 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                     type: 'post'
                 }).success(function(results) {
                     if (results.flag == 1) {
-                        alert("加单成功");
+                        // alert("加单成功");
                         _this.cleanOrderPanel();
                         var result = results.data;
                         _this.addOrderDataToList({
