@@ -177,7 +177,7 @@ function deviceReady(argument) {
 }
 
 function onDeviceReady(){
-     alert("deviceready")
+     // alert("deviceready")
     document.addEventListener('backbutton',function(){
         // alert("backbutton");
     },false);
