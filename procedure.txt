@@ -1049,7 +1049,7 @@ begin
 
 start transaction;
 
-select u.open_id from user u where u.email = _email and u.room_id = _room_id;
+select u.open_id,u.room_id from user u where u.email = _email and u.room_id = _room_id;
 
 commit;
 

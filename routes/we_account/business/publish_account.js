@@ -111,6 +111,16 @@ function registerMailVerify(req,res){
                         res.redirect("/err.html");
                     }else{
                         logger.info("call pro_register results:",rows);
+                        if(rows && rows[0] && rows[0][0].room_id){
+                            mailServer.sendMail({
+                                to : username,
+                                subject: "代go账号",
+                                generateTextFromHTML : true,
+                                html : "<h3>您的代go登录账号:"+rows[0][0].room_id+"</h3>"
+                            },function(err,results){
+                                
+                            });
+                        }
                         res.redirect('/we_account/live-room#billSystem');
             //            asyncAccountInfoFromWeix(openId);
                     }
