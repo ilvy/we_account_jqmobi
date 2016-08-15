@@ -1558,7 +1558,7 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                     return;
                 }
                 var ratio = $("#price-ratio").val();
-                var price = Math.ceil(cost_hk * ratio);
+                var price = Math.toFixed(cost_hk * ratio);
                 $("#price-result").val(price);
             }, true);
             $("#pay-list .product_name").touch("click", function(event) {
@@ -1713,9 +1713,9 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
          * 加单完成后，清理加单panel
          */
         cleanOrderPanel: function() {
-            $("input.required,#aopc_cate").val("");
+            $("input.input-comp").val("");
             $(".cpanel").removeClass("visible");
-            $("#aopq_quantity option").eq(1).attr('checked', true);
+            $("#aopq_quantity option").get(1).selected = true;
         },
         /**
          * 更新每条记录用于显示的汇率
