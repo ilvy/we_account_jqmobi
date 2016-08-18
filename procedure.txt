@@ -1121,6 +1121,21 @@ commit;
 end; $$
 delimiter ;
 
+/************** pro_get_user_info 获取用户基本信息 **************/
+delimiter $$
+drop procedure if exists pro_get_user_info;
+create procedure pro_get_user_info(in openId varchar(100))
+begin
+
+start transaction;
+
+select u.room_id,w.nickname from user u , t_weix_account_info w where u.open_id = w.open_id and u.open_id = openId;
+
+commit;
+
+end; $$
+delimiter ;
+
 
 update t_customer t1,(select c.id from t_customer c left join (select c_openid,seller_room_id,count(1) num from t_customer where c_status = 1 group by c_openid,seller_room_id) c2
  on c.c_openid = c2.c_openid and c.seller_room_id = c2.seller_room_id and c2.num > 1 and c_status = 1 and c.seller_room_id != '888888'

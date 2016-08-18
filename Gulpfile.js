@@ -29,10 +29,11 @@ gulp.task('uglifyjs',function(){
 
 gulp.task('concatcss',function(){
 	var concatCssFiles = [srcPath+'Jplugin/jquery.light-popup/jquery.light-popup.css'];
-	['bootstrap.css','bootstrap-grid.css','mystyle.css','style_new.css'].forEach(function(item,i){
+	['*.less'].forEach(function(item,i){
 		concatCssFiles.push(srcAssetsPath + item);
 	});
 	return gulp.src(concatCssFiles,{base:srcPath})
+			   .pipe(plugins.less())
 			   .pipe(plugins.concat('all.css'))
 			   .pipe(gulp.dest(srcAssetsPath));
 });
@@ -151,5 +152,5 @@ gulp.task('build',['clean'],function(){
 });
 
 gulp.task('watch',function(){
-	gulp.watch([srcPath+'stylesheets/*.css',"!"+srcPath+"**/all.css"],['concatcss']);
+	gulp.watch([srcPath+'stylesheets/*',"!"+srcPath+"**/all.css"],['concatcss']);
 });

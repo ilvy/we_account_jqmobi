@@ -221,6 +221,29 @@ var resetPwd = (req,res)=>{
 }
 
 /**
+ * 
+ * @param  {[type]} req [description]
+ * @param  {[type]} res [description]
+ * @return {[type]}     [description]
+ */
+var getUserInfo = (req,res) =>{
+    var session = req.session;
+    var openId = session.openId;
+    var userInfo;
+    dbOperator.query('call pro_get_user_info(?)',[openId],function(err,rows){
+        if(err){
+            response.failed(-1,res,'系统错误，稍后重试！');
+        }else{
+            if(rows && rows[0] && (userInfo = rows[0][0])){
+                response.success(userInfo,res,'');
+            }else{
+                response.failed(0,res,"当前用户为空");
+            }
+        }
+    });
+}
+
+/**
  * 退出登录，清理cookie
  * @param  {[type]} req [description]
  * @param  {[type]} res [description]
@@ -236,3 +259,4 @@ exports.verify = verifyEmailActive;
 exports.findPwd = findPwd;
 exports.beforeResetPwd = beforeResetPwd;
 exports.resetPwd = resetPwd;
+exports.getUserInfo = getUserInfo;

@@ -140,6 +140,7 @@ router.post("/loginService",login);
 router.get("/login",function(req,res){
     login(req,res,'get');
 });
+router.get('/get_user_info',loginRef.getUserInfo);
 router.post("/findPwd",findPwd);
 router.get("/verify",verify);
 router.post("/resetPwd",beforeResetPwd,resetPwd);
