@@ -265,7 +265,7 @@ select @productId product_id,@oid order_id,c.id c_id
 from t_customer c
 left join t_weix_account_info w
 on c.c_openid = w.open_id
-where (c.c_nickname = cnickname or w.nickname = cnickname) and c.seller_room_id = @sell_room_id;
+where (c.c_nickname = cnickname or w.nickname = cnickname) and c.seller_room_id = @sell_room_id and c.c_status = 1;
 
 commit;
 
@@ -274,49 +274,24 @@ delimiter ;
 -------------------------------
 delimiter $$
 drop procedure if exists pro_take_order_by_seller_new_test;
--- CREATE  PROCEDURE pro_take_order_by_seller_test(in c_open_id varchar(200),in sell_room_id varchar(16),in order_remark varchar(60),in productid int,in in_quantity int,in create_time datetime,in in_cost int,in in_price int,out o_id int)
+-- CREATE  PROCEDURE pro_take_order_by_seller_new_test(in c_open_id varchar(200),in sell_room_id varchar(16),in order_remark varchar(60),in productid int,in in_quantity int,in create_time datetime,in in_cost int,in in_price int,out o_id int)
 CREATE  PROCEDURE pro_take_order_by_seller_new_test(in c_open_id varchar(200),in customer_name varchar(50),in sell_room_id varchar(16),in order_remark varchar(60),in productid int,in in_quantity int,in create_time datetime,
                                            in in_cost decimal(10,2),in in_price decimal(10,2),in _discount decimal(4,2),in cate_name varchar(50),out o_id int)
 BEGIN
 
 START TRANSACTION;
 
-UPDATE t_order o , t_customer c
+-- 添加分类
+call pro_add_category(1,cate_name,@cateId);
+UPDATE t_order o , t_customer c ,t_category cg
 SET o.quantity = o.quantity + in_quantity
-where o.c_id = c.id AND o.product_id = productid AND c.c_openid = c_open_id  AND c.seller_room_id = sell_room_id AND STATUS = 1
+where o.c_id = c.id AND o.product_id = productid AND c.c_openid = c_open_id  AND c.seller_room_id = sell_room_id and c.remark = order_remark and o.cate_id = @cateId AND STATUS = 1
 AND o.create_time > '2015-05-11';
 
-set o_id = (select o.id from t_order o , t_customer c
+(select o.id from t_order o , t_customer c
 where o.c_id = c.id AND o.product_id = productid AND c.c_openid = c_open_id  AND c.seller_room_id = sell_room_id and c.c_nickname = customer_name AND STATUS = 1);
 
-set @update_count = (SELECT ROW_COUNT());
-  -- SELECT @update_count;
-  if @update_count = 0 THEN
-        SET @Cid = (SELECT c.id from t_customer c JOIN user u -- t_customer 重复容易报错，根据openid和nickname分别排查
-                                            ON c.seller_room_id = u.room_id
-                                            WHERE c.seller_room_id = sell_room_id AND c.c_openid = c_open_id and c.c_nickname = customer_name and c.c_status = 1);
-      -- SELECT @Cid;
-        if @Cid is NULL THEN
-        INSERT INTO t_customer(c_nickname,c_openid,seller_room_id,create_time,nickname_pinyin)
-          select nickname,c_open_id ,sell_room_id,create_time,nickname_pinyin from t_weix_account_info
-              where open_id = c_open_id;
-      --  SELECT 1 isExistCustomer;
-        end if;
 
-      -- 添加分类
-       call pro_add_category(1,cate_name,@cateId);
-
-            INSERT INTO t_order(product_id,c_id,status,quantity,create_time,exchange_rate,exchange_type,cost,price,remark,discount,cate_id)
-                SELECT productid ,c.id,1,in_quantity,create_time,r.exchange_rate,r.exchange_type,case when in_cost = -1 then null else in_cost end,case when in_price = -1 then null else in_price end,order_remark,_discount,@cateId
-                    FROM t_customer c JOIN user u
-                    ON c.seller_room_id = u.room_id
-                    JOIN t_exchange_rate r
-                    ON r.exchange_type = 2
-                    WHERE c.seller_room_id = sell_room_id AND c.c_openid = c_open_id and c.c_nickname = customer_name and c.c_status = 1
-                        AND r.open_id = (SELECT open_id from user WHERE room_id = seller_room_id);
-
-            set o_id = (select LAST_INSERT_ID());
-      end IF;
   commit;
   end; $$
   delimiter ;
