@@ -96,8 +96,13 @@ var appConfigForm = { //正式公众号配置
 };
 
 var verifyServerConfig = {
-    cookieDomain : '172.18.195.1',//'www.daidai2u.com',
+    cookieDomain : '10.22.0.51',//'www.daidai2u.com',
     port : 870
+};
+
+var verifyServerConfigForm = {
+    cookieDomain : 'www.daidai2u.com',
+    port : 80
 };
 
 exports.menusObj = menusObj;
@@ -106,7 +111,8 @@ exports.serverConfig = serverConfig;
 exports.appConfig = appConfigForm;
 exports.dataviewConfig = dataviewConfig;
 exports.redisConfig = redisConfig;
-exports.verifyServerConfig = verifyServerConfig;
+exports.verifyServerConfig = verifyServerConfigForm;
 if(process.argv[2] == 'test'){
     exports.appConfig = appConfig;
+    exports.verifyServerConfig = verifyServerConfig;
 }
