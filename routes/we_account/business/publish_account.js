@@ -103,7 +103,8 @@ function registerMailVerify(req,res){
             var username = rdsres.email,
             pwd = rdsres.pwd,
             weixin = rdsres.weixin, 
-            openId = rdsres.openId;
+            openId = rdsres.openId,
+            roomId;
             if(now < rdsres.limitAge){
                 dbOperator.query('call pro_register(?,?,?,?,?)',[openId,username,username,pwd,weixin],function(err,rows){
                     if(err){
@@ -111,17 +112,20 @@ function registerMailVerify(req,res){
                         res.redirect("/err.html");
                     }else{
                         logger.info("call pro_register results:",rows);
-                        if(rows && rows[0] && rows[0][0].room_id){
+                        if(rows && rows[0] && (roomId = rows[0][0].room_id)){
                             mailServer.sendMail({
                                 to : username,
                                 subject: "代go账号",
                                 generateTextFromHTML : true,
-                                html : "<h3>您的代go登录账号:"+rows[0][0].room_id+"</h3>"
+                                html : "<h3>您的代go登录账号:"+roomId+"</h3>"
                             },function(err,results){
-                                
+                                if(err){
+                                    logger.error('代go账号发送邮件失败:',err);
+                                }
                             });
                         }
-                        res.redirect('/we_account/live-room#billSystem');
+                        res.render("sendMailResult",{code:200,result:"注册成功，您的代go账号是:"+roomId+",若有遗忘，您也可前往注册邮箱查看，感谢您的使用!"});
+                        // res.redirect('/we_account/live-room#billSystem');
             //            asyncAccountInfoFromWeix(openId);
                     }
                 });

@@ -917,7 +917,7 @@ select @isExist isExist;
 else
 set @roomid = (select room_id from room where status = 0 and special_type = 0 limit 1);
 set @now = now();
-insert into user(open_id,user_name,email,pwd,room_id,nickname,weixin,create_time) values(openId,user_name,email,pwd,@roomid,nickname,weixin,@now);
+insert into user(open_id,user_name,email,pwd,room_id,nickname,weixin,create_time,status) values(openId,user_name,email,pwd,@roomid,nickname,weixin,@now,1);
 UPDATE room set status = 1 where room_id = @roomid;
 CALL pro_create_seller_exchange(openId);
 select 0 isExist,@roomid room_id;
@@ -1083,7 +1083,7 @@ begin
 
 start transaction;
 
-select u.open_id from user u where u.email = _email;
+select u.open_id from user u where u.email = _email and u.status = 1;
 
 commit;
 

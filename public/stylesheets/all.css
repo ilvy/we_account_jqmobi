@@ -3055,10 +3055,10 @@ ul#search-cates-panel > li:last-child {
   margin-top: 10px;
 }
 .side-nav {
-  width: 200px;
+  width: 280px;
   position: absolute;
   top: 0;
-  left: -201px;
+  left: -281px;
   height: 100%;
   background-color: #fff;
   z-index: 100;
@@ -3085,7 +3085,7 @@ ul#search-cates-panel > li:last-child {
   font-size: 16px;
 }
 .side-nav.open-sn {
-  transform: translateX(200px);
+  transform: translateX(280px);
 }
 .side-nav.open-sn ~ .sn-open-mask {
   display: block;

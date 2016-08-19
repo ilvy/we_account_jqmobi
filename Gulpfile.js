@@ -32,8 +32,9 @@ gulp.task('concatcss',function(){
 	['*.less'].forEach(function(item,i){
 		concatCssFiles.push(srcAssetsPath + item);
 	});
-	return gulp.src(concatCssFiles,{base:srcPath})
+	return gulp.src(concatCssFiles,{base:srcAssetsPath})
 			   .pipe(plugins.less())
+			   .pipe(gulp.dest(srcAssetsPath))
 			   .pipe(plugins.concat('all.css'))
 			   .pipe(gulp.dest(srcAssetsPath));
 });
