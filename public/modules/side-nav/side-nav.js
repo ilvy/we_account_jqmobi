@@ -40,5 +40,5 @@ define(["text!./modules/side-nav/side-nav.html", 'touchEvent'],function(sideNavT
 			$('.side-nav').removeClass('open-sn');
 		}
 	};
-	return new SideNav();
+	return SideNav;
 });

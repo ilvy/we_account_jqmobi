@@ -406,13 +406,13 @@ exports.query = query;
 // });
 
 
- query("call pro_add_order_by_seller_new_test('SHU','a2奶粉','','','oxfQVswUSy2KXBPOjNi_BqdNI3aA','','-1','1','-1','-1',1,NULL,'SHU')",['lopid_qwertyuiohdfg356784rfghthnd7y','478283225@qq.com'],function(err,rows){
-    if(err){
-        console.log("call pro_bind_account err:",err);
-    }else{
-        console.log("call pro_bind_account results:",rows);
-    }
-});
+//  query("call pro_add_order_by_seller_new_test('SHU','a2奶粉','','','oxfQVswUSy2KXBPOjNi_BqdNI3aA','','-1','1','-1','-1',1,NULL,'SHU')",['lopid_qwertyuiohdfg356784rfghthnd7y','478283225@qq.com'],function(err,rows){
+//     if(err){
+//         console.log("call pro_bind_account err:",err);
+//     }else{
+//         console.log("call pro_bind_account results:",rows);
+//     }
+// });
  
 
 //  query("SELECT c.id from t_customer c JOIN user u ON c.seller_room_id = u.room_id WHERE c.seller_room_id = '888888' AND c.c_openid = 'oxfQVswUSy2KXBPOjNi_BqdNI3aA' and c.c_nickname = 'SHU' and c.c_status = 1",['lopid_qwertyuiohdfg356784rfghthnd7y','478283225@qq.com'],function(err,rows){

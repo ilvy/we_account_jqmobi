@@ -113,8 +113,11 @@ var routerConfig = {
 //    getpay:'http://static.daidai2u.com/modules/Payment/Payment.js?v=1.1'
 // };
 
-define(['router','wxAPI','sideNav'],function(router,wx,sideNav){
+define(['router','wxAPI','util','sideNav'],function(router,wx,util,sideNav){
     deviceReady();
+    if(util.getUrlParam('fromapp')){
+        new sideNav();
+    }
     wxjssdkInit(function(err,results){
         var config;
         if(results.flag == 1){
@@ -148,6 +151,12 @@ define(['router','wxAPI','sideNav'],function(router,wx,sideNav){
         }
     })
 });
+
+function initSideNav(fromApp){
+    if(fromApp){
+
+    }
+}
 
 function wxjssdkInit(callback){
     var data = {

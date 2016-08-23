@@ -2227,7 +2227,7 @@ input.invalid {
 }
 #order-list {
   border-top: 1px solid transparent;
-  display: none;
+  /*display: none;*/
 }
 #pay-list .table,
 #order-list .table {
@@ -3036,7 +3036,7 @@ ul#search-cates-panel > li:last-child {
 }
 
 .side-nav-switch {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 30px;
@@ -3056,7 +3056,7 @@ ul#search-cates-panel > li:last-child {
 }
 .side-nav {
   width: 280px;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: -281px;
   height: 100%;
@@ -3074,7 +3074,7 @@ ul#search-cates-panel > li:last-child {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: url('/images/test_1429245238251.jpg') no-repeat center;
+  background: url('//image.daidai2u.com/images/default-img.jpg') no-repeat center;
   background-size: cover;
   left: 50%;
   position: relative;
