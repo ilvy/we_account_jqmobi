@@ -434,7 +434,7 @@ function addOrderBySeller(req,res){
         nickname_pinyin = pinyinTransfer.toPinyin(nickname);
     cate = cate == '' ? null : cate;
     var openId = req.session.openId;// || "oxfQVswUSy2KXBPOjNi_BqdNI3aA";
-    dbOperator.query("call pro_add_order_by_seller_new(?,?,?,?,?,?,?,?,?,?,?,?,?)",[nickname,title,desc,image_urls,openId,remark,productid,in_quantity,cost,price,discount,cate,nickname_pinyin],function(err,rows){
+    dbOperator.query("call pro_add_order_by_seller_new_test(?,?,?,?,?,?,?,?,?,?,?,?,?)",[nickname,title,desc,image_urls,openId,remark,productid,in_quantity,cost,price,discount,cate,nickname_pinyin],function(err,rows){
         if(err){
             logger.error("call pro_add_order_by_seller err:",err);
         }else{

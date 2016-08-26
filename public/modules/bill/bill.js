@@ -317,7 +317,8 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
             var record = orderInfo;
             var type = $(".cate_btn_group .btn-check").data("type");
             var name = type == 'c' ? orderInfo.nickname : orderInfo.product_name;
-            if (this.$objOrderTable || (this.$objOrderTable = this.findOrderAddedObjTable(type, name))) {
+            var cateName = type == 'c' ? '' : orderInfo.cate_name;
+            if (this.$objOrderTable || (this.$objOrderTable = this.findOrderAddedObjTable(type, name,cateName))) {
                 var newOrderRow = '<div class="t-row t-row-over-1" data-oid=' + record.oid + ' data-cid=' + record.cid + '>' +
                     '<div class="t-col t-col-2 nickname cnickname" data-type="1" data-value="' + record.nickname + '">' + record.nickname + '</div>' +
                     '<div class="t-col t-col-2 quantity" data-value="' + record.quantity + '">' +
@@ -1662,15 +1663,28 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
          * @param orderType
          * @param name
          */
-        findOrderAddedObjTable: function(orderType, name) {
+        findOrderAddedObjTable: function(orderType, name,cateName) {
             var _this = this,
                 objTable = false;
-            $("#order-list .card").each(function() {
-                var $this = $(this);
-                if ($this.find(".name").text() == name) {
-                    objTable = $this.find(".table");
-                }
-            });
+            if(cateName){
+                var $cateTitle = $("#order-list .category.title").filter(function(){
+                    var $this = $(this);
+                    if($this.text() == cateName){
+                        return true;
+                    }
+                });
+                var $card = $cateTitle.siblings('.card');
+                if($card.find(".name").text() == name){
+                    objTable = $card.find('.table');
+                };
+            }else{
+                $("#order-list .card").each(function() {
+                    var $this = $(this);
+                    if ($this.find(".name").text() == name) {
+                        objTable = $this.find(".table");
+                    }
+                });
+            }
             return objTable;
         },
         renderSearchUserPanel: function(wrapperSelector, customers) {
