@@ -250,7 +250,10 @@ var getUserInfo = (req,res) =>{
  * @return {[type]}     [description]
  */
 var logout = (req,res)=>{
-
+    var session = req.session;
+    var openId = session.openId;
+    session.openId = '';
+    response.success(1,res,"");
 }
 
 exports.login = login;
@@ -260,3 +263,4 @@ exports.findPwd = findPwd;
 exports.beforeResetPwd = beforeResetPwd;
 exports.resetPwd = resetPwd;
 exports.getUserInfo = getUserInfo;
+exports.logout = logout;

@@ -1,4 +1,9 @@
 @side-nav-width:280px;
+.billSystem:not(.visible){
+	.side-nav-switch.fromapp-switch{
+		display:none;
+	}
+}
 .side-nav-switch{
 	position: fixed;
 	top: 0;
@@ -16,6 +21,10 @@
 	    &:first-child{
 	    	margin-top: 10px;
 	    }
+	}
+	display:none;
+	&.fromapp-switch{
+		display:block;
 	}
 }
 .side-nav{
@@ -60,6 +69,13 @@
 		font-size: 18px;
 		color: blue;
 		text-align: center;
+	}
+	.w-logout-btn{
+		position: absolute;
+	    bottom: 32px;
+	    width: 100%;
+	    text-align: center;
+	    font-size: 14px;
 	}
 }
 .sn-open-mask{

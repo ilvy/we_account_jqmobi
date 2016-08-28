@@ -130,6 +130,8 @@ router.post("/register",function(req,res){
     register(req,res);
 });
 
+router.post("/logout",loginRef.logout);
+
 router.get("/register_mail_verify",publish_account.registerMailVerify);
 
 router.post('/check_username',publish_account.checkEmail);

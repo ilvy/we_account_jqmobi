@@ -5,6 +5,7 @@ define(["text!./modules/side-nav/side-nav.html", 'touchEvent'],function(sideNavT
 	SideNav.prototype = {
 		init:function(){
 			$('html').append(sideNavTpl);
+			$('#side-nav-switch').addClass('fromapp-switch');
 			this.addListener();
 			this.getUserInfo();
 		},
@@ -17,6 +18,9 @@ define(["text!./modules/side-nav/side-nav.html", 'touchEvent'],function(sideNavT
 			$('.sn-open-mask').touch('click',function(){
 				_this.hide();
 			},true);
+			$('.logout').touch('click',function(){
+				_this.logout();
+			});
 		},
 		getUserInfo:function(){
 			$.ajax({
@@ -32,6 +36,18 @@ define(["text!./modules/side-nav/side-nav.html", 'touchEvent'],function(sideNavT
 			}).error(function(err){
 				console.log(err);
 			})
+		},
+		logout:function(){
+			$.ajax({
+				url:'/we_account/logout',
+				type:"post"
+			}).success(function(results){
+				if(results.flag){
+					window.location.href = '/we_account/login';
+				}
+			}).failed(function(error){
+				console.log(error)
+			});
 		},
 		open:function(){
 			$('.side-nav').addClass('open-sn');

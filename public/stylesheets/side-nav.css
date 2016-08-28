@@ -1,3 +1,6 @@
+.billSystem:not(.visible) .side-nav-switch.fromapp-switch {
+  display: none;
+}
 .side-nav-switch {
   position: fixed;
   top: 0;
@@ -6,6 +9,7 @@
   height: 38px;
   background-color: #FF4562;
   z-index: 99;
+  display: none;
 }
 .side-nav-switch .h-line {
   width: 60%;
@@ -16,6 +20,9 @@
 }
 .side-nav-switch .h-line:first-child {
   margin-top: 10px;
+}
+.side-nav-switch.fromapp-switch {
+  display: block;
 }
 .side-nav {
   width: 280px;
@@ -60,6 +67,13 @@
   font-size: 18px;
   color: blue;
   text-align: center;
+}
+.side-nav .w-logout-btn {
+  position: absolute;
+  bottom: 32px;
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
 }
 .sn-open-mask {
   width: 100%;
