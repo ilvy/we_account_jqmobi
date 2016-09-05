@@ -1,4 +1,4 @@
-define(["text!./modules/side-nav/side-nav.html", 'touchEvent'],function(sideNavTpl){
+define(["text!/modules/side-nav/side-nav.html?__timestamp", 'touchEvent'],function(sideNavTpl){
 	var SideNav = function(){
 		this.init();
 	};
