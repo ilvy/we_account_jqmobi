@@ -46,6 +46,24 @@ gulp.task('minifycss',function(){
 
 });
 
+gulp.task('addtimestamp',function(){
+	console.log('addtimestamp')
+	return gulp.src([tmpPath+'modules/**/*.js'],{base:tmpPath})
+			   .pipe(through2.obj(function(file,enc,cb){
+			   		var fileContents = file.contents.toString();
+			   		// console.log(fileContents);
+			   		var reg = /(text!.*\.html\?)__timestamp/;
+			   		var resultFile = fileContents.replace(reg,function(match, src, index, input) {
+			   			// console.log(arguments);
+			   			var timestamp = new Date().getTime();
+	                    return [src,timestamp].join("");
+	                });
+	                file.contents = new Buffer(resultFile,"utf8");
+	                cb(null,file);
+			   }))
+			   .pipe(gulp.dest(tmpPath));
+});
+
 gulp.task('md5-cssjs',function(){
 	return gulp.src([tmpPath+"**/*.js",tmpPath+"**/*.css","!"+tmpPath+"jqr.js","!"+tmpPath+"Jplugin/laydate/**/*"],{base:tmpPath})
 			   .pipe(plugins.rev())
@@ -149,7 +167,7 @@ gulp.task('revReplaceJade',function(){
 
 
 gulp.task('build',['clean'],function(){
-	runSequence('uglifyjs','concatcss','minifycss','md5-cssjs','copy','dealrevjson','revReplace','revReplaceHtml','inlinejs','revReplaceJade');
+	runSequence('uglifyjs','addtimestamp','concatcss','minifycss','md5-cssjs','copy','dealrevjson','revReplace','revReplaceHtml','inlinejs','revReplaceJade');
 });
 
 gulp.task('watch',function(){
