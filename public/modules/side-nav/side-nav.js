@@ -1,4 +1,4 @@
-define(["text!./modules/side-nav/side-nav.html", 'touchEvent'],function(sideNavTpl){
+define(["text!/modules/side-nav/side-nav.html", 'util','touchEvent'],function(sideNavTpl,util){
 	var SideNav = function(){
 		this.init();
 	};
@@ -43,7 +43,8 @@ define(["text!./modules/side-nav/side-nav.html", 'touchEvent'],function(sideNavT
 				type:"post"
 			}).success(function(results){
 				if(results.flag){
-					window.location.href = '/we_account/login';
+					var isfromapp = util.getUrlParam('fromapp');
+					window.location.href = '/we_account/login'+(isfromapp ? '?fromapp=1' : '');
 				}
 			}).failed(function(error){
 				console.log(error)

@@ -55,7 +55,7 @@ gulp.task('md5-cssjs',function(){
 });
 
 gulp.task('copy',function(){
-	var start = srcPath+"Jplugin/laydate/**/*";
+	var start = [srcPath+"Jplugin/laydate/**/*",srcPath+"modules/**/*.html"];
 	return gulp.src(start,{base:srcPath})
 			   .pipe(gulp.dest(distPath));
 });
