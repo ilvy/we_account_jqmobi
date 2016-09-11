@@ -2900,6 +2900,12 @@ ul#search-cates-panel > li:last-child {
   font-size: 1rem;
   color: #ff7989;
 }
+.screenshot-btn {
+  background-color: #fff;
+  border: 1px solid #cdcdcd;
+  margin: 8px;
+  padding: 3px 8px;
+}
 .share-tip .fa-hand-o-up {
   font-size: 1.5rem;
 }

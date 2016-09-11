@@ -26,6 +26,12 @@ gulp.task('uglifyjs',function(){
 		       .pipe(gulp.dest(tmpPath));
 });
 
+gulp.task('copyjsinsteaduglify',function(){
+	var start = [srcPath+"javascripts/**/*.js",srcPath+"Jplugin/**/*.js",srcPath+"modules/**/*.js",srcPath+"modules/**/*.js",srcPath+"util/**/*.js",srcPath+"*.js"];
+	return gulp.src(start,{base:srcPath})
+			   .pipe(gulp.dest(tmpPath));
+});
+
 
 gulp.task('concatcss',function(){
 	var concatCssFiles = [srcPath+'Jplugin/jquery.light-popup/jquery.light-popup.css'];
@@ -65,11 +71,19 @@ gulp.task('addtimestamp',function(){
 });
 
 gulp.task('md5-cssjs',function(){
-	return gulp.src([tmpPath+"**/*.js",tmpPath+"**/*.css","!"+tmpPath+"jqr.js","!"+tmpPath+"Jplugin/laydate/**/*"],{base:tmpPath})
+	return gulp.src([tmpPath+"**/*.js",tmpPath+"**/*.css","!"+tmpPath+"jqr.js","!"+tmpPath+"Jplugin/laydate/**/*","!"+tmpPath+"/javascripts/cordova-js-src/**/*.js","!"+tmpPath+"/javascripts/plugins/**/*.js"
+		,"!"+tmpPath+"/javascripts/cordova_plugins.js"],{base:tmpPath})
 			   .pipe(plugins.rev())
 			   .pipe(gulp.dest(distPath))
 			   .pipe(plugins.rev.manifest('rev/rev-manifest.json',{merge:true,base: process.cwd()+'/rev'}))
 			   .pipe(gulp.dest("rev"));
+});
+
+gulp.task('copycordova',function(){
+	var start = [tmpPath+"/javascripts/cordova-js-src/**/*.js",tmpPath+"/javascripts/plugins/**/*.js"
+		,tmpPath+"/javascripts/cordova_plugins.js"];
+	return gulp.src(start,{base:tmpPath})
+			   .pipe(gulp.dest(distPath));
 });
 
 gulp.task('copy',function(){
@@ -167,9 +181,17 @@ gulp.task('revReplaceJade',function(){
 
 
 gulp.task('build',['clean'],function(){
-	runSequence('uglifyjs','addtimestamp','concatcss','minifycss','md5-cssjs','copy','dealrevjson','revReplace','revReplaceHtml','inlinejs','revReplaceJade');
+	runSequence('uglifyjs','addtimestamp','concatcss','minifycss','md5-cssjs','copycordova','copy','dealrevjson','revReplace','revReplaceHtml','inlinejs','revReplaceJade');
 });
 
 gulp.task('watch',function(){
 	gulp.watch([srcPath+'stylesheets/*',"!"+srcPath+"**/all.css"],['concatcss']);
+});
+
+gulp.task('watch-md5',function(){
+	gulp.watch([srcPath+'stylesheets/*',"!"+srcPath+"**/all.css",srcPath+"modules/**/*.js",srcPath+"javascripts/**/*.js"],['concatcss']);
+});
+
+gulp.task('build-watch-md5',['clean'],function(){
+	runSequence('copyjsinsteaduglify','concatcss','minifycss','md5-cssjs','copycordova','copy','dealrevjson','revReplace','revReplaceHtml','inlinejs','revReplaceJade');
 });

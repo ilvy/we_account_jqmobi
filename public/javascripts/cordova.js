@@ -1900,6 +1900,7 @@ function findCordovaPath() {
     var term = '/cordova.js';
     for (var n = scripts.length-1; n>-1; n--) {
         var src = scripts[n].src.replace(/\?.*$/, ''); // Strip any query param (CB-6007).
+        src = src.replace(/-.*\.js$/,'.js');
         if (src.indexOf(term) == (src.length - term.length)) {
             path = src.substring(0, src.length - term.length) + '/';
             break;
@@ -1917,7 +1918,7 @@ exports.load = function(callback) {
         console.log('Could not find cordova.js script tag. Plugin loading may fail.');
         pathPrefix = '';
     }
-    injectIfNecessary('cordova/plugin_list', pathPrefix + 'cordova_plugins.js', function() {
+    injectIfNecessary('cordova/plugin_list', pathPrefix + 'cordova_plugins.js?v=1.1', function() {
         var moduleList = require("cordova/plugin_list");
         handlePluginsObject(pathPrefix, moduleList, callback);
     }, callback);

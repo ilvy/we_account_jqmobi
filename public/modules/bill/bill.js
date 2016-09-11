@@ -1559,7 +1559,7 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                     return;
                 }
                 var ratio = $("#price-ratio").val();
-                var price = Math.toFixed(cost_hk * ratio);
+                var price = (cost_hk * ratio).toFixed(1);
                 $("#price-result").val(price);
             }, true);
             $("#pay-list .product_name").touch("click", function(event) {

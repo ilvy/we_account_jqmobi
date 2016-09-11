@@ -10,6 +10,7 @@ define(['router','util'],function(router,util){
         init:function(){
             this.do();
             this.addListener();
+            this.initScreenshot();
         },
         do:function(){
             var _this = this;
@@ -25,9 +26,9 @@ define(['router','util'],function(router,util){
                         for(var i = 0; i < data.length; i++){
                             var record = data[i];
                             oidstr += record.oid + ',';
-                            rowStr += '<div class="t-row bill-record"><div class="t-col t-col-2">'+(record.title?record.title:'')+'</div>' +
+                            rowStr += '<div class="t-row bill-record"><div class="t-col getpay-title-cell t-col-2">'+(record.title?record.title:'')+'</div>' +
                                 '<div class="t-col t-col-2">'+record.quantity+'</div>' +
-                                '<div class="t-col t-col-2">'+(record.remark?record.remark:'')+'</div>' +
+                                '<div class="t-col getpay-remark t-col-2">'+(record.remark?record.remark:'')+'</div>' +
                                 '<div class="t-col t-col-2">'+record.price+'</div>' +
                                 '<div class="t-col t-col-2">'+record.single_total+'</div></div>';
                         }
@@ -63,7 +64,7 @@ define(['router','util'],function(router,util){
             $("#backtobill").on('click',function(){
                 router.changeHash('billSystem',0);
             });
-            $(".mailFree_getpay").touch("click",function(event){
+            $(".mailFree_getpay").on("click",function(event){
                 var $this = event.$this;
                 var mail_pay = Number($('.mailpay_getpay').val());
                 var orders = $this.parents('.mail-detail').data('oid');
@@ -96,6 +97,24 @@ define(['router','util'],function(router,util){
 
                 }
             });
+            $(document).on("click",".screenshot-btn",function(){
+                _this.beforeSceenshot();
+                setTimeout(function(){
+                    ScreenShot.shot("shot",function(success){
+                        if(success == 1){
+                            alert("截屏成功，请前往sd卡下的daigo文件目录查看");
+                            setTimeout(function(){
+                                _this.afterScreenshot();
+                            },1000);
+                        }
+                    },function(fail){
+                        if(fail){
+                            alert("截屏失败，请重试");
+                            _this.afterScreenshot();
+                        }
+                    });
+                },500);
+            });
             //$(document).on("input",".mailpay_getpay",function(event){
             //    var originV = $(this).val();
             //    var currentInput = originV.substring(originV.length - 1);
@@ -105,6 +124,21 @@ define(['router','util'],function(router,util){
             //        return;
             //    }
             //});
+        },
+        initScreenshot:function(){
+            if(typeof ScreenShot != 'undefined'){
+                $(".share-tip.screenshot").removeClass("hide").siblings(".share-tip").addClass("hide");
+            }else{
+                $(".share-tip.screenshot").addClass("hide").siblings(".share-tip").removeClass("hide");
+            }
+        },
+        beforeSceenshot:function(){
+            $('#getpay .getpay-title-cell').removeClass('t-col-2').addClass('t-col-4');
+            $('#getpay .getpay-remark').addClass('hide');
+        },
+        afterScreenshot:function(){
+            $('#getpay .getpay-title-cell').addClass('t-col-2').removeClass('t-col-4');
+            $('#getpay .getpay-remark').removeClass('hide');
         },
         /**
          * 编辑邮费

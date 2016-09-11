@@ -22,5 +22,5 @@ v0.2.1.2
 6、product.sh 优化
 7、构建时，模块中.html文件处理，直接copy过去url不变有缓存问题
 bug：
-1、session时效问题
+1、session时效问题 --初步判断iPhone中浏览器切换后台休眠后断连，session销毁
 
