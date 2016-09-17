@@ -21,13 +21,19 @@ define(['util'],function(util){
         var $fromModule = $("."+globalVar.hashFrom),
             $toModule = $("."+hash);
         $fromModule.addClass('slide-out').find('#tools-box').addClass('tools-box-slide-out').removeClass('tools-box-slide-in');
+        $fromModule.find('#switchList').addClass("absolutePos");
+        $fromModule.find('#side-nav-switch').addClass("absolutePos");
         $toModule.addClass("visible").addClass("slide-init").addClass("slide-position");
+        $toModule.find('#switchList').addClass("absolutePos");
+        $toModule.find('#side-nav-switch').addClass("absolutePos");
         setTimeout(function(){
             $fromModule.removeClass("visible").removeClass('slide-out').addClass("slide-init");
             $toModule.addClass('slide-in').find('#tools-box').removeClass('tools-box-slide-out').addClass('tools-box-slide-in');
         },800);
         setTimeout(function(){
             $toModule.removeClass('slide-in').removeClass("slide-init").removeClass("slide-position");
+            $toModule.find('#switchList').removeClass("absolutePos");
+            $toModule.find('#side-nav-switch').removeClass("absolutePos");
         },1300);
 //        $fromModule.css({
 //            "position":"absolute",
