@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>代代</title>
+    <meta name="viewport" content="height=device-height,width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
     <style>
         body{
             font-family: Microsoft YaHei,Helvetica,sans-serif;
@@ -11,19 +12,28 @@
         }
         .main-content{
             text-align: center;
+            color: rgb(220, 44, 46);
+            font-size: 1rem;
         }
         .welcome{
-            margin-top: 70px;
-            color: rgb(220, 44, 46);
-            font-size: 1.5rem;
+            margin-top: 38px;
+        }
+        .wx-gzh{
+            margin-top: 38px;
         }
         .main-content img{
             position: absolute;
+            width: 200px;
             left: 0px;
             right: 0px;
             bottom: 0px;
             top: 0%;
             margin:auto;
+        }
+        .iphone{
+            position: absolute;
+            bottom: 143px;
+            width: 100%;
         }
         .footer{
             position: fixed;
@@ -43,9 +53,12 @@
 <body>
     <div class="main-content">
         <div class="welcome">
-            欢迎来到代代，使用代代请移步微信公众号
+        欢迎来到代代，使用代代请下载安卓app，<a href="//www.daidai2u.com/apps/daigo.apk" target="_blank">戳这里</a>
+        (若是微信中打开，请复制链接至浏览器打开)
         </div>
+        <div class="wx-gzh">或者移步公众号</div>
         <img src="http://image.daidai2u.com/images/qrcode_d2u_344.jpg">
+        <div class="iphone">使用iPhone请直接<a href="/we_account/login" target="_blank">登录</a></div>
     </div>
     <div class="footer">
         <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备15047336号</a> |
