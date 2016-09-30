@@ -14,6 +14,10 @@ define(['router','util','touchEvent'],function(router,util){
         this.do = function(){
 
         }
+        this.doWithoutFlush = function(){
+            // console.log(productArray);
+            // productArray = globalVar.productArray;
+        }
         this.addListener = function(){
             var _this = this;
             $("#cancel").on("click",function(){
@@ -96,7 +100,6 @@ define(['router','util','touchEvent'],function(router,util){
                     success:function(data){
                         console.log(data);
                         if(data && data.flag == 1){
-                            cleanPosition();
                             if($(".page.publish").hasClass("from-product")){
                                 $(".page.publish").removeClass("from-product");
                                 if(data.data == -1){//说明产品同名合并
@@ -111,6 +114,7 @@ define(['router','util','touchEvent'],function(router,util){
                                 showNewUploadImg(data.data.id || postData.product_id,productArray,title,submitType);
                                 router.changeHash('live_room-'+globalVar.room_id,0);//不重新加载
                             }
+                            cleanPosition();
                         }else{
                             alert("上传失败，请重试！！");
                         }
