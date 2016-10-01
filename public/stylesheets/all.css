@@ -2188,6 +2188,20 @@ input.invalid {
 #order-list-content > .card {
   border-top: none;
 }
+#pay-list .product_name {
+  position: relative;
+}
+#pay-list .w-p-l-remark {
+  font-size: 10px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 5px;
+}
+#pay-list .w-p-l-remark .p-l-remark {
+  background: #FF4562;
+  color: #fff;
+}
 #order-list-content > .card:last-child {
   margin-bottom: 75px;
 }

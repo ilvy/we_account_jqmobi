@@ -390,7 +390,7 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                     var record = cates[j];
                     var addMailPay = 0;
                     totalMoney += record.quantity * (record.unit_price ? record.unit_price : 0);
-                    tableStr += '<div class="t-row t-row-over-1" data-oid=' + record.oid + ' data-cid=' + record.cid + ' data-pid=' + record.product_id + '><div class="t-col t-col-3 product_name" data-type="1" data-value="' + record.product_name + '">' + record.product_name + '</div>' +
+                    tableStr += '<div class="t-row t-row-over-1" data-oid=' + record.oid + ' data-cid=' + record.cid + ' data-pid=' + record.product_id + '><div class="t-col t-col-3 product_name" data-type="1" data-value="' + record.product_name + '">' +'<span class="w-p-l-remark order-remark"><span class="p-l-remark">注</span></span>'+ record.product_name + '</div>' +
                         '<div class="t-col t-col-2 quantity" data-value="' + record.quantity + '">' +
                         this.generateNumSelect(100, record.quantity) + '</div>' +
                         '<div class="t-col t-col-2 input-div input-div-cost unit_cost" data-value="' + ((!record.unit_cost && record.unit_cost != 0) ? "" : record.unit_cost) + '" data-type="2" data-exrate="' + record.exchange_rate + '">' + ((!record.unit_cost && record.unit_cost != 0) ? "" : this.exchangeMoney(record.unit_cost, record.exchange_rate)) + '</div>' +
