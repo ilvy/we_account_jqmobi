@@ -89,6 +89,10 @@ function register(){
         $("#pwd").css({
             borderBottomColor:"red"
         })
+        $("#pwd-err-tip").css("display","block");
+        setTimeout(function(){
+            $("#pwd-err-tip").css("display","none");
+        },2000);
         flag = false;
     }else{
         $("#pwd").css({

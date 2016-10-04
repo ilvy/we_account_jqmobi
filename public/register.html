@@ -14,8 +14,8 @@
         </div>
         <div class="w-reg-info">
             <div class="form-control"><input type="text" name="weixin" id="weixin" placeholder="微信账号(公开，方便买家联系)"/><span id="weixin-tip" style="color: red;display: none;">微信账号不能为空</span></div>
-            <div class="form-control"><input type="password" name="pwd" id="pwd" placeholder="密码:6位(数字+字母)"/><span id="pwd-tip" style="color: red;display: none;">密码输入不一致</span></div>
-            <div class="form-control"><input type="password" id="confirmPwd" placeholder="确认密码"/></div>
+            <div class="form-control"><input type="password" name="pwd" id="pwd" placeholder="密码:6位(数字+字母)"/><span id="pwd-err-tip" style="color: red;display: none;">请输入6位密码(数字+字母)</span></div>
+            <div class="form-control"><input type="password" id="confirmPwd" placeholder="确认密码"/><span id="pwd-tip" style="color: red;display: none;">密码输入不一致</span></div>
             <input type="submit" id="registerBtn_r" class="" value="注册" onclick="return register();" />
             <a class="loginBtn_r" href="/we_account/login">已有账号，直接登录</a>
         </div>

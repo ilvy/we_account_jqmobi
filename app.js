@@ -21,7 +21,7 @@ var app = express();
 var cluster = require("cluster");
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'views-dist'));
 app.set('view engine', 'jade');
 //app.engine('html',require('html').renderFile);
 
@@ -33,7 +33,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 //app.use(compression());
-app.use(express.static(path.join(__dirname, 'public'),{//../../mywork/seajsProjs/todoListProj/todolist ../../mywork/mycode/seajs-share-1/seajs
+app.use(express.static(path.join(__dirname, 'public-dist'),{//../../mywork/seajsProjs/todoListProj/todolist ../../mywork/mycode/seajs-share-1/seajs
     etag:true,
     maxAge:'86400',
     //expires:new Date().getTime() + 30000,//无效
@@ -97,7 +97,7 @@ app.use(function(err, req, res, next) {
 
 //全局异常处理
 process.on('uncaughtException', function(err) {
-    console.log(err.stack);
+    console.log('Caught exception: ',err.stack);
 });
 //exports.logger=function(name){
 //    var logger = log4js.getLogger(name);

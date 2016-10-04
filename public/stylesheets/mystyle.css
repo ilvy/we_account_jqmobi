@@ -130,11 +130,14 @@ input.invalid {
   position: absolute;
   left: 0;
   top: 0;
-  padding: 5px;
+  padding: 8px 6px 8px 2px;
+  background: #eeeeee;
 }
 #pay-list .w-p-l-remark .p-l-remark {
   background: #FF4562;
   color: #fff;
+  display: block;
+  border-radius: 50%;
 }
 #order-list-content > .card:last-child {
   margin-bottom: 75px;

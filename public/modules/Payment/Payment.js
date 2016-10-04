@@ -9,10 +9,12 @@ define(['router','util'],function(router,util){
         orgPrice:0,//除去邮费的总价
         init:function(){
             this.do();
+            this.offListener();
             this.addListener();
             this.initScreenshot();
         },
         do:function(){
+            this.initPayment();
             var _this = this;
             $("#getpay .table .bill-record").remove();
             var url = '/we_account/getpay?room_id='+globalVar.room_id+'&nickname='+globalVar.nickname;
@@ -59,6 +61,9 @@ define(['router','util'],function(router,util){
                 }
             })
         },
+        initPayment:function(){
+            this.afterScreenshot();
+        },
         addListener:function(){
             var _this = this;
             $("#backtobill").on('click',function(){
@@ -98,22 +103,31 @@ define(['router','util'],function(router,util){
                 }
             });
             $(document).on("click",".screenshot-btn",function(){
-                _this.beforeSceenshot();
-                setTimeout(function(){
-                    ScreenShot.shot("shot",function(success){
-                        if(success == 1){
-                            alert("截屏成功，请前往sd卡下的daigo文件目录查看");
-                            setTimeout(function(){
+                var $shotBtn = $(this);
+                if(typeof ScreenShot != 'undefined'){
+                    _this.beforeSceenshot();
+                    setTimeout(function(){
+                        ScreenShot.shot("shot",function(success){
+                            if(success == 1){
+                                alert("截屏成功，请前往sd卡下的daigo文件目录查看");
+                                setTimeout(function(){
+                                    _this.afterScreenshot();
+                                },1000);
+                            }
+                        },function(fail){
+                            if(fail){
+                                alert("截屏失败，请重试");
                                 _this.afterScreenshot();
-                            },1000);
-                        }
-                    },function(fail){
-                        if(fail){
-                            alert("截屏失败，请重试");
-                            _this.afterScreenshot();
-                        }
-                    });
-                },500);
+                            }
+                        });
+                    },500);
+                }else if($shotBtn.hasClass('hide-remark')){
+                    _this.beforeSceenshot();
+                    $shotBtn.removeClass('hide-remark').addClass('show-remark');
+                }else{
+                    _this.afterScreenshot();
+                    $shotBtn.addClass('hide-remark').removeClass('show-remark');
+                }
             });
             //$(document).on("input",".mailpay_getpay",function(event){
             //    var originV = $(this).val();
@@ -125,11 +139,17 @@ define(['router','util'],function(router,util){
             //    }
             //});
         },
+        offListener:function(){
+            $("#backtobill").off("click");
+            $(".mailFree_getpay").off("click");
+            $(".mailpay_getpay").off("blur");
+            $(".screenshot-btn").off("click");
+        },
         initScreenshot:function(){
-            if(typeof ScreenShot != 'undefined'){
-                $(".share-tip.screenshot").removeClass("hide").siblings(".share-tip").addClass("hide");
-            }else{
+            if(util.isWeixin()){
                 $(".share-tip.screenshot").addClass("hide").siblings(".share-tip").removeClass("hide");
+            }else{
+                $(".share-tip.screenshot").removeClass("hide").siblings(".share-tip").addClass("hide");
             }
         },
         beforeSceenshot:function(){
