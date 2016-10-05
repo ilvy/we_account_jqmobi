@@ -276,7 +276,7 @@ define(['wxAPI'],function(wx){
       },
       isWeixin:function(){
         var ua = window.navigator.userAgent.toLowerCase();
-        if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+        if(ua.match(/MicroMessenger/i)){
             return true;
         }else{
             return false;

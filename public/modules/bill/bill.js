@@ -423,7 +423,7 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                 return;
             }
             var tableStr = '<div class="table"><div class="t-row t-row-over-1 t-row-header">' +
-                '<div class="t-col t-col-1">客户</div><div class="t-col t-col-2">品名</div><div class="t-col t-col-2">数量</div>' +
+                '<div class="t-col t-col-2">客户</div><div class="t-col t-col-2">品名</div><div class="t-col t-col-1">数量</div>' +
                 '<div class="t-col t-col-2">进价</div>' +
                 '<div class="t-col t-col-2">售价</div><div class="t-col t-col-1 extra">操作</div></div>';
             var totalMoney = 0,
@@ -436,8 +436,8 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                 }
                 totalMoney += record.quantity * (record.unit_price ? record.unit_price : 0);
                 totalCost += record.quantity * (record.unit_cost ? record.unit_cost : 0) * record.exchange_rate;
-                tableStr += '<div class="t-row t-row-over-1" data-oid=' + record.oid + ' data-cid=' + record.cid + '><div class="t-col t-col-1 c_name">'+record.nickname+'</div><div class="t-col t-col-2 product_name">' + record.product_name + '</div>' +
-                    '<div class="t-col t-col-2"><div class="num">' + record.quantity + '</div></div>' +
+                tableStr += '<div class="t-row t-row-over-1" data-oid=' + record.oid + ' data-cid=' + record.cid + '><div class="t-col t-col-2 c_name">'+record.nickname+'</div><div class="t-col t-col-2 product_name">' + record.product_name + '</div>' +
+                    '<div class="t-col t-col-1"><div class="num">' + record.quantity + '</div></div>' +
                     '<div class="t-col t-col-2">' + ((((!record.unit_cost && record.unit_cost != 0) ? "" : record.unit_cost) * record.exchange_rate).toFixed(1)) + '</div>' +
                     '<div class="t-col t-col-2">' + ((!record.unit_price && record.unit_price != 0) ? "" : record.unit_price) + '</div>' +
                     '<div class="t-col t-col-1 extra">删除</div></div>';
@@ -1032,6 +1032,7 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                     link = 'http://www.daidai2u.com/we_account/payit?room_id=' + _this.room_id + '&nickname=' + nickname;
                 globalVar.room_id = _this.room_id;
                 globalVar.nickname = nickname;
+                _this.billScrollTop = $('body').scrollTop();
                 wx.onMenuShareAppMessage({
                     title: title,
                     desc: desc,

@@ -40,7 +40,7 @@ define(['router','util'],function(router,util){
                         if(oidstr){
                             oidstr = oidstr.substring(0,oidstr.length - 1);
                             mailStr = '<div class="t-col-10">' +
-                                '<i class="fa '+(mail_free?'fa-check-square':'fa-square-o')+' mailFree_getpay"></i><span>包邮</span> <span>邮费：</span>' +
+                                '<i class="fa '+(mail_free?'fa-check-square':'fa-square-o')+' mailFree_getpay j-mail-tip"></i><span class="j-mail-tip">包邮</span> <span>邮费：</span>' +
                                 '<input type="number" class="mailpay_getpay" placeholder="0"  data-value="'+(mail_pay?mail_pay:"")+'" value="'+(mail_pay?mail_pay:"")+'">' +
                                 '<span class="unit">元</span></div>';
                         }
@@ -63,6 +63,7 @@ define(['router','util'],function(router,util){
         },
         initPayment:function(){
             this.afterScreenshot();
+            $('.screenshot-btn.show-remark').addClass('hide-remark').removeClass('show-remark');
         },
         addListener:function(){
             var _this = this;
@@ -155,10 +156,16 @@ define(['router','util'],function(router,util){
         beforeSceenshot:function(){
             $('#getpay .getpay-title-cell').removeClass('t-col-2').addClass('t-col-4');
             $('#getpay .getpay-remark').addClass('hide');
+            if($(".mailFree_getpay").hasClass("fa-square-o")){
+                $('#getpay .j-mail-tip').addClass('hide');
+            }
         },
         afterScreenshot:function(){
             $('#getpay .getpay-title-cell').addClass('t-col-2').removeClass('t-col-4');
             $('#getpay .getpay-remark').removeClass('hide');
+            if($(".mailFree_getpay").hasClass("fa-square-o")){
+                $('#getpay .j-mail-tip').removeClass('hide');
+            }
         },
         /**
          * 编辑邮费

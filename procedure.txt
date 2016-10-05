@@ -893,10 +893,11 @@ SELECT c.id cid,o.id oid,p.title product_name,c.c_nickname nickname,o.cost unit_
 	  JOIN `user` u1
 	ON c.seller_room_id = u1.room_id AND c.c_status = 1 and (c.c_nickname = nickname OR nickname = '')
 	  JOIN t_order o
-	on c.id = o.c_id AND DATE_FORMAT(o.pay_time,'%Y-%m-%d') >= date1 and DATE_FORMAT(o.pay_time,'%Y-%m-%d') <= date2
+	on c.id = o.c_id AND DATE_FORMAT(o.buy_time,'%Y-%m-%d') >= date1 and DATE_FORMAT(o.buy_time,'%Y-%m-%d') <= date2
 	  JOIN product p
 	ON o.product_id = p.id
-	WHERE o.`status` = 3 AND u1.open_id = openid AND c.c_status = 1;
+	WHERE o.`status` = 3 AND u1.open_id = openid AND c.c_status = 1
+  order by o.buy_time asc;
 
 commit;
 end; $$

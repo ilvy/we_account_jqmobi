@@ -138,6 +138,7 @@ input.invalid {
   color: #fff;
   display: block;
   border-radius: 50%;
+  padding: 1px;
 }
 #order-list-content > .card:last-child {
   margin-bottom: 75px;
