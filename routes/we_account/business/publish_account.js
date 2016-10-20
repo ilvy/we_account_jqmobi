@@ -73,18 +73,18 @@ function register(req,res,next){
             to : email,
             subject: "代go账号注册",
             generateTextFromHTML : true,
-            html : "<a href='http://"+verifyServerConfig.cookieDomain+":"+verifyServerConfig.port+"/we_account/register_mail_verify?acd="+actcode+"'>注册用户激活链接</a>"
+            html : "<p>亲爱的代go用户，</p><p>请点击以下链接激活您的账号，</p><a href='http://"+verifyServerConfig.cookieDomain+":"+verifyServerConfig.port+"/we_account/register_mail_verify?acd="+actcode+"'>注册用户激活链接</a><p>如有疑问，请电联客服17722699552，</p><p>感谢您的使用！</p>"
         },function(err,results){
             if(err){
                 console.log(err.name);
                 if(err.name == 'RecipientError'){
-                    res.render("sendMailResult",{code:0,result:"代go账号注册确认邮件发送失败，请确认您的邮箱<"+email+">是否正确！！！"});
+                    res.render("sendMailResult",{code:0,title:"注册账号",result:"代go账号注册确认邮件发送失败，请确认您的邮箱<"+email+">是否正确！！！"});
                 }else{
-                    res.render("sendMailResult",{code:0,result:"账号注册失败，请重试！！！"});
+                    res.render("sendMailResult",{code:0,title:"注册账号",result:"账号注册失败，请重试！！！"});
                 }
                 return;
             }
-            res.render("sendMailResult",{code:200,result:"感谢您的注册，验证邮件发送成功，请在一个小时内前往验证并修改密码!"});
+            res.render("sendMailResult",{code:200,title:"注册账号",result:"感谢您的注册，验证邮件发送成功，请在一个小时内前往验证并修改密码!"});
         });
     });
     
@@ -117,14 +117,14 @@ function registerMailVerify(req,res){
                                 to : username,
                                 subject: "代go账号",
                                 generateTextFromHTML : true,
-                                html : "<h3>您的代go登录账号:"+roomId+"</h3>"
+                                html : "<p>亲爱的代go用户，</p><h3>您的代go登录账号:"+roomId+"</h3><p>感谢您的支持！</p>"
                             },function(err,results){
                                 if(err){
                                     logger.error('代go账号发送邮件失败:',err);
                                 }
                             });
                         }
-                        res.render("sendMailResult",{code:200,result:"注册成功，您的代go账号是:"+roomId+",若有遗忘，您也可前往注册邮箱查看，感谢您的使用!"});
+                        res.render("sendMailResult",{code:200,title:"注册账号",result:"注册成功，您的代go账号是:"+roomId+",若有遗忘，您也可前往注册邮箱查看，感谢您的使用!"});
                         // res.redirect('/we_account/live-room#billSystem');
             //            asyncAccountInfoFromWeix(openId);
                     }

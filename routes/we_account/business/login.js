@@ -122,21 +122,23 @@ var findPwd = (req,res)=>{
 				    to : email,
 				    subject: "找回密码",
 				    generateTextFromHTML : true,
-				    html : "<a href='http://"+cookieDomain+":"+port+"/we_account/verify?acd="+actcode+"'>激活链接</a>"
+				    html : "<p>亲爱的代go用户，</p><p>请点击以下链接找回您的密码，</p>"
+                    +"<a href='http://"+cookieDomain+":"+port+"/we_account/verify?acd="+actcode+"'>激活链接</a>"
+                    +"<p>如有疑问，请电联客服17722699552,</p><p>感谢您的使用!</p>"
 				},function(err,results){
 					if(err){
-						res.render("sendMailResult",{code:0,result:"找回密码邮件发送失败，请重试！！！"});
+						res.render("sendMailResult",{code:0,title:"找回密码",result:"找回密码邮件发送失败，请重试！！！"});
 						return;
 					}
-					res.render("sendMailResult",{code:200,result:"找回密码邮件发送成功，请在一个小时内前往验证并修改密码"});
+					res.render("sendMailResult",{code:200,title:"找回密码",result:"找回密码邮件发送成功，请在一个小时内前往验证并修改密码"});
 				});
 	    	}
 	    });
     },function(error){
     	if(error.code == 1){
-    		res.render('sendMailResult',{code:1,result:"对不起，您输入的邮箱有误"});
+    		res.render('sendMailResult',{code:1,title:"找回密码",result:"对不起，您输入的邮箱有误，请查证后重试！"});
     	}else if(error.code == -1){
-			res.render('sendMailResult',{code:-1,result:"对不起，系统有误，请重试！！！"});
+			res.render('sendMailResult',{code:-1,title:"找回密码",result:"对不起，系统有误，请重试！！！"});
     	}
     })
     

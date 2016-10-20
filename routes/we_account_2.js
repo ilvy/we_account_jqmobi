@@ -458,5 +458,9 @@ router.get("/xml",function(req,res){
     res.send("OK");
 });
 
+router.get("/page_debug",function(req,res){
+    res.render(req.query.page,{result:req.query.result,title:req.query.title});
+});
+
 
 module.exports = router;

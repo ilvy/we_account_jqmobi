@@ -16,7 +16,7 @@ var transport = nodemailer.createTransport("SMTP", {
 //     to : "3122389700@qq.com",
 //     subject: "邮件主题",
 //     generateTextFromHTML : true,
-//     html : "<p>这是封测试邮件</p><a href='http://www.baidu.com/'>激活链接</a>"
+//     html : "<p>亲爱的代go用户，</p><p>请点击一下链接激活您的账号，</p><a href='http://www.baidu.com/'>激活链接</a><p>如有疑问，请电联客服17722699552</p><p>感谢您的使用</p>"
 // }, function(error, response){
 //     if(error){
 //         console.log(error);

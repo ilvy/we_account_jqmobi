@@ -109,7 +109,7 @@ define(['router','util'],function(router,util){
                         }
                     },function(fail){
                         if(fail){
-                            alert("截屏失败，请重试");
+                            alert("截屏失败，请重试:"+fail);
                             _this.afterScreenshot();
                         }
                     });

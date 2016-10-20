@@ -6,7 +6,8 @@ html
     head
         title live-room-waterfall
         meta(name="viewport",content="width=device-width,initial-scale=1.0,user-scalable=no")
-        link(rel='stylesheet', href='/stylesheets/style_new.css')
+        link(rel='stylesheet', href='//static.daidai2u.com/stylesheets/style_new.css')
+        link(rel="stylesheet",href="//static.daidai2u.com/stylesheets/result.css")
         style.
             .back_to_add{
                 position:fixed;
@@ -33,7 +34,12 @@ html
                         a(href="/we_account/forgetpwd") 忘记密码
                 input#loginBtn(type="submit" class="" value="登录")
         - else if(error)
-            H3 #{error}
+            div
+                H3.text-center 邮箱验证
+                H3.text-center.w-split
+                    .split-line
+                    .split-text 代go
+                H4 #{error}
     script(src="/javascripts/jquery.js")
     script.
         function login(){
