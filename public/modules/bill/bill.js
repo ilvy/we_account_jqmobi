@@ -389,8 +389,9 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                 for (var j = 0; j < cates.length; j++) {
                     var record = cates[j];
                     var addMailPay = 0;
+                    var oRemark = record.remark;
                     totalMoney += record.quantity * (record.unit_price ? record.unit_price : 0);
-                    tableStr += '<div class="t-row t-row-over-1" data-oid=' + record.oid + ' data-cid=' + record.cid + ' data-pid=' + record.product_id + '><div class="t-col t-col-3 product_name" data-type="1" data-value="' + record.product_name + '">' + record.product_name + '</div>' +
+                    tableStr += '<div class="t-row t-row-over-1" data-oid=' + record.oid + ' data-cid=' + record.cid + ' data-pid=' + record.product_id + '><div class="t-col t-col-3 product_name" data-type="1" data-value="' + record.product_name + '">' +'<span class="w-p-l-remark order-remark" data-oremark='+oRemark+'><span class="p-l-remark">注</span></span>'+ record.product_name + '</div>' +
                         '<div class="t-col t-col-2 quantity" data-value="' + record.quantity + '">' +
                         this.generateNumSelect(100, record.quantity) + '</div>' +
                         '<div class="t-col t-col-2 input-div input-div-cost unit_cost" data-value="' + ((!record.unit_cost && record.unit_cost != 0) ? "" : record.unit_cost) + '" data-type="2" data-exrate="' + record.exchange_rate + '">' + ((!record.unit_cost && record.unit_cost != 0) ? "" : this.exchangeMoney(record.unit_cost, record.exchange_rate)) + '</div>' +
@@ -422,7 +423,7 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                 return;
             }
             var tableStr = '<div class="table"><div class="t-row t-row-over-1 t-row-header">' +
-                '<div class="t-col t-col-1">客户</div><div class="t-col t-col-2">品名</div><div class="t-col t-col-2">数量</div>' +
+                '<div class="t-col t-col-2">客户</div><div class="t-col t-col-2">品名</div><div class="t-col t-col-1">数量</div>' +
                 '<div class="t-col t-col-2">进价</div>' +
                 '<div class="t-col t-col-2">售价</div><div class="t-col t-col-1 extra">操作</div></div>';
             var totalMoney = 0,
@@ -435,8 +436,8 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                 }
                 totalMoney += record.quantity * (record.unit_price ? record.unit_price : 0);
                 totalCost += record.quantity * (record.unit_cost ? record.unit_cost : 0) * record.exchange_rate;
-                tableStr += '<div class="t-row t-row-over-1" data-oid=' + record.oid + ' data-cid=' + record.cid + '><div class="t-col t-col-1 c_name">'+record.nickname+'</div><div class="t-col t-col-2 product_name">' + record.product_name + '</div>' +
-                    '<div class="t-col t-col-2"><div class="num">' + record.quantity + '</div></div>' +
+                tableStr += '<div class="t-row t-row-over-1" data-oid=' + record.oid + ' data-cid=' + record.cid + '><div class="t-col t-col-2 c_name">'+record.nickname+'</div><div class="t-col t-col-2 product_name">' + record.product_name + '</div>' +
+                    '<div class="t-col t-col-1"><div class="num">' + record.quantity + '</div></div>' +
                     '<div class="t-col t-col-2">' + ((((!record.unit_cost && record.unit_cost != 0) ? "" : record.unit_cost) * record.exchange_rate).toFixed(1)) + '</div>' +
                     '<div class="t-col t-col-2">' + ((!record.unit_price && record.unit_price != 0) ? "" : record.unit_price) + '</div>' +
                     '<div class="t-col t-col-1 extra">删除</div></div>';
@@ -1031,6 +1032,7 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                     link = 'http://www.daidai2u.com/we_account/payit?room_id=' + _this.room_id + '&nickname=' + nickname;
                 globalVar.room_id = _this.room_id;
                 globalVar.nickname = nickname;
+                _this.billScrollTop = $('body').scrollTop();
                 wx.onMenuShareAppMessage({
                     title: title,
                     desc: desc,
@@ -1537,6 +1539,8 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
             $(".order-remark").touch("click", function(event) {
                 var $this = event.$this;
                 var remark = $this.text();
+                var plRemark = $this.attr("data-oremark");
+                remark = typeof plRemark != 'undefined' ? plRemark : remark;
                 $(".order-remark-update-obj").removeClass("order-remark-update-obj");
                 $this.addClass("order-remark-update-obj"); //标记当前更改备注的目标
                 $("#pep_remark").addClass('visible-inline').val(remark).siblings('.pep_ele').removeClass('visible-inline');
@@ -1593,7 +1597,12 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                     data: data,
                     success: function(results) {
                         if (results.flag == 1) {
-                            $(".order-remark-update-obj").text(newRemark);
+                            var $updateObj = $(".order-remark-update-obj");
+                            if(!$updateObj.hasClass("w-p-l-remark")){
+                                $updateObj.text(newRemark);
+                            }else{
+                                $updateObj.attr("data-oremark",newRemark);
+                            }
                             //var updateDataSource = function() { //修改本地数据源
                             //    for (var i = 0; i < _this.orderListData.length; i++) {
                             //        if (_this.orderListData[i].oid == data.order_id) {

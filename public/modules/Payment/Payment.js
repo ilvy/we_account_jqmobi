@@ -9,10 +9,12 @@ define(['router','util'],function(router,util){
         orgPrice:0,//除去邮费的总价
         init:function(){
             this.do();
+            this.offListener();
             this.addListener();
             this.initScreenshot();
         },
         do:function(){
+            this.initPayment();
             var _this = this;
             $("#getpay .table .bill-record").remove();
             var url = '/we_account/getpay?room_id='+globalVar.room_id+'&nickname='+globalVar.nickname;
@@ -38,7 +40,7 @@ define(['router','util'],function(router,util){
                         if(oidstr){
                             oidstr = oidstr.substring(0,oidstr.length - 1);
                             mailStr = '<div class="t-col-10">' +
-                                '<i class="fa '+(mail_free?'fa-check-square':'fa-square-o')+' mailFree_getpay"></i><span>包邮</span> <span>邮费：</span>' +
+                                '<i class="fa '+(mail_free?'fa-check-square':'fa-square-o')+' mailFree_getpay j-mail-tip"></i><span class="j-mail-tip">包邮</span> <span>邮费：</span>' +
                                 '<input type="number" class="mailpay_getpay" placeholder="0"  data-value="'+(mail_pay?mail_pay:"")+'" value="'+(mail_pay?mail_pay:"")+'">' +
                                 '<span class="unit">元</span></div>';
                         }
@@ -59,13 +61,17 @@ define(['router','util'],function(router,util){
                 }
             })
         },
+        initPayment:function(){
+            this.afterScreenshot();
+            $('.screenshot-btn.show-remark').addClass('hide-remark').removeClass('show-remark');
+        },
         addListener:function(){
             var _this = this;
             $("#backtobill").on('click',function(){
                 router.changeHash('billSystem',0);
             });
-            $(".mailFree_getpay").on("click",function(event){
-                var $this = event.$this;
+            $(document).on("click",".mailFree_getpay",function(event){
+                var $this = $(this);
                 var mail_pay = Number($('.mailpay_getpay').val());
                 var orders = $this.parents('.mail-detail').data('oid');
                 if($this.hasClass("fa-square-o")){
@@ -98,22 +104,31 @@ define(['router','util'],function(router,util){
                 }
             });
             $(document).on("click",".screenshot-btn",function(){
-                _this.beforeSceenshot();
-                setTimeout(function(){
-                    ScreenShot.shot("shot",function(success){
-                        if(success == 1){
-                            alert("截屏成功，请前往sd卡下的daigo文件目录查看");
-                            setTimeout(function(){
+                var $shotBtn = $(this);
+                if(typeof ScreenShot != 'undefined'){
+                    _this.beforeSceenshot();
+                    setTimeout(function(){
+                        ScreenShot.shot("shot",function(success){
+                            if(success == 1){
+                                alert("截屏成功，请前往sd卡下的daigo文件目录查看");
+                                setTimeout(function(){
+                                    _this.afterScreenshot();
+                                },1000);
+                            }
+                        },function(fail){
+                            if(fail){
+                                alert("截屏失败，请重试:"+fail);
                                 _this.afterScreenshot();
-                            },1000);
-                        }
-                    },function(fail){
-                        if(fail){
-                            alert("截屏失败，请重试:"+fail);
-                            _this.afterScreenshot();
-                        }
-                    });
-                },500);
+                            }
+                        });
+                    },500);
+                }else if($shotBtn.hasClass('hide-remark')){
+                    _this.beforeSceenshot();
+                    $shotBtn.removeClass('hide-remark').addClass('show-remark');
+                }else{
+                    _this.afterScreenshot();
+                    $shotBtn.addClass('hide-remark').removeClass('show-remark');
+                }
             });
             //$(document).on("input",".mailpay_getpay",function(event){
             //    var originV = $(this).val();
@@ -125,20 +140,32 @@ define(['router','util'],function(router,util){
             //    }
             //});
         },
+        offListener:function(){
+            $("#backtobill").off("click");
+            $(document).off("click",".mailFree_getpay");
+            $(document).off("blur",".mailpay_getpay");
+            $(document).off("click",".screenshot-btn");
+        },
         initScreenshot:function(){
-            if(typeof ScreenShot != 'undefined'){
-                $(".share-tip.screenshot").removeClass("hide").siblings(".share-tip").addClass("hide");
-            }else{
+            if(util.isWeixin()){
                 $(".share-tip.screenshot").addClass("hide").siblings(".share-tip").removeClass("hide");
+            }else{
+                $(".share-tip.screenshot").removeClass("hide").siblings(".share-tip").addClass("hide");
             }
         },
         beforeSceenshot:function(){
             $('#getpay .getpay-title-cell').removeClass('t-col-2').addClass('t-col-4');
             $('#getpay .getpay-remark').addClass('hide');
+            if($(".mailFree_getpay").hasClass("fa-square-o")){
+                $('#getpay .j-mail-tip').addClass('hide');
+            }
         },
         afterScreenshot:function(){
             $('#getpay .getpay-title-cell').addClass('t-col-2').removeClass('t-col-4');
             $('#getpay .getpay-remark').removeClass('hide');
+            if($(".mailFree_getpay").hasClass("fa-square-o")){
+                $('#getpay .j-mail-tip').removeClass('hide');
+            }
         },
         /**
          * 编辑邮费

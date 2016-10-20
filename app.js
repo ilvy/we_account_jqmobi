@@ -97,7 +97,7 @@ app.use(function(err, req, res, next) {
 
 //全局异常处理
 process.on('uncaughtException', function(err) {
-    console.log(err.stack);
+    console.log('Caught exception: ',err.stack);
 });
 //exports.logger=function(name){
 //    var logger = log4js.getLogger(name);

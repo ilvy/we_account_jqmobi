@@ -273,6 +273,14 @@ define(['wxAPI'],function(wx){
 
               return result;
             }
+      },
+      isWeixin:function(){
+        var ua = window.navigator.userAgent.toLowerCase();
+        if(ua.match(/MicroMessenger/i)){
+            return true;
+        }else{
+            return false;
+        }
       }
     }
 
