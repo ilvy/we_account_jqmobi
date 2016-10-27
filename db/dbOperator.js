@@ -422,3 +422,12 @@ exports.query = query;
 //         console.log("call pro_bind_account results:",rows);
 //     }
 // });
+// 
+query(" call pro_get_order_info_new('oxfQVs19lJ8nF6lxSbupQEaulErQ','2')",['lopid_qwertyuiohdfg356784rfghthnd7y','478283225@qq.com'],function(err,rows){
+    if(err){
+        console.log("call pro_bind_account err:",err);
+    }else{
+        console.log("call pro_bind_account results:",rows);
+    }
+});
+ 

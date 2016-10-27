@@ -861,19 +861,35 @@ BEGIN
 	#Routine body goes here...
 START TRANSACTION;
 
-SELECT c.id cid,o.id oid,p.id product_id,p.title product_name,c.c_nickname nickname,o.quantity,o.`status`,
-    o.remark,o.cost unit_cost,o.price unit_price,o.mail_free,o.mail_pay,c.seller_room_id room_id,o.exchange_rate,o.discount,o.cate_id,ca.cate_name
-from t_customer c
-    JOIN `user` u1
-  ON c.seller_room_id = u1.room_id and c.c_status = 1
-    JOIN t_order o
-  on c.id = o.c_id
-    JOIN product p
-  ON o.product_id = p.id
-    JOIN t_category ca
-  on o.cate_id = ca.id
-  WHERE o.`status` = order_status AND u1.open_id = openid and c.c_status = 1
-  ORDER BY ca.cate_name,p.title ASC;
+if order_status != 2 then
+  SELECT c.id cid,o.id oid,p.id product_id,p.title product_name,c.c_nickname nickname,o.quantity,o.`status`,
+      o.remark,o.cost unit_cost,o.price unit_price,o.mail_free,o.mail_pay,c.seller_room_id room_id,o.exchange_rate,o.discount,o.cate_id,ca.cate_name
+  from t_customer c
+      JOIN `user` u1
+    ON c.seller_room_id = u1.room_id and c.c_status = 1
+      JOIN t_order o
+    on c.id = o.c_id
+      JOIN product p
+    ON o.product_id = p.id
+      JOIN t_category ca
+    on o.cate_id = ca.id
+    WHERE o.`status` = order_status AND u1.open_id = openid and c.c_status = 1
+    ORDER BY ca.cate_name,p.title ASC;
+else
+  SELECT c.id cid,o.id oid,p.id product_id,p.title product_name,c.c_nickname nickname,o.quantity,o.`status`,
+      o.remark,o.cost unit_cost,o.price unit_price,o.mail_free,o.mail_pay,c.seller_room_id room_id,o.exchange_rate,o.discount,o.cate_id,ca.cate_name
+  from t_customer c
+      JOIN `user` u1
+    ON c.seller_room_id = u1.room_id and c.c_status = 1
+      JOIN t_order o
+    on c.id = o.c_id
+      JOIN product p
+    ON o.product_id = p.id
+      JOIN t_category ca
+    on o.cate_id = ca.id
+    WHERE o.`status` = order_status AND u1.open_id = openid and c.c_status = 1
+    ORDER BY trim(c.nickname_pinyin) ASC;
+end if;
 
 commit;
 end; $$
