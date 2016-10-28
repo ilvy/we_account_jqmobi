@@ -26,7 +26,7 @@ var login = (req,res,type)=>{
             if(results[0] && results[0][0] && results[0][0].open_id){
             	req.session.openId = results[0][0].open_id;
             	setCookie(res,cookieDomain,req.query.username,3600 * 1000);
-            	res.render('loginRedirect',{redirectLink:'/we_account/live-room'+(isFromApp ? "?fromapp=1" : "")+'#billSystem'});
+            	res.render('loginRedirect',{redirectLink:'/live-room.html'+(isFromApp ? "?fromapp=1" : "")+'#billSystem'});//{redirectLink:'/we_account/live-room.html'+(isFromApp ? "?fromapp=1" : "")+'#billSystem'}
             }else{
             	res.redirect('login?lerr=1');//用户名密码不匹配fregt54re ccxaaasqw		
             }

@@ -15,7 +15,8 @@
   <!--link(rel='stylesheet', href='/stylesheets/all.css')-->
   <!--link(rel='stylesheet', href='/build/css/af.ui.base.min.css')-->
   <link rel="stylesheet" href="//static.daidai2u.com/stylesheets/all.css" />
-  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
+  <!-- <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" /> -->
+  <!-- <link rel="stylesheet" href="//static.daidai2u.com/stylesheets/font-awesome.css" /> -->
   <style>.back_to_add{
     position:fixed;
     right:0;
@@ -539,6 +540,21 @@ input(type='button' value='停止')#record-end-->
    </div>
   </div>
   <script src="//static.daidai2u.com/javascripts/jquery.js"></script>
+  <script>
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+        if (r != null) return unescape(r[2]); return null; //返回参数值
+    }
+    var fromapp = getUrlParam('fromapp');
+    var doc = document;
+    if(fromapp){
+      var scriptNode = doc.createElement("script");
+      scriptNode.src = '//static.daidai2u.com/javascripts/cordova.js?v=1.0';
+      var head = doc.head || doc.getElementsByTagName("head")[0] || doc.documentElement;
+      head.appendChild(scriptNode);
+    }
+  </script>
   <!--script(src="/javascripts/libs/jquery.mobile.custom.js")-->
   <!--script(src="/javascripts/preloadImg.js")-->
   <!--script(src="/javascripts/waterfall_relative.js")-->
