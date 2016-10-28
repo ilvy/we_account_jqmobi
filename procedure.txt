@@ -284,7 +284,7 @@ START TRANSACTION;
 -- 添加分类
 call pro_add_category(1,cate_name,@cateId);
 
-UPDATE t_order o , t_customer c ,t_category cg
+UPDATE t_order o , t_customer c
 SET o.quantity = o.quantity + in_quantity
 where o.c_id = c.id AND o.product_id = productid AND c.c_openid = c_open_id  AND c.seller_room_id = sell_room_id and o.remark = order_remark and o.cate_id = @cateId AND STATUS = 1
 AND o.create_time > '2015-05-11';

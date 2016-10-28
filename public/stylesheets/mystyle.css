@@ -404,6 +404,7 @@ input.invalid {
   /*rgb(134, 171, 228)*/
   color: #ffffff;
   border-bottom: 2px solid #fff /*rgb(80, 127, 199)*/;
+  float: left;
 }
 .current-list {
   border-bottom-color: #dd1a38 !important;
@@ -636,6 +637,7 @@ div#bottom-btn-group {
   color: #c81e28;
   background-color: #fff;
   outline: none;
+  float: left;
 }
 .cate_btn_group > .btn:first-child {
   border-right: 1px solid #cecece;

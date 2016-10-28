@@ -423,11 +423,11 @@ exports.query = query;
 //     }
 // });
 // 
-query(" call pro_get_order_info_new('oxfQVs19lJ8nF6lxSbupQEaulErQ','2')",['lopid_qwertyuiohdfg356784rfghthnd7y','478283225@qq.com'],function(err,rows){
+query(" call pro_add_order_by_seller_new_test('测试用户8','测试一下加单','','','oxfQVswUSy2KXBPOjNi_BqdNI3aA','','-1','1','-1','-1',1,NULL,'ceshiyonghu8')",['lopid_qwertyuiohdfg356784rfghthnd7y','478283225@qq.com'],function(err,rows){
     if(err){
-        console.log("call pro_bind_account err:",err);
+        console.log("call pro_add_order_by_seller_new_test err:",err);
     }else{
-        console.log("call pro_bind_account results:",rows);
+        console.log("call pro_add_order_by_seller_new_test results:",rows);
     }
 });
  

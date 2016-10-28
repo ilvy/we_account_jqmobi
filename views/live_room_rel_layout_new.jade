@@ -1,0 +1,250 @@
+//
+   Created by Administrator on 15-1-23.
+//
+    相对布局瀑布流
+
+
+doctype html
+html
+    head
+        title 代代
+        meta(name="viewport",content="width=device-width,initial-scale=1.0,user-scalable=no")
+        //link(rel='stylesheet', href='/Jplugin/jquery.light-popup/jquery.light-popup.css')
+        //link(rel='stylesheet', href='/stylesheets/bootstrap.css')
+        //link(rel='stylesheet', href='/stylesheets/bootstrap-grid.css')
+        //link(rel='stylesheet', href='/stylesheets/mystyle.css')
+        //link(rel='stylesheet', href='/stylesheets/style_new.css')
+        //link(rel='stylesheet', href='/stylesheets/all.css')
+        //link(rel='stylesheet', href='/build/css/af.ui.base.min.css')
+        link(rel='stylesheet', href='//static.daidai2u.com/stylesheets/all-35ede27d2a.css')
+        link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css')
+        style.
+            .back_to_add{
+                position:fixed;
+                right:0;
+                top:0;
+            }
+    body
+        img#for-share(src="")
+
+        div.page.billSystem
+            #side-nav-switch.side-nav-switch
+                .h-line
+                .h-line
+                .h-line
+            #order-list
+                //.cate_btn_group
+                    //input(type="button" value="按商品分类" data-type="p").cate_product_btn.btn.btn-check
+                    //input(type="button" value="按买家分类" data-type="c").cate_customer_btn.btn
+                #order-list-content
+            #pay-list
+            #bill-list
+                .position.t-col-10
+                    .t-col-2.t-col-xs-3
+                        input(type="text" placeholder="开始日期" value="" disable=true onclick='laydate({max:laydate.now()})').date#date1
+                    .t-col-2.t-col-xs-3
+                        input(type="text" placeholder="开始日期" value="" onclick='laydate({max:laydate.now()})').date#date2
+                    .t-col-3.t-col-xs-3
+                        input(type="text" placeholder="根据买家搜索" value="").search-input#nickname-position
+                    .t-col-1.t-col-xs-1
+                        input(type="button" value="GO").search-input#search-go
+                .bill-list-content
+            ul#vagueBox
+            div(style='position: fixed;bottom: 100px;')#switchList
+                input(type='button' value='预购清单')#to_order.current-list
+                input(type='button' value='收款列表')#to_pay
+                input(type='button' value='总账单')#to_bill
+            //.cate_btn_group_new
+                    //input(type="button" value="按商品分类" data-type="p").cate_product_btn.btn.btn-check
+                    //input(type="button" value="按买家分类" data-type="c").cate_customer_btn.btn
+            //div#create-order-box
+                //div#create-order-div
+                    //div#create
+                        //i.fa.fa-plus
+            div#bottom-btn-group
+                div#bbg-create-order-box
+                    div#bbg-create-order-div
+                        div#bbg-create
+                            .vertical
+                            .horizon
+                            //i.fa.fa-plus
+                .cate_btn_group
+                    input(type="button" value="按商品分类" data-type="p").cate_product_btn.btn.btn-check
+                    input(type="button" value="按买家分类" data-type="c").cate_customer_btn.btn
+        div.page.add_order
+            div#add_order-panel
+                .text-group
+                    input(type="text" placeholder="商品名称...").product-title
+                    textarea(placeholder="详细说点什么吧，让顾客更好的了解您的产品...").product-desc
+                div#aop_image_content
+                    //.upload-display(style="background:url(http://120.24.224.144/images/test_1430359628167.jpg) center no-repeat;background-size:100%;")
+                        .adjustImg
+                            i.fa.fa-rotate-right
+                .lr-btn-group.col-xxs-12
+                    div#aop_cancel-btn.col-xxs-6
+                        div
+                            i#aop_cancel.fa.fa-times
+                    div#aop_sub-btn.col-xxs-6
+                        div
+                            i#aop_submit.fa.fa-arrow-up
+        //div(style='position:fixed;top:10px;right:10px;')
+        //    a(href='#billSystem') 账单系统
+        div#uploading-mask
+        div#loading
+        div(data-orderstatus='#{orderStatus}')#forTakeOrder
+        #light-popup.light-popup
+            div.cost_comp
+                span 币种：
+                select#exchange-type
+                    option(value='2' selected) 港币
+                    //option(value='1') 人民币
+                    //option(value='3') 美元
+                span 汇率
+                    span.rate-desc (兑人民币)
+                    span ：
+                input(type='text' value='0.82')#recharge-rate
+            div.cost_comp
+                span 进价：
+                input(type='number')#money-input
+                //span 折扣：
+                //input(type='text' value=10)#discount
+            div.price_comp.no-boder-top
+                span 初定价：
+                input(type='number')#price-money-input
+                span.lp-ratio-span 售价比例：
+                input(type='number')#price-ratio
+            //div.price_comp
+            div.price_comp
+                span 实际售价：
+                input(type='number')#price-result
+                input(type='button' value='计算')#calc-price-btn
+            .btn-group
+                input(type='button' value='取消')#input-cancel
+                input(type='button' value='确定')#input-sure
+            //.test-audio
+                input(type='button' value='录音')#record-start
+                input(type='button' value='停止')#record-end
+        #host-info.light-popup
+            div.col-xxs-12
+                span.col-xxs-3.col-xxs-offset-2 昵称
+                div.col-xxs-7
+                    input#nickname(type='text',data-type='nickname',value='')
+            .col-xxs-12
+                span.col-xxs-3.col-xxs-offset-2 简介
+                div.col-xxs-7
+                    textarea#introduce(type='text',data-type='introduce',value='',palceholder='说点啥介绍一下呗...')
+            div.col-xxs-12
+                span.col-xxs-3.col-xxs-offset-2 微信账号
+                .col-xxs-7
+                    input(type='text',data-type='weix_account',value='')#weix_account
+            div.col-xxs-12
+                span.col-xxs-3.col-xxs-offset-2 性别
+                .col-xxs-7
+                    select#sex
+            div.col-xxs-12
+                span.col-xxs-3.col-xxs-offset-2 城市
+                .col-xxs-7
+                    input(type='text',data-type='city',value='')#city
+            div.col-xxs-12
+                span.col-xxs-3.col-xxs-offset-2 国家
+                .col-xxs-7
+                    input(type='text',data-type='country',value='')#country
+            .btn-group.col-xxs-12
+                input(type='button',value="取消").input-cancel
+                input(type='button',value="确定").input-sure
+        #qr-code.light-popup.customer
+            img.qr-code-img(src="/images/qr-code.png")
+            div.no-upload-qrcode 主人很懒，二维码都没留下
+            #upload-qr-code.upload-qr-code
+            p#re-upload.re-upload 重新上传
+            .detail-info
+                .di_weix_account
+                    span 微信号：
+                    span.account_num weix_478283225
+                .sex
+                    span 性别：
+                    span.sex_desc 男
+                .region
+                    span 地区：
+                    span.region_desc 浙江台州
+            .long-tap-tip 长按扫码添加代手微信
+        #addOrderPanel.light-popup
+            //(style="display:block;background-color: white;z-index: 100000;opacity:1")
+            .aop_category.col-xxs-11.col-xxs-offset-1.no-horizontal-padding
+                span.col-xxs-3.no-horizontal-padding 分类：
+                input(type="text" placeholder="建议按地址分类，例：铜锣湾" data-type="+")#aopc_cate.aopc_cate.col-xxs-7.no-horizontal-padding.input-comp
+            .aop_product.col-xxs-11.col-xxs-offset-1.no-horizontal-padding
+                span.col-xxs-3.no-horizontal-padding 品名：
+                .ap_box.col-xxs-7.no-horizontal-padding
+                    span.aopp_name.col-xxs-7.no-horizontal-padding iphone6Plus
+                    input(type="text")#aopp_name.aopp_name.col-xxs-10.no-horizontal-padding.required.input-comp
+                    a#search_product_btn.col-xxs-2.no-horizontal-padding 搜
+            .aop_customer.col-xxs-11.col-xxs-offset-1.no-horizontal-padding
+                span.col-xxs-3.no-horizontal-padding 买家：
+                input(type="text")#aopc_name.aopc_name.col-xxs-4.no-horizontal-padding.required.input-comp
+                #search_group.col-xxs-5.no-horizontal-padding
+                    a#search_user.col-xxs-2.no-horizontal-padding 搜
+                    span.col-xxs-1.no-horizontal-padding /
+                    a#search_exists_customers.col-xxs-5.no-horizontal-padding 搜熟客
+                    span.col-xxs-1.no-horizontal-padding /
+                    a#exists_customers.col-xxs-3.no-horizontal-padding 熟客
+            .aop_order_remark.col-xxs-11.col-xxs-offset-1.no-horizontal-padding
+                span.col-xxs-3.no-horizontal-padding 备注：
+                input(type="text")#aopo_remark.aopo_remark.col-xxs-7.no-horizontal-padding.input-comp
+                .col-xxs-2.no-horizontal-padding.optional-tip (选填)
+            //.aop_upload_product.col-xxs-8.col-xxs-offset-2.no-horizontal-padding
+                img
+            #aopq_quantity.aop_quantity.col-xxs-11.col-xxs-offset-1.no-horizontal-padding
+                span.col-xxs-3.no-horizontal-padding 数量：
+                select.aopq_quantity.col-xxs-7.no-horizontal-padding
+                    option(value=-1) 请选择
+                    option(value=1) -- 1  --
+            .aop_product_desc.col-xxs-11.col-xxs-offset-1.no-horizontal-padding.more
+                span.col-xxs-3.no-horizontal-padding 商品简介：
+                input(type="text")#aopc_desc.aopc_name.col-xxs-7.no-horizontal-padding.input-comp
+                .col-xxs-2.no-horizontal-padding.optional-tip (选填)
+            .aop_purchase.col-xxs-11.col-xxs-offset-1.no-horizontal-padding.more
+                span.col-xxs-3.no-horizontal-padding 进价(HK)：
+                input(type="number")#aoppurchase_money.aoppurchase_money.col-xxs-7.no-horizontal-padding.input-comp
+                .col-xxs-2.no-horizontal-padding.optional-tip (选填)
+            .aop_price.col-xxs-11.col-xxs-offset-1.no-horizontal-padding.more
+                span.col-xxs-3.no-horizontal-padding 售价(￥)：
+                input(type="number")#aopprice_money.aopprice_money.col-xxs-7.no-horizontal-padding.input-comp
+                .col-xxs-2.no-horizontal-padding.optional-tip (选填)
+            .options_toggle.col-xxs-12.no-horizontal-padding
+                a.toggle_btn.more_btn 更多
+            .aop_btn_group.col-xxs-6.col-xxs-offset-3.no-horizontal-padding
+                input(type="button" value="取消")#aop_seller_cancel.aop_cancel.yellow-btn.col-xxs-5
+                input(type="button" value="确定")#aop_seller_submit.aop_submit.green-btn.col-xxs-5.col-xxs-offset-2
+        #changeCategory.light-popup
+            .cc_title.col-xxs-12 移动到
+            .cc_cate_select_wrap.col-xxs-6.col-xxs-offset-3.no-horizontal-padding
+                select#cc_cate_select
+            #cc_cate_custom.cc_cate_custom.col-xxs-6.col-xxs-offset-3.no-horizontal-padding
+                input(type="text" placeholder="添加地址分类")
+            .cc_btn_group.col-xxs-6.col-xxs-offset-3.no-horizontal-padding
+                input(type="button" value="取消")#cc_seller_cancel.yellow-btn.col-xxs-5
+                input(type="button" value="确定")#cc_seller_submit.green-btn.col-xxs-5.col-xxs-offset-2
+        ul#search-cates-panel.cpanel
+        ul#search-products-panel.cpanel
+        ul#search-user-panel.cpanel
+        #search-customers-panel
+            ul#search-customers.cpanel
+            #scp-cancel-btn
+                i.fa.fa-times
+        //#mask
+        #order-edit-panel.light-popup
+            textarea#pep_remark.pep_remark.pep_ele
+            input(type="text")#pep_cnickname.pep_cnickname.pep_ele
+            .aop_btn_group.col-xxs-6.col-xxs-offset-3.no-horizontal-padding
+                input(type="button" value="取消")#pep_cancel.yellow-btn.col-xxs-5
+                input(type="button" value="确定")#pep_submit.green-btn.col-xxs-5.col-xxs-offset-2
+
+script(src="//static.daidai2u.com/javascripts/jquery-2e77fa7a05.js")
+- if (fromapp)
+    script(src="//static.daidai2u.com/javascripts/cordova.js?v=1.0")
+//script(src="/javascripts/libs/jquery.mobile.custom.js")
+//script(src="/javascripts/preloadImg.js")
+//script(src="/javascripts/waterfall_relative.js")
+//script(src="/javascripts/ajaxupload.js")
+script(src="//static.daidai2u.com/javascripts/libs/require/require-6ff1f85b2a.js" data-main="//static.daidai2u.com/jqr-9170ea6b98.js")

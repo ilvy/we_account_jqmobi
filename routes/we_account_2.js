@@ -263,6 +263,14 @@ router.get("/live-room",function(req,res){
 //    res.redirect('/live_room');
     res.render("live_room_rel_layout",{fromapp:isFromApp});
 });//带上参数room_id
+router.get("/live-room-new",function(req,res){
+    var openId = req.session.openId;// || 'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
+    console.log(openId)
+    var query = req.query,
+        roomId = query.room_id;
+    var isFromApp = query.fromapp;
+    res.render("live_room_rel_layout_new",{fromapp:isFromApp});
+});
 router.post("/live_room",gotoLiveRoom);//带上参数room_id
 
 router.post("/publish",publish_account.publishProduct);
