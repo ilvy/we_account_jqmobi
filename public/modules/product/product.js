@@ -170,7 +170,7 @@ define(['router','util','wxAPI','ajaxupload','touchEvent'],function(router,util,
                 var imgName = $('#product-photo img').attr('src');
                 imgName = imgName.split('/images/')[1];
                 globalVar.productArray.push(imgName);
-                $("#image_content").append('<div class="upload-display" style="background:url(http://120.24.224.144/images/'+imgName+') center no-repeat;background-size:100%;">' +
+                $("#image_content").append('<div class="upload-display" style="background:url(http://120.24.224.144/images/thumb/'+imgName+') center no-repeat;background-size:100%;">' +
                     '<div class="adjustImg"><i class="fa fa-rotate-right"></i></div></div>');
                 $('#upload-panel .product-title').val(_this.product.title);
                 $('#upload-panel .product-desc').val(_this.product.text);

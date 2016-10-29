@@ -156,9 +156,9 @@ define(['router','util','touchEvent'],function(router,util){
                     onComplete:function(file,res){
                         util.compress(res,function(err,result){
                             if(result.flag == 1){
-//                                setTimeout(function(){
+                               setTimeout(function(){
                                     $('.upload-display').css("background-image",'url(http://120.24.224.144/images/thumb/'+res + '?v='+ new Date().getTime()+')');
-//                                },200);
+                               },200);
                             }else{
                                 alert("上传失败");
                             }

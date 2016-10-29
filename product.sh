@@ -3,9 +3,8 @@ mv ./public ./public-bak;
 mv ./views ./views-bak;
 tar -xzvf ./source/public.tar.gz -C ./;
 tar -xzvf ./source/views.tar.gz -C ./;
-#tar -xzvf ./source/routes.tar.gz -C ./;
-## mkdir ./public-dist/images;
+tar -xzvf ./source/server.tar.gz -C ./;
 mv public-dist public;
 mv views-dist views;
 cp -r ./public-bak/images ./public/;
-
+cp -r ./public-bak/apps ./public/;

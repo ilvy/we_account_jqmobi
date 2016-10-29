@@ -8,6 +8,8 @@ var dbOperator = require("../../../db/dbOperator"),
 var redis = require("../../../db/redisOperator").client;
 var mailServer = require('./emailCenter');
 var verifyServerConfig = require("../../../config/config").verifyServerConfig;
+var operateLogger = require("../util/logUtil");
+operateLogger = new operateLogger.Logger("operate");
 var cookieDomain = verifyServerConfig.cookieDomain,
     port = verifyServerConfig.port;
 var tokenManager = {};
@@ -22,16 +24,20 @@ var login = (req,res,type)=>{
     console.log("testetestsettet");
 	//TODO 验证登录信息
 	validateLogin(req,function(err,results){
+        var now = new Date().getTime();
         if(!err){
             if(results[0] && results[0][0] && results[0][0].open_id){
             	req.session.openId = results[0][0].open_id;
             	setCookie(res,cookieDomain,req.query.username,3600 * 1000);
+                operateLogger.logging([results[0][0].open_id,now,isFromApp,0],"info","login");
             	res.render('loginRedirect',{redirectLink:'/we_account/live-room'+(isFromApp ? "?fromapp=1" : "")+'#billSystem'});
             }else{
+                operateLogger.logging([results[0][0].open_id,now,isFromApp,1],"error","login");//roomid-datetime-(device)-visitway-errorcode
             	res.redirect('login?lerr=1');//用户名密码不匹配fregt54re ccxaaasqw		
             }
         }else{
             if(err.errorCode == -1){
+                operateLogger.logging([results[0][0].open_id,now,isFromApp,-1],"error","login");
             	res.redirect('login?lerr=2');//用户名密码不能为空
             }
         }

@@ -26,10 +26,10 @@ function dispatch(data,res){
 //                    url:'http://www.daidai2u.com/tutorial-buy.html'
 //                },
                     {
-                    title:'卖家看代代使用教程',
+                    title:'iphone用户代go使用教程',
                     description:'想用代代管理代购信息，点击查看教程，一分钟就会，就是这么简单',
                     picUrl:'http://www.daidai2u.com/images/replyTutotion.png?v=1',
-                    url:'http://www.daidai2u.com/tutorial-sell.html'
+                    url:'http://mp.weixin.qq.com/s?__biz=MzAwNDU2MDU4MQ==&mid=2648682101&idx=1&sn=da141bffa4ee4b9805bede681116932d'//'http://www.daidai2u.com/tutorial-sell.html'
                 }
                 ];
                 data.imageTexts = imageTexts;

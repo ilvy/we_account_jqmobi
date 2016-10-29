@@ -19,6 +19,13 @@
       "type":"file",
       "filename": "logs/point.log",
       "level":"INFO"
+    },
+    {
+      "category":["operate"],
+      "type":"dateFile",
+      "filename":"logs/operate.log",
+      "pattern":"-yyyy-MM-dd",
+      "level":"INFO"
     }
   ],
   "replaceConsole":true
