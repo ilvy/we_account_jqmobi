@@ -1,0 +1,564 @@
+<!--Created by Administrator on 15-1-23.-->
+<!--相对布局瀑布流
+
+-->
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>代代</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no" />
+  <!--link(rel='stylesheet', href='/Jplugin/jquery.light-popup/jquery.light-popup.css')-->
+  <!--link(rel='stylesheet', href='/stylesheets/bootstrap.css')-->
+  <!--link(rel='stylesheet', href='/stylesheets/bootstrap-grid.css')-->
+  <!--link(rel='stylesheet', href='/stylesheets/mystyle.css')-->
+  <!--link(rel='stylesheet', href='/stylesheets/style_new.css')-->
+  <!--link(rel='stylesheet', href='/stylesheets/all.css')-->
+  <!--link(rel='stylesheet', href='/build/css/af.ui.base.min.css')-->
+  <link rel="stylesheet" href="//static.daidai2u.com/stylesheets/all.css" />
+  <!-- <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" /> -->
+  <link rel="stylesheet" href="/stylesheets/font-awesome.css" />
+  <style>.back_to_add{
+    position:fixed;
+    right:0;
+    top:0;
+}</style>
+ </head>
+ <body>
+  <img id="for-share" src="" />
+  <div class="page register"></div>
+  <div class="page products-page live_room slide-init">
+   <div id="header">
+    <div class="head col-xxs-3 col-xs-2">
+     <img src="" />
+    </div>
+    <div class="detail-personal-info col-xxs-9 col-xs-10">
+     <div class="nick-name col-xxs-6">
+      香港代购
+     </div>
+     <div class="room-num col-xxs-6">
+      代代号:888888
+     </div>
+     <div class="host-intro introduce">
+      下单立减哦
+     </div>
+     <!--.level.col-xxs-5 weix_47828325-->
+     <div class="attention col-xxs-7">
+      关注者:
+      <span class="attention-num">110</span>
+      <a href="" class="spread-btn">推广</a>
+     </div>
+     <div class="qr-code-btn col-xxs-5">
+      加TA微信
+     </div>
+    </div>
+    <!--.detail-personal-info.col-xxs-9.col-xs-10.room_num 代代号:
+.cell.col-xxs-12
+    .col-xxs-4 昵称
+    .nickname.col-xxs-6
+    input(type='button' value='编辑').edit-personality.col-xxs-2.remove
+.cell.col-xxs-12
+    .col-xxs-4 微信账号
+    .weix_account.col-xxs-8
+.cell.col-xxs-12
+    .col-xxs-4 性别
+    .sex.col-xxs-8
+.cell.col-xxs-12
+    .col-xxs-4 城市
+    .c-city.col-xxs-8-->
+    <!--.cell.col-xxs-12.search-groupinput(type='text' placeholder='商品名称').search-product.col-xxs-8.col-xs-10
+input(type='button' value='搜索商品').search-btn.col-xxs-4.col-xs-2-->
+   </div>
+   <div class="cell split-part">
+    <div class="line"></div>
+    <div class="text">
+     货架内容已更新
+    </div>
+   </div>
+   <div class="cell col-xxs-12 search-group">
+    <input type="text" placeholder="商品名称" class="search-product col-xxs-8 col-xs-10" />
+    <input type="button" value="搜索商品" class="search-btn col-xxs-4 col-xs-2" />
+   </div>
+   <ul id="vagueProduct">
+    <li></li>
+   </ul>
+   <section class="waterfall">
+    <div class="column"></div>
+    <div class="column"></div>
+    <div class="column"></div>
+    <div class="column"></div>
+    <div class="column"></div>
+    <div class="column"></div>
+    <div class="column"></div>
+    <div class="column"></div>
+   </section>
+   <div id="tools-box">
+    <div id="upload-div-box">
+     <div id="upload-div">
+      <div id="upload">
+       <i class="fa fa-plus"></i>
+       <!--div.vertical-->
+       <!--div.horizon-->
+      </div>
+     </div>
+    </div>
+    <a id="toMyFav">
+     <div class="myfavorites">
+      <input type="button" />
+      <i class="fa fa-folder"></i>
+     </div></a>
+    <a id="toRoomDoor">
+     <div class="changeRoom">
+      <input type="button" />
+      <i class="fa fa-exchange"></i>
+     </div></a>
+    <div class="favorite"></div>
+   </div>
+  </div>
+  <div class="page publish">
+   <div id="upload-panel">
+    <div role="alert" id="warn" class="alert alert-warning fade in">
+     至少需要发布一张图片
+    </div>
+    <!--div#sub-btn-->
+    <!--    input(type="button" value="确定")#submit-->
+    <div class="text-group">
+     <input type="text" placeholder="商品名称..." class="product-title" />
+     <textarea placeholder="详细说点什么吧，让顾客更好的了解您的产品..." class="product-desc"></textarea>
+    </div>
+    <div id="image_content">
+     <!--.upload-display(style="background:url(http://120.24.224.144/images/test_1430359628167.jpg) center no-repeat;background-size:100%;").adjustImg
+    i.fa.fa-rotate-right-->
+    </div>
+    <div class="lr-btn-group col-xxs-12">
+     <div id="cancel-btn" class="col-xxs-6">
+      <div>
+       <i id="cancel" class="fa fa-times"></i>
+      </div>
+     </div>
+     <div id="sub-btn" class="col-xxs-6">
+      <div>
+       <i id="submit" class="fa fa-arrow-up"></i>
+      </div>
+     </div>
+    </div>
+   </div>
+   <div id="disableClick-mask"></div>
+   <div id="product-photo-edit"></div>
+  </div>
+  <div class="page product_display slide-init">
+   <div>
+    <div class="desc col-lg-offset-4 col-lg-4 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2 col-xxs-12"></div>
+    <textarea class="edit-desc col-lg-offset-4 col-lg-4 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2 col-xxs-12"></textarea>
+    <div id="product" class="col-lg-offset-4 col-lg-4 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2 col-xxs-12">
+     <div id="product-photo" class="product-photo">
+      <div class="img-box">
+       <img src="http://120.24.224.144/images/default.jpg" />
+      </div>
+     </div>
+    </div>
+    <div id="order_info" class="col-xxs-12">
+     <div class="order_quantity col-xxs-12">
+      <span>订单数量：</span>
+      <!--span.sub-order-->
+      <!--    i.fa.fa-minus-->
+      <select class="qtt_num"></select>
+      <!--span.add-order-->
+      <!--    i.fa.fa-plus-->
+     </div>
+     <!--.order_remark.col-xxs-12-->
+     <!--    span 备注：-->
+     <!--    textarea(placeholder='对卖家说点啥要求')-->
+    </div>
+    <div id="take_order" class="col-xxs-12">
+     下单
+    </div>
+    <div id="edit_product" class="col-xxs-12">
+     编辑
+    </div>
+    <div id="edit_product_btn_group" class="col-xxs-12">
+     <div class="edit-sure col-xxs-12">
+      确定
+     </div>
+     <div class="edit-cancel col-xxs-12">
+      取消
+     </div>
+    </div>
+    <a id="back-live-room">
+     <div class="back-live-room col-xxs-12">
+      <div class="icon-box">
+       <div class="icon"></div>
+      </div>
+      <div class="text-box">
+       TA的代袋
+      </div>
+     </div></a>
+   </div>
+   <div class="stick-width"></div>
+  </div>
+  <div class="page myFavorite">
+   <ul id="room-list"></ul>
+  </div>
+  <div class="page room_door">
+   <form class="door col-lg-offset-3 col-lg-6 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2 col-xxs-12">
+    <div class="room_input col-xxs-12 col-xs-10 col-xs-offset-1 col-md-8 col-md-offset-2">
+     <input type="input" placeholder="输入昵称或代袋号" id="room" class="col-xxs-9 col-xs-9 col-md-8" />
+     <div class="submit-div">
+      <a class="fa fa-arrow-right"></a>
+     </div>
+    </div>
+   </form>
+  </div>
+  <div class="page personality"></div>
+  <div class="page billSystem">
+   <div id="side-nav-switch" class="side-nav-switch">
+    <div class="h-line"></div>
+    <div class="h-line"></div>
+    <div class="h-line"></div>
+   </div>
+   <div id="order-list">
+    <!--.cate_btn_group//input(type="button" value="按商品分类" data-type="p").cate_product_btn.btn.btn-check
+//input(type="button" value="按买家分类" data-type="c").cate_customer_btn.btn-->
+    <div id="order-list-content"></div>
+   </div>
+   <div id="pay-list"></div>
+   <div id="bill-list">
+    <div class="position t-col-10">
+     <div class="t-col-2 t-col-xs-3">
+      <input type="text" placeholder="开始日期" value="" disable="" onclick="laydate({max:laydate.now()})" id="date1" class="date" />
+     </div>
+     <div class="t-col-2 t-col-xs-3">
+      <input type="text" placeholder="开始日期" value="" onclick="laydate({max:laydate.now()})" id="date2" class="date" />
+     </div>
+     <div class="t-col-3 t-col-xs-3">
+      <input type="text" placeholder="根据买家搜索" value="" id="nickname-position" class="search-input" />
+     </div>
+     <div class="t-col-1 t-col-xs-1">
+      <input type="button" value="GO" id="search-go" class="search-input" />
+     </div>
+    </div>
+    <div class="bill-list-content"></div>
+   </div>
+   <ul id="vagueBox"></ul>
+   <div style="position: fixed;bottom: 100px;" id="switchList">
+    <input type="button" value="预购清单" id="to_order" class="current-list" />
+    <input type="button" value="收款列表" id="to_pay" />
+    <input type="button" value="总账单" id="to_bill" />
+   </div>
+   <!--.cate_btn_group_new//input(type="button" value="按商品分类" data-type="p").cate_product_btn.btn.btn-check
+//input(type="button" value="按买家分类" data-type="c").cate_customer_btn.btn-->
+   <!--div#create-order-box//div#create-order-div
+    //div#create
+        //i.fa.fa-plus-->
+   <div id="bottom-btn-group">
+    <div id="bbg-create-order-box">
+     <div id="bbg-create-order-div">
+      <div id="bbg-create">
+       <div class="vertical"></div>
+       <div class="horizon"></div>
+       <!--i.fa.fa-plus-->
+      </div>
+     </div>
+    </div>
+    <div class="cate_btn_group">
+     <input type="button" value="按商品分类" data-type="p" class="cate_product_btn btn btn-check" />
+     <input type="button" value="按买家分类" data-type="c" class="cate_customer_btn btn" />
+    </div>
+   </div>
+  </div>
+  <div class="page add_order">
+   <div id="add_order-panel">
+    <div class="text-group">
+     <input type="text" placeholder="商品名称..." class="product-title" />
+     <textarea placeholder="详细说点什么吧，让顾客更好的了解您的产品..." class="product-desc"></textarea>
+    </div>
+    <div id="aop_image_content">
+     <!--.upload-display(style="background:url(http://120.24.224.144/images/test_1430359628167.jpg) center no-repeat;background-size:100%;").adjustImg
+    i.fa.fa-rotate-right-->
+    </div>
+    <div class="lr-btn-group col-xxs-12">
+     <div id="aop_cancel-btn" class="col-xxs-6">
+      <div>
+       <i id="aop_cancel" class="fa fa-times"></i>
+      </div>
+     </div>
+     <div id="aop_sub-btn" class="col-xxs-6">
+      <div>
+       <i id="aop_submit" class="fa fa-arrow-up"></i>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div id="getpay" class="page getpay">
+   <div class="getpay-title">
+    <span class="collection_object"></span>
+    <span>的账单</span>
+    <div class="share-tip">
+     <i class="fa fa-hand-o-up"></i>
+     <p>分享给买家</p>
+    </div>
+    <div class="share-tip screenshot">
+     <input type="button" value="截图收款" class="screenshot-btn hide-remark" />
+    </div>
+   </div>
+   <div class="table">
+    <div class="t-row t-row-header">
+     <div class="t-col getpay-title-cell t-col-2">
+      品名
+     </div>
+     <div class="t-col t-col-2">
+      数量
+     </div>
+     <div class="t-col getpay-remark t-col-2">
+      备注
+     </div>
+     <div class="t-col t-col-2">
+      价格
+     </div>
+     <div class="t-col t-col-2">
+      总计
+     </div>
+    </div>
+   </div>
+   <div class="mail-detail">
+    <span>邮费:</span>
+    <span></span>
+   </div>
+   <div class="total-price">
+    <span>合计：</span>
+    <span class="money"></span>
+    <span class="money-type">rmb</span>
+   </div>
+   <input type="button" value="回到账单" id="backtobill" />
+  </div>
+  <div class="page contact-page">
+   <div class="curr-product"></div>
+  </div>
+  <!--div(style='position:fixed;top:10px;right:10px;')-->
+  <!--    a(href='#billSystem') 账单系统-->
+  <div id="uploading-mask"></div>
+  <div id="loading"></div>
+  <div data-orderstatus="undefined" id="forTakeOrder"></div>
+  <div id="light-popup" class="light-popup">
+   <div class="cost_comp">
+    <span>币种：</span>
+    <select id="exchange-type"><option value="2" selected="">港币</option>
+     <!--option(value='1') 人民币-->
+     <!--option(value='3') 美元--></select>
+    <span>汇率<span class="rate-desc">(兑人民币)</span><span>：</span></span>
+    <input type="text" value="0.82" id="recharge-rate" />
+   </div>
+   <div class="cost_comp">
+    <span>进价：</span>
+    <input type="number" id="money-input" />
+    <!--span 折扣：-->
+    <!--input(type='text' value=10)#discount-->
+   </div>
+   <div class="price_comp no-boder-top">
+    <span>初定价：</span>
+    <input type="number" id="price-money-input" />
+    <span class="lp-ratio-span">售价比例：</span>
+    <input type="number" id="price-ratio" />
+   </div>
+   <!--div.price_comp-->
+   <div class="price_comp">
+    <span>实际售价：</span>
+    <input type="number" id="price-result" />
+    <input type="button" value="计算" id="calc-price-btn" />
+   </div>
+   <div class="btn-group">
+    <input type="button" value="取消" id="input-cancel" />
+    <input type="button" value="确定" id="input-sure" />
+   </div>
+   <!--.test-audioinput(type='button' value='录音')#record-start
+input(type='button' value='停止')#record-end-->
+  </div>
+  <div id="host-info" class="light-popup">
+   <div class="col-xxs-12">
+    <span class="col-xxs-3 col-xxs-offset-2">昵称</span>
+    <div class="col-xxs-7">
+     <input id="nickname" type="text" data-type="nickname" value="" />
+    </div>
+   </div>
+   <div class="col-xxs-12">
+    <span class="col-xxs-3 col-xxs-offset-2">简介</span>
+    <div class="col-xxs-7">
+     <textarea id="introduce" type="text" data-type="introduce" value="" palceholder="说点啥介绍一下呗..."></textarea>
+    </div>
+   </div>
+   <div class="col-xxs-12">
+    <span class="col-xxs-3 col-xxs-offset-2">微信账号</span>
+    <div class="col-xxs-7">
+     <input type="text" data-type="weix_account" value="" id="weix_account" />
+    </div>
+   </div>
+   <div class="col-xxs-12">
+    <span class="col-xxs-3 col-xxs-offset-2">性别</span>
+    <div class="col-xxs-7">
+     <select id="sex"></select>
+    </div>
+   </div>
+   <div class="col-xxs-12">
+    <span class="col-xxs-3 col-xxs-offset-2">城市</span>
+    <div class="col-xxs-7">
+     <input type="text" data-type="city" value="" id="city" />
+    </div>
+   </div>
+   <div class="col-xxs-12">
+    <span class="col-xxs-3 col-xxs-offset-2">国家</span>
+    <div class="col-xxs-7">
+     <input type="text" data-type="country" value="" id="country" />
+    </div>
+   </div>
+   <div class="btn-group col-xxs-12">
+    <input type="button" value="取消" class="input-cancel" />
+    <input type="button" value="确定" class="input-sure" />
+   </div>
+  </div>
+  <div id="qr-code" class="light-popup customer">
+   <img src="/images/qr-code.png" class="qr-code-img" />
+   <div class="no-upload-qrcode">
+    主人很懒，二维码都没留下
+   </div>
+   <div id="upload-qr-code" class="upload-qr-code"></div>
+   <p id="re-upload" class="re-upload">重新上传</p>
+   <div class="detail-info">
+    <div class="di_weix_account">
+     <span>微信号：</span>
+     <span class="account_num">weix_478283225</span>
+    </div>
+    <div class="sex">
+     <span>性别：</span>
+     <span class="sex_desc">男</span>
+    </div>
+    <div class="region">
+     <span>地区：</span>
+     <span class="region_desc">浙江台州</span>
+    </div>
+   </div>
+   <div class="long-tap-tip">
+    长按扫码添加代手微信
+   </div>
+  </div>
+  <div id="addOrderPanel" class="light-popup">
+   <!--(style="display:block;background-color: white;z-index: 100000;opacity:1")-->
+   <div class="aop_category col-xxs-11 col-xxs-offset-1 no-horizontal-padding">
+    <span class="col-xxs-3 no-horizontal-padding">分类：</span>
+    <input type="text" placeholder="建议按地址分类，例：铜锣湾" data-type="+" id="aopc_cate" class="aopc_cate col-xxs-7 no-horizontal-padding input-comp" />
+   </div>
+   <div class="aop_product col-xxs-11 col-xxs-offset-1 no-horizontal-padding">
+    <span class="col-xxs-3 no-horizontal-padding">品名：</span>
+    <div class="ap_box col-xxs-7 no-horizontal-padding">
+     <span class="aopp_name col-xxs-7 no-horizontal-padding">iphone6Plus</span>
+     <input type="text" id="aopp_name" class="aopp_name col-xxs-10 no-horizontal-padding required input-comp" />
+     <a id="search_product_btn" class="col-xxs-2 no-horizontal-padding">搜</a>
+    </div>
+   </div>
+   <div class="aop_customer col-xxs-11 col-xxs-offset-1 no-horizontal-padding">
+    <span class="col-xxs-3 no-horizontal-padding">买家：</span>
+    <input type="text" id="aopc_name" class="aopc_name col-xxs-4 no-horizontal-padding required input-comp" />
+    <div id="search_group" class="col-xxs-5 no-horizontal-padding">
+     <a id="search_user" class="col-xxs-2 no-horizontal-padding">搜</a>
+     <span class="col-xxs-1 no-horizontal-padding">/</span>
+     <a id="search_exists_customers" class="col-xxs-5 no-horizontal-padding">搜熟客</a>
+     <span class="col-xxs-1 no-horizontal-padding">/</span>
+     <a id="exists_customers" class="col-xxs-3 no-horizontal-padding">熟客</a>
+    </div>
+   </div>
+   <div class="aop_order_remark col-xxs-11 col-xxs-offset-1 no-horizontal-padding">
+    <span class="col-xxs-3 no-horizontal-padding">备注：</span>
+    <input type="text" id="aopo_remark" class="aopo_remark col-xxs-7 no-horizontal-padding input-comp" />
+    <div class="col-xxs-2 no-horizontal-padding optional-tip">
+     (选填)
+    </div>
+   </div>
+   <!--.aop_upload_product.col-xxs-8.col-xxs-offset-2.no-horizontal-paddingimg-->
+   <div id="aopq_quantity" class="aop_quantity col-xxs-11 col-xxs-offset-1 no-horizontal-padding">
+    <span class="col-xxs-3 no-horizontal-padding">数量：</span>
+    <select class="aopq_quantity col-xxs-7 no-horizontal-padding"><option value="-1">请选择</option><option value="1">-- 1 --</option></select>
+   </div>
+   <div class="aop_product_desc col-xxs-11 col-xxs-offset-1 no-horizontal-padding more">
+    <span class="col-xxs-3 no-horizontal-padding">商品简介：</span>
+    <input type="text" id="aopc_desc" class="aopc_name col-xxs-7 no-horizontal-padding input-comp" />
+    <div class="col-xxs-2 no-horizontal-padding optional-tip">
+     (选填)
+    </div>
+   </div>
+   <div class="aop_purchase col-xxs-11 col-xxs-offset-1 no-horizontal-padding more">
+    <span class="col-xxs-3 no-horizontal-padding">进价(HK)：</span>
+    <input type="number" id="aoppurchase_money" class="aoppurchase_money col-xxs-7 no-horizontal-padding input-comp" />
+    <div class="col-xxs-2 no-horizontal-padding optional-tip">
+     (选填)
+    </div>
+   </div>
+   <div class="aop_price col-xxs-11 col-xxs-offset-1 no-horizontal-padding more">
+    <span class="col-xxs-3 no-horizontal-padding">售价(￥)：</span>
+    <input type="number" id="aopprice_money" class="aopprice_money col-xxs-7 no-horizontal-padding input-comp" />
+    <div class="col-xxs-2 no-horizontal-padding optional-tip">
+     (选填)
+    </div>
+   </div>
+   <div class="options_toggle col-xxs-12 no-horizontal-padding">
+    <a class="toggle_btn more_btn">更多</a>
+   </div>
+   <div class="aop_btn_group col-xxs-6 col-xxs-offset-3 no-horizontal-padding">
+    <input type="button" value="取消" id="aop_seller_cancel" class="aop_cancel yellow-btn col-xxs-5" />
+    <input type="button" value="确定" id="aop_seller_submit" class="aop_submit green-btn col-xxs-5 col-xxs-offset-2" />
+   </div>
+  </div>
+  <div id="changeCategory" class="light-popup">
+   <div class="cc_title col-xxs-12">
+    移动到
+   </div>
+   <div class="cc_cate_select_wrap col-xxs-6 col-xxs-offset-3 no-horizontal-padding">
+    <select id="cc_cate_select"></select>
+   </div>
+   <div id="cc_cate_custom" class="cc_cate_custom col-xxs-6 col-xxs-offset-3 no-horizontal-padding">
+    <input type="text" placeholder="添加地址分类" />
+   </div>
+   <div class="cc_btn_group col-xxs-6 col-xxs-offset-3 no-horizontal-padding">
+    <input type="button" value="取消" id="cc_seller_cancel" class="yellow-btn col-xxs-5" />
+    <input type="button" value="确定" id="cc_seller_submit" class="green-btn col-xxs-5 col-xxs-offset-2" />
+   </div>
+  </div>
+  <ul id="search-cates-panel" class="cpanel"></ul>
+  <ul id="search-products-panel" class="cpanel"></ul>
+  <ul id="search-user-panel" class="cpanel"></ul>
+  <div id="search-customers-panel">
+   <ul id="search-customers" class="cpanel"></ul>
+   <div id="scp-cancel-btn">
+    <i class="fa fa-times"></i>
+   </div>
+  </div>
+  <!--#mask-->
+  <div id="order-edit-panel" class="light-popup">
+   <textarea id="pep_remark" class="pep_remark pep_ele"></textarea>
+   <input type="text" id="pep_cnickname" class="pep_cnickname pep_ele" />
+   <div class="aop_btn_group col-xxs-6 col-xxs-offset-3 no-horizontal-padding">
+    <input type="button" value="取消" id="pep_cancel" class="yellow-btn col-xxs-5" />
+    <input type="button" value="确定" id="pep_submit" class="green-btn col-xxs-5 col-xxs-offset-2" />
+   </div>
+  </div>
+  <script src="//static.daidai2u.com/javascripts/jquery.js"></script>
+  <script>
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+        if (r != null) return unescape(r[2]); return null; //返回参数值
+    }
+    var fromapp = getUrlParam('fromapp');
+    var doc = document;
+    if(fromapp){
+      var scriptNode = doc.createElement("script");
+      scriptNode.src = '//static.daidai2u.com/javascripts/cordova.js?v=1.0';
+      var head = doc.head || doc.getElementsByTagName("head")[0] || doc.documentElement;
+      head.appendChild(scriptNode);
+    }
+  </script>
+  <!--script(src="/javascripts/libs/jquery.mobile.custom.js")-->
+  <!--script(src="/javascripts/preloadImg.js")-->
+  <!--script(src="/javascripts/waterfall_relative.js")-->
+  <!--script(src="/javascripts/ajaxupload.js")-->
+  <script src="//static.daidai2u.com/javascripts/libs/require/require.js" data-main="//static.daidai2u.com/jqr.js"></script>
+ </body>
+</html>

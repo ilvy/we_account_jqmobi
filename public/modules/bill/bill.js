@@ -62,7 +62,7 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                             _this.dealOrderList(data);
                         }
                     } else if (results.flag == 0) {
-                        window.location.href = '/follow_account.html';
+                        window.location.href = '/we_account/login';//'/follow_account.html';
                     }
                 },
                 error: function(err) {

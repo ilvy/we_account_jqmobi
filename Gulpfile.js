@@ -38,6 +38,7 @@ gulp.task('concatcss',function(){
 	['*.less'].forEach(function(item,i){
 		concatCssFiles.push(srcAssetsPath + item);
 	});
+	// concatCssFiles.push('!'+srcPath+'font-awesome.less')
 	return gulp.src(concatCssFiles,{base:srcAssetsPath})
 			   .pipe(plugins.less())
 			   .pipe(gulp.dest(srcAssetsPath))
@@ -83,6 +84,12 @@ gulp.task('copycordova',function(){
 	var start = [tmpPath+"/javascripts/cordova-js-src/**/*.js",tmpPath+"/javascripts/plugins/**/*.js"
 		,tmpPath+"/javascripts/cordova_plugins.js"];
 	return gulp.src(start,{base:tmpPath})
+			   .pipe(gulp.dest(distPath));
+});
+
+gulp.task('copyfontfile',function(){
+	var fontFileSrc = [srcPath+"fonts/*"];
+	return gulp.src(fontFileSrc,{base:srcPath})
 			   .pipe(gulp.dest(distPath));
 });
 
@@ -165,7 +172,7 @@ gulp.task('inlinejs',function(){
 			   	file.contents = new Buffer(resultFile,"utf8");
 			   	cb(null,file);
 			   }))
-			   // .pipe(plugins.htmlmin({collapseWhitespace: true}))
+			   .pipe(plugins.htmlmin({collapseWhitespace: true,removeComments: true,minifyJS: true,minifyCSS: true}))
 			   .pipe(gulp.dest(distPath));
 });
 
@@ -181,7 +188,7 @@ gulp.task('revReplaceJade',function(){
 
 
 gulp.task('build',['clean'],function(){
-	runSequence('uglifyjs','addtimestamp','concatcss','minifycss','md5-cssjs','copycordova','copy','dealrevjson','revReplace','revReplaceHtml','inlinejs','revReplaceJade');
+	runSequence('uglifyjs','addtimestamp','concatcss','minifycss','md5-cssjs','copyfontfile','copycordova','copy','dealrevjson','revReplace','revReplaceHtml','inlinejs','revReplaceJade');
 });
 
 gulp.task('watch',function(){

@@ -14,7 +14,7 @@ define(['router','util','wxAPI','ajaxupload','touchEvent'],function(router,util,
         }
         this.do = function(){
             var _this = this;
-            var url = 'product_display?product_id='+globalVar.product_id;
+            var url = '/we_account/product_display?product_id='+globalVar.product_id;
             if(!globalVar.room_id){
 
             }

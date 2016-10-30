@@ -21,6 +21,7 @@ v0.2.1.2
 5、自动填充默认账号密码														ok
 6、product.sh 优化
 7、构建时，模块中.html文件处理，直接copy过去url不变有缓存问题				ok
+8、重启脚本编写
 bug：
 1、session时效问题 --初步判断iPhone中浏览器切换后台休眠后断连，session销毁
 
@@ -53,3 +54,9 @@ app退出登录后重新进入没有侧边栏						未复现
 	1、今日活跃：当日新增订单至少一个
 日志格式：
 	登录日志：com.daigo.logging.login-roomid-datetime-(device)-visitway-loginresult
+
+
+最严重优化：
+1、jade->.html  目前需要继续测试
+2、jade实时编译成.html
+3、数据库表索引建立

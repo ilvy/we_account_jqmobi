@@ -10,6 +10,16 @@ var transport = nodemailer.createTransport("SMTP", {
         pass: "igxvakmtfxeqbihi"
     }
 });
+// var transport = nodemailer.createTransport("SMTP", {
+//     pool:true,
+//     host: "smtp.qq.com",
+//     secureConnection: true, // use SSL
+//     port: 465, // port for secure SMTP
+//     auth: {
+//         user: "478283225@qq.com",
+//         pass: "igxvakmtfxeqbihi"
+//     }
+// });
  
 // transport.sendMail({
 //     from : "sHy<478283225@qq.com>",

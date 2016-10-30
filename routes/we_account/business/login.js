@@ -30,7 +30,7 @@ var login = (req,res,type)=>{
             	req.session.openId = results[0][0].open_id;
             	setCookie(res,cookieDomain,req.query.username,3600 * 1000);
                 operateLogger.logging([results[0][0].open_id,now,isFromApp,0],"info","login");
-            	res.render('loginRedirect',{redirectLink:'/we_account/live-room'+(isFromApp ? "?fromapp=1" : "")+'#billSystem'});
+            	res.render('loginRedirect',{redirectLink:'/live-room.html'+(isFromApp ? "?fromapp=1" : "")+'#billSystem'});//{redirectLink:'/we_account/live-room.html'+(isFromApp ? "?fromapp=1" : "")+'#billSystem'}
             }else{
                 operateLogger.logging([results[0][0].open_id,now,isFromApp,1],"error","login");//roomid-datetime-(device)-visitway-errorcode
             	res.redirect('login?lerr=1');//用户名密码不匹配fregt54re ccxaaasqw		
