@@ -118,6 +118,9 @@ define(['router','wxAPI','util','sideNav'],function(router,wx,util,sideNav){
     if(util.getUrlParam('fromapp')){
         new sideNav();
     }
+    if(!util.isWeixin()){
+        return;
+    }
     wxjssdkInit(function(err,results){
         var config;
         if(results.flag == 1){

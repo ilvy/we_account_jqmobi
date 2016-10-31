@@ -236,7 +236,7 @@ function getBillList(req,res){
     var openId = req.session.openId;//||'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
     var status = req.query.billType;
     var paras = [openId,status];
-    logger.log("-------------- billlist start query db ---------------");
+    logger.info("-------------- billlist start query db ---------------");
     dbOperator.query('call pro_get_order_info_new(?,?)',paras,function(err,rows){
         if(err){
             logger.error(err);
