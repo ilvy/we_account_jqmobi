@@ -9,36 +9,38 @@ var mysql = require("mysql"),
 var connection = mysql.createConnection(dbPoolConfig);
 connection.connect();
 var yesterday = util.formatDate('','',1);
-var logsDir = "/mnt/projects/we_account_jqmobi/logs";//path.resolve("..","logs");
+var logsDir = "../logs";//path.resolve("..","logs");
 var logFilePath = [logsDir+"/operate.log",yesterday].join("-");
 // fs.readFile();
 var rl = readline.createInterface({
 	input:fs.createReadStream(logFilePath)
 })
 var loginUsers = {};
-var openIds = [];
+var roomIds = [];
 var mailContentHtml = "";
 var analysisLogin = (lineStr)=>{
 	line = lineStr.split("com.daigo.logging.login")[1].split(",");
 	if(!loginUsers[line[1]]){
-		loginUsers[line[1]] = {count:1,successCount:0,failCount:0,appCount:0,explorerCount:0,open_id:line[1]};
-		openIds.push(line[1]);
+		loginUsers[line[1]] = {count:1,successCount:0,failCount:0,appCount:0,explorerCount:0,room_id:line[1]};
+		roomIds.push(line[1]);
 	}else{
 		loginUsers[line[1]].count++;
 	}
 	var record = loginUsers[line[1]];
 	line[3] != 1 ? record.explorerCount++ : record.appCount++;
 	line[4] == 0 ? record.successCount++ : record.failCount++;
+	// console.log(record);
 };
 /**
  * 根据openId获取数据
- * @param  {[type]} openIds [description]
+ * @param  {[type]} roomIds [description]
  * @return {[type]}         [description]
  */
-var fetchInfo = (openIds,cb)=>{
-	var sql = "select u.room_id,w.nickname,u.open_id from user u left join t_weix_account_info w on u.open_id = w.open_id where u.status = 1 and u.open_id in ('"+(openIds.join("','"))+"')";
+var fetchInfo = (roomIds,cb)=>{
+	var room_idStr = (roomIds.join("','"));
+	var sql = "select u.room_id,w.nickname,u.open_id from user u left join t_weix_account_info w on u.open_id = w.open_id where u.status = 1 and u.room_id in ('"+room_idStr+"') or u.open_id in ('"+room_idStr+"')";
 	connection.query(sql,(err,rows,fields)=>{
-		// console.log(rows);
+		console.log(rows);
 		cb && cb(err,rows);
 	});
 	connection.end();
@@ -54,19 +56,27 @@ var integrate = (rows)=>{
 	for(var i = 0; i < rows.length; i++){
 		var row = rows[i];
 		var record = loginUsers[row.open_id];
-		record.room_id = row.room_id;
-		record.nickname = row.nickname;
+		if(record){
+			record.room_id = row.room_id;
+			record.nickname = row.nickname;
+		}
+		record = loginUsers[row.room_id];
+		if(record){
+			record.room_id = row.room_id;
+			record.nickname = row.nickname;
+		}
 	}
 	console.log(loginUsers);
 };
 var generateHtml = ()=>{
 	var user ;
 	mailContentHtml = "<table><thead><th>room_id</th><th>昵称</th><th>登录次数</th><th>登录成功次数</th><th>终端登录</th><th>网页登录</th></thead>"
-	for(var openId in loginUsers){
-		user = loginUsers[openId];
+	for(var room_id in loginUsers){
+		user = loginUsers[room_id];
 		mailContentHtml += '<tr style="border:1px solid #cecece;"><td>'+user.room_id+'</td><td>'+user.nickname+'</td><td>'+user.count+'</td><td>'+user.successCount+'</td><td>'+user.appCount+'</td><td>'+user.explorerCount+'</td></tr>'
 	}
 	mailContentHtml += "</table>";
+	// console.log(mailContentHtml);
 };
 var sendMail = ()=>{
 	// receiveMails.forEach(function(item,i){
@@ -85,10 +95,11 @@ rl.on("line",(line)=>{
 	analysisLogin(line);
 });
 rl.on("close",()=>{
-	fetchInfo(openIds,(err,rows)=>{
+	fetchInfo(roomIds,(err,rows)=>{
 		if(err){
 			mailContentHtml = "<p>统计出错，联系你们家帅气的程序猿！</p>";
 		}else{
+			// console.log(loginUsers);
 			integrate(rows);
 			generateHtml();
 		}

@@ -220,8 +220,9 @@ router.get("/goto_publish",function(req,resp){
                         return;
                     }
                     if(results[0]&&results[0]["count(1)"]){
-                        resp.redirect("/we_account/live-room#billSystem");
+                        // resp.redirect("/we_account/live-room#billSystem");
                         //resp.redirect("/we_account/live-room#live_room-"+results[0]["room_id"]);
+                        resp.redirect('/live-room.html#billSystem');
                     }else{
                         resp.redirect("/register.html");
                     }
@@ -241,7 +242,7 @@ router.get("/fav",live_room.myFavorite);
 router.get("/live-room",billSystem.getAuth_enterLiveRoom);
 router.get("/live-room",function(req,res){
     var openId = req.session.openId;// || 'oxfQVswUSy2KXBPOjNi_BqdNI3aA';
-    console.log(openId)
+    console.log('*****************',openId)
     var query = req.query,
         roomId = query.room_id;
     var isFromApp = query.fromapp;

@@ -59,4 +59,5 @@ app退出登录后重新进入没有侧边栏						未复现
 最严重优化：
 1、jade->.html  目前需要继续测试
 2、jade实时编译成.html
-3、数据库表索引建立
+3、数据库表索引建立                               
+	【1】、user表open_id字段索引 【2】、t_customer建立c_openid，nickname_pinyin字段索引 【3】、t_order建立product_id,cate_id,remark(20)字段索引

@@ -21,7 +21,7 @@ var login = (req,res,type)=>{
     	res.render('login',{error:"",fromapp:(isFromApp ? "?fromapp=1" : "")});
     	return;
     }
-    console.log("testetestsettet");
+    // console.log("testetestsettet");
 	//TODO 验证登录信息
 	validateLogin(req,function(err,results){
         var now = new Date().getTime();
@@ -29,15 +29,15 @@ var login = (req,res,type)=>{
             if(results[0] && results[0][0] && results[0][0].open_id){
             	req.session.openId = results[0][0].open_id;
             	setCookie(res,cookieDomain,req.query.username,3600 * 1000);
-                operateLogger.logging([results[0][0].open_id,now,isFromApp,0],"info","login");
+                operateLogger.logging([req.body.username,now,isFromApp,0],"info","login");
             	res.render('loginRedirect',{redirectLink:'/live-room.html'+(isFromApp ? "?fromapp=1" : "")+'#billSystem'});//{redirectLink:'/we_account/live-room.html'+(isFromApp ? "?fromapp=1" : "")+'#billSystem'}
             }else{
-                operateLogger.logging([results[0][0].open_id,now,isFromApp,1],"error","login");//roomid-datetime-(device)-visitway-errorcode
+                operateLogger.logging([req.body.username,now,isFromApp,1],"error","login");//roomid-datetime-(device)-visitway-errorcode
             	res.redirect('login?lerr=1');//用户名密码不匹配fregt54re ccxaaasqw		
             }
         }else{
             if(err.errorCode == -1){
-                operateLogger.logging([results[0][0].open_id,now,isFromApp,-1],"error","login");
+                operateLogger.logging([req.body.username,now,isFromApp,-1],"error","login");
             	res.redirect('login?lerr=2');//用户名密码不能为空
             }
         }
