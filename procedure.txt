@@ -836,9 +836,12 @@ if type = 1 THEN
 ELSEIF type = 2 THEN
   UPDATE t_order o SET o.cost = value,o.exchange_rate = exchangeRate ,o.exchange_type = exchangeType
     WHERE o.id = objid;
-  UPDATE t_order o SET o.exchange_rate = exchangeRate ,o.exchange_type = exchangeType
-    WHERE o.cost IS NULL AND o.product_id in
-        (SELECT p.id FROM product p,`user` u where p.room_id = u.room_id AND u.open_id = openId and p.status = 1);
+  -- UPDATE t_order o SET o.exchange_rate = exchangeRate ,o.exchange_type = exchangeType
+    -- WHERE o.cost IS NULL AND o.product_id in
+        -- (SELECT p.id FROM product p,`user` u where p.room_id = u.room_id AND u.open_id = openId and p.status = 1);
+  UPDATE t_order o,(SELECT p.id FROM product p,`user` u where p.room_id = u.room_id AND u.open_id = openId and p.status = 1) p
+   SET o.exchange_rate = exchangeRate ,o.exchange_type = exchangeType
+    WHERE o.cost IS NULL AND o.product_id = p.id;
   UPDATE t_exchange_rate er set er.exchange_rate = exchangeRate
     WHERE er.exchange_type = exchangeType AND er.open_id = openId;
   ELSEif type = 3 THEN
@@ -874,7 +877,7 @@ if order_status != 2 then
       JOIN t_category ca
     on o.cate_id = ca.id
     WHERE o.`status` = order_status AND u1.open_id = openid and c.c_status = 1
-    ORDER BY ca.cate_name,p.title ASC;
+    ORDER BY ca.cate_name,p.title,c.c_nickname ASC;
 else
   SELECT c.id cid,o.id oid,p.id product_id,p.title product_name,c.c_nickname nickname,o.quantity,o.`status`,
       o.remark,o.cost unit_cost,o.price unit_price,o.mail_free,o.mail_pay,c.seller_room_id room_id,o.exchange_rate,o.discount,o.cate_id,ca.cate_name
