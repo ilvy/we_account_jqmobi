@@ -224,7 +224,7 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                         '<div class="all-status ignore"><span>买到:</span><i class="fa fa-square-o"></i></div></div>';
                     var lastRow = '<div class="extra-row"><div class="t-col-5 product-detail" data-pid="' + key.split('_')[1] + '">【商品详情】</span></div>' +
                         '<div class="t-col-5 order-add"><input class="order-add-btn" data-cate="' + cateName + '" type="button" value="加单" /></div></div>';
-                    cardStr += tableStr + lastRow + '</div>';
+                    cardStr += tableStr + lastRow + '<div class="del-card-btn">删除</div></div>';
                     categoryStr += cardStr;
                     //$("#order-list-content").append(cardStr);
                 }
