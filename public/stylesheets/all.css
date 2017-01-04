@@ -3976,8 +3976,9 @@ input.invalid {
   float: left;
   border: 1px solid #cdcdcd;
   background-color: rgba(234, 244, 241, 0.4);
-  overflow-x: hidden;
+  overflow-x: visible;
   position: relative;
+  transition: transform 0.3s ease;
 }
 .card .del-card-btn {
   position: absolute;
@@ -3993,6 +3994,9 @@ input.invalid {
   color: white;
   right: -70px;
   /* transform: translateX(-70px); */
+}
+.card.show-del {
+  transform: translateX(-70px);
 }
 .cate_wrap .card {
   border-top: none;

@@ -504,6 +504,10 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                     $("#bottom-btn-group").addClass('hide');
                 }
             });
+            $("#order-list-content .card").touch("swipeleft",function(event){
+                var $this = event.$this;
+                $this.addClass("show-del");
+            });
             $(".cate_product_btn,.cate_customer_btn").touch("click", function(event) {
                 var $this = event.$this;
                 var type = $this.data("type");
