@@ -515,6 +515,18 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                 $("#order-list-content .show-del").removeClass('show-del');
                 $('.op-cancel-mask').addClass('hide');
             });
+            $("#order-list-content .card .del-card-btn").touch("click",function(event){
+                var $this = event.$this;
+                var oids = "";
+                var $objCard = $this.parents(".card");
+                $objCard.find("[data-oid]").each(function(){
+                    var oid = $(this).data("oid");
+                    oids += oid + ",";
+                });
+                oids = oids.substring(0,oids.length - 1);
+                console.log(oids);
+                _this.updateOrderStatus($objCard,oids,0);
+            });
             $(".cate_product_btn,.cate_customer_btn").touch("click", function(event) {
                 var $this = event.$this;
                 var type = $this.data("type");
