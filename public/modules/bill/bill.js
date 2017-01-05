@@ -507,6 +507,13 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
             $("#order-list-content .card").touch("swipeleft",function(event){
                 var $this = event.$this;
                 $this.addClass("show-del");
+                $('.op-cancel-mask').removeClass('hide');
+            },true);
+            //替代document的全局事件,方便触发
+            $(".op-cancel-mask").on("touchstart",function(event){
+                event.stopPropagation();
+                $("#order-list-content .show-del").removeClass('show-del');
+                $('.op-cancel-mask').addClass('hide');
             });
             $(".cate_product_btn,.cate_customer_btn").touch("click", function(event) {
                 var $this = event.$this;

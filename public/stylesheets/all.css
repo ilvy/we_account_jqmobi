@@ -3925,6 +3925,14 @@ ul {
   z-index: 1001;
   display: none;
 }
+.op-cancel-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1001;
+}
 input.required {
   -webkit-transition: border-color 1s ease-in;
   -moz-transition: border-color 1s ease-in;
