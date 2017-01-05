@@ -18,7 +18,7 @@ define(["text!/modules/side-nav/side-nav.html?__timestamp", 'util','touchEvent']
 			$('.sn-open-mask').touch('click',function(){
 				_this.hide();
 			},true);
-			$('.logout').touch('click',function(){
+			$('.w-logout-btn').touch('click',function(){
 				_this.logout();
 			});
 		},
