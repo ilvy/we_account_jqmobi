@@ -1105,6 +1105,7 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                 }
                 //$('#price-result').val(Number($this.data("price")));
                 //$('#price-ratio').val(originValue ? ((Number($this.data("price"))) / Number(originValue)):1);
+                _this.rememberWhere();
                 $("#light-popup").pop({
                     callback: function() {
                         $('.current').removeClass('current');
@@ -1130,6 +1131,7 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                             callback: function() {
                                 $('.current').removeClass('current');
                                 _this.cleanPopPanel();
+                                _this.backToRemember();
                             }
                         });
                         return;
@@ -1148,6 +1150,7 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                                     callback: function() {
                                         $('.current').removeClass('current');
                                         _this.cleanPopPanel();
+                                        _this.backToRemember();
                                     }
                                 });
                                 globalVar.hideLoading();
@@ -1170,6 +1173,7 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                             callback: function() {
                                 $('.current').removeClass('current');
                                 _this.cleanPopPanel();
+                                _this.backToRemember();
                             }
                         });
                         return;
@@ -1191,6 +1195,7 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                                     callback: function() {
                                         $('.current').removeClass('current');
                                         _this.cleanPopPanel();
+                                        _this.backToRemember();
                                     }
                                 });
                             }
@@ -1236,6 +1241,7 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                     hidden: 'true',
                     callback: function() {
                         $('.current').removeClass('current');
+                        _this.backToRemember();
                     }
                 });
             });
@@ -2006,6 +2012,17 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                     return;
                 }
             }
+        },
+        rememberWhere:function(){
+            this.billScrollTop = $("body").scrollTop();
+            console.log('remember,',this.billScrollTop);
+        },
+        backToRemember:function(){
+            var _this = this;
+            $('body,html').animate({
+                scrollTop: _this.billScrollTop
+            }, 10);
+            console.log('backToRemember,',this.billScrollTop);
         },
         showLoading: function() {
             $("#loading").css('display', 'block');
