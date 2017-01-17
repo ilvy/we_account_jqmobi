@@ -588,6 +588,21 @@ function hitPointBuyLocation(req,res){
     response.success(1,res,1);
 }
 
+function sendoff(req,res){
+    var body = req.body;
+    var orderIds = body.orderIds,
+        status = body.status;
+    var openId = req.session.openId;
+    dbOperator.query('call pro_sendoff(?,?,?)',[orderIds,openId,status],function(err,rows){
+        if(err){
+            logger.error('db error in sendoff:',err);
+            response.failed(-1,res,"");
+        }else{
+            response.success(1,res,1);
+        }
+    });
+}
+
 exports.getAuth_enterLiveRoom = getAuth_enterLiveRoom;
 exports.takeOrder = takeOrder;
 exports.filter_takeOrder = filter_takeOrder;
@@ -608,3 +623,4 @@ exports.updateOrderInfo = updateOrderInfo;
 exports.vagueCate = vagueCate;
 exports.changeCategory = changeCategory;
 exports.hitPointBuyLocation = hitPointBuyLocation;
+exports.sendoff = sendoff;

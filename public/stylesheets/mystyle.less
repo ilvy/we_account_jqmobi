@@ -117,6 +117,11 @@ input.invalid{
     font-size: 1rem;
 }
 
+#pay-list{
+    overflow-x: hidden;
+    width: 100%;
+}
+
 #pay-list,#bill-list{
     display: none;
 }
@@ -136,7 +141,7 @@ input.invalid{
     float: left;
     border: 1px solid #cdcdcd;
     background-color: rgba(234, 244, 241, 0.4);
-    overflow-x: visible;
+    overflow-x: none;
     position: relative;
     transition: transform 0.3s ease;
     .del-card-btn{
@@ -148,14 +153,22 @@ input.invalid{
         width: 68px;
         height: 100%;
         display: flex;
+        display: -webkit-flex;
+        display: -moz-flex;
         align-items: center;
+        -webkit-align-items: center;
+        -moz-align-items: center;
         justify-content: center;
+        -webkit-justify-content: center;
+        -moz-justify-content: center;
         color: white;
         right: -70px;
         /* transform: translateX(-70px); */
     }
     &.show-del{
         transform: translateX(-70px);
+        -webkit-transform: translateX(-70px);
+        -moz-transform: translateX(-70px);
     }
 }
 .cate_wrap .card {
@@ -228,6 +241,7 @@ input.invalid{
 
 #order-list {
     border-top: 1px solid transparent;
+    overflow-x: hidden;
     /*display: none;*/
 }
 
@@ -488,6 +502,18 @@ input.invalid{
     float: left;
 }
 
+.w-search-item{
+    padding: 5px 3px;
+    width: 100%;
+    >input{
+        width: 100%;
+        // outline: none;
+        text-align: center;
+        border: none;
+        padding: 6px;
+    }
+}
+
 .current-list{
     border-bottom-color: #dd1a38 !important;
 }
@@ -514,6 +540,7 @@ input.invalid{
     float: left;
     width: 100%;
     padding: 6px;
+    padding-right: 10px;
 }
 
 .order-list .extra-row{
@@ -544,6 +571,17 @@ input.invalid{
     border-radius: 3px;
     padding: 6px 16px;
     color: white;
+}
+
+.sendoff-btn{
+    >span{
+        padding: 6px 0 6px;
+        >i{
+            color: #00b487;
+        }
+    }
+    text-align: right;
+    font-size: .6rem;
 }
 
 .c-add-order-btn{

@@ -5,7 +5,7 @@ var favicon = require('serve-favicon');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
-//var compression = require('compression');
+var compression = require('compression');
 var log4js = require('log4js');
 var log = log4js.getLogger("app");
 
@@ -20,8 +20,11 @@ var test = require('./routes/we_account/test/test');
 var app = express();
 var cluster = require("cluster");
 
+var isDistDir = process.argv.indexOf("--dist");
+console.log(process.argv)
+
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, isDistDir > -1 ? 'views-dist' : 'views'));
 app.set('view engine', 'jade');
 //app.engine('html',require('html').renderFile);
 
@@ -32,8 +35,8 @@ app.use(log4js.connectLogger(log4js.getLogger("http"), { level: 'auto' }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-//app.use(compression());
-app.use(express.static(path.join(__dirname, 'public'),{//../../mywork/seajsProjs/todoListProj/todolist ../../mywork/mycode/seajs-share-1/seajs
+app.use(compression());
+app.use(express.static(path.join(__dirname, isDistDir > -1 ? 'public-dist' : 'public'),{//../../mywork/seajsProjs/todoListProj/todolist ../../mywork/mycode/seajs-share-1/seajs
     etag:true,
     maxAge:'86400',
     //expires:new Date().getTime() + 30000,//无效
