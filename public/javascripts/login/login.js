@@ -27,6 +27,29 @@ function loginSubmit(){
     return flag;
 }
 
+function submitData(){
+    if(loginSubmit()){
+        var username = $("#username").val(),
+            pwd = $("#pwd").val();
+        var fd = new FormData();
+        fd.append("username",username);
+        fd.append("pwd",pwd);
+        $.ajax({
+            url:"/we_account/loginService",
+            type:"post",
+            data:fd,
+            contentType:false,
+            processData:false,
+            success:function(){
+
+            },
+            error:function(){
+
+            }
+        })
+    }
+}
+
 function initError(){
 	var lerr = util.getUrlParam('lerr');
 	var errMsg = lerr == 1 ? "用户名密码不匹配" : lerr == 2 ? "用户名密码不能为空" : "";
