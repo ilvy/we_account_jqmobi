@@ -431,3 +431,10 @@ exports.query = query;
 //     }
 // });
 //  
+// query("call pro_sendoff(?,?,?)",['252,264,265,266,267,268,987,11111','oxfQVswUSy2KXBPOjNi_BqdNI3aA',0],function(err,rows){
+//     if(err){
+//         console.log("call pro_add_order_by_seller_new_test err:",err);
+//     }else{
+//         console.log("call pro_add_order_by_seller_new_test results:",rows);
+//     }
+// });

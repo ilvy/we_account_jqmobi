@@ -202,3 +202,7 @@ gulp.task('watch-md5',function(){
 gulp.task('build-watch-md5',['clean'],function(){
 	runSequence('copyjsinsteaduglify','concatcss','minifycss','md5-cssjs','copycordova','copy','dealrevjson','revReplace','revReplaceHtml','inlinejs','revReplaceJade');
 });
+
+gulp.task('watch-build-md5',function(){
+	gulp.watch([srcPath+'stylesheets/*',"!"+srcPath+"**/all.css",srcPath+"modules/**/*.js",srcPath+"javascripts/**/*.js"],['build-watch-md5']);
+});

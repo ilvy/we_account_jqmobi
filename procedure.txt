@@ -564,6 +564,58 @@ DELIMITER ;
 
 ----------------------split string-----------------------
 
+-------------------------发货----------------------------------
+    ---------发货标记 t_s_serial 序列临时表---------
+DELIMITER $$
+
+drop PROCEDURE if exists sp_gene_s_serial;
+CREATE PROCEDURE `sp_gene_s_serial`(
+ IN f_string varchar(1000),IN f_delimiter varchar(5)
+)
+BEGIN
+  -- Get the separated string.
+  declare cnt int default 0;
+  declare i int default 0;
+  set cnt = func_get_split_string_total(f_string,f_delimiter);
+  drop table if exists tmp_print;
+  create temporary table tmp_print (num int not null);
+  while i < cnt
+  do
+    set i = i + 1;
+    insert into tmp_print(num) values (func_get_split_string(f_string,f_delimiter,i));
+  end while;
+  insert into t_s_serial select * from tmp_print;
+
+END$$
+
+DELIMITER ;
+
+    ------发货标记 t_s_serial 序列临时表 end----
+    ----------发货脚本 start---------
+delimiter $$
+drop procedure if exists pro_sendoff;
+CREATE  PROCEDURE pro_sendoff(in idStr varchar(200),in openid varchar(100), in status tinyint)
+BEGIN
+
+START TRANSACTION;
+delete from t_s_serial;
+call sp_gene_s_serial(idStr,',');
+update t_order o
+    join t_s_serial s
+    on o.id = s.sid and (o.status = 1 or o.status = 2)
+    join product p
+    on o.product_id = p.id
+    join user u
+    on p.room_id = u.room_id
+    set o.sendoff=status
+    where u.open_id = openid;
+
+COMMIT;
+end; $$
+delimiter ;
+    ----------发货脚本 end--------
+-----------------------------发货------------------------
+
 
 ---------------------全站模糊匹配user------------------------start
 delimiter $$
@@ -866,7 +918,7 @@ START TRANSACTION;
 
 if order_status != 2 then
   SELECT c.id cid,o.id oid,p.id product_id,p.title product_name,c.c_nickname nickname,o.quantity,o.`status`,
-      o.remark,o.cost unit_cost,o.price unit_price,o.mail_free,o.mail_pay,c.seller_room_id room_id,o.exchange_rate,o.discount,o.cate_id,ca.cate_name
+      o.remark,o.cost unit_cost,o.price unit_price,o.mail_free,o.mail_pay,c.seller_room_id room_id,o.exchange_rate,o.discount,o.cate_id,ca.cate_name,o.sendoff
   from t_customer c
       JOIN `user` u1
     ON c.seller_room_id = u1.room_id and c.c_status = 1
@@ -880,7 +932,7 @@ if order_status != 2 then
     ORDER BY ca.cate_name,p.title,c.c_nickname ASC;
 else
   SELECT c.id cid,o.id oid,p.id product_id,p.title product_name,c.c_nickname nickname,o.quantity,o.`status`,
-      o.remark,o.cost unit_cost,o.price unit_price,o.mail_free,o.mail_pay,c.seller_room_id room_id,o.exchange_rate,o.discount,o.cate_id,ca.cate_name
+      o.remark,o.cost unit_cost,o.price unit_price,o.mail_free,o.mail_pay,c.seller_room_id room_id,o.exchange_rate,o.discount,o.cate_id,ca.cate_name,o.sendoff
   from t_customer c
       JOIN `user` u1
     ON c.seller_room_id = u1.room_id and c.c_status = 1

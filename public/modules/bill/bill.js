@@ -296,7 +296,7 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                     '</div>';
                 var lastRow = '<div class="extra-row">' +
                     '<div class="t-col-10 c-add-order-btn"><input type="button" value="加单"/></div></div>';
-                cardStr += tableStr + lastRow + '</div>';
+                cardStr += tableStr + lastRow + '<div class="del-card-btn">删除</div></div>';
                 $("#order-list-content").append(cardStr);
             }
         },
@@ -386,8 +386,12 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                     '<div class="t-col t-col-3">品名</div><div class="t-col t-col-2">数量</div>' +
                     '<div class="t-col t-col-2">进价</div>' +
                     '<div class="t-col t-col-2">售价</div><div class="t-col t-col-1 extra">操作</div></div>';
+                var isSendoff = true;
                 for (var j = 0; j < cates.length; j++) {
                     var record = cates[j];
+                    if(isSendoff && !record.sendoff){
+                        isSendoff = false;
+                    }
                     var addMailPay = 0;
                     var oRemark = record.remark;
                     totalMoney += record.quantity * (record.unit_price ? record.unit_price : 0);
@@ -410,10 +414,11 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                 tableStr += mailStr + '</div>';
                 var cardStr = '<div class="card"><div class="card-title"><div class="caret-wrapper"><i class="fa fa-caret-right card-btn"></i></div>' +
                     '<div class="product"><span class="name-span">买家:</span><span class="name">' + nickname + '</span> <span class="tq-span">合计: </span><span class="total-quantity" data-addmailpay=' + addMailPay + '>' + totalMoney.toFixed(1) + '</span> </div>' +
-                    '<div class="all-status"><span>已付：</span><i class="fa fa-square-o"></i></div></div>';
+                    '<div class="all-status"><span>完成：</span><i class="fa fa-square-o"></i></div></div>';
                 var lastRow = '<div class="extra-row">' +
-                    '<div class="t-col-5 getpay-btn"><input type="button" value="收款"/></div></div>';
-                cardStr += tableStr + lastRow + '</div>';
+                    '<div class="t-col-5 getpay-btn"><input type="button" value="收款"/></div>'+
+                    '<div class="t-col-5 sendoff-btn"><span><span>已发：</span><i class="fa '+(isSendoff?"fa-check-square":"fa-square-o")+'"></i><span></div></div>';
+                cardStr += tableStr + lastRow + '<div class="del-card-btn">删除</div></div>';
                 $("#pay-list").append(cardStr);
             }
         },
@@ -488,37 +493,59 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                     $("#bill-list").css("display", 'none');
                     $("#pay-list").css("display", 'none');
                     $("#order-list").css("display", 'block');
+                    $(".w-search-item").removeClass("hide");
                     _this.flushOrderList();
                     $("#bottom-btn-group").removeClass('hide');
                 } else if ($this.attr("id") == 'to_pay') {
                     $("#pay-list").css("display", 'block');
                     $("#order-list").css("display", 'none');
                     $("#bill-list").css("display", 'none');
+                    $(".w-search-item").removeClass("hide");
                     _this.flushPayList();
                     $("#bottom-btn-group").addClass('hide');
                 } else {
                     $("#bill-list").css("display", 'block');
                     $("#order-list").css("display", 'none');
                     $("#pay-list").css("display", 'none');
+                    $(".w-search-item").addClass("hide");
                     _this.flushBillList();
                     $("#bottom-btn-group").addClass('hide');
                 }
             });
-            $("#order-list-content .card").touch("swipeleft",function(event){
+            $(".card").touch("swipeleft",function(event){
                 var $this = event.$this;
+                // alert("test");
+                if($this.find(".card-title").hasClass("active")){
+                    return;
+                }
                 $this.addClass("show-del");
                 $('.op-cancel-mask').removeClass('hide');
             },true);
             //替代document的全局事件,方便触发
             $(".op-cancel-mask").on("touchstart",function(event){
                 event.stopPropagation();
-                $("#order-list-content .show-del").removeClass('show-del');
-                $('.op-cancel-mask').addClass('hide');
+                _this.cancelCardSwipeDelete();
+            });
+            $(".card .del-card-btn").touch("click",function(event){
+                if(!confirm("确认删除?")){
+                    return;
+                }
+                var $this = event.$this;
+                var oids = "";
+                var $objCard = $this.parents(".card");
+                $objCard.find("[data-oid]").each(function(){
+                    var oid = $(this).data("oid");
+                    oids += oid + ",";
+                });
+                oids = oids.substring(0,oids.length - 1);
+                console.log(oids);
+                _this.updateOrderStatus($objCard,oids,0);
             });
             $(".cate_product_btn,.cate_customer_btn").touch("click", function(event) {
                 var $this = event.$this;
                 var type = $this.data("type");
                 $this.addClass("btn-check").siblings(".btn").removeClass("btn-check");
+                $(".w-search-item .search-item").val("");
                 if (type == 'c') {
                     _this.dealOrderListOrderByCustomer(_this.orderListData);
                 } else {
@@ -751,6 +778,7 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                 }
             });
             $(".all-status").touch("click", function(event) {
+                _this.cancelCardSwipeDelete();//若之前有删除滑动操作未消除，先消除
                 var $this = event.$this;
                 var $card = $this.parents(".card");
                 var isPriceOk = false;
@@ -1083,6 +1111,48 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                     return true;
                 }
             }, true);
+            $(".sendoff-btn > span").touch("click",function(event){
+                var $this = event.$this;
+                var $objSelect = $this.find('.fa-square-o');
+                var sendoffFlag = 0;
+                if($objSelect.length > 0){
+                    sendoffFlag = 1;
+                    $objSelect.removeClass('fa-square-o').addClass('fa-check-square');
+                }else{
+                    $objSelect = $this.find('.fa-check-square')
+                    sendoffFlag = 0;
+                    $objSelect.addClass('fa-square-o').removeClass('fa-check-square');
+                }
+                var oids = "";
+                $this.parents(".card").find(".t-row[data-oid]").each(function(event){
+                    oids += $(this).data("oid") + ","
+                });
+                oids.substring(0,oids.length - 1);
+                $.ajax({
+                    url:"/we_account/sendoff",
+                    type:"post",
+                    data:{
+                        orderIds:oids,
+                        status:sendoffFlag
+                    },
+                    success:function(results){
+                        if(results.flag != 1){//修改失败
+                            if(sendoffFlag == 1){
+                                $objSelect.addClass('fa-square-o').removeClass('fa-check-square');
+                            }else{
+                                $objSelect.removeClass('fa-square-o').addClass('fa-check-square');
+                            }
+                        }
+                    },
+                    error:function(){
+                        if(sendoffFlag == 1){
+                            $objSelect.addClass('fa-square-o').removeClass('fa-check-square');
+                        }else{
+                            $objSelect.removeClass('fa-square-o').addClass('fa-check-square');
+                        }
+                    }
+                })
+            },true);
             $('.input-div-cost,.input-div.unit_price').touch('click', function(event) {
                 //                wx.scanQRCode({
                 //                    needResult:1,
@@ -1322,6 +1392,7 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                 alert(111);
             }, true);
             $(".order-add-btn").touch("click", function(event) {
+                _this.cancelCardSwipeDelete();//若之前有删除滑动操作未消除，先消除
                 var $this = event.$this;
                 var productId = $this.parents(".extra-row").find(".product-detail").data("pid"),
                     title = $this.parents(".card").find(".name").text();
@@ -1590,6 +1661,51 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                 $('#take_order').remove();
                 router.changeHash("product_display-" + product_id, 1);
             });
+            /**
+            * 筛选框输入匹配
+            */
+            $('.billSystem .search-item').on("input",util.debounce(function(event){
+                var likestr = $(this).val();
+                if(!$.trim(likestr)){
+                    $(".cate_wrap,.card").removeClass("hide");
+                    return;
+                }
+                var selector = $(".current-list").attr("id") == "to_order" ? "#order-list" : "#pay-list";
+                if($(".current-list").attr("id") == "to_order"){//预购列表
+                    $("#order-list .cate_wrap").each(function(){
+                        var $cateWrap = $(this);
+                        var isRemainCate = false;
+                        $cateWrap.find(".card").each(function(){
+                            var $card = $(this);
+                            if($card.find('.name').text().indexOf(likestr) == -1){
+                                $card.addClass("hide");
+                            }else{
+                                $card.removeClass("hide");
+                                isRemainCate = true;
+                            }
+                        });
+                        if(!isRemainCate){
+                            $cateWrap.addClass("hide");
+                        }else{
+                            $cateWrap.removeClass("hide");
+                        }
+                    });
+                }else{//收款列表
+                    $('#pay-list .card').each(function(){
+                        var $card = $(this);
+                        if($card.find('.name').text().indexOf(likestr) == -1){
+                            $card.addClass("hide");
+                        }
+                    });
+                }
+            },1000));
+        },
+        /**
+        * 撤销大类别滑动删除效果
+        */
+        cancelCardSwipeDelete:function(){
+            $(".show-del").removeClass('show-del');
+            $('.op-cancel-mask').addClass('hide');
         },
         /**
          * 修改订单信息（remark）

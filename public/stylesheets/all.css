@@ -3929,7 +3929,7 @@ ul {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  width: calc(100% - 68px);
   height: 100%;
   z-index: 1001;
 }
@@ -3966,6 +3966,10 @@ input.invalid {
 .optional-tip {
   font-size: 1rem;
 }
+#pay-list {
+  overflow-x: hidden;
+  width: 100%;
+}
 #pay-list,
 #bill-list {
   display: none;
@@ -3984,7 +3988,7 @@ input.invalid {
   float: left;
   border: 1px solid #cdcdcd;
   background-color: rgba(234, 244, 241, 0.4);
-  overflow-x: visible;
+  overflow-x: none;
   position: relative;
   transition: transform 0.3s ease;
 }
@@ -3997,14 +4001,22 @@ input.invalid {
   width: 68px;
   height: 100%;
   display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
   align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
   justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
   color: white;
   right: -70px;
   /* transform: translateX(-70px); */
 }
 .card.show-del {
   transform: translateX(-70px);
+  -webkit-transform: translateX(-70px);
+  -moz-transform: translateX(-70px);
 }
 .cate_wrap .card {
   border-top: none;
@@ -4070,6 +4082,7 @@ input.invalid {
 }
 #order-list {
   border-top: 1px solid transparent;
+  overflow-x: hidden;
   /*display: none;*/
 }
 #pay-list .table,
@@ -4297,6 +4310,16 @@ input.invalid {
   border-bottom: 2px solid #fff /*rgb(80, 127, 199)*/;
   float: left;
 }
+.w-search-item {
+  padding: 5px 3px;
+  width: 100%;
+}
+.w-search-item > input {
+  width: 100%;
+  text-align: center;
+  border: none;
+  padding: 6px;
+}
 .current-list {
   border-bottom-color: #dd1a38 !important;
 }
@@ -4321,6 +4344,7 @@ input.invalid {
   float: left;
   width: 100%;
   padding: 6px;
+  padding-right: 10px;
 }
 .order-list .extra-row {
   padding-top: 0;
@@ -4345,6 +4369,16 @@ input.invalid {
   border-radius: 3px;
   padding: 6px 16px;
   color: white;
+}
+.sendoff-btn {
+  text-align: right;
+  font-size: .6rem;
+}
+.sendoff-btn > span {
+  padding: 6px 0 6px;
+}
+.sendoff-btn > span > i {
+  color: #00b487;
 }
 .c-add-order-btn {
   text-align: right;
