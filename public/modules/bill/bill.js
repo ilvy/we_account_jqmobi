@@ -779,6 +779,7 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
             });
             $(".all-status").touch("click", function(event) {
                 _this.cancelCardSwipeDelete();//若之前有删除滑动操作未消除，先消除
+                var start = new Date().getTime();
                 var $this = event.$this;
                 var $card = $this.parents(".card");
                 var isPriceOk = false;
@@ -804,7 +805,10 @@ define(['router', 'util', 'wxAPI', 'jpopup', 'touchEvent', 'laydate'], function(
                     oids += $row.data('oid') + ',';
                 });
                 oids = oids.substring(0, oids.length - 1);
+                var midTime = new Date().getTime() - start;
+                // alert(midTime+","+(new Date().getTime() - start));
                 if ($this.parents("#order-list").length > 0) {
+                    // alert(midTime+","+(new Date().getTime() - start));
                     if (confirm("确认" + $($this.parents('.card').find('span.total-quantity')).text() + "个" + $this.parents('.card').find('span.name').text() + "已经购买?")) {
                         //                        $this.parents(".card").remove();
                         _this.logBuyProductLocation($card.data("pid"));

@@ -37,9 +37,11 @@ function submitData(){
         $.ajax({
             url:"/we_account/loginService",
             type:"post",
-            data:fd,
-            contentType:false,
-            processData:false,
+            data:JSON.stringify({
+                username:username,
+                pwd:pwd
+            }),
+            contentType:'application/json',
             success:function(){
 
             },

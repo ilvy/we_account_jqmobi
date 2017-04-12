@@ -24,6 +24,20 @@
             overflow-y: scroll !important;
             border: 1px solid red;
         }
+        .pages{
+            margin-bottom: 100px;
+        }
+        #alertTestBtn:active{
+            background-color: red;
+        }
+
+        #alertTestBtn2,#alertTestBtn{
+            margin-top: 100px;
+            -webkit-user-select: none;
+        }
+        #alertTestBtn2:active{
+            background-color: red;
+        }
     </style>
 
 </head>
@@ -41,10 +55,23 @@
 
         </div>
     </div>
-
+    <button id="alertTestBtn">alert</button>
+        
+    <div id="alertTestBtn2">
+        alert
+    </div>
 </div>
 </body>
+<script type="text/javascript" src="/touchUtil.js"></script>
 <script>
+    window.onload = function(){
+        $("#alertTestBtn").on("click",function(){
+            alert("test");
+        });
+        $("#alertTestBtn2").touch("click",function(){
+            alert("test");
+        });
+    }
     var menusObj = {
         "button": [
             {

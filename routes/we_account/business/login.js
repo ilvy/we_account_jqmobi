@@ -22,6 +22,7 @@ var login = (req,res,type)=>{
     	return;
     }
     // console.log("testetestsettet");
+    console.log(req.headers,req.body);
 	//TODO 验证登录信息
 	validateLogin(req,function(err,results){
         var now = new Date().getTime();
@@ -58,6 +59,7 @@ var validateLogin = (req,cb)=>{
     	cb({errorCode:-1})
     	return;
     }
+    console.log(username,pwd);
     dbOperator.query('call pro_login(?,?)',[username,pwd],function(err,results){
         cb(err,results);
     });

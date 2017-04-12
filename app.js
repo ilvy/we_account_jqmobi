@@ -8,6 +8,7 @@ var session = require('express-session');
 var compression = require('compression');
 var log4js = require('log4js');
 var log = log4js.getLogger("app");
+var multipart = require('connect-multiparty'); 
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -32,11 +33,13 @@ app.set('view engine', 'jade');
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 //app.use(logger('dev'));
 app.use(log4js.connectLogger(log4js.getLogger("http"), { level: 'auto' }));
+app.use(multipart());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(compression());
 app.use(express.static(path.join(__dirname, isDistDir > -1 ? 'public-dist' : 'public'),{//../../mywork/seajsProjs/todoListProj/todolist ../../mywork/mycode/seajs-share-1/seajs
+// app.use(express.static(path.join(__dirname, 'public'),{//../../mywork/seajsProjs/todoListProj/todolist ../../mywork/mycode/seajs-share-1/seajs
     etag:true,
     maxAge:'86400',
     //expires:new Date().getTime() + 30000,//无效

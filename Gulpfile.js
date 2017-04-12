@@ -5,13 +5,16 @@ var plugins = gulpLoadPlugins();
 var del = require('del');
 var runSequence = require('run-sequence');
 var srcPath = 'public/',
-	distPath = 'public-dist/',
+	distPath = 'public-dist/dist/',
 	tmpPath = 'public-tmp/',
 	viewsPath = 'views/',
-	viewsDistPath = 'views-dist/';
+	viewsDistPath = 'views-dist/dist/';
 var distAssetsPath = distPath + 'stylesheets/';
 var srcAssetsPath = srcPath + 'stylesheets/';
 var tmpAssetsPath = tmpPath + 'stylesheets/';
+
+console.log(process.argv);
+// process.argv.indexOf
 
 /******************* 正式环境 ********************/
 gulp.task('clean',function(){
@@ -186,6 +189,9 @@ gulp.task('revReplaceJade',function(){
 
  /***************** 生产环境 ********************/
 
+gulp.task('build-test',function(){
+	// runSequence('uglifyjs','addtimestamp','concatcss','minifycss','md5-cssjs','copyfontfile','copycordova','copy','dealrevjson','revReplace','revReplaceHtml','inlinejs','revReplaceJade');
+});
 
 gulp.task('build',['clean'],function(){
 	runSequence('uglifyjs','addtimestamp','concatcss','minifycss','md5-cssjs','copyfontfile','copycordova','copy','dealrevjson','revReplace','revReplaceHtml','inlinejs','revReplaceJade');
